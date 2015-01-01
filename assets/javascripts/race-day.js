@@ -624,7 +624,7 @@ function poll_results() {
       var percent_vote = +arr[3];
       var n_delegates = +arr[4];
       var n_pledged_delegates = +arr[5];
-      var winner = (arr[5] == 'true');
+      var winner = (arr[6] == 'true');
 
       var key = candidate_id + '-' + state_code;
       var elems = els_by_candidate_id_and_state_code[key];
