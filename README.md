@@ -1,4 +1,4 @@
-Tracks elections in 2016.
+Tracks presidential primaries and election in 2016.
 
 This is not a web app: it is a flat-file generator. It's designed to churn out
 results so they're updated frequently and available to all.
