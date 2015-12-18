@@ -1,5 +1,7 @@
 require 'haml'
 
+require_relative './logger'
+
 RootPath = File.expand_path("../../dist", __FILE__)
 
 module PrimariesPageGenerator
@@ -15,6 +17,12 @@ module PrimariesPageGenerator
 
   private
 
+  def self.write_string_to_path(string, path)
+    $logger.info("Writing #{path}")
+    FileUtils.mkdir_p(File.dirname(path))
+    File.open(path, 'w') { |f| f.write(string) }
+  end
+
   # Generate all static files for the given Race.
   #
   # Generates an HTML file and a JSON file.
@@ -28,9 +36,7 @@ module PrimariesPageGenerator
     context = HtmlContext.new(election_day, race, state_reporting_unit)
     output = haml_engine.render(context)
     path = "#{RootPath}/#{context.html_path}"
-
-    FileUtils.mkdir_p(File.dirname(path))
-    File.open(path, 'w') { |f| f.write(output) }
+    write_string_to_path(output, path)
   end
 
   class HtmlContext
