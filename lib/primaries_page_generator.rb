@@ -2,8 +2,7 @@ require 'haml'
 
 require_relative './assets'
 require_relative './logger'
-
-RootPath = File.expand_path("../../dist", __FILE__)
+require_relative './paths'
 
 module PrimariesPageGenerator
   @template = File.read(File.expand_path('../../templates/primary.html.haml', __FILE__))
@@ -36,7 +35,7 @@ module PrimariesPageGenerator
     haml_engine = Haml::Engine.new(@template)
     context = HtmlContext.new(election_day, race, state_reporting_unit)
     output = haml_engine.render(context)
-    path = "#{RootPath}/#{context.html_path}"
+    path = "#{Paths.Dist}/#{context.html_path}"
     write_string_to_path(output, path)
   end
 

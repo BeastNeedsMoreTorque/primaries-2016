@@ -1,4 +1,4 @@
-RootPath = File.expand_path("../../dist", __FILE__)
+require_relative './paths'
 
 module Assets
   extend Sprockets::DigestUtils
@@ -15,7 +15,7 @@ module Assets
 
   def self.asset_digest_hex(filename)
     digest = digest_class.new
-    File.open("#{RootPath}/#{filename}", 'r') { |f| digest << f.read }
+    File.open("#{Paths.Dist}/#{filename}", 'r') { |f| digest << f.read }
     pack_hexdigest(digest.digest)
   end
 end

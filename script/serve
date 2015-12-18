@@ -2,7 +2,7 @@
 
 require 'webrick'
 
-RootPath = File.expand_path("../../dist", __FILE__)
+require_relative '../lib/paths'
 
 # Serve "x.html" as just "x"
 class FileHandler < WEBrick::HTTPServlet::FileHandler
@@ -16,6 +16,6 @@ class FileHandler < WEBrick::HTTPServlet::FileHandler
 end
 
 server = WEBrick::HTTPServer.new(Port: 3000)
-server.mount('/', FileHandler, RootPath)
+server.mount('/', FileHandler, Paths.Dist)
 trap("INT") { server.shutdown }
 server.start
