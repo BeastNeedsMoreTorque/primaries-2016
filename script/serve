@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require 'webrick'
+
+RootPath = File.expand_path("../../dist", __FILE__)
+
+# Serve "x.html" as just "x"
+class FileHandler < WEBrick::HTTPServlet::FileHandler
+  def search_file(req, res, basename)
+    if file = super
+      file
+    else
+      super(req, res, "#{basename}.html")
+    end
+  end
+end
+
+server = WEBrick::HTTPServer.new(Port: 3000)
+server.mount('/', FileHandler, RootPath)
+trap("INT") { server.shutdown }
+server.start
