@@ -1,5 +1,6 @@
 require 'haml'
 
+require_relative './assets'
 require_relative './logger'
 
 RootPath = File.expand_path("../../dist", __FILE__)
@@ -48,12 +49,15 @@ module PrimariesPageGenerator
       @state_reporting_unit = state_reporting_unit
     end
 
+    def main_js_path; Assets.main_js_path; end
+    def main_css_path; Assets.main_css_path; end
+
     def html_h1
-      "#{state_reporting_unit.name} #{race.race_type}"
+      "#{state_reporting_unit.state_name} #{race.race_type}"
     end
 
     def html_title
-      "#{state_reporting_unit.name} #{race.race_type}"
+      "#{state_reporting_unit.state_name} #{race.race_type}"
     end
 
     def precincts_reporting; state_reporting_unit.precincts_reporting; end

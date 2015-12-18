@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+Bundler.require
+
+require_relative '../lib/logger'
+
+RootPath = File.expand_path("../..", __FILE__)
+
+sprockets = Sprockets::Environment.new(RootPath) do |env|
+  env.logger = $logger
+end
+sprockets.append_path("#{RootPath}/assets")
+%w(javascripts/main.js stylesheets/main.css).each do |filename|
+  asset = sprockets.find_asset(filename)
+  dirname, basename = filename.split('/')
+  FileUtils.mkpath("#{RootPath}/dist/#{dirname}")
+  asset.write_to("#{RootPath}/dist/#{asset.filename}")
+  asset.write_to("#{RootPath}/dist/#{asset.digest_path}")
+end

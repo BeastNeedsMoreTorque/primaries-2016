@@ -3,6 +3,8 @@
 require 'rubygems'
 require 'bundler/setup'
 
+Bundler.require(:default)
+
 require_relative '../lib/ap'
 require_relative '../lib/primaries_page_generator'
 
