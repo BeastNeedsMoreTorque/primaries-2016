@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+
+require_relative '../lib/ap'
+require_relative '../lib/primaries_page_generator'
+
+election_day = AP.GET_primaries_election_day('2016-02-01')
+PrimariesPageGenerator.generate(election_day)

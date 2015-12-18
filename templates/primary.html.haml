@@ -1,0 +1,25 @@
+-# Called with a PrimariesPageGenerator::HtmlContext
+!!! 5
+%html{lang: 'en'}
+  %head
+    %title= html_title
+  %body
+    %h1= html_h1
+
+    %h2 State-level results
+    %p.precincts= "#{precincts_reporting} of #{precincts_total} precincts reporting"
+    %table
+      %thead
+        %tr
+          %th.candidate Candidate
+          %th.votes Votes
+          %th.percent Pct.
+          %th.n-delegates Del.
+      %tbody
+        - candidates.each do |candidate|
+          %tr
+            %td.candidate= candidate.name
+            %td.votes= candidate.vote_count
+            %td.percent
+              %span.n>= (100 * candidate_votes_fraction(candidate)).round(1)
+            %td.n-delegates TODO
