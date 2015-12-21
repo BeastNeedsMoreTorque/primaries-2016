@@ -8,11 +8,16 @@ class ElectionDay
   # JSON attributes, no logic
   def date; Date.parse(@hash[:electionDate]); end
   def timestamp; DateTime.parse(@hash[:timestamp]); end
-  def races; @hash[:races].map { |r| Race.new(r) }; end
+  def races; @hash[:races].map { |r| Race.new(self, r) }; end
 end
 
 class Race
-  def initialize(hash); @hash = hash; end
+  attr_reader(:election_day)
+
+  def initialize(election_day, hash)
+    @election_day = election_day
+    @hash = hash
+  end
 
   # JSON attributes, no logic
   def id; @hash[:raceID]; end
@@ -27,12 +32,8 @@ class Race
   # Derived values
 
   def state_reporting_units
-    reporting_units.select { |ru| ru.level == 'state' }
+    @state_reporting_units ||= reporting_units.select { |ru| ru.level == 'state' }
   end
-
-  private
-
-  def sum(arr); arr.reduce(0) { |s, n| s + n }; end
 end
 
 class ReportingUnit
@@ -70,4 +71,84 @@ class Candidate
   def name
     "#{first} #{last}"
   end
+end
+
+class DelSuper
+  def initialize(hash); @hash = hash; end
+
+  # JSON attributes, no logic
+  def timestamp; DateTime.parse(@hash[:timestamp]); end
+  def dels; @hash[:del].map { |d| Del.new(d) }; end
+
+  # Derived
+
+  # party_state_candidates[party_id][state_id][candidate_id] is a DelCandidate
+  def party_state_candidates
+    @party_state_candidates ||= build_party_state_candidates
+  end
+
+  # party_country_candidates[party_id][candidate_id] is a DelCandidate
+  def party_country_candidates
+    @country ||= build_party_country_candidates
+  end
+
+  private
+
+  def build_party_state_candidates
+    ret = {}
+    for del in dels
+      ret[del.party_id] = retDel = {}
+      for state in del.states
+        next if state.id == 'US'
+        retDel[state.id] = retState = {}
+        for candidate in state.candidates
+          retState[candidate.id] = candidate
+        end
+      end
+    end
+    ret
+  end
+
+  def build_party_country_candidates
+    ret = {}
+    for del in dels
+      ret[del.party_id] = retDel = {}
+      for state in del.states
+        if state.id == 'US'
+          for candidate in state.candidates
+            retDel[candidate.id] = candidate
+          end
+        end
+      end
+    end
+    ret
+  end
+end
+
+class Del
+  def initialize(hash); @hash = hash; end
+
+  # JSON attributes, no logic
+  def party_id; @hash[:pId]; end
+  def delegates_needed; @hash[:dNeed]; end
+  def delegates_total; @hash[:dVote]; end
+  def states; @hash[:State].map { |s| DelState.new(s) }; end
+end
+
+class DelState
+  def initialize(hash); @hash = hash; end
+
+  # JSON attributes, no logic
+  def id; @hash[:sId]; end
+  def candidates; @hash[:Cand].map { |c| DelCandidate.new(c) }; end
+end
+
+class DelCandidate
+  def initialize(hash); @hash = hash; end
+
+  # JSON attributes, no logic
+  def id; @hash[:cId]; end
+  def name; @hash[:cName]; end
+  def delegates; @hash[:dTot].to_i; end
+  def unpledged_delegates; @hash[:sdTot].to_i; end
 end

@@ -7,11 +7,18 @@ require_relative './paths'
 module PrimariesPageGenerator
   @template = File.read(File.expand_path('../../templates/primary.html.haml', __FILE__))
 
-  def self.generate(election_day)
+  def self.generate(delegate_counts, election_day)
     election_day.races.each do |race|
-      race.state_reporting_units.each do |state_reporting_unit|
-        generate_for_race(election_day, race, state_reporting_unit)
-      end
+      generate_for_race(delegate_counts, race)
+    end
+  end
+
+  # Generate all static files for the given Race.
+  #
+  # Generates an HTML file and a JSON file.
+  def self.generate_for_race(delegate_counts, race)
+    race.state_reporting_units.each do |state_reporting_unit|
+      generate_html_for_race(delegate_counts, race, state_reporting_unit)
     end
   end
 
@@ -23,17 +30,10 @@ module PrimariesPageGenerator
     File.open(path, 'w') { |f| f.write(string) }
   end
 
-  # Generate all static files for the given Race.
-  #
-  # Generates an HTML file and a JSON file.
-  def self.generate_for_race(election_day, race, state_reporting_unit)
-    generate_html_for_race(election_day, race, state_reporting_unit)
-  end
-
   # Generate all static HTML files for
-  def self.generate_html_for_race(election_day, race, state_reporting_unit)
+  def self.generate_html_for_race(delegate_counts, race, state_reporting_unit)
     haml_engine = Haml::Engine.new(@template)
-    context = HtmlContext.new(election_day, race, state_reporting_unit)
+    context = HtmlContext.new(delegate_counts, race, state_reporting_unit)
     output = haml_engine.render(context)
     path = "#{Paths.Dist}/#{context.html_path}"
     write_string_to_path(output, path)
@@ -42,8 +42,9 @@ module PrimariesPageGenerator
   class HtmlContext
     attr_reader(:election_day, :race, :state_reporting_unit)
 
-    def initialize(election_day, race, state_reporting_unit)
-      @election_day = election_day
+    def initialize(delegate_counts, race, state_reporting_unit)
+      @delegate_counts = delegate_counts
+      @election_day = race.election_day
       @race = race
       @state_reporting_unit = state_reporting_unit
     end
@@ -62,6 +63,11 @@ module PrimariesPageGenerator
     def precincts_reporting; state_reporting_unit.precincts_reporting; end
     def precincts_total; state_reporting_unit.precincts_total; end
     def candidates; state_reporting_unit.candidates; end
+
+    def candidate_n_delegates(candidate)
+      del_candidate = @delegate_counts.party_state_candidates[candidate.party][race.state_reporting_units.first.state_postal][candidate.id]
+      del_candidate && del_candidate.delegates || 0
+    end
 
     def candidate_votes_fraction(candidate)
       total_n_votes = candidates.map(&:vote_count).reduce(0) { |s, n| s + n }

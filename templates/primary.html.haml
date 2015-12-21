@@ -24,4 +24,4 @@
             %td.votes= candidate.vote_count
             %td.percent
               %span.n>= (100 * candidate_votes_fraction(candidate)).round(1)
-            %td.n-delegates TODO
+            %td.n-delegates= candidate_n_delegates(candidate)
