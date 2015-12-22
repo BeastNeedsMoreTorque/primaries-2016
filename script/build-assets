@@ -4,17 +4,6 @@ require 'rubygems'
 require 'bundler/setup'
 Bundler.require
 
-require_relative '../lib/logger'
-require_relative '../lib/paths'
+require_relative '../lib/assets'
 
-sprockets = Sprockets::Environment.new(Paths.Dist) do |env|
-  env.logger = $logger
-end
-sprockets.append_path(Paths.Assets)
-%w(javascripts/main.js stylesheets/main.css).each do |filename|
-  asset = sprockets.find_asset(filename)
-  dirname, basename = filename.split('/')
-  FileUtils.mkpath("#{Paths.Dist}/#{dirname}")
-  asset.write_to("#{Paths.Dist}/#{asset.filename}")
-  asset.write_to("#{Paths.Dist}/#{asset.digest_path}")
-end
+Assets.build

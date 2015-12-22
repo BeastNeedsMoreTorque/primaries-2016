@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+require 'rubygems'
+require 'bundler/setup'
+Bundler.require(:default, :development)
+
 require 'webrick'
 
 require_relative '../lib/paths'
@@ -18,4 +22,11 @@ end
 server = WEBrick::HTTPServer.new(Port: 3000)
 server.mount('/', FileHandler, Paths.Dist)
 trap("INT") { server.shutdown }
+
+listener = Listen.to('lib', 'assets', 'templates', only: /\.(rb|js|json|png|css|sass)$/) do |modified, added, removed|
+  system("#{Paths.Script}/build-primaries")
+end
+
+listener.start
 server.start
+listener.stop

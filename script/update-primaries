@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+Bundler.require(:default)
+
+require_relative '../lib/ap'
+
+AP.update_cache
+exec "#{Paths.Script}/build-primaries"

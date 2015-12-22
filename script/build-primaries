@@ -5,8 +5,11 @@ require 'bundler/setup'
 Bundler.require(:default)
 
 require_relative '../lib/ap'
+require_relative '../lib/assets'
 #require_relative '../lib/index_page_generator'
 require_relative '../lib/primaries_page_generator'
+
+Assets.build # HTML pages depend on asset paths, which include hashes of contents
 
 delegate_counts = AP.GET_del_super
 races = AP.GET_all_primary_election_days.map(&:races).flatten(1)

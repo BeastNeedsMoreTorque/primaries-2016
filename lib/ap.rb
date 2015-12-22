@@ -1,11 +1,20 @@
+require 'fileutils'
 require 'json'
 require 'net/http'
 require 'uri'
 
 require_relative './logger'
 require_relative './models'
+require_relative './paths'
 
+# Requests data from the AP Elections API and stores it in `cache/ap`. Then
+# returns it as JSON when requested.
 module AP
+  def self.update_cache
+    self.GET_del_super
+    self.GET_all_primary_election_days
+  end
+
   # Requests election results for the given date.
   #
   # Returns an ElectionDay or raises an error.
@@ -44,12 +53,47 @@ module AP
 
   private
 
+  # Loads JSON: from `cache/ap` if it's there, from the server otherwise.
+  #
+  # If it loads from the server, it saves the result in the cache.
   def self.GET_json(uri_string)
+    path = uri_to_path(uri_string)
+    if File.exist?(path)
+      load_json_from_cache(uri_string)
+    else
+      GET_json_and_save(uri_string)
+    end
+  end
+
+  # Sends a GET request, saves the result to `cache/ap`, and returns the saved
+  # JSON.
+  def self.GET_json_and_save(uri_string)
     $logger.info("GET #{uri_string}")
     uri = URI(uri_string)
     response = Net::HTTP.get_response(uri)
     raise "HTTP #{response.code} #{response.message} from server. Body: #{response.body}" if response.code != '200'
-    JSON.parse(response.body, create_additions: false, symbolize_names: true)
+    save_string_to_cache(response.body, uri_string)
+    load_json_from_cache(uri_string)
+  end
+
+  # Reads a GET response from `cache/ap`, or raises an error if there is no
+  # cached value.
+  def self.load_json_from_cache(uri_string)
+    path = uri_to_path(uri_string)
+    $logger.debug("load #{path}")
+    File.open(path, 'r') { |f| JSON.load(f, nil, create_additions: false, max_nesting: false, symbolize_names: true) }
+  end
+
+  # Saves a GET response to `cache/ap`.
+  def self.save_string_to_cache(string, uri_string)
+    path = uri_to_path(uri_string)
+    FileUtils.mkdir_p(File.dirname(path))
+    $logger.debug("save #{path}")
+    File.open(path, 'w') { |f| f.write(string) }
+  end
+
+  def self.uri_to_path(uri_string)
+    "#{Paths.Cache}/ap/" + uri_string.sub('https://api.ap.org/v2/', '').gsub('/', '__')
   end
 
   def self.api_key
