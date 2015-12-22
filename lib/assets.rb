@@ -5,6 +5,8 @@ module Assets
   extend Sprockets::DigestUtils
 
   def self.build
+    $logger.info("Rebuilding assets...")
+
     # Create main.js and main.css
     sprockets = Sprockets::Environment.new(Paths.Dist) do |env|
       env.logger = $logger
@@ -14,14 +16,14 @@ module Assets
       asset = sprockets.find_asset(filename)
       dirname, basename = filename.split('/')
       FileUtils.mkpath("#{Paths.Dist}/#{dirname}")
-      $logger.info("Writing asset #{asset.digest_path}")
-      asset.write_to("#{Paths.Dist}/#{asset.filename}")
+      $logger.debug("Writing asset #{asset.digest_path}")
+      asset.write_to("#{Paths.Dist}/#{filename}")
       asset.write_to("#{Paths.Dist}/#{asset.digest_path}")
     end
 
     # Copy static assets
     %w(topojson).each do |filename|
-      $logger.info("Copying asset #{filename}")
+      $logger.debug("Copying asset #{filename}")
       FileUtils.cp_r("#{Paths.Assets}/#{filename}", "#{Paths.Dist}")
     end
   end

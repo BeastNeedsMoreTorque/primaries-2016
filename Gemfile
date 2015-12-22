@@ -6,4 +6,5 @@ gem 'sprockets'
 
 group :development do
   gem 'listen'
+  gem 'rspec'
 end

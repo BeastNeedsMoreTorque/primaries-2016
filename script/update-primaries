@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+#
+# Refreshes the delegate count and vote counts for the specified election dates
+#
+# Usage: update-primaries [YYYY-MM-DD ...]
 
 require 'rubygems'
 require 'bundler/setup'
@@ -6,5 +10,5 @@ Bundler.require(:default)
 
 require_relative '../lib/ap'
 
-AP.update_cache
+AP.wipe_dates(ARGV)
 exec "#{Paths.Script}/build-primaries"

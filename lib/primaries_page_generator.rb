@@ -25,7 +25,7 @@ module PrimariesPageGenerator
   private
 
   def self.write_string_to_path(string, path)
-    $logger.info("Writing #{path}")
+    $logger.debug("Writing #{path}")
     FileUtils.mkdir_p(File.dirname(path))
     File.open(path, 'w') { |f| f.write(string) }
   end

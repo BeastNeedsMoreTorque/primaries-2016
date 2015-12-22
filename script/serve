@@ -19,14 +19,20 @@ class FileHandler < WEBrick::HTTPServlet::FileHandler
   end
 end
 
+def on_event
+  system("#{Paths.Script}/build-primaries")
+  system("rspec")
+end
+
 server = WEBrick::HTTPServer.new(Port: 3000)
 server.mount('/', FileHandler, Paths.Dist)
 trap("INT") { server.shutdown }
 
-listener = Listen.to('lib', 'assets', 'templates', only: /\.(rb|js|json|png|css|sass)$/) do |modified, added, removed|
-  system("#{Paths.Script}/build-primaries")
+listener = Listen.to('lib', 'assets', 'templates', 'spec', only: /\.(rb|js|json|png|css|sass)$/) do |modified, added, removed|
+  on_event
 end
 
+on_event
 listener.start
 server.start
 listener.stop
