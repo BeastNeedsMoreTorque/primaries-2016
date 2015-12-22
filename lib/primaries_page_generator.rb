@@ -40,7 +40,7 @@ module PrimariesPageGenerator
   end
 
   class HtmlContext
-    attr_reader(:election_day, :race, :state_reporting_unit)
+    attr_reader(:delegate_counts, :election_day, :race, :state_reporting_unit)
 
     def initialize(delegate_counts, race, state_reporting_unit)
       @delegate_counts = delegate_counts
@@ -51,6 +51,9 @@ module PrimariesPageGenerator
 
     def main_js_path; Assets.main_js_path; end
     def main_css_path; Assets.main_css_path; end
+
+    def votes_timestamp; election_day.timestamp; end
+    def delegates_timestamp; delegate_counts.timestamp; end
 
     def html_h1
       "#{state_reporting_unit.state_name} #{race.race_type}"

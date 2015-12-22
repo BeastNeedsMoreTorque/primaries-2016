@@ -28,7 +28,7 @@ server = WEBrick::HTTPServer.new(Port: 3000)
 server.mount('/', FileHandler, Paths.Dist)
 trap("INT") { server.shutdown }
 
-listener = Listen.to('lib', 'assets', 'templates', 'spec', only: /\.(rb|js|json|png|css|sass)$/) do |modified, added, removed|
+listener = Listen.to('lib', 'assets', 'templates', 'spec', only: /\.(rb|js|json|png|css|sass|haml)$/) do |modified, added, removed|
   on_event
 end
 

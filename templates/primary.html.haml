@@ -25,3 +25,5 @@
             %td.percent
               %span.n>= (100 * candidate_votes_fraction(candidate)).round(1)
             %td.n-delegates= candidate_n_delegates(candidate)
+
+    %p.last-updated= "Vote counts current as of #{votes_timestamp}. Delegate counts current as of #{delegates_timestamp}"
