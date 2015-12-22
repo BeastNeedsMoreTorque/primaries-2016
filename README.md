@@ -9,13 +9,13 @@ results so they're updated frequently and available to all.
 2. `gem install bundler`
 3. `bundle install`
 4. `script/build-assets`
-5. `AP_API_KEY=abcdefg script/build-2016-primaries-from-scratch`
-6. (periodically) `AP_API_KEY=abcdefg script/update-2016-primaries`
+6. (periodically) `AP_API_KEY=abcdefg script/update-primaries`
 
 # Developing
 
 This is a static website, stored in the `dist/` directory. Run `script/serve` to
-serve it at [http://localhost:3000](http://localhost:3000).
+serve it at [http://localhost:3000](http://localhost:3000). (You can still run
+`script/update-primaries` periodically while this is running.)
 
 Set the environment variable `AP_TEST=true` to incorporate test data from the
 Associated Press.
