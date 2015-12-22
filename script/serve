@@ -21,7 +21,7 @@ end
 
 def on_event
   system("#{Paths.Script}/build-primaries")
-  system("rspec")
+  system("rspec") unless ENV['SKIP_RSPEC']
 end
 
 server = WEBrick::HTTPServer.new(Port: 3000)

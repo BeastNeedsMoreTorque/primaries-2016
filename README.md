@@ -8,8 +8,8 @@ results so they're updated frequently and available to all.
 1. Install [rvm](http://rvm.io)
 2. `gem install bundler`
 3. `bundle install`
-4. `script/build-assets`
-6. (periodically) `AP_API_KEY=abcdefg script/update-primaries`
+4. `script/build-primaries`
+5. (periodically) `AP_API_KEY=abcdefg script/update-primaries [YYYY-MM-DD ...]`
 
 # Developing
 
@@ -20,7 +20,9 @@ serve it at [http://localhost:3000](http://localhost:3000). (You can still run
 Set the environment variable `AP_TEST=true` to incorporate test data from the
 Associated Press.
 
-Set the environment variable `LOG_LEVEL=debug` to see more log data.
+Set the environment variable `LOG_LEVEL=debug` to see more log data. You'll
+probably also want to set `SKIP_RSPEC=true` in this case; otherwise the specs
+will create confusing log messages.
 
 # Endpoints
 
