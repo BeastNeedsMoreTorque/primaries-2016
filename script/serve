@@ -19,8 +19,17 @@ on_event
 listener.start
 
 app = Rack::Builder.new do
-  use(Rack::StaticCache, urls: [ '/javascripts', '/stylesheets', '/topojson' ], root: Paths.Dist, versioning: false)
-  use(Rack::TryStatic, root: Paths.Dist, urls: [ '/' ], try: [ '.html' ])
+  use(Rack::TryStatic, root: Paths.Dist, urls: [ '/primaries' ], try: [ '.html' ])
+  use(Rack::Static,
+      urls: [ '/' ],
+      root: Paths.Dist,
+      header_rules: [
+        [ :all, { 'Cache-Control' => 'public, max-age=31536000', 'Expires' => (Time.now + 86400 * 365).utc.rfc2822 }],
+        [ %w(css), { 'Content-Type' => 'text/css; charset=utf-8' } ],
+        [ %w(js), { 'Content-Type' => 'application/javascript; charset=utf-8' } ],
+        [ %w(json), { 'Content-Type' => 'application/json' } ]
+      ]
+  )
 
   run lambda { [ 404, { 'Content-Type' => 'text/html' }, [ 'Not Found' ]] }
 end
