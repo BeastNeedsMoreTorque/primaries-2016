@@ -1,0 +1,27 @@
+-# Called with a AllPrimariesPageGenerator::HtmlContext
+!!! 5
+%html{lang: 'en'}
+  %head
+    %title Presidential Primary Races
+    %link{rel: 'stylesheet', href: main_css_path}
+    %script{src: main_js_path}
+  %body
+    %h1 Presidential Primary Races
+
+    %svg.map
+
+    %h2 Candidates
+    %table
+      %thead
+        %tr
+          %th.candidate Candidate
+          %th.votes Votes
+          %th.n-delegates Del.
+      %tbody
+        - pols.each do |pol|
+          %tr
+            %td.candidate= pol.name
+            %td.votes= pol.n_votes
+            %td.n-delegates= pol.n_delegates
+
+    %p.last-updated= "Vote counts current as of #{votes_timestamp}. Delegate counts current as of #{delegates_timestamp}"

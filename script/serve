@@ -4,29 +4,12 @@ require 'rubygems'
 require 'bundler/setup'
 Bundler.require(:default, :development)
 
-require 'webrick'
-
 require_relative '../lib/paths'
-
-# Serve "x.html" as just "x"
-class FileHandler < WEBrick::HTTPServlet::FileHandler
-  def search_file(req, res, basename)
-    if file = super
-      file
-    else
-      super(req, res, "#{basename}.html")
-    end
-  end
-end
 
 def on_event
   system("#{Paths.Script}/build-primaries")
   system("rspec") unless ENV['SKIP_RSPEC']
 end
-
-server = WEBrick::HTTPServer.new(Port: 3000)
-server.mount('/', FileHandler, Paths.Dist)
-trap("INT") { server.shutdown }
 
 listener = Listen.to('lib', 'assets', 'templates', 'spec', only: /\.(rb|js|json|png|css|sass|haml)$/) do |modified, added, removed|
   on_event
@@ -34,5 +17,14 @@ end
 
 on_event
 listener.start
-server.start
+
+app = Rack::Builder.new do
+  use(Rack::StaticCache, urls: [ '/javascripts', '/stylesheets', '/topojson' ], root: Paths.Dist, versioning: false)
+  use(Rack::TryStatic, root: Paths.Dist, urls: [ '/' ], try: [ '.html' ])
+
+  run lambda { [ 404, { 'Content-Type' => 'text/html' }, [ 'Not Found' ]] }
+end
+
+Rack::Server.start(app: app, Port: 3000) # will return after Ctrl+C
+
 listener.stop

@@ -2,6 +2,58 @@ require 'date'
 
 # http://customersupport.ap.org/doc/eln/AP_Elections_API_Developer_Guide.pdf
 
+class Database
+  attr_reader(:delegate_counts, :election_days)
+
+  def initialize(delegate_counts, election_days)
+    @delegate_counts = delegate_counts
+    @election_days = election_days
+  end
+
+  def races
+    @races ||= @election_days.flat_map(&:races)
+  end
+
+  # An Array of Pols.
+  #
+  # A Pol appears in this Array if he or she appears in the delegate_counts.
+  def pols(party_id)
+    @delegate_counts.party_country_candidates[party_id].values.map { |dc| Pol.new(dc, races) }
+  end
+end
+
+# Politician
+class Pol
+  def initialize(del_candidate, races)
+    @del_candidate = del_candidate
+    @races = races
+  end
+
+  def id; @del_candidate.id; end
+  def party_id; @del_candidate.party_id; end
+  def n_delegates; @del_candidate.delegates; end
+  def n_unpledged_delegates; @del_candidate.unpledged_delegates; end
+
+  def n_votes
+    race_candidates.map(&:vote_count).reduce(0, :+)
+  end
+
+  def name
+    # Assume the name is the same across all races
+    race_candidates.first.name || ''
+  end
+
+  private
+
+  # Array of Candidates, one per Race this pol appears in
+  def race_candidates
+    @race_candidates ||= @races
+      .select { |r| r.party == party_id }
+      .flat_map { |r| r.state_reporting_units }
+      .flat_map { |ru| ru.candidates.select { |c| c.pol_id == id } }
+  end
+end
+
 class ElectionDay
   def initialize(hash); @hash = hash; end
 
@@ -132,23 +184,25 @@ class Del
   def party_id; @hash[:pId]; end
   def delegates_needed; @hash[:dNeed]; end
   def delegates_total; @hash[:dVote]; end
-  def states; @hash[:State].map { |s| DelState.new(s) }; end
+  def states; @hash[:State].map { |s| DelState.new(self, s) }; end
 end
 
 class DelState
-  def initialize(hash); @hash = hash; end
+  def initialize(del, hash); @del = del; @hash = hash; end
 
   # JSON attributes, no logic
   def id; @hash[:sId]; end
-  def candidates; @hash[:Cand].map { |c| DelCandidate.new(c) }; end
+  def candidates; @hash[:Cand].map { |c| DelCandidate.new(@del, c) }; end
 end
 
 class DelCandidate
-  def initialize(hash); @hash = hash; end
+  def initialize(del, hash); @del = del; @hash = hash; end
 
   # JSON attributes, no logic
   def id; @hash[:cId]; end
   def name; @hash[:cName]; end
   def delegates; @hash[:dTot].to_i; end
   def unpledged_delegates; @hash[:sdTot].to_i; end
+
+  def party_id; @del.party_id; end
 end

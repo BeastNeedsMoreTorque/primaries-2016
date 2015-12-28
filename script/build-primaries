@@ -6,15 +6,16 @@ Bundler.require(:default)
 
 require_relative '../lib/ap'
 require_relative '../lib/assets'
-#require_relative '../lib/index_page_generator'
+require_relative '../lib/all_primaries_page_generator'
 require_relative '../lib/primaries_page_generator'
 
 Assets.build # HTML pages depend on asset paths, which include hashes of contents
 
 delegate_counts = AP.GET_del_super
-races = AP.GET_all_primary_election_days.map(&:races).flatten(1)
+election_days = AP.GET_all_primary_election_days
+database = Database.new(delegate_counts, election_days)
 
-#IndexPageGenerator.generate(delegate_counts)
-for race in races
-  PrimariesPageGenerator.generate_for_race(delegate_counts, race)
+AllPrimariesPageGenerator.generate(database)
+for election_day in database.election_days
+  PrimariesPageGenerator.generate(database.delegate_counts, election_day)
 end

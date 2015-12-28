@@ -1,10 +1,11 @@
 require 'haml'
 
 require_relative './assets'
-require_relative './logger'
+require_relative './page_generator'
 require_relative './paths'
 
 module PrimariesPageGenerator
+  extend PageGenerator
   @template = File.read(File.expand_path('../../templates/primary.html.haml', __FILE__))
 
   def self.generate(delegate_counts, election_day)
@@ -23,12 +24,6 @@ module PrimariesPageGenerator
   end
 
   private
-
-  def self.write_string_to_path(string, path)
-    $logger.debug("Writing #{path}")
-    FileUtils.mkdir_p(File.dirname(path))
-    File.open(path, 'w') { |f| f.write(string) }
-  end
 
   # Generate all static HTML files for
   def self.generate_html_for_race(delegate_counts, race, state_reporting_unit)

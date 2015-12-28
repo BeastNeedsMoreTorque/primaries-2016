@@ -6,5 +6,7 @@ gem 'sprockets'
 
 group :development do
   gem 'listen'
+  gem 'rack'
+  gem 'rack-contrib'
   gem 'rspec'
 end
