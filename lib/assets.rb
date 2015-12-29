@@ -8,7 +8,7 @@ module Assets
     $logger.info("Clearing assets...")
 
     %w(javascripts stylesheets topojson).each do |subdir|
-      FileUtils.rm_rf("#{Paths.Dist}/#{subdir}")
+      FileUtils.rm_rf("#{Paths.Dist}/2016/#{subdir}")
     end
   end
 
