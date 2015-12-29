@@ -1,0 +1,71 @@
+#!/usr/bin/env ruby
+#
+# Uploads the contents of `dist/` to Amazon S3.
+
+require 'rubygems'
+require 'bundler/setup'
+Bundler.require(:default)
+
+require_relative '../lib/logger'
+require_relative '../lib/paths'
+
+S3Bucket = 'elections-test'
+MaxAge = 365 * 86400 # 1yr
+ShortAge = 5
+
+$bucket = Aws::S3::Bucket.new(S3Bucket)
+
+def upload_asset(relative_path, content_type)
+  absolute_path = "#{Paths.Dist}/#{relative_path}"
+  key = relative_path
+
+  $logger.info("PUT s3://#{S3Bucket}/#{key} #{content_type}")
+
+  File.open(absolute_path, 'r') do |f|
+    $bucket.put_object({
+      key: key,
+      acl: 'public-read',
+      body: f,
+      cache_control: "public, max-age=#{MaxAge}",
+      content_type: content_type,
+      expires: Time.now + MaxAge
+    })
+  end
+end
+
+def upload_html(absolute_path)
+  key = absolute_path[(Paths.Dist.length + 1) .. -6]
+
+  $logger.info("PUT s3://#{S3Bucket}/#{key} text/html; charset=utf-8")
+
+  File.open(absolute_path, 'r') do |f|
+    $bucket.put_object({
+      key: key,
+      acl: 'public-read',
+      body: f,
+      cache_control: "public, max-age=#{ShortAge}",
+      content_type: 'text/html; charset=utf-8',
+      expires: Time.now + ShortAge
+    })
+  end
+end
+
+# Upload the never-expiring assets first. They're fingerprinted, and we never
+# delete the old fingerprints. By uploading them first, we guarantee we don't
+# upload an HTML file that points to an asset before that asset is uploaded.
+Dir["#{Paths.Dist}/**/*.*"].select{ |s| s !~ /\.html$/ }.each do |filename|
+  relative_path = filename[(Paths.Dist.length + 1) .. -1]
+  content_type = if relative_path =~ /\.css$/
+    'text/css; charset=utf-8'
+  elsif relative_path =~ /\.js$/
+    'application/javascript; charset=utf-8'
+  elsif relative_path =~ /\.json$/
+    'application/json'
+  else
+    raise "Aah, this file shouldn't exist: #{relative_path}"
+  end
+  upload_asset(relative_path, content_type)
+end
+
+# Now upload the HTML files.
+Dir["#{Paths.Dist}/**/*.html"].each { |path| upload_html(path) }

@@ -6,4 +6,5 @@ Bundler.require
 
 require_relative '../lib/assets'
 
+Assets.clear
 Assets.build

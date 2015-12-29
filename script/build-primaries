@@ -9,6 +9,7 @@ require_relative '../lib/assets'
 require_relative '../lib/all_primaries_page_generator'
 require_relative '../lib/primaries_page_generator'
 
+Assets.clear
 Assets.build # HTML pages depend on asset paths, which include hashes of contents
 
 delegate_counts = AP.GET_del_super

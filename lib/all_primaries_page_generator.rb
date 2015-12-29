@@ -31,7 +31,7 @@ module AllPrimariesPageGenerator
     def pols; @database.pols(party_id); end
 
     def html_path
-      "primaries/#{party_id}.html"
+      "2016/primaries/#{party_id}.html"
     end
   end
 

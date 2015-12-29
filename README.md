@@ -31,13 +31,14 @@ will create confusing log messages.
 
 # Architecture
 
-An build has two phases:
+A build has three phases:
 
 1. Pull the newest data from the AP Elections API
 2. Build our static files (HTML, CSS, JavaScript, JSON)
+3. Upload the static files to S3
 
 The AP Elections API has severe quota restrictions. We try and avoid calls to
-it whenever possible. We dump our HTML response JSON into `cache/ap`.
+it whenever possible. We dump our HTML response JSON into `cache/`.
 
 You can use or ignore each level of the cache using the following commands:
 
@@ -50,3 +51,5 @@ You can use or ignore each level of the cache using the following commands:
 * To serve at [http://localhost:3000](http://localhost:3000) and rebuild every
   time code changes, run `script/serve`. This will also call `rspec` whenever
   code changes, so you can't help but see test results :).
+* To upload to S3, run `script/upload`. You'll need to set `AWS_ACCESS_KEY_ID`,
+  `AWS_SECRET_ACCESS_KEY` and `AWS_REGION` in your environment.

@@ -77,7 +77,7 @@ module PrimariesPageGenerator
     end
 
     def html_path
-      "primaries/#{race.party}/#{state_reporting_unit.state_postal}.html"
+      "2016/primaries/#{race.party}/#{state_reporting_unit.state_postal}.html"
     end
   end
 end

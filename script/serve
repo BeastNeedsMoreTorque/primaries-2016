@@ -19,9 +19,9 @@ on_event
 listener.start
 
 app = Rack::Builder.new do
-  use(Rack::TryStatic, root: Paths.Dist, urls: [ '/primaries' ], try: [ '.html' ])
+  use(Rack::TryStatic, root: Paths.Dist, urls: [ '/2016/primaries' ], try: [ '.html' ])
   use(Rack::Static,
-      urls: [ '/' ],
+      urls: [ '/2016' ],
       root: Paths.Dist,
       header_rules: [
         [ :all, { 'Cache-Control' => 'public, max-age=31536000', 'Expires' => (Time.now + 86400 * 365).utc.rfc2822 }],

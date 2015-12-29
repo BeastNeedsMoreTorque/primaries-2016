@@ -21,7 +21,7 @@ function load_us_map() {
 
   var states = svg.append('g').attr('class', 'states');
 
-  d3.json('/topojson/us.json', function(err, us) {
+  d3.json('/2016/topojson/us.json', function(err, us) {
     if (err) throw err;
 
     states.selectAll('path')
