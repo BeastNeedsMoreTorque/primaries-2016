@@ -6,6 +6,9 @@ require 'rubygems'
 require 'bundler/setup'
 Bundler.require(:default)
 
+require 'pstore'
+
+require_relative '../lib/assets'
 require_relative '../lib/logger'
 require_relative '../lib/paths'
 
@@ -15,38 +18,76 @@ ShortAge = 5
 
 $bucket = Aws::S3::Bucket.new(S3Bucket)
 
+# We cache the sha1s of files we upload, so we don't need to upload twice. This
+# shaves a few seconds off our upload times on election night: we won't need to
+# re-upload the JavaScript over and over again.
+module S3UploadCache
+  # finds the cached sha1, or returns nil.
+  def self.get_digest(absolute_path)
+    @cache.transaction(true) do
+      @cache[absolute_path]
+    end
+  end
+
+  # sets the cached sha1. Do this after upload succeeds.
+  def self.set_digest(absolute_path, digest)
+    @cache.transaction do
+      @cache[absolute_path] = digest
+    end
+  end
+
+  private
+
+  @cache = PStore.new("#{Paths.Cache}/uploaded-to-s3.pstore")
+end
+
 def upload_asset(relative_path, content_type)
   absolute_path = "#{Paths.Dist}/#{relative_path}"
-  key = relative_path
+  digest = Assets.digest_file_at_path(absolute_path)
+  debug_path = "s3://#{S3Bucket}/#{relative_path}"
 
-  $logger.info("PUT s3://#{S3Bucket}/#{key} #{content_type}")
+  if digest != S3UploadCache.get_digest(absolute_path)
+    $logger.info("PUT #{debug_path} #{content_type}")
 
-  File.open(absolute_path, 'r') do |f|
-    $bucket.put_object({
-      key: key,
-      acl: 'public-read',
-      body: f,
-      cache_control: "public, max-age=#{MaxAge}",
-      content_type: content_type,
-      expires: Time.now + MaxAge
-    })
+    File.open(absolute_path, 'r') do |f|
+      $bucket.put_object({
+        key: relative_path,
+        acl: 'public-read',
+        body: f,
+        cache_control: "public, max-age=#{MaxAge}",
+        content_type: content_type,
+        expires: Time.now + MaxAge
+      })
+    end
+
+    S3UploadCache.set_digest(absolute_path, digest)
+  else
+    $logger.info("SKIP #{debug_path}")
   end
 end
 
 def upload_html(absolute_path)
+  digest = Assets.digest_file_at_path(absolute_path)
   key = absolute_path[(Paths.Dist.length + 1) .. -6]
+  debug_path = "s3://#{S3Bucket}/#{key}"
 
-  $logger.info("PUT s3://#{S3Bucket}/#{key} text/html; charset=utf-8")
+  if digest != S3UploadCache.get_digest(absolute_path)
+    $logger.info("PUT s3://#{debug_path} text/html; charset=utf-8")
 
-  File.open(absolute_path, 'r') do |f|
-    $bucket.put_object({
-      key: key,
-      acl: 'public-read',
-      body: f,
-      cache_control: "public, max-age=#{ShortAge}",
-      content_type: 'text/html; charset=utf-8',
-      expires: Time.now + ShortAge
-    })
+    File.open(absolute_path, 'r') do |f|
+      $bucket.put_object({
+        key: key,
+        acl: 'public-read',
+        body: f,
+        cache_control: "public, max-age=#{ShortAge}",
+        content_type: 'text/html; charset=utf-8',
+        expires: Time.now + ShortAge
+      })
+    end
+
+    S3UploadCache.set_digest(absolute_path, digest)
+  else
+    $logger.info("SKIP #{debug_path}")
   end
 end
 

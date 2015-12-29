@@ -44,11 +44,15 @@ module Assets
     @main_js_path ||= "/2016/javascripts/main-#{asset_digest_hex('javascripts/main.js')}.js"
   end
 
+  def self.digest_file_at_path(path)
+    digest = digest_class.new
+    File.open(path, 'r') { |f| digest << f.read }
+    pack_hexdigest(digest.digest)
+  end
+
   private
 
   def self.asset_digest_hex(filename)
-    digest = digest_class.new
-    File.open("#{Paths.Dist}/2016/#{filename}", 'r') { |f| digest << f.read }
-    pack_hexdigest(digest.digest)
+    digest_file_at_path("#{Paths.Dist}/2016/#{filename}")
   end
 end

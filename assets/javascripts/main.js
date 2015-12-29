@@ -67,6 +67,7 @@ function load_us_map() {
       if (state.code == 'LA') { centroid[0] -= 7; }
       if (state.code == 'MI') { centroid[0] += 13; centroid[1] += 20; }
       if (state.code == 'MN') { centroid[0] -= 4; }
+      if (state.code == 'WV') { centroid[0] -= 2; }
 
       drawProperties[d.id] = {
         centroid: centroid,
