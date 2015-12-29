@@ -1,0 +1,19 @@
+svg#main-map {
+  path.state {
+    stroke: white;
+    fill: #eee;
+    cursor: pointer;
+  }
+
+  line {
+    stroke: #bbb;
+    stroke-width: 1px;
+  }
+
+  text {
+    cursor: pointer;
+    &.in-state {
+      text-anchor: middle;
+    }
+  }
+}
