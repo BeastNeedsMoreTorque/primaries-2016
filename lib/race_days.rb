@@ -1,5 +1,21 @@
 require 'date'
 
+require_relative './states'
+
+class RaceDay
+  def initialize(hash); @hash = hash; end
+  def date; @hash[:date]; end
+
+  def states
+    arr = [ :Dem, :GOP ].map do |party|
+      [ party, (@hash[party] || []).map { |code| StatesByCode[code] } ]
+    end
+    Hash[arr]
+  end
+
+  def to_json(*a); @hash.to_json(*a); end
+end
+
 RaceDays = [
   { date: Date.parse('2016-02-01'), Dem: [ 'IA' ], GOP: [ 'IA' ] },
   { date: Date.parse('2016-02-09'), Dem: [ 'NH' ], GOP: [ 'NH' ] },
@@ -32,4 +48,4 @@ RaceDays = [
   { date: Date.parse('2016-06-05'), Dem: [ 'PR' ] },
   { date: Date.parse('2016-06-07'), Dem: [ 'CA', 'MT', 'NJ', 'NM', 'ND', 'SD' ], GOP: [ 'CA', 'MT', 'NJ', 'NM', 'SD' ] },
   { date: Date.parse('2016-06-14'), Dem: [ 'DC' ], GOP: [ 'DC' ] }
-]
+].map { |hash| RaceDay.new(hash) }

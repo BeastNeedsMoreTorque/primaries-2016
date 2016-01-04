@@ -1,4 +1,14 @@
-StatesShorthand = [
+class State
+  def initialize(hash); @hash = hash; end
+  def to_json(*a); @hash.to_json(*a); end
+
+  def abbreviation; @hash[:abbreviation]; end
+  def code; @hash[:code]; end
+  def name; @hash[:name]; end
+  def fips_int; @hash[:fips_int]; end
+end
+
+States = [
   [ 1, 'AL', 'Ala.', 'Alabama' ],
   [ 2, 'AK', 'Alaska' ],
   [ 4, 'AZ', 'Ariz.', 'Arizona' ],
@@ -56,17 +66,8 @@ StatesShorthand = [
   [ 72, 'PR', 'P.R.', 'Puerto Rico' ],
   [ 78, 'VI', 'V.I.', 'Virgin Islands' ],
   [ -1, 'abroad', 'abroad', 'Democrats Abroad' ]
-];
+].map { |arr| State.new(fipsInt: arr[0], code: arr[1], abbreviation: arr[2], name: arr[3] || arr[2]) }
 
-States = StatesShorthand.map do |arr|
-  {
-    fipsInt: arr[0],
-    code: arr[1],
-    abbreviation: arr[2],
-    name: arr[3] || arr[2]
-  }
-end
+StatesByCode = Hash[States.map { |s| [ s.code, s ] }]
 
-StatesByCode = Hash[States.map { |s| [ s[:code], s ] }]
-
-StatesByFipsInt = Hash[States.map { |s| [ s[:fipsInt], s ] } ]
+StatesByFipsInt = Hash[States.map { |s| [ s.fips_int, s ] } ]

@@ -1,0 +1,26 @@
+.calendar {
+  h4 {
+    font-size: 3rem;
+    margin: 2rem 0 0 1rem;
+    padding: 0;
+  }
+
+  ol.race-months, ol.race-days, ul.parties {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ol.race-days {
+    display: flex;
+    -webkit-display: flex;
+  }
+
+  li.race-day {
+    margin: 1rem;
+  }
+
+  a {
+    font-size: 2rem;
+  }
+}
