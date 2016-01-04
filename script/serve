@@ -34,7 +34,7 @@ app = Rack::Builder.new do
       ]
   )
 
-  run lambda { [ 404, { 'Content-Type' => 'text/html' }, [ 'Not Found' ]] }
+  run lambda { |env| [ 404, { 'Content-Type' => 'text/html' }, [ 'Not Found' ]] }
 end
 
 Rack::Server.start(app: app, Port: 3000) # will return after Ctrl+C
