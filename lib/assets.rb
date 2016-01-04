@@ -1,3 +1,5 @@
+require 'json'
+
 require_relative './logger'
 require_relative './paths'
 
@@ -14,6 +16,31 @@ module Assets
 
   def self.build
     $logger.info("Rebuilding assets...")
+
+    # Build JSON data files
+    require_relative './states'
+    $logger.debug('Writing javascripts/state.js')
+    File.open("#{Paths.Assets}/javascripts/states.js", 'w') do |f|
+      f.write <<-EOT.gsub(/^\s{8}/, '')
+        // Automatically generated from states.rb. See lib/assets.rb.
+        var States = #{JSON.dump(States)};
+        var StatesByCode = {};
+        var StatesByFipsInt = {};
+        States.forEach(function(state) {
+          StatesByCode[state.code] = state;
+          StatesByFipsInt[state.fipsInt] = state;
+        });
+        EOT
+    end
+
+    require_relative './race_days'
+    $logger.debug('Writing javascripts/race_days.js')
+    File.open("#{Paths.Assets}/javascripts/race_days.js", 'w') do |f|
+      f.write <<-EOT.gsub(/^\s{8}/, '')
+        // Automatically generated from race_days.rb. See lib/assets.rb.
+        var RaceDays = #{JSON.dump(RaceDays)};
+        EOT
+    end
 
     # Create main.js and main.css
     sprockets = Sprockets::Environment.new("#{Paths.Dist}/2016") do |env|

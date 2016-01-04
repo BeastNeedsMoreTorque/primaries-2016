@@ -1,3 +1,5 @@
 dist/
 cache/
 *.swp
+assets/javascripts/states.js
+assets/javascripts/race_days.js

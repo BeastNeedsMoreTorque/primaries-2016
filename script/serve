@@ -12,7 +12,10 @@ def on_event
 end
 
 listener = Listen.to('lib', 'assets', 'templates', 'spec', only: /\.(rb|js|json|png|css|sass|scss|haml)$/) do |modified, added, removed|
-  on_event
+  files = Set.new(modified + added + removed) - [ "#{Paths.Assets}/javascripts/states.js", "#{Paths.Assets}/javascripts/race_days.js" ]
+  if !files.empty?
+    on_event
+  end
 end
 
 on_event
