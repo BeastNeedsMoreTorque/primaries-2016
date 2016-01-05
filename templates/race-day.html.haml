@@ -1,0 +1,22 @@
+-# Called with a RaceDayPageGenerator::HtmlContext
+!!! 5
+%html{lang: 'en'}
+  %head
+    %title= "Presidential Primaries: #{election_day.date.strftime('%B %-d, %Y')}"
+    %link{rel: 'stylesheet', href: main_css_path}
+    %script{src: main_js_path}
+  %body
+    %h1= "Presidential Primaries: #{election_day.date.strftime('%B %-d, %Y')}"
+
+    = render(partial: 'calendar')
+
+    - states.each do |state, state_races|
+      %h3= state.name
+      - [ :Dem, :GOP ].each do |party|
+        - if state_races[party].nil?
+          %p (Not today)
+        - else
+          - race = state_races[party]
+
+
+    %svg#main-map

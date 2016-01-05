@@ -8,22 +8,19 @@
   %body
     %h1= html_h1
 
-    %h2 State-level results
-    %p.precincts= "#{precincts_reporting} of #{precincts_total} precincts reporting"
-    %table
-      %thead
-        %tr
-          %th.candidate Candidate
-          %th.votes Votes
-          %th.percent Pct.
-          %th.n-delegates Del.
-      %tbody
-        - candidates.each do |candidate|
+    - if race.id
+      %h2 State-level results
+      %p.precincts= "#{race.n_precincts_reporting} of #{race.n_precincts_total} precincts reporting"
+      %table
+        %thead
           %tr
-            %td.candidate= candidate.name
-            %td.votes= candidate.vote_count
-            %td.percent
-              %span.n>= (100 * candidate_votes_fraction(candidate)).round(1)
-            %td.n-delegates= candidate_n_delegates(candidate)
-
-    %p.last-updated= "Vote counts current as of #{votes_timestamp}. Delegate counts current as of #{delegates_timestamp}"
+            %th.candidate Candidate
+            %th.votes Votes
+            %th.n-delegates Del.
+        %tbody
+          - race.candidate_races.each do |candidate_race|
+            - candidate = candidate_race.candidate
+            %tr
+              %td.candidate= candidate.name
+              %td.votes= candidate_race.n_votes
+              %td.n-delegates= candidate.candidate_state(state).n_delegates

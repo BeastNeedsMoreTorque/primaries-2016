@@ -2,14 +2,13 @@
   %ol.race-months
     - race_months.each do |race_days|
       %li.race-month
-        - puts race_days.to_s
         %h4= race_days[0].date.strftime('%B')
         %ol.race-days
           - race_days.each do |race_day|
             %li.race-day{"data-date": race_day.date.to_s}
               %a.race-day{href: "/2016/primaries/#{race_day.date.to_s}"}= race_day.date.strftime('%-d')
               %ul.parties
-                - [ :Dem, :GOP ].each do |party|
-                  - states = race_day.states[party]
+                - Party.all.each do |party|
+                  - states = race_day.states_for_party(party)
                   - if !states.empty?
-                    %li{class: "party party-#{party.to_s.downcase}"}= "#{party}: #{states.map(&:abbreviation).join(', ')}"
+                    %li{class: "party party-#{party.to_s.downcase}"}= "#{party.name}: #{states.map(&:abbreviation).join(', ')}"

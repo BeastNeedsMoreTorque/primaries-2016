@@ -6,7 +6,6 @@ require 'uri'
 require_relative './ap_cache'
 require_relative './ap_client'
 require_relative './logger'
-require_relative './models'
 require_relative './paths'
 
 # Requests data from the AP Elections API and stores it in `cache/ap`. Then
@@ -42,8 +41,7 @@ module AP
   # Returns an ElectionDay or raises an error.
   def self.GET_primaries_election_day(date)
     string = @cache.get_or_update(:election_day, date) { @server.get(:election_day, date) }
-    obj = parse_json(string)
-    ElectionDay.new(obj)
+    parse_json(string)
   end
 
   # All 2016 election results.
@@ -68,7 +66,7 @@ module AP
   def self.GET_del_super
     string = @cache.get_or_update(:del_super, nil) { @server.get(:del_super, nil) }
     obj = parse_json(string)
-    DelSuper.new(obj[:delSuper])
+    obj[:delSuper]
   end
 
   private

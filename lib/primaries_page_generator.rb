@@ -3,81 +3,66 @@ require 'haml'
 require_relative './assets'
 require_relative './page_generator'
 require_relative './paths'
+require_relative './view/html_context'
 
 module PrimariesPageGenerator
   extend PageGenerator
   @template = File.read(File.expand_path('../../templates/primary.html.haml', __FILE__))
 
-  def self.generate(delegate_counts, election_day)
-    election_day.races.each do |race|
-      generate_for_race(delegate_counts, race)
+  def self.generate_all
+    for race_day in RaceDay.all
+      for race in race_day.races
+        self.generate_for_race(race)
+      end
     end
   end
 
   # Generate all static files for the given Race.
   #
   # Generates an HTML file and a JSON file.
-  def self.generate_for_race(delegate_counts, race)
-    race.state_reporting_units.each do |state_reporting_unit|
-      generate_html_for_race(delegate_counts, race, state_reporting_unit)
-    end
+  def self.generate_for_race(race)
+    generate_html_for_race(race)
   end
 
   private
 
   # Generate all static HTML files for
-  def self.generate_html_for_race(delegate_counts, race, state_reporting_unit)
+  def self.generate_html_for_race(race)
     haml_engine = Haml::Engine.new(@template)
-    context = HtmlContext.new(delegate_counts, race, state_reporting_unit)
+    context = HtmlContext.new(race)
     output = haml_engine.render(context)
     path = "#{Paths.Dist}/#{context.html_path}"
     write_string_to_path(output, path)
   end
 
-  class HtmlContext
-    attr_reader(:delegate_counts, :election_day, :race, :state_reporting_unit)
+  class HtmlContext < ::HtmlContext
+    attr_reader(:race)
 
-    def initialize(delegate_counts, race, state_reporting_unit)
-      @delegate_counts = delegate_counts
-      @election_day = race.election_day
+    def initialize(race)
       @race = race
-      @state_reporting_unit = state_reporting_unit
     end
+
+    def party; race.party; end
+    def state; race.state; end
 
     def main_js_path; Assets.main_js_path; end
     def main_css_path; Assets.main_css_path; end
 
-    def votes_timestamp; election_day.timestamp; end
-    def delegates_timestamp; delegate_counts.timestamp; end
-
     def html_h1
-      "#{state_reporting_unit.state_name} #{race.race_type}"
+      "#{state.name} #{race.race_type}"
     end
 
     def html_title
-      "#{state_reporting_unit.state_name} #{race.race_type}"
+      html_h1
     end
-
-    def precincts_reporting; state_reporting_unit.precincts_reporting; end
-    def precincts_total; state_reporting_unit.precincts_total; end
-    def candidates; state_reporting_unit.candidates; end
 
     def candidate_n_delegates(candidate)
       del_candidate = @delegate_counts.party_state_candidates[candidate.party][race.state_reporting_units.first.state_postal][candidate.id]
       del_candidate && del_candidate.delegates || 0
     end
 
-    def candidate_votes_fraction(candidate)
-      total_n_votes = candidates.map(&:vote_count).reduce(0) { |s, n| s + n }
-      if total_n_votes == 0
-        0
-      else
-        candidate.vote_count.to_f / total_n_votes
-      end
-    end
-
     def html_path
-      "2016/primaries/#{race.party}/#{state_reporting_unit.state_postal}.html"
+      "2016/primaries/#{party.id}/#{state.code}.html"
     end
   end
 end

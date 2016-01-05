@@ -9,3 +9,12 @@ class HtmlContext
     end
   end
 end
+
+Dir[File.dirname(__FILE__) + '/../../app/models/*.rb'].each do |path|
+  next if path =~ /database.rb$/
+  require path
+  basename = path.split('/').last.split('.').first
+  class_name = basename.gsub(/(^|_)([^_]+)/) { $2.capitalize }
+  klass = Object.const_get(class_name)
+  HtmlContext.define_singleton_method(class_name, lambda { klass })
+end

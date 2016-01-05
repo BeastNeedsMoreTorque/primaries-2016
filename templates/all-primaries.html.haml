@@ -17,13 +17,9 @@
       %thead
         %tr
           %th.candidate Candidate
-          %th.votes Votes
           %th.n-delegates Del.
       %tbody
-        - pols.each do |pol|
+        - candidates.each do |candidate|
           %tr
-            %td.candidate= pol.name
-            %td.votes= pol.n_votes
-            %td.n-delegates= pol.n_delegates
-
-    %p.last-updated= "Vote counts current as of #{votes_timestamp}. Delegate counts current as of #{delegates_timestamp}"
+            %td.candidate= candidate.name
+            %td.n-delegates= candidate.n_delegates

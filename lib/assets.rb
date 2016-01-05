@@ -18,12 +18,12 @@ module Assets
     $logger.info("Rebuilding assets...")
 
     # Build JSON data files
-    require_relative './states'
+    require_relative '../app/models/state'
     $logger.debug('Writing javascripts/state.js')
     File.open("#{Paths.Assets}/javascripts/states.js", 'w') do |f|
       f.write <<-EOT.gsub(/^\s{8}/, '')
         // Automatically generated from states.rb. See lib/assets.rb.
-        var States = #{JSON.dump(States)};
+        var States = #{JSON.dump(State.all)};
         var StatesByCode = {};
         var StatesByFipsInt = {};
         States.forEach(function(state) {
@@ -33,12 +33,12 @@ module Assets
         EOT
     end
 
-    require_relative './race_days'
+    require_relative '../app/models/race_day'
     $logger.debug('Writing javascripts/race_days.js')
     File.open("#{Paths.Assets}/javascripts/race_days.js", 'w') do |f|
       f.write <<-EOT.gsub(/^\s{8}/, '')
         // Automatically generated from race_days.rb. See lib/assets.rb.
-        var RaceDays = #{JSON.dump(RaceDays)};
+        var RaceDays = #{JSON.dump(RaceDay.all)};
         EOT
     end
 

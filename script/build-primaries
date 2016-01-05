@@ -8,15 +8,12 @@ require_relative '../lib/ap'
 require_relative '../lib/assets'
 require_relative '../lib/all_primaries_page_generator'
 require_relative '../lib/primaries_page_generator'
+require_relative '../app/models/database'
+
+Database.load
 
 Assets.clear
 Assets.build # HTML pages depend on asset paths, which include hashes of contents
 
-delegate_counts = AP.GET_del_super
-election_days = AP.GET_all_primary_election_days
-database = Database.new(delegate_counts, election_days)
-
-AllPrimariesPageGenerator.generate(database)
-for election_day in database.election_days
-  PrimariesPageGenerator.generate(database.delegate_counts, election_day)
-end
+AllPrimariesPageGenerator.generate
+PrimariesPageGenerator.generate_all

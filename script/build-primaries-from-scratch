@@ -5,4 +5,4 @@ require 'fileutils'
 require_relative '../lib/paths'
 
 FileUtils.rm_rf(Paths.Cache)
-exec "#{Paths.Script}/update-primaries"
+exec "#{Paths.Script}/build-primaries"
