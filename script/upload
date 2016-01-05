@@ -72,7 +72,7 @@ def upload_html(absolute_path)
   debug_path = "s3://#{S3Bucket}/#{key}"
 
   if digest != S3UploadCache.get_digest(absolute_path)
-    $logger.info("PUT s3://#{debug_path} text/html; charset=utf-8")
+    $logger.info("PUT #{debug_path} text/html; charset=utf-8")
 
     File.open(absolute_path, 'r') do |f|
       $bucket.put_object({
