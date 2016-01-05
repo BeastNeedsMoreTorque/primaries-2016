@@ -26,8 +26,8 @@ class RaceDay
   end
 
   def states # through races
-    state_codes = Set[Party.all.map{ |p| @static_hash[p.id.to_sym] || [] }.flatten]
-    State.all.select { |s| state_codes.include?(s.code.to_sym) }
+    state_codes = Set.new(Party.all.flat_map{ |p| @static_hash[p.id.to_sym] || [] })
+    State.all.select { |s| s.is_actual_state? && state_codes.include?(s.code.to_sym) }
   end
 
   def states_for_party(party)
@@ -50,7 +50,8 @@ class RaceDay
     else
       Party.all.map do |party|
         (@static_hash[party.id.to_sym] || []).map do |state_code|
-          Race.new(self, party, State.find_by_code(state_code), nil)
+          state = State.find_by_code(state_code)
+          Race.new(self, party, state, nil)
         end
       end.flatten(1)
     end
@@ -67,7 +68,7 @@ class RaceDay
       { date: '2016-02-27', Dem: [ :SC ] },
       { date: '2016-03-01',
         Dem: [ :AL, :AS, :AR, :CO, 'abroad', :GA, :MA, :MN, :OK, :TN, :TX, :VT, :VA ],
-        GOP: [ :AL, :AK, :AR, :CO, :GA, :MA, :MN, :OK, :TN, :TX, :VT, :VA, :WY ] },
+        GOP: [ :AL, :AK, :AR, :GA, :MA, :MN, :OK, :TN, :TX, :VT, :VA, :WY ] }, # CO isn't voting. http://www.denverpost.com/news/ci_28700919/colorado-republicans-cancel-2016-presidential-caucus-vote
       { date: '2016-03-05', Dem: [ :KS, :LA, :NE ], GOP: [ :KS, :KY, :LA, :ME ] },
       { date: '2016-03-06', Dem: [ :ME ], GOP: [ :PR ] },
       { date: '2016-03-08', Dem: [ :MI, :MS ], GOP: [ :HI, :ID, :MI, :MS ] },
@@ -90,7 +91,7 @@ class RaceDay
       { date: '2016-06-04', Dem: [ :VI ] },
       { date: '2016-06-05', Dem: [ :PR ] },
       { date: '2016-06-07', Dem: [ :CA, :MT, :NJ, :NM, :ND, :SD ], GOP: [ :CA, :MT, :NJ, :NM, :SD ] },
-      { date: '2016-06-14', Dem: [ :DC ], GOP: [ :DC ] }
+      { date: '2016-06-14', Dem: [ :DC ] }
     ].map { |hash| RaceDay.new(hash) }
   end
 end

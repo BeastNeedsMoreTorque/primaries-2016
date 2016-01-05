@@ -1,11 +1,16 @@
 class Race
-  attr_reader(:party, :state)
+  attr_reader(:race_day, :party, :state)
+
+  @@all = []
 
   def initialize(race_day, party, state, ap_hash)
     @race_day = race_day
     @party = party
     @state = state
     @ap_hash = ap_hash
+
+    # OOOOH, ugly hack
+    @@all << self
   end
 
   # JSON attributes, no logic
@@ -35,6 +40,14 @@ class Race
     @reporting_units ||= @ap_hash[:reportingUnits]
       .select { |ru| ru.level == 'FIPSCode' }
       .map { |ru| ReportingUnit.new(ru) }
+  end
+
+  # Returns a Race ... or nil if there won't be one.
+  #
+  # (Colorado Republicans  won't vote for a presidential nominee in 2016.)
+  def self.find_by_party_and_state(party, state)
+    @by_party_and_state ||= @@all.map{ |r| [ "#{r.party.id}-#{r.state.code}", r ] }.to_h
+    @by_party_and_state["#{party.id}-#{state.code}"]
   end
 
   private

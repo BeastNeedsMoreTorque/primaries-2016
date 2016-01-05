@@ -6,6 +6,7 @@ class State
   def code; @hash[:code]; end
   def name; @hash[:name]; end
   def fips_int; @hash[:fips_int]; end
+  def is_actual_state?; fips_int < 60 && fips_int > 0; end
 
   def self.all
     @all ||= [
@@ -66,7 +67,7 @@ class State
       [ 72, 'PR', 'P.R.', 'Puerto Rico' ],
       [ 78, 'VI', 'V.I.', 'Virgin Islands' ],
       [ -1, 'abroad', 'abroad', 'Democrats Abroad' ]
-    ].map { |arr| State.new(fipsInt: arr[0], code: arr[1], abbreviation: arr[2], name: arr[3] || arr[2]) }
+    ].map { |arr| State.new(fips_int: arr[0], code: arr[1], abbreviation: arr[2], name: arr[3] || arr[2]) }
   end
 
   def self.find_by_code(code)

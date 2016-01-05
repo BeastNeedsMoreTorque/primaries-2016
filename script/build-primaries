@@ -8,6 +8,7 @@ require_relative '../lib/ap'
 require_relative '../lib/assets'
 require_relative '../lib/all_primaries_page_generator'
 require_relative '../lib/primaries_page_generator'
+require_relative '../lib/race_day_page_generator'
 require_relative '../app/models/database'
 
 Database.load
@@ -16,4 +17,5 @@ Assets.clear
 Assets.build # HTML pages depend on asset paths, which include hashes of contents
 
 AllPrimariesPageGenerator.generate
+RaceDayPageGenerator.generate_all
 PrimariesPageGenerator.generate_all
