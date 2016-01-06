@@ -1,3 +1,7 @@
+require_relative './candidate'
+require_relative './candidate_race'
+require_relative './reporting_unit'
+
 class Race
   attr_reader(:race_day, :party, :state)
 

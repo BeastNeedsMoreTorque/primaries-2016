@@ -1,9 +1,9 @@
 require 'date'
 require 'set'
 
+require_relative './party'
 require_relative './race'
 require_relative './state'
-require_relative '../../lib/ap'
 
 class RaceDay
   def self.load_ap_data(ap_election_days)
