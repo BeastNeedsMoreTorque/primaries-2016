@@ -57,7 +57,7 @@ module Assets
     end
 
     # Copy static assets
-    %w(topojson).each do |filename|
+    %w(topojson images).each do |filename|
       $logger.debug("Copying asset #{filename}")
       FileUtils.cp_r("#{Paths.Assets}/#{filename}", "#{Paths.Dist}/2016")
     end

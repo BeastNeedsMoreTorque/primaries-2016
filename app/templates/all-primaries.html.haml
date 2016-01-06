@@ -6,6 +6,11 @@
     %link{rel: 'stylesheet', href: main_css_path}
     %script{src: main_js_path}
   %body
+    .topbar
+      %a{href: 'http://huffingtonpost.com'}
+        %img.logo__topbar--desktop(src="/2016/images/huffpost-logo-white.png")
+        %img.logo__topbar--mobile(src="/2016/images/hplogo-white-short.svg")
+
     %h1 Presidential Primary Races
 
     = render(:partial => 'calendar')

@@ -1,0 +1,28 @@
+body {
+  margin: 0;
+  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+}
+
+.topbar {
+  background: black;
+  height: 40px;
+}
+
+.logo__topbar--desktop {
+    padding: 10px;
+    width: 290px;
+    @media (max-width: 499px) {
+        display: none;
+    }
+}
+
+.logo__topbar--mobile {
+    width: 140px;
+    position: absolute;
+    left: 50%;
+    margin-left: -70px;
+    margin-top: 2.5%;
+    @media (min-width: 500px) {
+        display: none;
+    }
+}
