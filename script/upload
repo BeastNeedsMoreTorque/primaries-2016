@@ -94,7 +94,7 @@ end
 # Upload the never-expiring assets first. They're fingerprinted, and we never
 # delete the old fingerprints. By uploading them first, we guarantee we don't
 # upload an HTML file that points to an asset before that asset is uploaded.
-Dir["#{Paths.Dist}/**/*.*"].select{ |s| s !~ /\.html$/ }.each do |filename|
+Dir["#{Paths.Dist}/**/*.*"].select{ |s| s !~ /\.html$/ }.sort.each do |filename|
   relative_path = filename[(Paths.Dist.length + 1) .. -1]
   content_type = if relative_path =~ /\.css$/
     'text/css; charset=utf-8'
@@ -113,4 +113,4 @@ Dir["#{Paths.Dist}/**/*.*"].select{ |s| s !~ /\.html$/ }.each do |filename|
 end
 
 # Now upload the HTML files.
-Dir["#{Paths.Dist}/**/*.html"].each { |path| upload_html(path) }
+Dir["#{Paths.Dist}/**/*.html"].sort.each { |path| upload_html(path) }
