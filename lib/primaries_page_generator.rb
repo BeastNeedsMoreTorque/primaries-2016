@@ -6,7 +6,7 @@ require_relative './page_generator'
 
 module PrimariesPageGenerator
   extend PageGenerator
-  @template = File.read(File.expand_path('../../templates/primary.html.haml', __FILE__))
+  @template = File.read(File.expand_path('../../app/templates/primary.html.haml', __FILE__))
 
   def self.generate_all
     for race in Race.all

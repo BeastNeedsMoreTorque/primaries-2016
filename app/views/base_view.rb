@@ -3,7 +3,7 @@ require_relative '../../lib/paths'
 class BaseView
   def render(options)
     if options[:partial]
-      template = File.read(File.expand_path("../../../templates/_#{options[:partial]}.html.haml", __FILE__))
+      template = File.read(File.expand_path("../../templates/_#{options[:partial]}.html.haml", __FILE__))
       haml_engine = Haml::Engine.new(template)
       haml_engine.render(self)
     end

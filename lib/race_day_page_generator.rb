@@ -8,7 +8,7 @@ module RaceDayPageGenerator
   extend PageGenerator
 
   def self.generate_all
-    template = File.read(File.expand_path('../../templates/race-day.html.haml', __FILE__))
+    template = File.read(File.expand_path('../../app/templates/race-day.html.haml', __FILE__))
     for race_day in RaceDay.all
       self.generate_html(template, RaceDayView.new(race_day))
     end

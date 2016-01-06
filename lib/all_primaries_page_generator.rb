@@ -6,7 +6,7 @@ module AllPrimariesPageGenerator
   extend PageGenerator
 
   def self.generate
-    template = File.read(File.expand_path('../../templates/all-primaries.html.haml', __FILE__))
+    template = File.read(File.expand_path('../../app/templates/all-primaries.html.haml', __FILE__))
     Party.all.each do |party|
       self.generate_html(template, AllPrimariesView.new(party))
     end
