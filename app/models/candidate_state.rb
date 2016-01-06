@@ -15,8 +15,8 @@ class CandidateState
         state_hash = (party_hash[state_code] ||= {})
         for del_candidate in del_state[:Cand]
           candidate_id = del_candidate[:cId]
-          n_delegates = del_candidate[:dTot]
-          n_unpledged_delegates = del_candidate[:sdTot]
+          n_delegates = del_candidate[:dTot].to_i
+          n_unpledged_delegates = del_candidate[:sdTot].to_i
 
           cs = CandidateState.new(candidate_id, state_code, party_id, n_delegates, n_unpledged_delegates)
           state_hash[candidate_id] = cs

@@ -34,7 +34,7 @@ class Race
       else
         [] # will be flattened
       end
-    end
+    end.sort { |a, b| b.n_delegates - a.n_delegates || b.n_votes - a.n_votes || a.ballot_position - b.ballot_position }
   end
 
   def n_precincts_reporting; @ap_hash && reporting_unit_hash[:precinctsReporting]; end

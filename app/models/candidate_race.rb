@@ -14,4 +14,7 @@ class CandidateRace
   def party; Party.find_by_id(party_id); end
   def n_votes; @ap_hash[:voteCount]; end
   def winner; @hash[:winner]; end
+  def state; @race.state; end
+  def candidate_state; @candidate_state = CandidateState.by_candidate_and_state(candidate, state); end
+  def n_delegates; candidate_state.n_delegates; end
 end
