@@ -5,9 +5,13 @@ require 'bundler/setup'
 Bundler.require(:default)
 
 require_relative '../lib/assets'
+require_relative '../lib/logger'
+require_relative '../lib/paths'
 require_relative '../app/models/database'
 
 Database.load
+
+$logger.info('Regenerating primaries...')
 
 Assets.clear
 Assets.build # HTML pages depend on asset paths, which include hashes of contents
@@ -20,3 +24,5 @@ Dir[File.dirname(__FILE__) + '/../app/views/*.rb'].each do |path|
   klass = Object.const_get(class_name)
   klass.generate_all
 end
+
+$logger.info("Rebuilt #{Paths.Dist}")
