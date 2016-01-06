@@ -98,6 +98,10 @@ Dir["#{Paths.Dist}/**/*.*"].select{ |s| s !~ /\.html$/ }.each do |filename|
   relative_path = filename[(Paths.Dist.length + 1) .. -1]
   content_type = if relative_path =~ /\.css$/
     'text/css; charset=utf-8'
+  elsif relative_path =~ /\.png$/
+    'image/png'
+  elsif relative_path =~ /\.svg$/
+    'image/svg+xml'
   elsif relative_path =~ /\.js$/
     'application/javascript; charset=utf-8'
   elsif relative_path =~ /\.json$/
