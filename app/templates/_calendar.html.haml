@@ -2,7 +2,7 @@
   %ol.race-months
     - race_months.each do |race_days|
       %li.race-month
-        %h4= race_days[0].date.strftime('%B')
+        %h4.month= race_days[0].date.strftime('%B')
         %ol.race-days
           - race_days.each do |race_day|
             %li.race-day{"data-date": race_day.date.to_s}
