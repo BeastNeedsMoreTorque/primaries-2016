@@ -3,6 +3,7 @@
 //= require './vendor/jquery-2.1.4.js'
 //
 //= require './states.js'
+//= require './race-day.js'
 
 function onClickState(stateFeature) {
   var state = StatesByFipsInt[stateFeature.id];

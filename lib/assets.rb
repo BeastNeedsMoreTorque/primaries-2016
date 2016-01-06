@@ -33,15 +33,6 @@ module Assets
         EOT
     end
 
-    require_relative '../app/models/race_day'
-    $logger.debug('Writing javascripts/race_days.js')
-    File.open("#{Paths.Assets}/javascripts/race_days.js", 'w') do |f|
-      f.write <<-EOT.gsub(/^\s{8}/, '')
-        // Automatically generated from race_days.rb. See lib/assets.rb.
-        var RaceDays = #{JSON.dump(RaceDay.all)};
-        EOT
-    end
-
     # Create main.js and main.css
     sprockets = Sprockets::Environment.new("#{Paths.Dist}/2016") do |env|
       env.logger = $logger

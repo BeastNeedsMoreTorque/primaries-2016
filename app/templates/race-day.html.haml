@@ -4,7 +4,6 @@
   %head
     %title= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
     %link{rel: 'stylesheet', href: main_css_path}
-    %script{src: main_js_path}
   %body.race-day
     = render(partial: 'topbar')
 
@@ -21,9 +20,10 @@
       - states.each do |state|
         %li.state
           %h3= state.name
-          %ul.state-parties
+          .state-results
+            .state-map{'data-state-code': state.code}
             - Party.all.each do |party|
-              %li.state-party{'data-party-id': party.id}
+              .state-party-results{'data-party-id': party.id}
                 - race = Race.find_by_party_and_state(party, state)
                 %h4= party.name
                 - if !race
@@ -58,3 +58,5 @@
 
 
     %svg#main-map
+
+    %script{src: main_js_path}
