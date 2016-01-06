@@ -4,7 +4,6 @@
   %head
     %title Presidential Primary Races
     %link{rel: 'stylesheet', href: main_css_path}
-    %script{src: main_js_path}
   %body.all-primaries
     = render(partial: 'topbar')
 
@@ -26,3 +25,5 @@
               %td.n-delegates= candidate.n_delegates
 
     %svg#main-map
+
+    %script{src: main_js_path}

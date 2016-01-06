@@ -5,7 +5,7 @@ body.race-day {
     padding: 0;
   }
 
-  ul.parties, ul.state-parties {
+  ul.parties, .state-results {
     display: flex;
     -webkit-display: flex;
 
@@ -14,11 +14,33 @@ body.race-day {
     }
   }
 
+  .state-map, .state-party-results {
+    width: 33.33333%;
+  }
+
+  .state-map {
+    order: 1;
+    -webkit-order: 1;
+  }
+
+  .state-map + .state-party-results + .state-party-results {
+    order: 2;
+    -webkit-order: 2;
+  }
+
   h2, h3 {
     text-align: center;
   }
 
   li.state {
     margin-bottom: 4rem;
+  }
+
+  svg {
+    path.county {
+      stroke: white;
+      stroke-width: 1px;
+      fill: #eed;
+    }
   }
 }
