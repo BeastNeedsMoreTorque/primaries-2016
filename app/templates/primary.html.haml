@@ -6,6 +6,8 @@
     %link{rel: 'stylesheet', href: main_css_path}
     %script{src: main_js_path}
   %body
+    = render(partial: 'topbar')
+
     %h1= html_h1
 
     - if race.id

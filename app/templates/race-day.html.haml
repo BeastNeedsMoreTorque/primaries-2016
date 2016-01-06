@@ -6,6 +6,8 @@
     %link{rel: 'stylesheet', href: main_css_path}
     %script{src: main_js_path}
   %body.race-day
+    = render(partial: 'topbar')
+
     %h1= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
 
     = render(partial: 'calendar')
