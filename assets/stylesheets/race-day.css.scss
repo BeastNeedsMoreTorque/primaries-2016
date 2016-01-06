@@ -1,0 +1,24 @@
+body.race-day {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  ul.parties, ul.state-parties {
+    display: flex;
+    -webkit-display: flex;
+
+    li {
+      width: 50%;
+    }
+  }
+
+  h2, h3 {
+    text-align: center;
+  }
+
+  li.state {
+    margin-bottom: 4rem;
+  }
+}

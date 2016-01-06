@@ -50,6 +50,8 @@ class Race
     @by_party_and_state["#{party.id}-#{state.code}"]
   end
 
+  def self.all; @@all; end
+
   private
 
   def reporting_unit_hash
