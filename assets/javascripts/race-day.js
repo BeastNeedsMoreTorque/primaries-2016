@@ -245,6 +245,42 @@ if (Object.keys(svg_nodes).length > 0) {
     });
   }
 
+  function update_race_precincts_from_database() {
+    var key_to_elems = {}; // state_code-candidate_id -> { nReporting, nTotal }, d3 elements
+
+    d3.selectAll('p.race-precincts-reporting').each(function() {
+      var p = d3.select(this);
+
+      var party_id = p.attr('data-party-id');
+      var state_code = p.attr('data-state-code');
+      var key = party_id + '-' + state_code;
+
+      key_to_elems[key] = {
+        nReporting: p.select('.n-reporting'),
+        nTotal: p.select('.n-total'),
+        lastUpdated: d3.select(p.node().nextElementSibling).select('time')
+      };
+    });
+
+    database.race_csv.split('\n').slice(1).forEach(function(line) {
+      var arr = line.split(',');
+      var party_id = arr[0];
+      var state_code = arr[1];
+      var n_reporting = arr[2];
+      var n_total = arr[3];
+      var last_updated = new Date(arr[4]);
+
+      var key = party_id + '-' + state_code;
+
+      var elems = key_to_elems[key];
+      if (elems) {
+        elems.nReporting.text(n_reporting);
+        elems.nTotal.text(n_total);
+        elems.lastUpdated.text(last_updated.toISOString());
+      }
+    });
+  }
+
   function endlessly_poll_for_new_database() {
     d3.json('/2016/primaries/results.json', function(err, json) {
       if (err) {
@@ -252,6 +288,7 @@ if (Object.keys(svg_nodes).length > 0) {
       } else {
         database = json;
         update_race_tables_from_database();
+        update_race_precincts_from_database();
       }
       window.setTimeout(endlessly_poll_for_new_database, 30000);
     });
