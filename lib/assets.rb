@@ -23,7 +23,7 @@ module Assets
     File.open("#{Paths.Assets}/javascripts/states.js", 'w') do |f|
       f.write <<-EOT.gsub(/^\s{8}/, '')
         // Automatically generated from states.rb. See lib/assets.rb.
-        var States = #{JSON.dump(State.all).gsub('fips_int', 'fipsInt')};
+        var States = #{JSON.dump(State.all)};
         var StatesByCode = {};
         var StatesByFipsInt = {};
         States.forEach(function(state) {

@@ -22,10 +22,18 @@ class BaseView
   def self.generate_for_view(view)
     path = "#{Paths.Dist}/#{view.output_path}"
     $logger.debug("Generating #{path}")
+    output = render_view_haml(view)
+    self.write_contents(path, output)
+  end
+
+  def self.render_view_haml(view)
     haml_engine = Haml::Engine.new(view.template)
-    output = haml_engine.render(view)
+    haml_engine.render(view)
+  end
+
+  def self.write_contents(path, contents)
     FileUtils.mkdir_p(File.dirname(path))
-    File.open(path, 'w') { |f| f.write(output) }
+    File.open(path, 'w') { |f| f.write(contents) }
   end
 
   def template_name

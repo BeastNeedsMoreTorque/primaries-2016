@@ -1,64 +1,33 @@
 require_relative './candidate'
-require_relative './candidate_race'
-require_relative './reporting_unit'
+require_relative './candidate_county'
+require_relative './candidate_state'
+require_relative './party'
+require_relative './race_day'
+require_relative './state'
 
-class Race
-  attr_reader(:race_day, :party, :state)
+# Could be called PartyState. Gives the votes/delegates of a state.
+Race = Struct.new(:ap_id, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated) do
+  def party; Party.find(party_id); end
+  def race_day; RaceDay.find(race_day_id); end
+  def state; State.find_by_code(state_code); end
 
-  @@all = []
-
-  def initialize(race_day, party, state, ap_hash)
-    @race_day = race_day
-    @party = party
-    @state = state
-    @ap_hash = ap_hash
-
-    # OOOOH, ugly hack
-    @@all << self
-  end
-
-  # JSON attributes, no logic
-  def id; @ap_hash && @ap_hash[:raceID]; end
-  def num_runoff; @ap_hash && @ap_hash[:numRunoff]; end
-  def office_id; @ap_hash && @ap_hash[:officeID]; end
-  def office_name; @ap_hash && @ap_hash[:officeName]; end
-  def race_type; @ap_hash && @ap_hash[:raceType]; end
-  def race_type_id; @ap_hash && @ap_hash[:raceTypeID]; end
-
-  # Derived values
-
-  def candidate_races
-    @candidate_races ||= @ap_hash && reporting_unit_hash[:candidates].flat_map do |c|
-      if Candidate.include?(c[:polID])
-        CandidateRace.new(c, self)
-      else
-        [] # will be flattened
-      end
-    end.sort { |a, b| b.n_delegates - a.n_delegates || b.n_votes - a.n_votes || a.ballot_position - b.ballot_position }
-  end
-
-  def n_precincts_reporting; @ap_hash && reporting_unit_hash[:precinctsReporting]; end
-  def n_precincts_total; @ap_hash && reporting_unit_hash[:precinctsTotal]; end
-
-  def reporting_units
-    @reporting_units ||= @ap_hash[:reportingUnits]
-      .select { |ru| ru.level == 'FIPSCode' }
-      .map { |ru| ReportingUnit.new(ru) }
+  def candidate_states
+    @candidate_states ||= if ap_id
+      CandidateState.find_all_by_party_id_and_state_code(party_id, state_code)
+        .sort { |a, b| b.n_delegates - a.n_delegates || b.n_votes - a.n_votes || a.ballot_position - b.ballot_position }
+    else
+      []
+    end
   end
 
   # Returns a Race ... or nil if there won't be one.
   #
   # (Colorado Republicans  won't vote for a presidential nominee in 2016.)
   def self.find_by_party_and_state(party, state)
-    @by_party_and_state ||= @@all.map{ |r| [ "#{r.party.id}-#{r.state.code}", r ] }.to_h
+    @by_party_and_state ||= @all.map{ |r| [ "#{r.party.id}-#{r.state.code}", r ] }.to_h
     @by_party_and_state["#{party.id}-#{state.code}"]
   end
 
-  def self.all; @@all; end
-
-  private
-
-  def reporting_unit_hash
-    @reporting_unit_hash ||= @ap_hash && @ap_hash[:reportingUnits].find { |ru| ru[:level] == 'state' }
-  end
+  def self.all=(v); @all = v; end
+  def self.all; @all; end
 end

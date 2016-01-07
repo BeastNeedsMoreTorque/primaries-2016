@@ -28,7 +28,7 @@
                 %h4= party.name
                 - if !race
                   %p= #{state.name} #{party.name} won't pledge any delegates to a 2016 presidential nominee.
-                - elsif !race.id
+                - elsif !race.ap_id
                   - if race.race_day == race_day
                     %p= "Come back #{race_day.date.strftime('%B %-d')} for live results"
                   - else
@@ -47,12 +47,11 @@
                           %th.n-votes Votes
                           %th.n-delegates Delegates
                       %tbody
-                        - race.candidate_races.each do |candidate_race|
-                          - candidate = candidate_race.candidate
-                          - candidate_state = candidate.candidate_state(state)
+                        - race.candidate_states.each do |candidate_state|
+                          - candidate = candidate_state.candidate
                           %tr
                             %td.candidate= candidate.name
-                            %td.n-votes= candidate_race.n_votes
+                            %td.n-votes= candidate_state.n_votes
                             %td.n-delegates=candidate_state.n_delegates
                     %p= "#{race.n_precincts_reporting} of #{race.n_precincts_total} precincts reporting"
 
