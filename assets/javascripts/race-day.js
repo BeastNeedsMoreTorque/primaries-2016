@@ -207,12 +207,51 @@ if (Object.keys(svg_nodes).length > 0) {
     build_maps(us);
   });
 
+  function update_race_tables_from_database() {
+    var key_to_elems = {}; // state_code-candidate_id -> { nVotes, nDelegates }, d3 elements
+
+    d3.selectAll('table.race').each(function() {
+      var table_node = this;
+
+      var state_code = table_node.getAttribute('data-state-code');
+
+      d3.select(table_node).select('tbody').selectAll('tr').each(function() {
+        var tr = this;
+
+        var candidate_id = tr.getAttribute('data-candidate-id');
+
+        var key = state_code + '-' + candidate_id;
+
+        key_to_elems[key] = {
+          nVotes: d3.select(tr).select('.n-votes'),
+          nDelegates: d3.select(tr).select('.n-delegates')
+        };
+      });
+    });
+
+    database.candidate_state_csv.split('\n').slice(1).forEach(function(line) {
+      var arr = line.split(',');
+      var candidate_id = arr[0];
+      var state_code = arr[1];
+      var n_votes = arr[2];
+      var n_delegates = arr[3];
+
+      var key = state_code + '-' + candidate_id;
+      var elems = key_to_elems[key];
+      if (elems) {
+        elems.nVotes.text(n_votes);
+        elems.nDelegates.text(n_delegates);
+      }
+    });
+  }
+
   function endlessly_poll_for_new_database() {
     d3.json('/2016/primaries/results.json', function(err, json) {
       if (err) {
         console.log(err);
       } else {
         database = json;
+        update_race_tables_from_database();
       }
       window.setTimeout(endlessly_poll_for_new_database, 30000);
     });

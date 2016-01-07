@@ -41,7 +41,7 @@
                       - if !is_this_page_date
                         %p= "This race happened on #{race.race_day.date.strftime('%B %-d')}"
                       .state-map{'data-state-code': state.code, 'data-party-id': party.id}
-                      %table.race
+                      %table.race{'data-state-code': state.code, 'data-party-id': party.id}
                         %thead
                           %tr
                             %th.candidate Candidate
