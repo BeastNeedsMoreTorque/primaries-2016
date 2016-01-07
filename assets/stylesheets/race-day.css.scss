@@ -44,5 +44,30 @@ body.race-day {
       stroke-width: 1px;
       fill: #eed;
     }
+
+    path.hover {
+      fill: transparent;
+      stroke: #aaa;
+      stroke-width: 2px;
+      z-index: 1;
+    }
+  }
+
+  .race-tooltip {
+    &.show {
+      display: inline-block;
+    }
+
+    display: none;
+    position: absolute;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    background: white;
+
+    table {
+      margin: 0;
+      padding: 0;
+      border-collapse: collapse;
+    }
   }
 }

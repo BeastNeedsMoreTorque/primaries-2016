@@ -28,7 +28,7 @@ class PrimariesResultsView < BaseView
   end
 
   def candidate_county_csv
-    header = "candidate_id,fips_int,n_votes,n_delegates\n"
+    header = "candidate_id,fips_int,n_votes\n"
     data = CandidateCounty.all.map{ |cc| "#{cc.candidate_id},#{cc.fips_int},#{cc.n_votes}" }.join("\n")
     header + data
   end

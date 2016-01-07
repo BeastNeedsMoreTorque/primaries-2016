@@ -50,7 +50,7 @@
                         %tbody
                           - race.candidate_states.each do |candidate_state|
                             - candidate = candidate_state.candidate
-                            %tr
+                            %tr{'data-candidate-id': candidate.id}
                               %td.candidate= candidate.name
                               %td.n-votes= candidate_state.n_votes
                               %td.n-delegates=candidate_state.n_delegates

@@ -7,12 +7,27 @@ d3.selectAll('.state-map')
     var key = party_id + '-' + state_code;
     var svg = d3.select(this).append('svg')
       .attr('data-state-code', state_code)
+      .attr('data-party-id', party_id)
       .attr('width', '100%')
       .attr('height', '100%');
     svg_nodes[key] = svg.node();
   });
 
 if (Object.keys(svg_nodes).length > 0) {
+  var database = {
+    "candidate_csv": "",
+    "candidate_county_csv": "",
+    "candidate_state_csv": ""
+  };
+  var body = d3.select('body');
+  var tooltip = body.append('div')
+    .attr('class', 'race-tooltip');
+  var tooltip_title = tooltip.append('h5');
+  var tooltip_tbody = tooltip
+    .append('table')
+    .append('tbody');
+  var hover_path = null;
+
   // Defers until the svg has been rendered, empty, on the page. Then calls
   // next(width, height).
   function wait_for_svg_to_have_size_then(svg, next) {
@@ -76,8 +91,83 @@ if (Object.keys(svg_nodes).length > 0) {
     return projection;
   }
 
-  function on_click_county(d) {
-    console.log(d);
+  // Given a state-level <table> of candidates, returns [ { id: id, name: name } ]
+  function extract_candidate_list(table_node) {
+    var ret = [];
+    d3.select(table_node).select('tbody').selectAll('tr').each(function() {
+      ret.push({
+        id: this.getAttribute('data-candidate-id'),
+        name: d3.select(this).select('td.candidate').text(),
+        nVotes: 0 // we'll overwrite this
+      });
+    });
+    return ret;
+  }
+
+  function position_tooltip() {
+    tooltip
+      .classed('show', true)
+      .style({ left: (10 + d3.event.pageX) + 'px', top: (10 + d3.event.pageY) + 'px' })
+      ;
+  }
+
+  function show_tooltip(feature) {
+    var path_node = d3.event.target;
+
+    var svg = path_node.parentNode;
+
+    hover_path = d3.select(svg).append('path')
+      .attr('pointer-events', 'none')
+      .attr('class', 'hover')
+      .attr('d', path_node.getAttribute('d'))
+      ;
+
+    var party_id = svg.parentNode.getAttribute('data-party-id');
+    var state_code = svg.parentNode.getAttribute('data-state-code');
+    var county_id = feature.id;
+    var candidates = extract_candidate_list(svg.parentNode.nextElementSibling);
+    var candidates = extract_candidate_list(svg.parentNode.nextElementSibling);
+    var candidates_regex = candidates.map(function(c) { return c.id; }).join('|');
+
+    var id_to_candidate = {};
+    candidates.forEach(function(c) { id_to_candidate[c.id] = c; });
+
+    var regex = new RegExp('^(' + candidates_regex + '),' + county_id + ',(.*)$', 'gm');
+    var match;
+    while ((match = regex.exec(database.candidate_county_csv)) !== null) {
+      var candidate_id = match[1];
+      var n_votes = parseInt(match[2], 10);
+      id_to_candidate[candidate_id].nVotes = n_votes;
+    }
+
+    var columns = [
+      { class_name: 'name', property: 'name' },
+      { class_name: 'n-votes', property: 'nVotes' }
+    ];
+
+    tooltip_tbody.data([]);
+    tooltip_tbody.selectAll('tr').remove();
+    tooltip_tbody.selectAll('tr')
+      .data(candidates)
+      .enter()
+        .append('tr')
+        .selectAll('td')
+          .data(function(row) {
+            return columns.map(function(c) { return { row: row, column: c }; });
+          })
+          .enter()
+            .append('td')
+            .attr('class', function(d) { return d.column.class_name; })
+            .text(function(d) { return d.row[d.column.property]; })
+      ;
+
+    position_tooltip();
+  }
+
+  function hide_tooltip() {
+    hover_path.remove();
+    d3.select(d3.event.target).classed('hover', false);
+    tooltip.classed('show', false);
   }
 
   function build_maps(us) {
@@ -103,7 +193,9 @@ if (Object.keys(svg_nodes).length > 0) {
             .attr('class', 'county')
             .attr('id', function(d) { return d.id; })
             .attr('d', path)
-            .on('click', on_click_county)
+            .on('mouseenter', show_tooltip)
+            .on('mousemove', position_tooltip)
+            .on('mouseleave', hide_tooltip)
             ;
       });
     });
@@ -114,4 +206,17 @@ if (Object.keys(svg_nodes).length > 0) {
 
     build_maps(us);
   });
+
+  function endlessly_poll_for_new_database() {
+    d3.json('/2016/primaries/results.json', function(err, json) {
+      if (err) {
+        console.log(err);
+      } else {
+        database = json;
+      }
+      window.setTimeout(endlessly_poll_for_new_database, 30000);
+    });
+  }
+
+  endlessly_poll_for_new_database();
 }
