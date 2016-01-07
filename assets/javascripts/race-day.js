@@ -32,8 +32,6 @@ if (Object.keys(state_svg_nodes).length > 0) {
 
     if (features.length == 0) return null;
 
-    console.log(features[0].id);
-
     var feature_collection = { type: 'FeatureCollection', features: features };
     var projection;
 
