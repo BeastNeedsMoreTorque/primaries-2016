@@ -28,7 +28,40 @@ if (Object.keys(state_svg_nodes).length > 0) {
 
   function compute_projection(features, width, height) {
     // http://stackoverflow.com/questions/14492284/center-a-map-in-d3-given-a-geojson-object
-    var projection = d3.geo.albers()
+    // ... plus we adjust the rotation and lines of latitude.
+
+    if (features.length == 0) return null;
+
+    console.log(features[0].id);
+
+    var feature_collection = { type: 'FeatureCollection', features: features };
+    var projection;
+
+    if (Math.floor(features[0].id / 1000) == 2) {
+      // EPSG:3338, as per http://bl.ocks.org/mbostock/5952814
+      projection = d3.geo.albers()
+        .rotate([ 154, 0 ])
+        .center([ 0, 62 ])
+        .parallels([ 55, 65 ]);
+    } else {
+      var ll_bounds = d3.geo.path()
+        .projection(null)
+        .bounds(feature_collection);
+      var lon = (ll_bounds[0][0] + ll_bounds[1][0]) / 2;
+      var lat = (ll_bounds[0][1] + ll_bounds[1][1]) / 2;
+      // parallels at 1/6 and 5/6: http://www.georeference.org/doc/albers_conical_equal_area.htm
+      var lats = [
+        ll_bounds[0][1] + 5/6 * (ll_bounds[1][1] - ll_bounds[0][1]),
+        ll_bounds[0][1] + 1/6 * (ll_bounds[1][1] - ll_bounds[0][1])
+      ];
+
+      projection = d3.geo.albers()
+        .rotate([ -lon, 0 ])
+        .center([ 0, lat ])
+        .parallels(lats)
+    }
+
+    projection
       .scale(1)
       .translate([0, 0]);
 
