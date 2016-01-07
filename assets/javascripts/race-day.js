@@ -1,16 +1,18 @@
-var state_svg_nodes = {}; // code -> svg
+var svg_nodes = {}; // key -> svg
 
 d3.selectAll('.state-map')
   .each(function() {
+    var party_id = this.getAttribute('data-party-id');
     var state_code = this.getAttribute('data-state-code');
+    var key = party_id + '-' + state_code;
     var svg = d3.select(this).append('svg')
       .attr('data-state-code', state_code)
       .attr('width', '100%')
       .attr('height', '100%');
-    state_svg_nodes[state_code] = svg.node();
+    svg_nodes[key] = svg.node();
   });
 
-if (Object.keys(state_svg_nodes).length > 0) {
+if (Object.keys(svg_nodes).length > 0) {
   // Defers until the svg has been rendered, empty, on the page. Then calls
   // next(width, height).
   function wait_for_svg_to_have_size_then(svg, next) {
@@ -79,15 +81,17 @@ if (Object.keys(state_svg_nodes).length > 0) {
   }
 
   function build_maps(us) {
-    Object.keys(state_svg_nodes).forEach(function(state_code) {
+    Object.keys(svg_nodes).forEach(function(key) {
+      var arr = key.split('-');
+      var party_id = arr[0];
+      var state_code = arr[1];
       var state = StatesByCode[state_code];
-      var node = state_svg_nodes[state_code];
+      var node = svg_nodes[key];
       var svg = d3.select(node);
+      var county_features = topojson.feature(us, us.objects.counties).features
+        .filter(function(d) { return Math.floor(d.id / 1000) == state.fipsInt; });
 
       wait_for_svg_to_have_size_then(svg, function(width, height) {
-        var county_features = topojson.feature(us, us.objects.counties).features
-          .filter(function(d) { return Math.floor(d.id / 1000) == state.fipsInt; });
-
         var projection = compute_projection(county_features, width, height);
 
         var path = d3.geo.path()
