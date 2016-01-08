@@ -10,5 +10,5 @@ Bundler.require(:default)
 
 require_relative '../lib/ap'
 
-AP.wipe_dates(ARGV)
+AP.poll_dates(ARGV)
 exec "#{Paths.Script}/build-primaries"

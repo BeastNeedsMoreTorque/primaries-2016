@@ -28,11 +28,13 @@ class APClient
     @is_test = is_test
   end
 
-  # Fetches a string document from the server.
+  # Fetches a String document from the server and its String etag.
   #
   # Raises an error if the server does not respond.
   # Raises an error if the response code is not 200.
   # Raises an error if the response is not valid JSON.
+  #
+  # Returns { data: '{ "json": "stuff" }', etag: 'some-etag' }
   def get(key, maybe_param, maybe_etag)
     case key
     when :election_day
@@ -43,9 +45,18 @@ class APClient
       get!("/v2/elections?format=json&apikey=#{api_key}", maybe_etag)
     when :del_super
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
-      s1 = get!("/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{api_key}#{is_test_query_param}", maybe_etag)
-      report_id = JSON.parse(s1)['reports'][0]['id']['https://api.ap.org'.length .. -1]
-      get!("#{report_id}?format=json&apikey=#{api_key}", maybe_etag) # no "test" parameter
+      r1 = get!("/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{api_key}#{is_test_query_param}", maybe_etag)
+      if r1 === nil
+        # Exact same contents as before. And AP docs say report data at any
+        # given URL remain constant, so we assume no change there
+        nil
+      else
+        # We need to cache the ETag of the first response, because if it
+        # matches we want to avoid making the second request completely.
+        report_id = JSON.parse(r1[:data])['reports'][0]['id']['https://api.ap.org'.length .. -1]
+        r2 = get!("#{report_id}?format=json&apikey=#{api_key}", nil) # no ETag, no "test" parameter
+        { data: r2[:data], etag: r1[:etag] }
+      end
     else
       throw ArgumentError.new("invalid key #{key}")
     end
@@ -60,9 +71,16 @@ class APClient
   # Returns nil if the etag matches
   def get!(url, maybe_etag)
     response = @http_client.get(url, maybe_etag)
-    case response.code
+    string = case response.code
     when '304' then nil
-    when '200' then JSON.parse(response.body); response.body # raise an error on invalid JSON, but return the original data
+    when '200' then
+      # AP returns a 200 OK on `/v2/reports?...` even when the etags match.
+      # We *could* ignore those responses, or we *could* fiddle with
+      # If-Modified-Since ... but that would be above and beyond the HTTP spec
+      # and our API requirements, and we don't stand to gain anything, so let's
+      # not.
+      JSON.parse(response.body) # Raise an error immediately on invalid JSON
+      { data: response.body, etag: response['ETag'] }
     else raise "HTTP #{response.code} #{response.message} from server. Body: #{response.body}"
     end
   end

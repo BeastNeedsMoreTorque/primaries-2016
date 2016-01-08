@@ -15,36 +15,23 @@ class APCache
   def get(key, maybe_param)
     filename = args_to_filename(key, maybe_param)
     begin
-      ret = IO::read(filename)
+      data = IO::read(filename)
+      etag = IO::read("#{filename}.etag")
       $logger.debug("Cache hit: #{key},#{maybe_param}")
-      ret
+      { data: data, etag: etag }
     rescue Errno::ENOENT
       $logger.debug("Cache miss: #{key},#{maybe_param}")
       nil
     end
   end
 
-  def get_or_update(key, maybe_param, &fetch_command)
-    ret = get(key, maybe_param)
-    if !ret
-      ret = fetch_command.call
-      save(key, maybe_param, ret)
-    end
-    ret
-  end
-
   # Writes the given blob to the given key+param slot.
-  def save(key, maybe_param, blob)
+  def save(key, maybe_param, blob, etag)
     $logger.debug("Cache write: #{key},#{maybe_param}")
     filename = args_to_filename(key, maybe_param)
     FileUtils.mkdir_p(File.dirname(filename))
     IO::write(filename, blob)
-  end
-
-  def wipe(key, maybe_param)
-    $logger.debug("Cache wipe: #{key},#{maybe_param}")
-    filename = args_to_filename(key, maybe_param)
-    FileUtils::rm_f(filename)
+    IO::write("#{filename}.etag", etag)
   end
 
   def wipe_all

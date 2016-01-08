@@ -31,16 +31,19 @@ module AP
     @cache.wipe_all
   end
 
-  def self.wipe_dates(dates)
-    @cache.wipe(:del_super, nil)
-    dates.each { |date| @cache.wipe(:election_day, date) }
+  def self.poll_dates(dates)
+    poll_or_fetch(:del_super, nil)
+    #poll_or_fetch(:election_days, nil)
+    for date in dates
+      poll_or_fetch(:election_day, date)
+    end
   end
 
   # Election results for the given date.
   #
   # Returns an ElectionDay or raises an error.
   def self.GET_primaries_election_day(date)
-    string = @cache.get_or_update(:election_day, date) { @server.get(:election_day, date, nil) }
+    string = get_cached_or_fetch(:election_day, date)
     parse_json(string)
   end
 
@@ -48,7 +51,7 @@ module AP
   #
   # Returns an Array of ElectionDay objects.
   def self.GET_all_primary_election_days
-    string = @cache.get_or_update(:election_days, nil) { @server.get(:election_days, nil, nil) }
+    string = get_cached_or_fetch(:election_days, nil)
     obj = parse_json(string)
     obj[:elections]
       .select { |e| !!e[:testResults] == is_test }
@@ -64,12 +67,37 @@ module AP
   # This performs two requests: first to /reports, and second to
   # /reports/id-returned-by-first-request.
   def self.GET_del_super
-    string = @cache.get_or_update(:del_super, nil) { @server.get(:del_super, nil, nil) }
+    string = get_cached_or_fetch(:del_super, nil)
     obj = parse_json(string)
     obj[:delSuper]
   end
 
   private
+
+  # Polls @server for the latest version of this key using @cache etag, or
+  # fetches on cache miss. Saves the return value to @cache.
+  def self.poll_or_fetch(key, arg)
+    existing = @cache.get(key, arg)
+    etag = existing ? existing[:etag] : nil
+    result = @server.get(key, arg, etag)
+    if result[:etag] != etag
+      @cache.save(key, arg, result[:data], result[:etag])
+      result[:data]
+    else
+      existing[:data]
+    end
+  end
+
+  def self.get_cached_or_fetch(key, arg)
+    existing = @cache.get(key, arg)
+    if existing
+      existing[:data]
+    else
+      result = @server.get(key, arg, nil)
+      @cache.save(key, arg, result[:data], result[:etag])
+      result[:data]
+    end
+  end
 
   def self.parse_json(string)
     JSON.parse(string, create_additions: false, symbolize_names: true)
