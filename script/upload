@@ -54,9 +54,9 @@ def upload_asset(relative_path, content_type)
         key: relative_path,
         acl: 'public-read',
         body: f,
-        cache_control: "public, max-age=#{MaxAge}",
+        cache_control: content_type == 'application/json' ? 'no-cache' : "public, max-age=#{MaxAge}",
         content_type: content_type,
-        expires: Time.now + MaxAge
+        expires: Time.now + (content_type == 'application/json' ? ShortAge : MaxAge)
       })
     end
 
