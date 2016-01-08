@@ -10,4 +10,5 @@ group :development do
   gem 'rack'
   gem 'rack-contrib'
   gem 'rspec'
+  gem 'ruby-prof'
 end

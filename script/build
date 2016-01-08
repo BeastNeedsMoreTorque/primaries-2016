@@ -4,14 +4,18 @@ require 'rubygems'
 require 'bundler/setup'
 Bundler.require(:default)
 
-require_relative '../lib/assets'
 require_relative '../lib/logger'
+
+$logger.info('Starting build')
+
+#require 'ruby-prof'
+#RubyProf.start
+
+require_relative '../lib/assets'
 require_relative '../lib/paths'
 require_relative '../app/models/database'
 
 Database.load
-
-$logger.info('Starting build')
 
 Assets.clear
 Assets.build # HTML pages depend on asset paths, which include hashes of contents
@@ -28,3 +32,7 @@ Dir[File.dirname(__FILE__) + '/../app/views/*.rb'].each do |path|
 end
 
 $logger.info("Rebuilt #{Paths.Dist}")
+
+#result = RubyProf.stop
+#printer = RubyProf::GraphPrinter.new(result)
+#printer.print(STDOUT)

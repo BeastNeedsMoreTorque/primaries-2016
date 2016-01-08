@@ -13,11 +13,22 @@ class BaseView
   def race_months; RaceDay.all.group_by{ |rd| rd.date.to_s[0...7] }.values; end
   def party; Party.all; end
 
-  def template
-    @template ||= File.read(File.expand_path("../../templates/#{template_name}.html.haml", __FILE__))
+  def template_name
+    t = self.class.name.gsub(/([A-Z])/) { "-#{$1.downcase}" }
+    t[1..-6]
   end
 
   protected
+
+  def self.template_name_to_haml_engine(template_name)
+    @template_name_to_haml_engine ||= {}
+    @template_name_to_haml_engine[template_name] ||= load_haml_engine(template_name)
+  end
+
+  def self.load_haml_engine(template_name)
+    template = File.read(File.expand_path("../../templates/#{template_name}.html.haml", __FILE__))
+    Haml::Engine.new(template)
+  end
 
   def self.generate_for_view(view)
     path = "#{Paths.Dist}/#{view.output_path}"
@@ -27,18 +38,13 @@ class BaseView
   end
 
   def self.render_view_haml(view)
-    haml_engine = Haml::Engine.new(view.template)
+    haml_engine = template_name_to_haml_engine(view.template_name)
     haml_engine.render(view)
   end
 
   def self.write_contents(path, contents)
     FileUtils.mkdir_p(File.dirname(path))
     File.open(path, 'w') { |f| f.write(contents) }
-  end
-
-  def template_name
-    t = self.class.name.gsub(/([A-Z])/) { "-#{$1.downcase}" }
-    t[1..-6]
   end
 end
 
