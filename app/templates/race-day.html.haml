@@ -9,7 +9,7 @@
 
     #main
       %h1= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
-
+      = render(partial: 'delegate-bars')
       = render(partial: 'calendar')
 
       %ul.parties

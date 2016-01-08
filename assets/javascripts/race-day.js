@@ -47,12 +47,12 @@ if (Object.keys(svg_nodes).length > 0) {
     // http://stackoverflow.com/questions/14492284/center-a-map-in-d3-given-a-geojson-object
     // ... plus we adjust the rotation and lines of latitude.
 
-    if (features.length == 0) return null;
+    if (features.length === 0) return null;
 
     var feature_collection = { type: 'FeatureCollection', features: features };
     var projection;
 
-    if (Math.floor(features[0].id / 1000) == 2) {
+    if (Math.floor(features[0].id / 1000) === 2) {
       // EPSG:3338, as per http://bl.ocks.org/mbostock/5952814
       projection = d3.geo.albers()
         .rotate([ 154, 0 ])
@@ -66,14 +66,14 @@ if (Object.keys(svg_nodes).length > 0) {
       var lat = (ll_bounds[0][1] + ll_bounds[1][1]) / 2;
       // parallels at 1/6 and 5/6: http://www.georeference.org/doc/albers_conical_equal_area.htm
       var lats = [
-        ll_bounds[0][1] + 5/6 * (ll_bounds[1][1] - ll_bounds[0][1]),
-        ll_bounds[0][1] + 1/6 * (ll_bounds[1][1] - ll_bounds[0][1])
+        ll_bounds[0][1] + 5 / 6 * (ll_bounds[1][1] - ll_bounds[0][1]),
+        ll_bounds[0][1] + 1 / 6 * (ll_bounds[1][1] - ll_bounds[0][1])
       ];
 
       projection = d3.geo.albers()
         .rotate([ -lon, 0 ])
         .center([ 0, lat ])
-        .parallels(lats)
+        .parallels(lats);
     }
 
     projection
@@ -84,7 +84,7 @@ if (Object.keys(svg_nodes).length > 0) {
       .projection(projection);
 
     var b = path.bounds({ type: 'FeatureCollection', features: features });
-    var s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
+    var s = 0.95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
     var t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
 
     projection.scale(s).translate(t);
@@ -281,6 +281,32 @@ if (Object.keys(svg_nodes).length > 0) {
     });
   }
 
+  function update_delegate_counts_from_database() {
+    var key_to_elems = {};
+    d3.selectAll('div.candidate-container').each(function() {
+      var div = d3.select(this);
+
+      var key = div.attr('data-candidate-id');
+      key_to_elems[key] = {
+        nDelegatesCount: div.select('.n-delegates-count'),
+        nDelegatesBar: div.select('.n-delegates-bar')
+      };
+    });
+
+    database.candidate_csv.split('\n').slice(1).forEach(function(line) {
+      var arr = line.split(',');
+      var candidate_id = arr[0];
+      var n_delegates = arr[1];
+      var up_delegates = arr[2];
+
+      var elems = key_to_elems[candidate_id];
+      if (elems) {
+        elems.nDelegatesCount.text(n_delegates);
+        elems.nDelegatesBar.style('width', n_delegates / 3 + 'px');
+      }
+    });
+  }
+
   function endlessly_poll_for_new_database() {
     d3.json('/2016/primaries/results.json', function(err, json) {
       if (err) {
@@ -289,6 +315,7 @@ if (Object.keys(svg_nodes).length > 0) {
         database = json;
         update_race_tables_from_database();
         update_race_precincts_from_database();
+        update_delegate_counts_from_database();
       }
       window.setTimeout(endlessly_poll_for_new_database, 30000);
     });
