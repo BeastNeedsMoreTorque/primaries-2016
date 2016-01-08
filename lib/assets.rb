@@ -38,7 +38,7 @@ module Assets
       env.logger = $logger
     end
     sprockets.append_path(Paths.Assets)
-    %w(javascripts/main.js stylesheets/main.css).each do |filename|
+    %w(javascripts/main.js stylesheets/main.css stylesheets/right-rail.css).each do |filename|
       asset = sprockets.find_asset(filename)
       dirname, basename = filename.split('/')
       FileUtils.mkpath("#{Paths.Dist}/#{dirname}")
@@ -56,6 +56,10 @@ module Assets
 
   def self.main_css_path
     @main_css_path ||= "/2016/stylesheets/main-#{asset_digest_hex('stylesheets/main.css')}.css"
+  end
+
+  def self.right_rail_css_path
+    @right_rail_css_path ||= "/2016/stylesheets/right-rail-#{asset_digest_hex('stylesheets/right-rail.css')}.css"
   end
 
   def self.main_js_path

@@ -1,0 +1,13 @@
+!!! 5
+%html{lang: 'en'}
+  %head
+    %meta{charset: 'utf-8'}
+    %title Huffington Post 2016 Primaries Results
+    %link{rel: 'stylesheet', href: right_rail_css_path}
+  %body.primary-right-rail
+    = render(partial: 'delegate-bars')
+
+    - if current_race_day
+      %a{target: '_parent', href: "/2016/primaries/#{current_race_day.id}"} Live results
+    - elsif next_race_day
+      %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}= "Next race: #{next_race_day.id}"

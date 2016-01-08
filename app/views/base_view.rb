@@ -11,6 +11,7 @@ class BaseView
 
   def main_js_path; Assets.main_js_path; end
   def main_css_path; Assets.main_css_path; end
+  def right_rail_css_path; Assets.right_rail_css_path; end
   def race_months; RaceDay.all.group_by{ |rd| rd.date.to_s[0...7] }.values; end
   def party; Party.all; end
 
