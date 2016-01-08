@@ -3,7 +3,7 @@
 %html{lang: 'en'}
   %head
     %title Presidential Primary Races
-    %link{rel: 'stylesheet', href: main_css_path}
+    %link{rel: 'stylesheet', href: asset_path('main.css')}
   %body.all-primaries
     = render(partial: 'topbar')
 
@@ -28,4 +28,4 @@
 
       %svg#main-map
 
-    %script{src: main_js_path}
+    %script{src: asset_path('main.js')}

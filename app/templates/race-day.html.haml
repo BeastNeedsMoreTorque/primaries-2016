@@ -3,7 +3,7 @@
 %html{lang: 'en'}
   %head
     %title= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
-    %link{rel: 'stylesheet', href: main_css_path}
+    %link{rel: 'stylesheet', href: asset_path('main.css')}
   %body.race-day
     = render(partial: 'topbar')
 
@@ -65,4 +65,4 @@
 
       %svg#main-map
 
-    %script{src: main_js_path}
+    %script{src: asset_path('main.js')}
