@@ -1,11 +1,13 @@
-class State
-  def initialize(hash); @hash = hash; end
-  def to_json(*a); @hash.to_json(*a); end
+State = Struct.new(:fips_int, :code, :abbreviation, :name) do
+  def to_json(*a)
+    JSON.generate({
+      fipsInt: fips_int,
+      code: code,
+      abbreviation: abbreviation,
+      name: name
+    }, *a)
+  end
 
-  def abbreviation; @hash[:abbreviation]; end
-  def code; @hash[:code]; end
-  def name; @hash[:name]; end
-  def fips_int; @hash[:fips_int]; end
   def is_actual_state?; fips_int < 60 && fips_int > 0; end
 
   def self.all
@@ -67,7 +69,7 @@ class State
       [ 72, 'PR', 'P.R.', 'Puerto Rico' ],
       [ 78, 'VI', 'V.I.', 'Virgin Islands' ],
       [ -1, 'abroad', 'abroad', 'Democrats Abroad' ]
-    ].map { |arr| State.new(fips_int: arr[0], code: arr[1], abbreviation: arr[2], name: arr[3] || arr[2]) }
+    ].map { |arr| State.new(arr[0], arr[1], arr[2], arr[3] || arr[2]) }
   end
 
   def self.find_by_code(code)

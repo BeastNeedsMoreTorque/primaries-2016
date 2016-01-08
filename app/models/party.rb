@@ -1,14 +1,8 @@
-class Party
-  attr_reader(:id, :name, :adjective)
+require_relative './candidate'
 
-  def initialize(id, name, adjective)
-    @id = id
-    @name = name
-    @adjective = adjective
-  end
-
+Party = Struct.new(:id, :name, :adjective) do
   def candidates
-    Candidate.all.select { |c| c.party == self }
+    @candidates ||= Candidate.all.select { |c| c.party == self }
   end
 
   def self.all
@@ -18,7 +12,7 @@ class Party
     ]
   end
 
-  def self.find_by_id(id)
+  def self.find(id)
     @by_id ||= all.map{ |p| [ p.id, p ] }.to_h
     @by_id.fetch(id.to_sym)
   end

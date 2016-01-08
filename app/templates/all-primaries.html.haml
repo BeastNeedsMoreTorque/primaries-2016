@@ -7,25 +7,25 @@
   %body.all-primaries
     = render(partial: 'topbar')
 
-    %h1 Presidential Primary Races
+    #main
+      %h1 Presidential Primary Races
 
-    = render(partial: 'delegate-bars')
+      = render(partial: 'delegate-bars')
+      = render(partial: 'calendar')
 
-    = render(partial: 'calendar')
-
-    - Party.all.each do |party|
-      %h2= "#{party.adjective} Candidates"
-      %table
-        %thead
-          %tr
-            %th.candidate Candidate
-            %th.n-delegates Del.
-        %tbody
-          - party.candidates.each do |candidate|
+      - Party.all.each do |party|
+        %h2= "#{party.adjective} Candidates"
+        %table
+          %thead
             %tr
-              %td.candidate= candidate.name
-              %td.n-delegates= candidate.n_delegates
+              %th.candidate Candidate
+              %th.n-delegates Del.
+          %tbody
+            - party.candidates.each do |candidate|
+              %tr
+                %td.candidate= candidate.name
+                %td.n-delegates= candidate.n_delegates
 
-    %svg#main-map
+      %svg#main-map
 
     %script{src: main_js_path}

@@ -14,8 +14,8 @@ results so they're updated frequently and available to all.
 # Developing
 
 This is a static website, stored in the `dist/` directory. Run `script/serve` to
-serve it at [http://localhost:3000](http://localhost:3000). (You can still run
-`script/update-primaries` periodically while this is running.)
+serve it at [http://localhost:3000/2016](http://localhost:3000/2016). (You can
+still run `script/update-primaries` periodically while this is running.)
 
 Set the environment variable `AP_TEST=true` to incorporate test data from the
 Associated Press.
@@ -26,8 +26,14 @@ will create confusing log messages.
 
 # Endpoints
 
-* `/primaries/GOP/AK`: Republican primary results in Alaska
-* `/primaries/Dem/NY`: Democratic primary results in New York
+* `/2016/primaries`: Landing page page
+* `/2016/primaries/YYYY-MM-DD`: Dashboard for primaries on a certain day
+* `/2016/primaries/results.json`: New numbers of votes and delegate counts
+
+To build these files, we iterate over `app/views/*.rb` and run
+`[SomethingView].generate_all` on each class. The `generate_all` method will
+call `BaseView.generate_for_view(something_view)`, which will render the HAML
+markup in `app/templates/something-view.html.haml`.
 
 # Architecture
 
