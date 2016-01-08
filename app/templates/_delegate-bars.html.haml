@@ -1,0 +1,8 @@
+.delegate-counts-gop
+  - party.each do |par|
+    %h4= "#{par.adjective} Party"
+    - par.candidates.each do |cd|
+      %div.candidate-container
+        %text.cd-name= cd.name
+        %div.n-delegates-bar{:id => cd.id, :style => "width: #{cd.n_delegates / 3}px;" }
+        %text.n-delegates-count= cd.n_delegates

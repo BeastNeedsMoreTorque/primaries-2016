@@ -12,6 +12,7 @@ class BaseView
   def main_js_path; Assets.main_js_path; end
   def main_css_path; Assets.main_css_path; end
   def race_months; RaceDay.all.group_by{ |rd| rd.date.to_s[0...7] }.values; end
+  def party; Party.all; end
 
   def template
     @template ||= File.read(File.expand_path("../../templates/#{template_name}.html.haml", __FILE__))
