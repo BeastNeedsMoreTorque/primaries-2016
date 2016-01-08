@@ -40,7 +40,7 @@ module AP
   #
   # Returns an ElectionDay or raises an error.
   def self.GET_primaries_election_day(date)
-    string = @cache.get_or_update(:election_day, date) { @server.get(:election_day, date) }
+    string = @cache.get_or_update(:election_day, date) { @server.get(:election_day, date, nil) }
     parse_json(string)
   end
 
@@ -48,7 +48,7 @@ module AP
   #
   # Returns an Array of ElectionDay objects.
   def self.GET_all_primary_election_days
-    string = @cache.get_or_update(:election_days, nil) { @server.get(:election_days, nil) }
+    string = @cache.get_or_update(:election_days, nil) { @server.get(:election_days, nil, nil) }
     obj = parse_json(string)
     obj[:elections]
       .select { |e| !!e[:testResults] == is_test }
@@ -64,7 +64,7 @@ module AP
   # This performs two requests: first to /reports, and second to
   # /reports/id-returned-by-first-request.
   def self.GET_del_super
-    string = @cache.get_or_update(:del_super, nil) { @server.get(:del_super, nil) }
+    string = @cache.get_or_update(:del_super, nil) { @server.get(:del_super, nil, nil) }
     obj = parse_json(string)
     obj[:delSuper]
   end
