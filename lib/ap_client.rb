@@ -6,10 +6,17 @@ require_relative './logger'
 
 class APClient
   class HTTPClient
-    def get(url)
-      $logger.debug("GET #{url}")
-      uri = URI(url)
-      Net::HTTP.get_response(uri)
+    def get(path, maybe_etag)
+      uri = URI("https://api.ap.org#{path}")
+
+      $logger.debug("GET #{uri}")
+
+      req = Net::HTTP::Get.new(uri)
+      req['If-None-Match'] = maybe_etag if maybe_etag
+
+      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+        http.request(req)
+      end
     end
   end
 
@@ -26,19 +33,19 @@ class APClient
   # Raises an error if the server does not respond.
   # Raises an error if the response code is not 200.
   # Raises an error if the response is not valid JSON.
-  def get(key, maybe_param)
+  def get(key, maybe_param, maybe_etag)
     case key
     when :election_day
       throw ArgumentError.new('param must be a date in YYYY-MM-DD format') if maybe_param.nil?
-      get!("https://api.ap.org/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{api_key}#{is_test_query_param}")
+      get!("/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{api_key}#{is_test_query_param}", maybe_etag)
     when :election_days
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
-      get!("https://api.ap.org/v2/elections?format=json&apikey=#{api_key}")
+      get!("/v2/elections?format=json&apikey=#{api_key}", maybe_etag)
     when :del_super
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
-      s1 = get!("https://api.ap.org/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{api_key}#{is_test_query_param}")
-      report_id = JSON.parse(s1)['reports'][0]['id']
-      get!("#{report_id}?format=json&apikey=#{api_key}") # no "test" parameter
+      s1 = get!("/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{api_key}#{is_test_query_param}", maybe_etag)
+      report_id = JSON.parse(s1)['reports'][0]['id']['https://api.ap.org'.length .. -1]
+      get!("#{report_id}?format=json&apikey=#{api_key}", maybe_etag) # no "test" parameter
     else
       throw ArgumentError.new("invalid key #{key}")
     end
@@ -50,11 +57,14 @@ class APClient
   #
   # Raises an error if the response code is not 200.
   # Raises an error if the response is not valid JSON.
-  def get!(url)
-    response = @http_client.get(url)
-    raise "HTTP #{response.code} #{response.message} from server. Body: #{response.body}" if response.code != '200'
-    JSON.parse(response.body) # raise an error early on invalid JSON
-    response.body
+  # Returns nil if the etag matches
+  def get!(url, maybe_etag)
+    response = @http_client.get(url, maybe_etag)
+    case response.code
+    when '304' then nil
+    when '200' then JSON.parse(response.body); response.body # raise an error on invalid JSON, but return the original data
+    else raise "HTTP #{response.code} #{response.message} from server. Body: #{response.body}"
+    end
   end
 
   def is_test_query_param

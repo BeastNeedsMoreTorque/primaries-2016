@@ -44,7 +44,6 @@ class APCache
   def wipe(key, maybe_param)
     $logger.debug("Cache wipe: #{key},#{maybe_param}")
     filename = args_to_filename(key, maybe_param)
-    FileUtils::copy_file(filename, "#{filename}-#{Time.now.getutc.to_i}")
     FileUtils::rm_f(filename)
   end
 
