@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'date'
+
+FileUtils.mkdir_p('cache') # in case it's empty
+FileUtils.mkdir_p('cache-by-date')
+
+while true
+  FileUtils.cp_r('cache', "cache-by-date/#{DateTime.now.iso8601}")
+
+  `script/update-primaries 2016-03-01`
+  `script/upload`
+
+  sleep 20
+end
