@@ -12,5 +12,5 @@ while true
   `script/update-primaries 2016-03-01`
   `script/upload`
 
-  sleep 20
+  sleep 30
 end
