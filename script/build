@@ -11,14 +11,16 @@ require_relative '../app/models/database'
 
 Database.load
 
-$logger.info('Regenerating primaries...')
+$logger.info('Starting build')
 
 Assets.clear
 Assets.build # HTML pages depend on asset paths, which include hashes of contents
 
+$logger.info('Building views...')
+
 Dir[File.dirname(__FILE__) + '/../app/views/*.rb'].each do |path|
   next if path =~ /base_view.rb$/
-  require path
+  require File.absolute_path(path)
   basename = path.split('/').last.split('.').first
   class_name = basename.gsub(/(^|_)([^_]+)/) { $2.capitalize }
   klass = Object.const_get(class_name)

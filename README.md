@@ -8,8 +8,9 @@ results so they're updated frequently and available to all.
 1. Install [rvm](http://rvm.io)
 2. `gem install bundler`
 3. `bundle install`
-4. `script/build-primaries`
-5. (periodically) `AP_API_KEY=abcdefg script/update-primaries [YYYY-MM-DD ...]`
+4. (for dev) `AP_API_KEY=abcdefg script/serve`
+5. (for upload to s3) `AP_API_KEY=abcdefg script/build && script/upload`
+6. (to ping AP for new data and rebuild) `AP_API_KEY=abcdefg script/update-primaries [YYYY-MM-DD ...]`
 
 # Developing
 
@@ -29,6 +30,7 @@ will create confusing log messages.
 * `/2016/primaries`: Landing page page
 * `/2016/primaries/YYYY-MM-DD`: Dashboard for primaries on a certain day
 * `/2016/primaries/results.json`: New numbers of votes and delegate counts
+* `/2016/primaries/right-rail`: Embeddable right rail
 
 To build these files, we iterate over `app/views/*.rb` and run
 `[SomethingView].generate_all` on each class. The `generate_all` method will

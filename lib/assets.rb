@@ -18,15 +18,13 @@ module Assets
   )
 
   def self.clear
-    $logger.info("Clearing assets...")
-
     %w(javascripts stylesheets topojson).each do |subdir|
       FileUtils.rm_rf("#{Paths.Dist}/2016/#{subdir}")
     end
   end
 
   def self.build
-    $logger.info("Rebuilding assets...")
+    $logger.info("Building assets...")
 
     self.build_dynamic_js
     self.build_sprockets_assets
