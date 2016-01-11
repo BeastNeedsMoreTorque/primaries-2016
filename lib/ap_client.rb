@@ -53,7 +53,7 @@ class APClient
       else
         # We need to cache the ETag of the first response, because if it
         # matches we want to avoid making the second request completely.
-        report_id = JSON.parse(r1[:data])['reports'][0]['id']['https://api.ap.org'.length .. -1]
+        report_id = Oj.load(r1[:data])['reports'][0]['id']['https://api.ap.org'.length .. -1]
         r2 = get!("#{report_id}?format=json&apikey=#{api_key}", nil) # no ETag, no "test" parameter
         { data: r2[:data], etag: r1[:etag] }
       end

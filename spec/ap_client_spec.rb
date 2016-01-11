@@ -1,4 +1,4 @@
-require 'json'
+require 'oj'
 
 require_relative '../lib/ap_client'
 
@@ -37,7 +37,7 @@ describe 'APClient' do
 
     it 'should raise an error if the server returns non-JSON' do
       expect_GET('/v2/elections?format=json&apikey=abcdef', nil, Net::HTTPOK.new('1.1', '200', 'OK'), 'foo')
-      expect { @subject.get(:election_days, nil, nil) }.to raise_error(JSON::ParserError)
+      expect { @subject.get(:election_days, nil, nil) }.to raise_error(Oj::ParseError)
     end
 
     it 'should send the etag if provided' do
