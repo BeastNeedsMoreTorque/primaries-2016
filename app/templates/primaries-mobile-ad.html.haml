@@ -1,0 +1,13 @@
+!!! 5
+%html{lang: 'en'}
+  %meta{charset: 'utf-8'}
+  %title Huffington Post 2016 Primaries
+%body
+  %p.leading-democrat= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
+  %p.leading-republican= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
+  %p
+    - if current_race_day
+      %a{href: "/2016/primaries/#{current_race_day.id}"} Live updates
+    - elsif next_race_day
+      Next race:
+      %a{href: "/2016/primaries/#{next_race_day.id}"}= next_race_day.date.strftime('%A, %B %-d')
