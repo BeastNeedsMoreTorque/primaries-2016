@@ -15,10 +15,10 @@ require_relative '../lib/assets'
 require_relative '../lib/paths'
 require_relative '../app/models/database'
 
-Database.load
+database = Database.load
 
 Assets.clear
-Assets.build # HTML pages depend on asset paths, which include hashes of contents
+Assets.build(database) # HTML pages depend on asset paths, which include hashes of contents
 
 $logger.info('Building views...')
 
@@ -28,7 +28,7 @@ Dir[File.dirname(__FILE__) + '/../app/views/*.rb'].each do |path|
   basename = path.split('/').last.split('.').first
   class_name = basename.gsub(/(^|_)([^_]+)/) { $2.capitalize }
   klass = Object.const_get(class_name)
-  klass.generate_all
+  klass.generate_all(database)
 end
 
 $logger.info("Rebuilt #{Paths.Dist}")

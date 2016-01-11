@@ -13,7 +13,7 @@
       = render(partial: 'delegate-bars')
       = render(partial: 'calendar')
 
-      - Party.all.each do |party|
+      - parties.each do |party|
         %h2= "#{party.adjective} Candidates"
         %table
           %thead

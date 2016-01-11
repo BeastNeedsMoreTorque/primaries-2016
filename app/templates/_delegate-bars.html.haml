@@ -1,5 +1,5 @@
 .delegate-counts
-  - party.each do |par|
+  - parties.each do |par|
     %div.party-container{:id => par.adjective}
       %h4= "#{par.adjective} Party"
       - par.candidates.each do |cd|

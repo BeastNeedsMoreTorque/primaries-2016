@@ -1,17 +1,27 @@
 require_relative '../../lib/paths'
 
 class BaseView
+  attr_reader(:database)
+
+  def initialize(database)
+    @database = database
+  end
+
+  Database::CollectionNames.each do |collection_name|
+    define_method(collection_name.to_sym) { database.send(collection_name) }
+  end
+
   def render(options)
     if options[:partial]
-      template = File.read(File.expand_path("../../templates/_#{options[:partial]}.html.haml", __FILE__))
-      haml_engine = Haml::Engine.new(template)
+      filename = File.expand_path("../../templates/_#{options[:partial]}.html.haml", __FILE__)
+      template = File.read(filename)
+      haml_engine = Haml::Engine.new(template, filename: filename)
       haml_engine.render(self)
     end
   end
 
   def asset_path(path); Assets.asset_path(path); end
-  def race_months; RaceDay.all.group_by{ |rd| rd.date.to_s[0...7] }.values; end
-  def party; Party.all; end
+  def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
 
   def template_name
     t = self.class.name.gsub(/([A-Z])/) { "-#{$1.downcase}" }
@@ -26,8 +36,9 @@ class BaseView
   end
 
   def self.load_haml_engine(template_name)
-    template = File.read(File.expand_path("../../templates/#{template_name}.html.haml", __FILE__))
-    Haml::Engine.new(template)
+    filename = File.expand_path("../../templates/#{template_name}.html.haml", __FILE__)
+    template = File.read(filename)
+    Haml::Engine.new(template, filename: filename)
   end
 
   def self.generate_for_view(view)
