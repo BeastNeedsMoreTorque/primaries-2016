@@ -17,8 +17,7 @@ class BaseView
 
   def render(options)
     if options[:partial]
-      filename = File.expand_path("../../templates/_#{options[:partial]}.html.haml", __FILE__)
-      template = Tilt.new(filename)
+      template = BaseView.load_template("_#{options[:partial]}")
       template.render(self)
     end
   end
@@ -39,8 +38,11 @@ class BaseView
   end
 
   def self.load_template(template_name)
-    filename = File.expand_path("../../templates/#{template_name}.html.haml", __FILE__)
-    Tilt.new(filename)
+    @templates ||= {}
+    @templates[template_name] ||= begin
+      filename = File.expand_path("../../templates/#{template_name}.html.haml", __FILE__)
+      Tilt.new(filename)
+    end
   end
 
   def self.generate_for_view(view)
