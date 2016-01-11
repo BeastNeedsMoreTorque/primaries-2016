@@ -1,9 +1,10 @@
 source 'https://rubygems.org'
 
+gem 'aws-sdk'
 gem 'hamlit'
+gem 'oj'
 gem 'sass'
 gem 'sprockets'
-gem 'aws-sdk'
 
 group :development do
   gem 'listen'

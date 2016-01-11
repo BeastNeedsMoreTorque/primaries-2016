@@ -1,4 +1,4 @@
-require 'json'
+require 'oj'
 require 'net/http'
 require 'uri'
 
@@ -79,7 +79,7 @@ class APClient
       # If-Modified-Since ... but that would be above and beyond the HTTP spec
       # and our API requirements, and we don't stand to gain anything, so let's
       # not.
-      JSON.parse(response.body) # Raise an error immediately on invalid JSON
+      Oj.load(response.body) # Raise an error immediately on invalid JSON
       { data: response.body, etag: response['ETag'] }
     else raise "HTTP #{response.code} #{response.message} from server. Body: #{response.body}"
     end

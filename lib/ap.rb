@@ -1,5 +1,5 @@
 require 'fileutils'
-require 'json'
+require 'oj'
 require 'net/http'
 require 'uri'
 
@@ -100,6 +100,6 @@ module AP
   end
 
   def self.parse_json(string)
-    JSON.parse(string, create_additions: false, symbolize_names: true)
+    Oj.load(string, symbol_keys: true)
   end
 end
