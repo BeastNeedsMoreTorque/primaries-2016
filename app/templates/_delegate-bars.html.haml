@@ -1,9 +1,16 @@
-.delegate-counts
+%div.delegate-counts.clearfix
   - party.each do |par|
-    %div.party-container{:id => par.adjective}
+    %div.party-container{ :id => par.adjective }
       %h4= "#{par.adjective} Party"
       - par.candidates.each do |cd|
         %div.candidate-container{ :'data-candidate-id' => cd.id }
-          %span.cd-name= cd.name
-          %div.n-delegates-bar{:style => "width: #{cd.n_delegates / 3}px;" }
-          %span.n-delegates-count= cd.n_delegates
+          - if par.adjective == 'Republican'
+            %span.cd-name= cd.name
+            %div.total-delegates-bar
+              %div.n-delegates-bar{ :style => "width: #{cd.n_delegates.to_f / 2472.0 * 100}%;" }
+            %span.n-delegates-count= cd.n_delegates
+          - else
+            %span.cd-name= cd.name
+            %div.total-delegates-bar
+              %div.n-delegates-bar{ :style => "width: #{cd.n_delegates.to_f / 4764.0 * 100}%;" }
+            %span.n-delegates-count= cd.n_delegates

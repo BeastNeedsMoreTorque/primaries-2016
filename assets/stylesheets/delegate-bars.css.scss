@@ -1,11 +1,22 @@
-.n-delegates-bar{
-  display: inline-block;
-  height: 0.5em;
-  background-color: red;
-}
-.cd-name{
-  display: inline-block;
-}
-.n-delegates-count{
-  display: inline-block;
+.party-container{
+  float: left;
+  width: 50%;
+  overflow: hidden;
+  margin:0px 0px 0px 0px;
+  .total-delegates-bar{
+    display: inline-block;
+    width: 50%;
+    .n-delegates-bar{
+      display: inline-block;
+      height: 0.5em;
+      background-color: red;
+    }
+  }
+  .cd-name{
+    display: inline-block;
+    width: 35%;
+  }
+  .n-delegates-count{
+    display: inline-block;
+  }
 }
