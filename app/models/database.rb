@@ -2,6 +2,12 @@ require 'date'
 
 require_relative '../../lib/ap'
 
+# All data that goes into page rendering.
+#
+# Once you build a Database, nothing will change.
+#
+# The Database contains every Collection we use -- e.g., `candidates`, `states`
+# -- plus the rendering date.
 class Database
   CollectionNames = %w(
     candidates
@@ -16,8 +22,9 @@ class Database
   )
 
   attr_reader(*CollectionNames)
+  attr_reader(:today)
 
-  def initialize(collections)
+  def initialize(collections, today)
     CollectionNames.each { |n| require_relative "../collections/#{n}.rb" }
 
     CollectionNames.each do |collection_name|
@@ -34,8 +41,13 @@ class Database
 
       instance_variable_set("@#{collection_name}", collection)
     end
+
+    @today = today
   end
 
+  # The "production" Database: today's date, AP's data
+  #
+  # If AP_TEST=true, we use AP's test data.
   def self.load
     candidates = []
     candidate_counties = []
@@ -143,13 +155,13 @@ class Database
       end
     end
 
-    Database.new(
+    Database.new({
       candidates: candidates,
       candidate_counties: candidate_counties,
       candidate_states: candidate_states,
       counties: counties,
       county_parties: county_parties,
       races: races
-    )
+    }, Date.today)
   end
 end

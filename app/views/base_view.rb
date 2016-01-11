@@ -7,6 +7,8 @@ class BaseView
     @database = database
   end
 
+  def today; database.today; end
+
   Database::CollectionNames.each do |collection_name|
     define_method(collection_name.to_sym) { database.send(collection_name) }
   end
