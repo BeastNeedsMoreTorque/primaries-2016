@@ -2,14 +2,11 @@
 #
 # Uploads the contents of `dist/` to Amazon S3.
 
-require 'rubygems'
-require 'bundler/setup'
-Bundler.require(:default)
+require_relative '../lib/env'
 
 require 'pstore'
 
 require_relative '../lib/assets'
-require_relative '../lib/logger'
 require_relative '../lib/paths'
 
 S3Bucket = 'elections-test'

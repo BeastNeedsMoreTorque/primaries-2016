@@ -1,10 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'rubygems'
-require 'bundler/setup'
-Bundler.require(:default)
-
-require_relative '../lib/logger'
+require_relative '../lib/env'
 
 $logger.info('Starting build')
 
@@ -34,5 +30,5 @@ end
 $logger.info("Rebuilt #{Paths.Dist}")
 
 #result = RubyProf.stop
-#printer = RubyProf::GraphPrinter.new(result)
-#printer.print(STDOUT)
+#printer = RubyProf::GraphHtmlPrinter.new(result)
+#File.open('profile.html', 'w') { |f| printer.print(f) }
