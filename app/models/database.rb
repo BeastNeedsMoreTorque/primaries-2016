@@ -1,6 +1,7 @@
 require 'date'
 
 require_relative '../../lib/ap'
+require_relative '../collections/parties'
 
 # All data that goes into page rendering.
 #
@@ -54,6 +55,7 @@ class Database
     candidate_states = []
     counties = []
     county_parties = []
+    parties = []
     races = []
 
     id_to_candidate = {}
@@ -63,6 +65,10 @@ class Database
     # Fill CandidateState (no ballot_order or n_votes) and Candidate (no name)
     for del in AP.GET_del_super[:del]
       party_id = del[:pId]
+      party_extra = Parties.extra_attributes_by_id.fetch(party_id.to_sym)
+
+      parties << [ party_id, party_extra[:name], party_extra[:adjective], del[:dVotes], del[:dNeed] ]
+
       for del_state in del[:State]
         state_code = del_state[:sId]
         next if state_code == 'UN' # "Unassigned super delegates"
@@ -161,6 +167,7 @@ class Database
       candidate_states: candidate_states,
       counties: counties,
       county_parties: county_parties,
+      parties: parties,
       races: races
     }, Date.today)
   end
