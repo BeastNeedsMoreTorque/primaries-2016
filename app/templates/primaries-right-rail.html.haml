@@ -5,7 +5,7 @@
     %title Huffington Post 2016 Primaries Results
     %link{rel: 'stylesheet', href: asset_path('right-rail.css')}
   %body.primary-right-rail
-    = render(partial: 'delegate-bars')
+    != render(partial: 'delegate-bars')
 
     - if current_race_day
       %a{target: '_parent', href: "/2016/primaries/#{current_race_day.id}"} Live results

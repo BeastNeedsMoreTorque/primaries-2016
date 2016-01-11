@@ -5,12 +5,12 @@
     %title= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
     %link{rel: 'stylesheet', href: asset_path('main.css')}
   %body.race-day
-    = render(partial: 'topbar')
+    != render(partial: 'topbar')
 
     #main
       %h1= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
-      = render(partial: 'delegate-bars')
-      = render(partial: 'calendar')
+      != render(partial: 'delegate-bars')
+      != render(partial: 'calendar')
 
       %ul.parties
         - parties.each do |party|
