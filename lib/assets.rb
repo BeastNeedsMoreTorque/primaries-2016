@@ -15,6 +15,7 @@ module Assets
   StaticAssets = %w(
     topojson
     images
+    javascripts/pym.min.js
   )
 
   def self.clear
@@ -87,7 +88,7 @@ module Assets
   def self.build_static_assets
     StaticAssets.each do |filename|
       $logger.debug("Copying asset #{filename}")
-      FileUtils.cp_r("#{Paths.Assets}/#{filename}", "#{Paths.Dist}/2016")
+      FileUtils.cp_r("#{Paths.Assets}/#{filename}", "#{Paths.Dist}/2016/#{filename}")
     end
   end
 

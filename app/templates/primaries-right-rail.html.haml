@@ -11,3 +11,7 @@
       %a{target: '_parent', href: "/2016/primaries/#{current_race_day.id}"} Live results
     - elsif next_race_day
       %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}= "Next race: #{next_race_day.id}"
+
+    %script{src: '/2016/javascripts/pym.min.js'}
+    %script
+      var pymChild = new pym.Child();
