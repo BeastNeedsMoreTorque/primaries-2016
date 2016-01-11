@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'haml'
+gem 'hamlit'
 gem 'sass'
 gem 'sprockets'
 gem 'aws-sdk'

@@ -15,21 +15,23 @@ module Assets
   StaticAssets = %w(
     topojson
     images
+    javascripts/pym.min.js
   )
 
   def self.clear
-    %w(javascripts stylesheets topojson).each do |subdir|
+    %w(javascripts stylesheets images topojson).each do |subdir|
       FileUtils.rm_rf("#{Paths.Dist}/2016/#{subdir}")
     end
   end
 
-  def self.build
+  def self.build(database)
     $logger.info("Building assets...")
 
-    self.build_dynamic_js
+    self.build_dynamic_js(database)
     self.build_sprockets_assets
     self.build_static_assets
   end
+
   # asset_path('main.css') -> '/2016/stylesheets/main-abcdef.css'
   def self.asset_path(path)
     path =~ /(.*)\.(css|js)$/
@@ -52,13 +54,11 @@ module Assets
 
   private
 
-  def self.build_dynamic_js
-    require_relative '../app/models/state'
+  def self.build_dynamic_js(database)
     $logger.debug('Writing javascripts/state.js')
     File.open("#{Paths.Assets}/javascripts/states.js", 'w') do |f|
       f.write <<-EOT.gsub(/^\s{8}/, '')
-        // Automatically generated from states.rb. See lib/assets.rb.
-        var States = #{JSON.dump(State.all)};
+        var States = #{JSON.dump(database.states.all)};
         var StatesByCode = {};
         var StatesByFipsInt = {};
         States.forEach(function(state) {
@@ -87,7 +87,7 @@ module Assets
   def self.build_static_assets
     StaticAssets.each do |filename|
       $logger.debug("Copying asset #{filename}")
-      FileUtils.cp_r("#{Paths.Assets}/#{filename}", "#{Paths.Dist}/2016")
+      FileUtils.cp_r("#{Paths.Assets}/#{filename}", "#{Paths.Dist}/2016/#{filename}")
     end
   end
 

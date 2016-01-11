@@ -1,6 +1,6 @@
-%div.delegate-counts.clearfix
-  - party.each do |par|
-    %div.party-container{ :id => par.adjective }
+%div.delegate-counts
+  - parties.each do |par|
+    %div.party-container{:id => par.adjective}
       %h4= "#{par.adjective} Party"
       - par.candidates.each do |cd|
         %div.candidate-container{ :'data-candidate-id' => cd.id }

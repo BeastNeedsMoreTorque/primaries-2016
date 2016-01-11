@@ -5,15 +5,15 @@
     %title Presidential Primary Races
     %link{rel: 'stylesheet', href: asset_path('main.css')}
   %body.all-primaries
-    = render(partial: 'topbar')
+    != render(partial: 'topbar')
 
     #main
       %h1 Presidential Primary Races
 
-      = render(partial: 'delegate-bars')
-      = render(partial: 'calendar')
+      != render(partial: 'delegate-bars')
+      != render(partial: 'calendar')
 
-      - Party.all.each do |party|
+      - parties.each do |party|
         %h2= "#{party.adjective} Candidates"
         %table
           %thead

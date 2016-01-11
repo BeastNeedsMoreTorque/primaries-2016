@@ -8,7 +8,7 @@
             %li.race-day{"data-date": race_day.date.to_s}
               %a.race-day{href: "/2016/primaries/#{race_day.date.to_s}"}= race_day.date.strftime('%-d')
               %ul.parties
-                - Party.all.each do |party|
-                  - states = race_day.states_for_party(party)
-                  - if !states.empty?
-                    %li{class: "party party-#{party.to_s.downcase}"}= "#{party.name}: #{states.map(&:abbreviation).join(', ')}"
+                - parties.each do |party|
+                  - party_states = race_day.states_for_party(party)
+                  - if !party_states.empty?
+                    %li{class: "party party-#{party.id.downcase}"}= "#{party.name}: #{party_states.map(&:abbreviation).join(', ')}"

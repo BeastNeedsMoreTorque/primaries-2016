@@ -5,29 +5,29 @@
     %title= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
     %link{rel: 'stylesheet', href: asset_path('main.css')}
   %body.race-day
-    = render(partial: 'topbar')
+    != render(partial: 'topbar')
 
     #main
       %h1= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
-      = render(partial: 'delegate-bars')
-      = render(partial: 'calendar')
+      != render(partial: 'delegate-bars')
+      != render(partial: 'calendar')
 
       %ul.parties
-        - Party.all.each do |party|
+        - parties.each do |party|
           %li.party
             %h2= party.name
 
       %ul.states
-        - states.each do |state|
+        - race_day_states.each do |state|
           %li.state
             %h3= state.name
             %ul.party-state
-              - Party.all.each do |party|
+              - parties.each do |party|
                 %li.party-state
                   %h4= party.name
-                  - race = Race.find_by_party_and_state(party, state)
+                  - race = database.races.find_by_party_and_state(party, state)
                   - if !race
-                    %p= #{state.name} #{party.name} won't pledge any delegates to a 2016 presidential nominee.
+                    %p= "#{state.name} #{party.name} won't pledge any delegates to a 2016 presidential nominee."
                   - elsif !race.ap_id
                     - if race.race_day == race_day
                       %p= "Come back #{race_day.date.strftime('%B %-d')} for live results"

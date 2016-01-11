@@ -1,24 +1,63 @@
 require 'date'
 
-require_relative './candidate'
-require_relative './candidate_county'
-require_relative './candidate_state'
-require_relative './county'
-require_relative './county_party'
-require_relative './race'
 require_relative '../../lib/ap'
 
-module Database
+# All data that goes into page rendering.
+#
+# Once you build a Database, nothing will change.
+#
+# The Database contains every Collection we use -- e.g., `candidates`, `states`
+# -- plus the rendering date.
+class Database
+  CollectionNames = %w(
+    candidates
+    candidate_counties
+    candidate_states
+    counties
+    county_parties
+    parties
+    races
+    race_days
+    states
+  )
+
+  attr_reader(*CollectionNames)
+  attr_reader(:today)
+
+  def initialize(collections, today)
+    CollectionNames.each { |n| require_relative "../collections/#{n}.rb" }
+
+    CollectionNames.each do |collection_name|
+      collection_class_name = collection_name.gsub(/(?:^|_)(\w)/) { $1.upcase }
+      collection_class = Object.const_get(collection_class_name)
+
+      all = collections[collection_name.to_sym]
+
+      collection = if all
+        collection_class.build(self, all)
+      else
+        collection_class.build_hard_coded(self)
+      end
+
+      instance_variable_set("@#{collection_name}", collection)
+    end
+
+    @today = today
+  end
+
+  # The "production" Database: today's date, AP's data
+  #
+  # If AP_TEST=true, we use AP's test data.
   def self.load
-    Candidate.all = candidates = []
-    CandidateCounty.all = candidate_counties = []
-    CandidateState.all = candidate_states = []
-    County.all = counties = []
-    CountyParty.all = county_parties = []
-    Race.all = races = []
+    candidates = []
+    candidate_counties = []
+    candidate_states = []
+    counties = []
+    county_parties = []
+    races = []
 
     id_to_candidate = {}
-    fips_code_to_county = {}
+    seen_county_ids = Set.new([])
     ids_to_candidate_state = {}
 
     # Fill CandidateState (no ballot_order or n_votes) and Candidate (no name)
@@ -33,13 +72,13 @@ module Database
           n_unpledged_delegates = del_candidate[:sdTot].to_i
 
           if state_code == 'US'
-            c = Candidate.new(candidate_id, party_id, nil, n_delegates, n_unpledged_delegates)
+            c = [ candidate_id, party_id, nil, n_delegates, n_unpledged_delegates ]
             candidates << c
-            id_to_candidate[c.id] = c
+            id_to_candidate[candidate_id] = c
           else
-            cs = CandidateState.new(candidate_id, state_code, -1, 0, n_delegates)
+            cs = [ candidate_id, state_code, -1, 0, n_delegates ]
             candidate_states << cs
-            ids_to_candidate_state[[cs.candidate_id, cs.state_code]] = cs
+            ids_to_candidate_state[[candidate_id, state_code]] = cs
           end
         end
       end
@@ -52,7 +91,7 @@ module Database
         party_id = race_hash[:party]
         race_type = race_hash[:raceType]
 
-        race = Race.new(race_id, race_day_id, party_id, nil, race_type, nil, nil, nil)
+        race = [ race_id, race_day_id, party_id, nil, race_type, nil, nil, nil ]
         races << race
 
         for reporting_unit in race_hash[:reportingUnits]
@@ -62,10 +101,10 @@ module Database
           state_code = reporting_unit[:statePostal]
 
           if reporting_unit[:level] == 'state'
-            race.state_code = state_code
-            race.n_precincts_reporting = n_precincts_reporting
-            race.n_precincts_total = n_precincts_total
-            race.last_updated = last_updated
+            race[3] = state_code
+            race[5] = n_precincts_reporting
+            race[6] = n_precincts_total
+            race[7] = last_updated
 
             for candidate_hash in reporting_unit[:candidates]
               candidate_id = candidate_hash[:polID]
@@ -73,33 +112,31 @@ module Database
 
               next if !candidate
 
-              candidate_state = ids_to_candidate_state[[candidate.id, state_code]]
+              candidate_state = ids_to_candidate_state[[candidate_id, state_code]]
 
-              if !candidate.name
+              if !candidate[2] # name
                 first_name = candidate_hash[:first]
                 last_name = candidate_hash[:last]
-                candidate.name ||= "#{first_name} #{last_name}".strip
+                candidate[2] ||= "#{first_name} #{last_name}".strip
               end
 
               if !candidate_state
                 raise "Missing candidate-state pair #{candidate.id}-#{state_code}"
               end
 
-              candidate_state.ballot_order = candidate_hash[:ballotOrder]
-              candidate_state.n_votes = candidate_hash[:voteCount]
+              candidate_state[2] = candidate_hash[:ballotOrder]
+              candidate_state[3] = candidate_hash[:voteCount]
             end
           elsif reporting_unit[:level] == 'FIPSCode'
             fips_code = reporting_unit[:fipsCode]
+            county_id = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
 
-            county = if fips_code_to_county.include?(fips_code)
-              fips_code_to_county[fips_code]
-            else
-              t = County.new(fips_code)
-              counties << t
-              fips_code_to_county[fips_code] = t
+            if !seen_county_ids.include?(county_id)
+              counties << [ county_id ]
+              seen_county_ids.add(county_id)
             end
 
-            county_parties << CountyParty.new(county.id, party_id, n_precincts_reporting, n_precincts_reporting, last_updated)
+            county_parties << [ county_id, party_id, n_precincts_reporting, n_precincts_reporting, last_updated ]
 
             for candidate_hash in reporting_unit[:candidates]
               candidate_id = candidate_hash[:polID]
@@ -109,7 +146,7 @@ module Database
 
               n_votes = candidate_hash[:voteCount]
 
-              candidate_counties << CandidateCounty.new(candidate_id, county.id, n_votes)
+              candidate_counties << [ candidate_id, county_id, n_votes ]
             end
           else
             raise "Invalid reporting unit level `#{reporting_unit[:level]}'"
@@ -117,5 +154,14 @@ module Database
         end
       end
     end
+
+    Database.new({
+      candidates: candidates,
+      candidate_counties: candidate_counties,
+      candidate_states: candidate_states,
+      counties: counties,
+      county_parties: county_parties,
+      races: races
+    }, Date.today)
   end
 end

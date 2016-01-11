@@ -11,7 +11,7 @@ def on_event
   system("rspec") unless ENV['SKIP_RSPEC']
 end
 
-listener = Listen.to('app', 'lib', 'assets', 'spec', only: /\.(rb|js|json|png|css|sass|scss|haml)$/) do |modified, added, removed|
+listener = Listen.to('app', 'lib', 'assets', 'spec', 'script', only: /\.(rb|js|json|png|css|sass|scss|haml)$/) do |modified, added, removed|
   files = Set.new(modified + added + removed) - [ "#{Paths.Assets}/javascripts/states.js", "#{Paths.Assets}/javascripts/race_days.js" ]
   if !files.empty?
     on_event
