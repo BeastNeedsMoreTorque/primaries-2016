@@ -2,7 +2,7 @@ require 'date'
 require 'set'
 
 RaceDay = Struct.new(:database, :id, :races_codified) do
-  def date; Date.parse(id); end
+  def date; @date ||= Date.parse(id); end
 
   # States that have one or more races on this day
   def states
