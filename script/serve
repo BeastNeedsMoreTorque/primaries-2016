@@ -7,7 +7,7 @@ Bundler.require(:default, :development)
 require_relative '../lib/paths'
 
 def on_event
-  system("#{Paths.Script}/build-primaries")
+  system("#{Paths.Script}/build")
   system("rspec") unless ENV['SKIP_RSPEC']
 end
 
