@@ -3,14 +3,17 @@ require 'oj'
 require 'net/http'
 require 'uri'
 
-require_relative './ap_cache'
-require_relative './ap_client'
+require_relative './http_cache'
+require_relative './http_client'
 require_relative './logger'
 require_relative './paths'
 
-# Requests data from the AP Elections API and stores it in `cache/ap`. Then
-# returns it as JSON when requested.
-module AP
+# Requests data from HTTP APIs: Pollster and AP.
+#
+# Stores results in `cache`.
+#
+# Returns JSON.
+module ApiSources
   private
 
   def self.api_key
@@ -24,8 +27,8 @@ module AP
 
   public
 
-  @server = APClient.new(APClient::HTTPClient.new, AP.api_key, AP.is_test)
-  @cache = APCache.new(Paths.Cache)
+  @server = HttpClient.new(HttpClient::HttpInterface.new, ApiSources.api_key, ApiSources.is_test)
+  @cache = HttpCache.new(Paths.Cache)
 
   def self.wipe_all
     @cache.wipe_all
@@ -39,17 +42,18 @@ module AP
     end
   end
 
+  def self.poll_pollster_primaries
+    poll_or_fetch(:pollster_primaries, 'Dem')
+    poll_or_fetch(:pollster_primaries, 'GOP')
+  end
+
   # Election results for the given date.
-  #
-  # Returns an ElectionDay or raises an error.
   def self.GET_primaries_election_day(date)
     string = get_cached_or_fetch(:election_day, date)
     parse_json(string)
   end
 
   # All 2016 election results.
-  #
-  # Returns an Array of ElectionDay objects.
   def self.GET_all_primary_election_days
     string = get_cached_or_fetch(:election_days, nil)
     obj = parse_json(string)
@@ -62,14 +66,18 @@ module AP
 
   # Delegate counts per candidate.
   #
-  # Returns a DelSuper or raises an error.
-  #
   # This performs two requests: first to /reports, and second to
   # /reports/id-returned-by-first-request.
   def self.GET_del_super
     string = get_cached_or_fetch(:del_super, nil)
     obj = parse_json(string)
     obj[:delSuper]
+  end
+
+  # Pollster primaries polling results per state, including 'US' state.
+  def self.GET_pollster_primaries(party_id)
+    string = get_cached_or_fetch(:pollster_primaries, party_id)
+    parse_json(string)
   end
 
   private

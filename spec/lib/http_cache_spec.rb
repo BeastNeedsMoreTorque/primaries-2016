@@ -1,11 +1,11 @@
 require 'fileutils'
 
-require_relative '../../lib/ap_cache'
+require_relative '../../lib/http_cache'
 
-RSpec.describe 'APCache' do
+RSpec.describe 'HttpCache' do
   before(:each) do
     @tmpdir = Dir.mktmpdir
-    @subject = APCache.new(@tmpdir)
+    @subject = HttpCache.new(@tmpdir)
   end
 
   after(:each) do

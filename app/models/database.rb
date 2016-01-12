@@ -1,6 +1,6 @@
 require 'date'
 
-require_relative '../../lib/ap'
+require_relative '../../lib/api_sources'
 require_relative '../collections/parties'
 
 # All data that goes into page rendering.
@@ -62,11 +62,13 @@ class Database
     races = []
 
     id_to_candidate = {}
+    last_name_to_candidate = {}
     seen_county_ids = Set.new([])
     ids_to_candidate_state = {}
+    last_name_and_state_code_to_candidate_state = {}
 
     # Fill CandidateState (no ballot_order or n_votes) and Candidate (no name)
-    for del in AP.GET_del_super[:del]
+    for del in ApiSources.GET_del_super[:del]
       party_id = del[:pId]
       party_extra = Parties.extra_attributes_by_id.fetch(party_id.to_sym)
 
@@ -77,6 +79,7 @@ class Database
         next if state_code == 'UN' # "Unassigned super delegates"
         for del_candidate in del_state[:Cand]
           candidate_id = del_candidate[:cId]
+          last_name = del_candidate[:cName]
           if candidate_id.length == 6
             candidate_id = "#{party_id}-#{candidate_id}"
           end
@@ -84,19 +87,21 @@ class Database
           n_unpledged_delegates = del_candidate[:sdTot].to_i
 
           if state_code == 'US'
-            c = [ candidate_id, party_id, nil, n_delegates, n_unpledged_delegates ]
+            c = [ candidate_id, party_id, nil, last_name, n_delegates, n_unpledged_delegates, nil ]
             candidates << c
             id_to_candidate[candidate_id] = c
+            last_name_to_candidate[last_name] = c
           else
-            cs = [ candidate_id, state_code, -1, 0, n_delegates ]
+            cs = [ candidate_id, state_code, -1, 0, n_delegates, nil ]
             candidate_states << cs
             ids_to_candidate_state[[candidate_id, state_code]] = cs
+            last_name_and_state_code_to_candidate_state[[last_name, state_code]] = cs
           end
         end
       end
     end
 
-    for election_day in AP.GET_all_primary_election_days
+    for election_day in ApiSources.GET_all_primary_election_days
       race_day_id = election_day[:electionDate]
       for race_hash in election_day[:races]
         race_id = race_hash[:raceID]
@@ -166,6 +171,28 @@ class Database
             end
           else
             raise "Invalid reporting unit level `#{reporting_unit[:level]}'"
+          end
+        end
+      end
+    end
+
+    for party_id in [ 'Dem', 'GOP' ]
+      for chart in ApiSources.GET_pollster_primaries(party_id)
+        state_code = chart[:state]
+        for estimate in chart[:estimates]
+          last_name = estimate[:last_name]
+          poll_percent = estimate[:value]
+
+          if state_code == 'US'
+            candidate = last_name_to_candidate[last_name]
+            if candidate
+              candidate[6] = poll_percent
+            end
+          else
+            candidate_state = last_name_and_state_code_to_candidate_state[[last_name, state_code]]
+            if candidate_state
+              candidate_state[5] = poll_percent
+            end
           end
         end
       end
