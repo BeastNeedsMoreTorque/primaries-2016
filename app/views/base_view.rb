@@ -33,8 +33,6 @@ class BaseView
   protected
 
   class CachingTemplate < ::Temple::Templates::Tilt
-    include Sprockets::DigestUtils
-
     def prepare
       template_filename = eval_file
       cached_result_filename = "#{Paths.Cache}/templates/#{template_filename[Paths.Templates.length + 1 .. -1]}"
@@ -61,9 +59,7 @@ class BaseView
     private
 
     def digest_file_at_path(path)
-      digest = digest_class.new
-      File.open(path, 'r') { |f| digest << f.read }
-      pack_hexdigest(digest.digest)
+      Digest::SHA1.file(path).hexdigest
     end
   end
 

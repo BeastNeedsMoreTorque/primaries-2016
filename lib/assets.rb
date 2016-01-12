@@ -4,8 +4,6 @@ require_relative './logger'
 require_relative './paths'
 
 module Assets
-  extend Sprockets::DigestUtils
-
   SprocketsAssets = %w(
     javascripts/main.js
     stylesheets/main.css
@@ -47,9 +45,7 @@ module Assets
   end
 
   def self.digest_file_at_path(path)
-    digest = digest_class.new
-    File.open(path, 'r') { |f| digest << f.read }
-    pack_hexdigest(digest.digest)
+    Digest::SHA1.file(path).hexdigest
   end
 
   private
