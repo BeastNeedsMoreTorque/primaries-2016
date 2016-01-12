@@ -3,7 +3,7 @@ require 'set'
 # Saves and fetches raw JSON objects from the AP Elections API.
 #
 # They're saved to disk, in `base_path`.
-class APCache
+class HttpCache
   ValidKeys = Set[:election_day, :election_days, :del_super]
   ValidKeysWithoutParam = Set[:election_days, :del_super]
   ValidKeysWithParam = Set[:election_day]

@@ -3,7 +3,7 @@ require 'oj'
 require 'net/http'
 require 'uri'
 
-require_relative './ap_cache'
+require_relative './http_cache'
 require_relative './ap_client'
 require_relative './logger'
 require_relative './paths'
@@ -25,7 +25,7 @@ module AP
   public
 
   @server = APClient.new(APClient::HTTPClient.new, AP.api_key, AP.is_test)
-  @cache = APCache.new(Paths.Cache)
+  @cache = HttpCache.new(Paths.Cache)
 
   def self.wipe_all
     @cache.wipe_all
