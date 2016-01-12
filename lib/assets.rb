@@ -72,6 +72,7 @@ module Assets
   def self.build_sprockets_assets
     sprockets = Sprockets::Environment.new("#{Paths.Dist}/2016") do |env|
       env.cache = Sprockets::Cache::FileStore.new(Paths.Cache)
+      env.digest_class = Digest::SHA1
       env.logger = $logger
     end
     sprockets.append_path(Paths.Assets)
