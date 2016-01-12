@@ -32,19 +32,23 @@ module Assets
 
   # asset_path('main.css') -> '/2016/stylesheets/main-abcdef.css'
   def self.asset_path(path)
-    path =~ /(.*)\.(css|js)$/
+    @asset_paths ||= {}
+    @asset_paths[path] ||= begin
+      path =~ /(.*)\.(css|js)$/
 
-    raise "invalid path #{path}" if !$0
-    dir = case $2
-      when 'css' then 'stylesheets'
-      when 'js' then 'javascripts'
-      else raise "invalid asset extension #{$2}"
+      raise "invalid path #{path}" if !$0
+      dir = case $2
+        when 'css' then 'stylesheets'
+        when 'js' then 'javascripts'
+        else raise "invalid asset extension #{$2}"
+      end
+
+      "/2016/#{dir}/#{$1}-#{asset_digest_hex("#{dir}/#{path}")}.#{$2}"
     end
-
-    "/2016/#{dir}/#{$1}-#{asset_digest_hex("#{dir}/#{path}")}.#{$2}"
   end
 
-  def self.digest_file_at_path(path)
+  def self.asset_digest_hex(filename)
+    path = "#{Paths.Dist}/2016/#{filename}"
     Digest::SHA1.file(path).hexdigest
   end
 
@@ -87,9 +91,5 @@ module Assets
       $logger.debug("Copying asset #{filename}")
       FileUtils.cp_r("#{Paths.Assets}/#{filename}", "#{Paths.Dist}/2016/#{filename}")
     end
-  end
-
-  def self.asset_digest_hex(filename)
-    digest_file_at_path("#{Paths.Dist}/2016/#{filename}")
   end
 end
