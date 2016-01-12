@@ -37,18 +37,21 @@ class HttpClient
   # Returns { data: '{ "json": "stuff" }', etag: 'some-etag' }
   def get(key, maybe_param, maybe_etag)
     case key
+    when :copy
+      throw ArgumentError.new('param must be nil') if !maybe_param.nil?
+      get_text!('https://docs.google.com/document/export?format=txt&id=1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w', maybe_etag)
     when :pollster_primaries
       throw ArgumentError.new('param must be "Dem" or "GOP"') if ![ 'Dem', 'GOP' ].include?(maybe_param)
-      get!("http://elections.huffingtonpost.com/pollster/api/charts?topic=2016-president-#{maybe_param.downcase}-primary", maybe_etag)
+      get_json!("http://elections.huffingtonpost.com/pollster/api/charts?topic=2016-president-#{maybe_param.downcase}-primary", maybe_etag)
     when :election_day
       throw ArgumentError.new('param must be a date in YYYY-MM-DD format') if maybe_param.nil?
-      get!("https://api.ap.org/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)
+      get_json!("https://api.ap.org/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)
     when :election_days
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
-      get!("https://api.ap.org/v2/elections?format=json&apikey=#{ap_api_key}", maybe_etag)
+      get_json!("https://api.ap.org/v2/elections?format=json&apikey=#{ap_api_key}", maybe_etag)
     when :del_super
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
-      r1 = get!("https://api.ap.org/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)
+      r1 = get_json!("https://api.ap.org/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)
       if r1 === nil
         # Exact same contents as before. And AP docs say report data at any
         # given URL remain constant, so we assume no change there
@@ -57,7 +60,7 @@ class HttpClient
         # We need to cache the ETag of the first response, because if it
         # matches we want to avoid making the second request completely.
         report_id = Oj.load(r1[:data])['reports'][0]['id']
-        r2 = get!("#{report_id}?format=json&apikey=#{ap_api_key}", nil) # no ETag, no "test" parameter
+        r2 = get_json!("#{report_id}?format=json&apikey=#{ap_api_key}", nil) # no ETag, no "test" parameter
         { data: r2[:data], etag: r1[:etag] }
       end
     else
@@ -72,7 +75,7 @@ class HttpClient
   # Raises an error if the response code is not 200.
   # Raises an error if the response is not valid JSON.
   # Returns nil if the etag matches
-  def get!(url, maybe_etag)
+  def get_json!(url, maybe_etag)
     response = @http_interface.get(url, maybe_etag)
     string = case response.code
     when '304' then nil
@@ -85,6 +88,19 @@ class HttpClient
       Oj.load(response.body) # Raise an error immediately on invalid JSON
       { data: response.body, etag: response['ETag'] }
     else raise "HTTP #{response.code} #{response.message} from server. Body: #{response.body}"
+    end
+  end
+
+  # Fetches a txt document from the server.
+  #
+  # Raises an error if the response code is not 200.
+  # Returns nil if the etag matches
+  def get_text!(url, maybe_etag)
+    response = @http_interface.get(url, maybe_etag)
+    if response.code == '200'
+      { data: response.body, etag: response['ETag'] }
+    else
+      raise "HTTP #{response.code} #{response.message} from server. Body: #{response.body}"
     end
   end
 

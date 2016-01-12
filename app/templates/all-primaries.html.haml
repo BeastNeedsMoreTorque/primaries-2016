@@ -8,7 +8,9 @@
     != render(partial: 'topbar')
 
     #main
-      %h1 Presidential Primary Races
+      %h1= hed
+
+      %p= body
 
       != render(partial: 'delegate-bars')
       != render(partial: 'calendar')

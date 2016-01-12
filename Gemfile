@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'archieml'
 gem 'aws-sdk'
 gem 'oj'
 gem 'sprockets'

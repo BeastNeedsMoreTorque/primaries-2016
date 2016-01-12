@@ -4,8 +4,8 @@ require 'set'
 #
 # They're saved to disk, in `base_path`.
 class HttpCache
-  ValidKeys = Set[:election_day, :election_days, :del_super, :pollster_primaries]
-  ValidKeysWithoutParam = Set[:election_days, :del_super]
+  ValidKeys = Set[:copy, :election_day, :election_days, :del_super, :pollster_primaries]
+  ValidKeysWithoutParam = Set[:copy, :election_days, :del_super]
   ValidKeysWithParam = Set[:election_day, :pollster_primaries]
 
   def initialize(base_path)
