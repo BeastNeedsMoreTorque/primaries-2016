@@ -71,9 +71,11 @@ module Assets
 
   def self.build_sprockets_assets
     sprockets = Sprockets::Environment.new("#{Paths.Dist}/2016") do |env|
+      env.cache = Sprockets::Cache::FileStore.new(Paths.Cache)
       env.logger = $logger
     end
     sprockets.append_path(Paths.Assets)
+
     SprocketsAssets.each do |filename|
       asset = sprockets.find_asset(filename)
       dirname, basename = filename.split('/')

@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 gem 'aws-sdk'
-gem 'hamlit'
 gem 'oj'
-gem 'sass'
 gem 'sprockets'
+gem 'hamlit' # Faster version of Haml
+gem 'sass'
 
 group :development do
   gem 'listen'
