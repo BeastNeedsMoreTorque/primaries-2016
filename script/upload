@@ -6,7 +6,6 @@ require_relative '../lib/env'
 
 require 'pstore'
 
-require_relative '../lib/assets'
 require_relative '../lib/paths'
 
 S3Bucket = 'elections-test'
@@ -14,6 +13,10 @@ MaxAge = 365 * 86400 # 1yr
 ShortAge = 5
 
 $bucket = Aws::S3::Bucket.new(S3Bucket)
+
+def digest_file_at_path(absolute_path)
+  Digest::SHA1.file(absolute_path).base64digest
+end
 
 # We cache the sha1s of files we upload, so we don't need to upload twice. This
 # shaves a few seconds off our upload times on election night: we won't need to
@@ -40,7 +43,7 @@ end
 
 def upload_asset(relative_path, content_type)
   absolute_path = "#{Paths.Dist}/#{relative_path}"
-  digest = Assets.digest_file_at_path(absolute_path)
+  digest = digest_file_at_path(absolute_path)
   debug_path = "s3://#{S3Bucket}/#{relative_path}"
 
   if digest != S3UploadCache.get_digest(absolute_path)
@@ -64,7 +67,7 @@ def upload_asset(relative_path, content_type)
 end
 
 def upload_html(absolute_path)
-  digest = Assets.digest_file_at_path(absolute_path)
+  digest = digest_file_at_path(absolute_path)
   key = absolute_path[(Paths.Dist.length + 1) .. -6]
   debug_path = "s3://#{S3Bucket}/#{key}"
 
