@@ -103,10 +103,11 @@ class Database
         for reporting_unit in race_hash[:reportingUnits]
           n_precincts_reporting = reporting_unit[:precinctsReporting]
           n_precincts_total = reporting_unit[:precinctsTotal]
-          last_updated = DateTime.parse(reporting_unit[:lastUpdated])
-          state_code = reporting_unit[:statePostal]
 
           if reporting_unit[:level] == 'state'
+            last_updated = DateTime.parse(reporting_unit[:lastUpdated])
+            state_code = reporting_unit[:statePostal]
+
             race[3] = state_code
             race[5] = n_precincts_reporting
             race[6] = n_precincts_total
