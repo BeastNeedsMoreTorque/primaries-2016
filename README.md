@@ -25,6 +25,9 @@ Set the environment variable `LOG_LEVEL=debug` to see more log data. You'll
 probably also want to set `SKIP_RSPEC=true` in this case; otherwise the specs
 will create confusing log messages.
 
+Another useful command is `AP_API_KEY=abcdgef RPROF=true script/build`, which
+will dump profiling data to `profile.html`.
+
 # Endpoints
 
 * `/2016/primaries`: Landing page page

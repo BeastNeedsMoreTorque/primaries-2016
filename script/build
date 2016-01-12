@@ -4,8 +4,10 @@ require_relative '../lib/env'
 
 $logger.info('Starting build')
 
-#require 'ruby-prof'
-#RubyProf.start
+if ENV['RPROF'] == 'true'
+  require 'ruby-prof'
+  RubyProf.start
+end
 
 require_relative '../lib/assets'
 require_relative '../lib/paths'
@@ -29,6 +31,8 @@ end
 
 $logger.info("Rebuilt #{Paths.Dist}")
 
-#result = RubyProf.stop
-#printer = RubyProf::GraphHtmlPrinter.new(result)
-#File.open('profile.html', 'w') { |f| printer.print(f) }
+if ENV['RPROF'] == 'true'
+  result = RubyProf.stop
+  printer = RubyProf::GraphHtmlPrinter.new(result)
+  File.open('profile.html', 'w') { |f| printer.print(f) }
+end
