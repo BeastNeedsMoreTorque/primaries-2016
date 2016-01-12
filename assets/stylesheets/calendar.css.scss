@@ -1,10 +1,5 @@
 .calendar {
-  clear: left;
-  h4 {
-    font-size: 3rem;
-    margin: 2rem 0 0 1rem;
-    padding: 0;
-  }
+  clear: both;
 
   ol.race-months, ol.race-days, ul.parties {
     margin: 0;
@@ -14,19 +9,50 @@
 
   ol.race-months {
     display: flex;
-    -webkit-display: flex;
+    display: -webkit-flex;
+  }
+
+  li.race-month {
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
   }
 
   li.race-day {
     font-size: 1rem;
     margin: 1rem;
+    position: relative;
   }
 
   a.race-day {
+    display: block;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 3rem;
+    text-decoration: none;
     font-weight: bold;
+
+    & + ul.parties {
+      display: none;
+      position: absolute;
+      left: 50%;
+      margin-left: -50%;
+      top: 100%;
+      width: 10em;
+      background: white;
+      border: 1px solid #eee;
+      padding: 1rem;
+      z-index: 1;
+      opacity: .9;
+    }
+
+    &:hover + ul.parties {
+      display: inline-block;
+    }
   }
 
-  .month {
+  h4.month {
     font-size: 1.2rem;
+    margin: 1rem;
+    text-align: center;
   }
 }

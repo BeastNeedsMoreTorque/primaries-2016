@@ -11,4 +11,8 @@
                 - parties.each do |party|
                   - party_states = race_day.states_for_party(party)
                   - if !party_states.empty?
-                    %li{class: "party party-#{party.id.downcase}"}= "#{party.name}: #{party_states.map(&:abbreviation).join(', ')}"
+                    %li{class: "party party-#{party.id.downcase}"}
+                      %p.party-name= party.name
+                      %ul.party-states
+                        - party_states.each do |state|
+                          %li.party-state= state.name
