@@ -5,8 +5,8 @@
         %h4.month= race_days[0].date.strftime('%B')
         %ol.race-days
           - race_days.each do |race_day|
-            %li.race-day{"data-date": race_day.date.to_s}
-              %a.race-day{href: "/2016/primaries/#{race_day.date.to_s}"}= race_day.date.strftime('%-d')
+            %li.race-day{"data-date": race_day.id}
+              %a.race-day{href: "/2016/primaries/#{race_day.id}"}= race_day.date.strftime('%-d')
               %ul.parties
                 - parties.each do |party|
                   - party_states = race_day.states_for_party(party)
