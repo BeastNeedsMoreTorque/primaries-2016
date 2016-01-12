@@ -25,6 +25,8 @@ class BaseView
 
   def asset_path(path); Assets.asset_path(path); end
   def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
+  def dem_candidates; database.candidates.select{ |cd| cd.party_id == 'Dem'}; end
+  def gop_candidates; database.candidates.select{ |cd| cd.party_id == 'GOP'}; end
 
   def template_name
     t = self.class.name.gsub(/([A-Z])/) { "-#{$1.downcase}" }

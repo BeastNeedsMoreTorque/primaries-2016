@@ -3,11 +3,29 @@
   clear:both;
 }
 .t-pollster {
+  border-collapse: collapse;
   width: 45%;
-}
-#Democratic {
-  float: left;
-}
-#Republican {
-  float: right;
+  td {
+    padding: 10px;
+    height: 25px;
+    border-bottom: 1px solid gray;
+  }
+  td.cd-avg-poll{
+    width: 10%;
+    text-align: center;
+    border-left: 1px solid gray;
+  }
+  tr:nth-child(even) {
+    background-color: #f1f1f1;
+  }
+  th {
+    text-align: left;
+    border-bottom: 1px solid black;
+  }
+  &.democratic {
+    float: left;
+  }
+  &.republican {
+    float: right;
+  }
 }

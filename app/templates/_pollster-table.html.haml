@@ -1,11 +1,25 @@
 %div.tables
-- parties.each do |par|
-  %table.t-pollster{id: par.adjective}
-    - par.candidates.each do |cd|
-      %tr.candidate
+  %table.t-pollster.democratic
+    %th
+    %th
+      candidate
+    %th
+      pollster
+    - dem_candidates.each do |cd|
+      %tr.dem-candidate
         %td.cd-img
           img
-        %td.cd-name
-          a candidate name
-        %td.cd-avg-poll
-          a poll result
+        %td.cd-name= cd.name
+        %td.cd-avg-poll= cd.poll_percent
+  %table.t-pollster.republican
+    %th
+    %th
+      candidate
+    %th
+      pollster
+    - gop_candidates.each do |cd|
+      %tr.rep-candidate
+        %td.cd-img
+          img
+        %td.cd-name= cd.name
+        %td.cd-avg-poll= cd.poll_percent
