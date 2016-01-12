@@ -2,7 +2,7 @@ require_relative './candidate'
 require_relative './state'
 
 # Delegate/vote counts for a Candidate in a State.
-CandidateState = Struct.new(:database, :candidate_id, :state_code, :ballot_order, :n_votes, :n_delegates) do
+CandidateState = Struct.new(:database, :candidate_id, :state_code, :ballot_order, :n_votes, :n_delegates, :poll_percent) do
   include Comparable
 
   def candidate; database.candidates.find!(candidate_id); end

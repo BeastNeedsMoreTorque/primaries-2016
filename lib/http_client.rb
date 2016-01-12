@@ -4,10 +4,10 @@ require 'uri'
 
 require_relative './logger'
 
-class APClient
-  class HTTPClient
-    def get(path, maybe_etag)
-      uri = URI("https://api.ap.org#{path}")
+class HttpClient
+  class HttpInterface
+    def get(url, maybe_etag)
+      uri = URI(url)
 
       $logger.debug("GET #{uri}")
 
@@ -20,11 +20,11 @@ class APClient
     end
   end
 
-  attr_reader(:api_key, :is_test)
+  attr_reader(:ap_api_key, :is_test)
 
-  def initialize(http_client, api_key, is_test)
-    @http_client = http_client
-    @api_key = api_key
+  def initialize(http_interface, ap_api_key, is_test)
+    @http_interface = http_interface
+    @ap_api_key = ap_api_key
     @is_test = is_test
   end
 
@@ -37,15 +37,18 @@ class APClient
   # Returns { data: '{ "json": "stuff" }', etag: 'some-etag' }
   def get(key, maybe_param, maybe_etag)
     case key
+    when :pollster_primaries
+      throw ArgumentError.new('param must be "Dem" or "GOP"') if ![ 'Dem', 'GOP' ].include?(maybe_param)
+      get!("http://elections.huffingtonpost.com/pollster/api/charts?topic=2016-president-#{maybe_param.downcase}-primary", maybe_etag)
     when :election_day
       throw ArgumentError.new('param must be a date in YYYY-MM-DD format') if maybe_param.nil?
-      get!("/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{api_key}#{is_test_query_param}", maybe_etag)
+      get!("https://api.ap.org/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)
     when :election_days
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
-      get!("/v2/elections?format=json&apikey=#{api_key}", maybe_etag)
+      get!("https://api.ap.org/v2/elections?format=json&apikey=#{ap_api_key}", maybe_etag)
     when :del_super
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
-      r1 = get!("/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{api_key}#{is_test_query_param}", maybe_etag)
+      r1 = get!("https://api.ap.org/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)
       if r1 === nil
         # Exact same contents as before. And AP docs say report data at any
         # given URL remain constant, so we assume no change there
@@ -53,8 +56,8 @@ class APClient
       else
         # We need to cache the ETag of the first response, because if it
         # matches we want to avoid making the second request completely.
-        report_id = Oj.load(r1[:data])['reports'][0]['id']['https://api.ap.org'.length .. -1]
-        r2 = get!("#{report_id}?format=json&apikey=#{api_key}", nil) # no ETag, no "test" parameter
+        report_id = Oj.load(r1[:data])['reports'][0]['id']
+        r2 = get!("#{report_id}?format=json&apikey=#{ap_api_key}", nil) # no ETag, no "test" parameter
         { data: r2[:data], etag: r1[:etag] }
       end
     else
@@ -70,7 +73,7 @@ class APClient
   # Raises an error if the response is not valid JSON.
   # Returns nil if the etag matches
   def get!(url, maybe_etag)
-    response = @http_client.get(url, maybe_etag)
+    response = @http_interface.get(url, maybe_etag)
     string = case response.code
     when '304' then nil
     when '200' then
