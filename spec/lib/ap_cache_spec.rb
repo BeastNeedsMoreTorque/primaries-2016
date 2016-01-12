@@ -1,6 +1,6 @@
 require 'fileutils'
 
-require_relative '../lib/ap_cache'
+require_relative '../../lib/ap_cache'
 
 RSpec.describe 'APCache' do
   before(:each) do

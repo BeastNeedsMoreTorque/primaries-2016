@@ -1,6 +1,6 @@
 require 'oj'
 
-require_relative '../lib/ap_client'
+require_relative '../../lib/ap_client'
 
 describe 'APClient' do
   before(:each) do
