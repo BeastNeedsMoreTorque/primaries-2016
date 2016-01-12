@@ -37,6 +37,9 @@ class HttpClient
   # Returns { data: '{ "json": "stuff" }', etag: 'some-etag' }
   def get(key, maybe_param, maybe_etag)
     case key
+    when :pollster_primaries
+      throw ArgumentError.new('param must be "Dem" or "GOP"') if ![ 'Dem', 'GOP' ].include?(maybe_param)
+      get!("http://elections.huffingtonpost.com/pollster/api/charts?topic=2016-president-#{maybe_param.downcase}-primary", maybe_etag)
     when :election_day
       throw ArgumentError.new('param must be a date in YYYY-MM-DD format') if maybe_param.nil?
       get!("https://api.ap.org/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)
