@@ -11,8 +11,14 @@ class RaceDayView < BaseView
   end
 
   def output_path; "2016/primaries/#{race_day.id}.html"; end
+  def hed; race_day_copy ? race_day_copy['title'] : nil; end
+  def body; race_day_copy ? race_day_copy['body'] : nil; end
 
   def race_day_states; race_day.states.sort_by(&:name); end
+
+  def race_day_copy
+    @race_day_copy ||= copy['primaries']['race-days'].find {|rd| rd['date'] == race_day.id}
+  end
 
   def self.generate_all(database)
     database.race_days.each do |race_day|

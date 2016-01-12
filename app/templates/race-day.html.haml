@@ -8,9 +8,13 @@
     != render(partial: 'topbar')
 
     #main
-      %h1= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
+      %h1= hed || "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
+
       != render(partial: 'delegate-bars')
       != render(partial: 'calendar')
+
+      - if body
+        %p= body
 
       %ul.parties
         - parties.each do |party|
