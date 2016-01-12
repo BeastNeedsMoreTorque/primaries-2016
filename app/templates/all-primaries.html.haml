@@ -13,19 +13,6 @@
       != render(partial: 'delegate-bars')
       != render(partial: 'calendar')
 
-      - parties.each do |party|
-        %h2= "#{party.adjective} Candidates"
-        %table
-          %thead
-            %tr
-              %th.candidate Candidate
-              %th.n-delegates Del.
-          %tbody
-            - party.candidates.each do |candidate|
-              %tr
-                %td.candidate= candidate.name
-                %td.n-delegates= candidate.n_delegates
-
       %svg#main-map
 
     %script{src: asset_path('main.js')}
