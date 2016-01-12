@@ -7,6 +7,8 @@ gem 'hamlit' # Faster version of Haml
 gem 'sass'
 
 group :development do
+  gem 'capybara'
+  gem 'capybara-webkit'
   gem 'listen'
   gem 'rack'
   gem 'rack-contrib'

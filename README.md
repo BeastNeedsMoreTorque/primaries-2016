@@ -8,9 +8,12 @@ results so they're updated frequently and available to all.
 1. Install [rvm](http://rvm.io)
 2. `gem install bundler`
 3. `bundle install`
-4. (for dev) `AP_API_KEY=abcdefg script/serve`
+4. (for dev) `AP_API_KEY=abcdefg script/serve` and `rspec`
 5. (for upload to s3) `AP_API_KEY=abcdefg script/build && script/upload`
 6. (to ping AP for new data and rebuild) `AP_API_KEY=abcdefg script/update-primaries [YYYY-MM-DD ...]`
+
+Bundle install problems? Maybe install
+[capybara-webkit dependencies](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit). On Fedora 23, `ln -s /usr/bin/qmake-qt5 $HOME/bin/qmake`.
 
 # Developing
 
@@ -27,6 +30,11 @@ will create confusing log messages.
 
 Another useful command is `AP_API_KEY=abcdgef RPROF=true script/build`, which
 will dump profiling data to `profile.html`.
+
+Finally, if you run `rspec` directly you'll run integration tests. You must
+have `script/serve` running in another console (to serve the files). This will
+overwrite all HTML files once per test. Run `script/build` again to revert to
+the results AP gives.
 
 # Endpoints
 

@@ -1,5 +1,6 @@
 require 'tilt'
 
+require_relative '../../lib/assets'
 require_relative '../../lib/paths'
 
 class BaseView

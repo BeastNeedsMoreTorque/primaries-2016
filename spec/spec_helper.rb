@@ -3,3 +3,48 @@
 #
 # https://github.com/rspec/rspec-core/issues/1983
 $LOAD_PATH.delete_if { |p| File.expand_path(p) == File.expand_path('./lib') }
+
+running_rspec_through_script_serve = (ENV['AP_API_KEY'] != nil)
+ENV['AP_API_KEY'] = 'no-api-key-because-this-is-a-test-suite'
+
+require_relative '../lib/env'
+Bundler.require(:development)
+
+RSpec.configure do |config|
+  if running_rspec_through_script_serve
+    config.filter_run_excluding(type: :feature)
+  end
+end
+
+require 'capybara/rspec'
+Capybara.configure do |config|
+  config.default_driver = :webkit
+  config.app_host = 'http://localhost:3000'
+  config.run_server = false
+end
+
+require_relative '../app/models/database'
+
+def mock_database(collections, date_string)
+  date = Date.parse(date_string)
+  collections[:parties] ||= [
+    [ 'Dem', 'Democrats', 'Democratic', '1000', '500' ],
+    [ 'GOP', 'Republicans', 'Republican', '2000', '1000' ]
+  ]
+  collections[:candidates] ||= [
+    [ '1', 'Dem', 'Hillary Clinton', 50, 10 ],
+    [ '2', 'GOP', 'Marco Rubio', 100, 20 ]
+  ]
+  Database.new(collections, date)
+end
+
+def render_from_database(database)
+  Dir[File.dirname(__FILE__) + '/../app/views/*.rb'].each do |path|
+    next if path =~ /base_view.rb$/
+    require File.absolute_path(path)
+    basename = path.split('/').last.split('.').first
+    class_name = basename.gsub(/(^|_)([^_]+)/) { $2.capitalize }
+    klass = Object.const_get(class_name)
+    klass.generate_all(database)
+  end
+end

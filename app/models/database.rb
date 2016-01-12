@@ -36,8 +36,11 @@ class Database
 
       collection = if all
         collection_class.build(self, all)
-      else
+      elsif collection_class.respond_to?(:build_hard_coded)
         collection_class.build_hard_coded(self)
+      else
+        # Integration tests use this
+        collection_class.build(self, [])
       end
 
       instance_variable_set("@#{collection_name}", collection)
