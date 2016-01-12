@@ -32,6 +32,44 @@ class BaseView
 
   protected
 
+  class CachingTemplate < ::Temple::Templates::Tilt
+    include Sprockets::DigestUtils
+
+    def prepare
+      template_filename = eval_file
+      cached_result_filename = "#{Paths.Cache}/templates/#{template_filename[Paths.Templates.length + 1 .. -1]}"
+
+      template_sha1 = digest_file_at_path(template_filename)
+      cache_contents = begin
+        IO.read(cached_result_filename, encoding: 'utf-8')
+      rescue Errno::ENOENT
+        ''
+      end
+
+      cache_sha1, cache_src = cache_contents.split(/\n/, 2)
+
+      if cache_sha1 == template_sha1
+        @src = cache_src
+      else
+        @src = super
+        FileUtils.mkdir_p(File.dirname(cached_result_filename))
+        IO.write(cached_result_filename, "#{template_sha1}\n#{@src}", encoding: 'utf-8')
+        @src
+      end
+    end
+
+    private
+
+    def digest_file_at_path(path)
+      digest = digest_class.new
+      File.open(path, 'r') { |f| digest << f.read }
+      pack_hexdigest(digest.digest)
+    end
+  end
+
+  HamlitTemplate = CachingTemplate.create(Hamlit::Engine, register_as: :haml)
+  Tilt.register(HamlitTemplate, 'haml')
+
   def self.template_name_to_template(template_name)
     @template_name_to_template ||= {}
     @template_name_to_template[template_name] ||= load_template(template_name)
