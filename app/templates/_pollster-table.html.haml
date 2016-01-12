@@ -1,0 +1,11 @@
+%div.tables
+- parties.each do |par|
+  %table.t-pollster{id: par.adjective}
+    - par.candidates.each do |cd|
+      %tr.candidate
+        %td.cd-img
+          img
+        %td.cd-name
+          a candidate name
+        %td.cd-avg-poll
+          a poll result
