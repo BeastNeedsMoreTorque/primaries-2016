@@ -38,7 +38,7 @@ module CollectionClass
       # For instance: Candidate.create([[ '1', 'GOP', 'Mr. Foo', 13, 25 ], ...])
       def self.build(database, array_of_param_arrays)
         all = array_of_param_arrays.map { |param_array| @item_class.new(database, *param_array) }
-        if @item_class.method_defined?(:<=>)
+        if @item_class.included_modules.include?(Comparable)
           all.sort
         end
         self.new(all)
