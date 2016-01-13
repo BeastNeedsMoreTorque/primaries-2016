@@ -6,6 +6,7 @@ gem 'oj'
 gem 'sprockets'
 gem 'hamlit' # Faster version of Haml
 gem 'sass'
+gem 'mkfifo'
 
 group :development do
   gem 'capybara'

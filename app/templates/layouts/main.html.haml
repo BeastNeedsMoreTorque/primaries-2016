@@ -1,0 +1,38 @@
+-# Pass me options: `stylesheets`, `main`
+!!! 5
+%html{lang: 'en'}
+  %head
+    %meta{charset: 'utf-8'}
+    %title= page_title
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    %meta{itemprop: 'name', content: "#{page_title} - The Huffington Post"}
+    %meta{name: 'description', content: meta[:page_description]}
+    %meta{property: 'og:type', content: 'article'}
+    %meta{property: 'og:site_name', content: 'The Huffington Post'}
+    %meta{property: 'og:url', content: "http://elections.huffingtonpost.com/#{output_path[0 .. -5]}"}
+    %meta{property: 'og:description', content: meta[:page_description]}
+    %meta{property: 'og:title', content: page_title}
+    - if meta[:social_image_url]
+      %meta{property: 'twitter:card', content: 'summary_large_image'}
+      %meta{property: 'og:image', content: meta[:social_image_url]}
+    %meta{property: 'article:publisher', content: 'HuffingtonPost'}
+    - if meta[:author]
+      %meta{name: 'author', content: meta[:author]}
+      %meta{property: 'article:author', content: meta[:author]}
+    - if meta[:author_twitter]
+      %meta{property: 'twitter:creator', content: meta[:author_twitter]}
+    %meta{property: 'fb:app_id', content: '46744042133'}
+
+    - for stylesheet in (stylesheets || [])
+      %link{rel: 'stylesheet', href: stylesheet}
+  %body{class: body_class}
+    != render(partial: 'topbar')
+
+    != main
+
+    .footer
+      :plain
+        &copy; 2015 TheHuffingtonPost.com, Inc. |
+        <a href="http://privacy.aol.com">Privacy</a> |
+        <span class="hpdatalink"><a href="http://data.huffingtonpost.com">HuffPost Data</a></span> |
+        Part of <strong>HPMG News</strong>

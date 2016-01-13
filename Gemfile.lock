@@ -34,6 +34,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2015.1120)
     mini_portile2 (2.0.0)
+    mkfifo (0.1.1)
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
     oj (2.14.3)
@@ -80,6 +81,7 @@ DEPENDENCIES
   capybara-webkit
   hamlit
   listen
+  mkfifo
   oj
   rack
   rack-contrib

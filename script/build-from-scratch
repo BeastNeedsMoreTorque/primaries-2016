@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'fileutils'
-
-require_relative '../lib/paths'
-
-FileUtils.rm_rf(Paths.Cache)
-exec "#{Paths.Script}/build"

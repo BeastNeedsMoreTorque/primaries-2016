@@ -8,6 +8,7 @@
   - dem_candidates.each do |cd|
     - if cd.poll_percent
       %tr.dem-candidate
-        %td.cd-img Img
+        %td
+          %img.cd-img(src="images/#{cd.slug}.png")
         %td.cd-name= cd.name
         %td.pollster= "#{cd.poll_percent}%"

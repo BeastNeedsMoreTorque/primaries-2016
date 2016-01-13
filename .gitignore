@@ -5,3 +5,4 @@ cache-by-date/
 assets/javascripts/states.js
 assets/javascripts/race_days.js
 profile.html
+tmp/

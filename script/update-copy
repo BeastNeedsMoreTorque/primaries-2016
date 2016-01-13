@@ -15,4 +15,3 @@ open(Url, 'r') do |input|
 end
 
 $logger.info("Overwrote #{Paths.Copy}")
-exec "#{Paths.Script}/build"

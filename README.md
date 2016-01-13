@@ -33,13 +33,41 @@ will dump profiling data to `profile.html`.
 
 Oh yeah, and `script/update-copy` will update our static copy. We edit that at
 https://docs.google.com/document/d/1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w/edit.
-You'll want to set `AP_API_KEY` on this one, too, as it calls `script/build`
-once the copy has changed.
 
 Finally, if you run `rspec` directly you'll run integration tests. You must
 have `script/serve` running in another console (to serve the files). This will
 overwrite all HTML files once per test. Run `script/build` again to revert to
 the results AP gives.
+
+# Production
+
+While this is a static website, we do update it often. We run a simple, not-HTTP
+server called `production-server` which handles various tasks:
+
+* It updates from Pollster from time to time
+* It updates from the AP API from time to time
+* It builds and pushes to S3 after each update
+
+We control this server with [Capistrano](http://capistranorb.com/).
+`cap staging deploy` will gracefully kill the previously-running
+`production-server`, pull new code, and start a new `production-server`.
+Here's the full list of commands:
+
+* `cap production setup`: set up server on production (prompts for variables).
+* `cap production deploy`: update code, start/restart `production-server`.
+* `cap production tell-server 'poll_dates 2016-02-01'`: give the server a
+  command. Commands are:
+  * `poll_dates [YYYY-MM-DD ...]`: updates AP data for races that day
+  * `exit`: terminates the server gracefully
+
+And here's what you do when you want to change copy:
+
+1. Update the copy on Google Docs, at
+   https://docs.google.com/document/d/1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w/edit.
+2. Run `script/update-copy`.
+3. Check the `script/serve` output on localhost.
+4. Run `git commit; git push; cap staging deploy` and test on staging.
+5. Run `cap production deploy` and test on production.
 
 # Endpoints
 
