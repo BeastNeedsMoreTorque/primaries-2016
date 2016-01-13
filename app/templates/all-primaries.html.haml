@@ -8,11 +8,16 @@
     != render(partial: 'topbar')
 
     #main
-      %h1 Presidential Primary Races
+      %h1= hed
+
+      %p= body
 
       != render(partial: 'delegate-bars')
       != render(partial: 'dem-pollster-table')
       != render(partial: 'gop-pollster-table')
       != render(partial: 'calendar')
 
+      %svg#main-map
+
+    %script{src: asset_path('stats.js')}
     %script{src: asset_path('main.js')}

@@ -23,7 +23,7 @@ body.race-day {
 
 table.race {
   border-collapse: collapse;
-  width: 45%;
+  width: 90%;
   td {
     text-align: left;
     padding: 5px;
@@ -36,7 +36,15 @@ table.race {
     border-left: 1px solid gray;
   }
   td.candidate{
-    widt: 30%;
+    width: 30%;
+  }
+  td.n-votes{
+    border-left: 1px solid gray;
+    text-align: center;
+  }
+  td.n-delegates{
+    border-left: 1px solid gray;
+    text-align: center;
   }
   tr:nth-child(even) {
     background-color: #f1f1f1;

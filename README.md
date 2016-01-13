@@ -31,6 +31,11 @@ will create confusing log messages.
 Another useful command is `AP_API_KEY=abcdgef RPROF=true script/build`, which
 will dump profiling data to `profile.html`.
 
+Oh yeah, and `script/update-copy` will update our static copy. We edit that at
+https://docs.google.com/document/d/1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w/edit.
+You'll want to set `AP_API_KEY` on this one, too, as it calls `script/build`
+once the copy has changed.
+
 Finally, if you run `rspec` directly you'll run integration tests. You must
 have `script/serve` running in another console (to serve the files). This will
 overwrite all HTML files once per test. Run `script/build` again to revert to

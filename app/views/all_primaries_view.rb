@@ -2,6 +2,8 @@ require_relative './base_view'
 
 class AllPrimariesView < BaseView
   def output_path; "2016/primaries.html"; end
+  def hed; copy['primaries']['landing-page']['hed']; end
+  def body; copy['primaries']['landing-page']['body']; end
 
   def dem_candidates; database.candidates.select{ |cd| cd.party_id == 'Dem'}; end
   def gop_candidates; database.candidates.select{ |cd| cd.party_id == 'GOP'}; end

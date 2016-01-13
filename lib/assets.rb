@@ -5,6 +5,7 @@ require_relative './paths'
 
 module Assets
   SprocketsAssets = %w(
+    javascripts/stats.js
     javascripts/main.js
     stylesheets/main.css
     stylesheets/right-rail.css

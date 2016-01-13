@@ -65,7 +65,7 @@ States = CollectionClass.new('parties', 'party', Party) do
       [ 69, 'MP', 'Northern Mariana Islands' ],
       [ 72, 'PR', 'P.R.', 'Puerto Rico' ],
       [ 78, 'VI', 'V.I.', 'Virgin Islands' ],
-      [ -1, 'abroad', 'abroad', 'Democrats Abroad' ]
+      [ -1, 'DA', 'Dems abroad', 'Democrats Abroad' ]
     ].map { |arr| State.new(database, arr[0], arr[1], arr[2], arr[3] || arr[2]) }
     self.new(all)
   end

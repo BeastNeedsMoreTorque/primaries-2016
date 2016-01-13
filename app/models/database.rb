@@ -24,8 +24,9 @@ class Database
 
   attr_reader(*CollectionNames)
   attr_reader(:today)
+  attr_reader(:copy)
 
-  def initialize(collections, today)
+  def initialize(collections, today, copy)
     CollectionNames.each { |n| require_relative "../collections/#{n}.rb" }
 
     CollectionNames.each do |collection_name|
@@ -47,6 +48,7 @@ class Database
     end
 
     @today = today
+    @copy = copy
   end
 
   # The "production" Database: today's date, AP's data
@@ -206,6 +208,13 @@ class Database
       county_parties: county_parties,
       parties: parties,
       races: races
-    }, Date.today)
+    }, Date.today, production_copy)
+  end
+
+  def self.production_copy
+    @production_copy ||= begin
+      text = IO.read(Paths.Copy)
+      Archieml.load(text)
+    end
   end
 end

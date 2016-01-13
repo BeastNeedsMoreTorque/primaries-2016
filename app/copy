@@ -1,0 +1,61 @@
+﻿Please ask a member of huffpostdata for help editing this Archieml document.
+
+
+Valid States:
+* All 50 postal codes: AR, AK, etc.
+* Democrats Abroad: DA
+* Four others: GU, MP, PR and VI
+
+
+Valid Parties:
+* GOP
+* Dem
+
+
+States and parties are case-sensitive
+{primaries.landing-page}
+
+
+hed: Something Awesome
+body: Moo mar
+
+
+
+
+beep
+:end
+
+
+[primaries.race-days]
+
+
+date: 2016-02-01
+title: Iowa Caucuses
+body: The Iowa Caucuses are important because ... uh ... why?
+
+
+More text
+:end
+
+
+date: 2016-02-09
+title: New Hampshire Primaries
+body: New Hampshire is crucial becuase
+
+
+... really? Is it?
+:end
+
+
+[primaries.races]
+
+
+state: IA
+party: Dem
+text: Any democrat *needs* Iowa.
+
+
+:end
+
+
+:ignore all text after this line
