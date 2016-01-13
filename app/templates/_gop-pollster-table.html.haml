@@ -1,14 +1,17 @@
 %h4 GOP
 %table.t-pollster.republican
-  %th
-  %th
-    candidate
-  %th
-    pollster
-  - gop_candidates.each do |cd|
-    - if cd.poll_percent
-      %tr.rep-candidate
-        %td
-          %img.cd-img(src="images/#{cd.slug}.png")
-        %td.cd-name= cd.name
-        %td.pollster= "#{cd.poll_percent}%"
+  %thead
+    %tr
+      %th
+      %th
+        candidate
+      %th
+        pollster
+  %tbody
+    - gop_candidates.each do |cd|
+      - if cd.poll_percent
+        %tr.rep-candidate
+          %td
+            %img.cd-img{src: "images/#{cd.slug}.png", alt: ''}
+          %td.cd-name= cd.name
+          %td.pollster= "#{cd.poll_percent}%"
