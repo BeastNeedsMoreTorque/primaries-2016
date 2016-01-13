@@ -1,0 +1,19 @@
+%h2 When's my race?
+
+%p Here are all races, sorted by state.
+
+%table
+  %thead
+    %tr
+      %th.state State
+      - for party in parties
+        %th{class: "party party-#{party.id.downcase}"}= party.name
+  %tbody
+    - for state in states.sort_by(&:name)
+      %tr
+        %td.state= state.name
+        - for party in parties
+          %td{class: "party party-#{party.id.downcase}"}
+            - race = races.find_by_party_and_state(party, state)
+            - if race
+              %a{href: "/2016/primaries/#{race.race_day_id}##{state.code}"}= race.date.strftime('%B %-d')

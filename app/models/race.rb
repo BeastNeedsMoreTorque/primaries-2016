@@ -3,6 +3,7 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def party; database.parties.find!(party_id); end
   def race_day; database.race_days.find!(race_day_id); end
   def state; database.states.find!(state_code); end
+  def date; race_day.date; end
 
   def candidate_states
     @candidate_states ||= if ap_id
