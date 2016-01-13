@@ -1,0 +1,127 @@
+#!/usr/bin/env ruby
+#
+# This is meant to run as a daemon. It's basically cron with benefits.
+#
+# RUNNING
+#
+# The server creates `tmp/production-server.sock` and reads it, waiting for
+# commands such as `exit\n` or `poll_dates 2016-02-01\n`. If no command comes
+# before the timeout, it does its default polling.
+#
+# To run a command, run `script/run-production-command "exit"`. That opens
+# `tmp/production-server.sock` for writing and opens
+# `tmp/production-server-output.sock` for reading. The server will open
+# `tmp/production-server-output.sock` for writing, so the server's output
+# will be redirected to the `run-production-command` process, which will dump
+# it on stderr.
+
+require 'date'
+
+require_relative '../lib/env'
+require_relative '../lib/paths'
+require_relative '../lib/api_sources'
+require_relative '../app/models/database'
+
+FileUtils.mkdir_p(Paths.ProductionDir)
+
+for path in [ Paths.ProductionCommands, Paths.ProductionOutput ]
+  FileUtils.rm_f(path)
+  File.mkfifo(path)
+end
+
+class Server
+  Timeout = 30 # seconds
+
+  def initialize
+    @command_reader = open(Paths.ProductionCommands, 'r+')
+    @output_writer = open(Paths.ProductionOutput, 'a+')
+    @output_writer.sync = true
+    @real_stderr = $stderr.dup
+
+    @views = Dir[File.dirname(__FILE__) + '/../app/views/*.rb'].map do |path|
+      if path =~ /base_view.rb$/
+        nil
+      else
+        require File.absolute_path(path)
+        basename = path.split('/').last.split('.').first
+        class_name = basename.gsub(/(^|_)([^_]+)/) { $2.capitalize }
+        Object.const_get(class_name)
+      end
+    end.compact
+  end
+
+  def run
+    run_poll_dates([ latest_race_date_string ])
+
+    while true
+      tick
+    end
+  end
+
+  private
+
+  def run_poll_dates(date_strings)
+    $logger.info("Updating AP data for #{date_strings.join(' ')}")
+    begin
+      ApiSources.poll_dates(date_strings)
+    rescue RuntimeError => e
+      valid_message = 'HTTP 500'
+      if e.message[0 .. valid_message.length] != valid_message && e.message =~ /QuotaViolation/
+        $logger.info("AP's API reports a quota violation. Falling back to cached results.")
+      else
+        raise e
+      end
+    end
+
+    $logger.info("Updating Pollster primaries data")
+    ApiSources.poll_pollster_primaries
+
+    $logger.info("Generating")
+    database = Database.load
+    Assets.clear
+    Assets.build(database)
+
+    for view in @views
+      view.generate_all(database)
+    end
+
+    $logger.info("Uploading")
+    system("#{Paths.Script}/upload")
+  end
+
+  def latest_race_date_string
+    # Polls usually close at 10:00 p.m.; we'll assume they're finalized before
+    # 2 p.m. the next day.
+    (DateTime.now - 2.0/3).to_date.to_s
+  end
+
+  def tick
+    if !IO.select([ @command_reader ], [], [], Timeout)
+      run_poll_dates([ latest_race_date_string ])
+    else
+      command = @command_reader.gets.strip
+      $logger.info("Handling command: #{command}")
+
+      $stderr.reopen(@output_writer)
+
+      parts = command.split(/\s+/)
+
+      case parts[0]
+      when 'poll_dates' then run_poll_dates(parts[1..-1])
+      when 'exit'
+        $logger.info("Exiting")
+        $stderr.write("\n") # so client can exit -- see below
+        exit 0
+      else
+        $logger.warn("Ignoring invalid command `#{command}`")
+      end
+
+      # The client is running this command until output finishes. Write an empty
+      # line to indicate the end of output.
+      $stderr.write("\n")
+      $stderr.reopen(@real_stderr)
+    end
+  end
+end
+
+Server.new.run

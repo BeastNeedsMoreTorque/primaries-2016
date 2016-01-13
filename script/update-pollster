@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 #
-# Refreshes the delegate count and vote counts for the specified election dates
+# Refreshes the pollster estimates for candidates and candidate_states
 #
 # Usage: update-primaries [YYYY-MM-DD ...]
 
 require_relative '../lib/env'
 require_relative '../lib/api_sources'
 
-ApiSources.poll_dates(ARGV)
+ApiSources.poll_pollster_primaries
 exec "#{Paths.Script}/build"

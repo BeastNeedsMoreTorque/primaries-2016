@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+#
+# Runs a command on the server, or exits if the server isn't running.
+
+require_relative '../lib/paths'
+
+command_writer = open(Paths.ProductionCommands, 'a')
+command_writer.sync = true
+output_reader = open(Paths.ProductionOutput, 'r')
+
+command_writer.puts("#{ARGV[0]}\n")
+
+while true
+  line = output_reader.gets
+  if line == "\n"
+    exit 0
+  else
+    $stderr.write(line)
+  end
+end
