@@ -208,6 +208,13 @@ class Database
       county_parties: county_parties,
       parties: parties,
       races: races
-    }, Date.today, ApiSources.GET_copy)
+    }, Date.today, production_copy)
+  end
+
+  def self.production_copy
+    @production_copy ||= begin
+      text = IO.read(Paths.Copy)
+      Archieml.load(text)
+    end
   end
 end

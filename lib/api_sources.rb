@@ -34,10 +34,6 @@ module ApiSources
     @cache.wipe_all
   end
 
-  def self.poll_copy
-    poll_or_fetch(:copy, nil)
-  end
-
   def self.poll_dates(dates)
     poll_or_fetch(:del_super, nil)
     #poll_or_fetch(:election_days, nil)
@@ -82,13 +78,6 @@ module ApiSources
   def self.GET_pollster_primaries(party_id)
     string = get_cached_or_fetch(:pollster_primaries, party_id)
     parse_json(string)
-  end
-
-  # Copy (text), as parsed ArchieML from Google Docs
-  # Edit here: https://docs.google.com/document/d/1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w
-  def self.GET_copy
-    string = get_cached_or_fetch(:copy, nil)
-    Archieml.load(string)
   end
 
   private

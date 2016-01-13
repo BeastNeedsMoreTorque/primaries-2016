@@ -37,9 +37,6 @@ class HttpClient
   # Returns { data: '{ "json": "stuff" }', etag: 'some-etag' }
   def get(key, maybe_param, maybe_etag)
     case key
-    when :copy
-      throw ArgumentError.new('param must be nil') if !maybe_param.nil?
-      get_text!('https://docs.google.com/document/export?format=txt&id=1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w', maybe_etag)
     when :pollster_primaries
       throw ArgumentError.new('param must be "Dem" or "GOP"') if ![ 'Dem', 'GOP' ].include?(maybe_param)
       get_json!("http://elections.huffingtonpost.com/pollster/api/charts?topic=2016-president-#{maybe_param.downcase}-primary", maybe_etag)
@@ -88,19 +85,6 @@ class HttpClient
       Oj.load(response.body) # Raise an error immediately on invalid JSON
       { data: response.body, etag: response['ETag'] }
     else raise "HTTP #{response.code} #{response.message} from server. Body: #{response.body}"
-    end
-  end
-
-  # Fetches a txt document from the server.
-  #
-  # Raises an error if the response code is not 200.
-  # Returns nil if the etag matches
-  def get_text!(url, maybe_etag)
-    response = @http_interface.get(url, maybe_etag)
-    if response.code == '200'
-      { data: response.body, etag: response['ETag'] }
-    else
-      raise "HTTP #{response.code} #{response.message} from server. Body: #{response.body}"
     end
   end
 
