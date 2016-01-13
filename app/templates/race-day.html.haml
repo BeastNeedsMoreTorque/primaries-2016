@@ -9,7 +9,7 @@
 
     #main
       %h1= "Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"
-      != render(partial: 'delegate-bars')
+      -# != render(partial: 'delegate-bars')
       != render(partial: 'calendar')
 
       %ul.parties
@@ -47,13 +47,15 @@
                             %th.candidate Candidate
                             %th.n-votes Votes
                             %th.n-delegates Delegates
+                            %th.pollster Pollster
                         %tbody
                           - race.candidate_states.each do |candidate_state|
                             - candidate = candidate_state.candidate
                             %tr{'data-candidate-id': candidate.id}
                               %td.candidate= candidate.name
                               %td.n-votes= candidate_state.n_votes
-                              %td.n-delegates=candidate_state.n_delegates
+                              %td.n-delegates= candidate_state.n_delegates
+                              %td.pollster= candidate_state.poll_percent ? "#{candidate_state.poll_percent}%" : ""
                       %p.race-precincts-reporting{'data-state-code': state.code, 'data-party-id': party.id}
                         %span.n-reporting= race.n_precincts_reporting
                         of

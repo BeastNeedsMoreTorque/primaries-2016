@@ -1,0 +1,12 @@
+%table.t-pollster.republican
+  %th
+  %th
+    candidate
+  %th
+    pollster
+  - gop_candidates.each do |cd|
+    - if cd.poll_percent
+      %tr.rep-candidate
+        %td.cd-img Img
+        %td.cd-name= cd.name
+        %td.pollster= "#{cd.poll_percent}%"

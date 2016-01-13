@@ -11,7 +11,8 @@
       %h1 Presidential Primary Races
 
       != render(partial: 'delegate-bars')
-      != render(partial: 'pollster-table')
+      != render(partial: 'dem-pollster-table')
+      != render(partial: 'gop-pollster-table')
       != render(partial: 'calendar')
 
     %script{src: asset_path('main.js')}

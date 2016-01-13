@@ -21,6 +21,32 @@ body.race-day {
     }
   }
 
+table.race {
+  border-collapse: collapse;
+  width: 45%;
+  td {
+    text-align: left;
+    padding: 5px;
+    height: 10px;
+    border-bottom: 1px solid gray;
+  }
+  td.pollster{
+    width: 10%;
+    text-align: center;
+    border-left: 1px solid gray;
+  }
+  td.candidate{
+    widt: 30%;
+  }
+  tr:nth-child(even) {
+    background-color: #f1f1f1;
+  }
+  th {
+    text-align: left;
+    border-bottom: 1px solid black;
+  }
+}
+
   ul.parties, ul.party-state {
     display: flex;
     -webkit-display: flex;
