@@ -1,16 +1,14 @@
 .party-container{
+  min-width: 275px;
   float: left;
   width: 50%;
   overflow: hidden;
   margin:0px 0px 0px 0px;
   .total-delegates-bar{
-    border: 1px solid gray;
-    border-radius: 10px;
     height: 0.5em;
     display: inline-block;
     width: 50%;
     .n-delegates-bar{
-      border-radius: 10px;
       height: 0.5em;
       background-color: red;
     }

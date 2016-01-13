@@ -1,1 +1,29 @@
 //= require ./delegate-bars
+
+.primary-right-rail{
+  width: 300px;
+}
+.primary-right-rail .container {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border: 1px solid #bdbdbd;
+}
+.primary-right-rail .t-pollster {
+  border-collapse: collapse;
+  min-width: 275px;
+}
+.t-pollster td {
+  text-align: left;
+  padding: 5px;
+  height: 10px;
+  border-bottom: 1px solid #bdbdbd;
+}
+.t-pollster td.pollster{
+  width: 10%;
+  text-align: center;
+  /*border-left: 1px solid gray;*/
+}
+.t-pollster th {
+  text-align: left;
+  border-bottom: 1px solid #bdbdbd;
+}
