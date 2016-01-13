@@ -66,7 +66,7 @@ And here's what you do when you want to change copy:
    https://docs.google.com/document/d/1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w/edit.
 2. Run `script/update-copy`.
 3. Check the `script/serve` output on localhost.
-4. Run `cap staging deploy` and test on staging.
+4. Run `git commit; git push; cap staging deploy` and test on staging.
 5. Run `cap production deploy` and test on production.
 
 # Endpoints
