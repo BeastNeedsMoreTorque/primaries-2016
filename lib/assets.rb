@@ -75,6 +75,7 @@ module Assets
       env.cache = Sprockets::Cache::FileStore.new(Paths.Cache)
       env.digest_class = Digest::SHA1
       env.js_compressor = :uglify
+      env.css_compressor = :sass
       env.logger = $logger
     end
     sprockets.append_path(Paths.Assets)
