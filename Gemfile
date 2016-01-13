@@ -4,6 +4,7 @@ gem 'archieml'
 gem 'aws-sdk'
 gem 'oj'
 gem 'sprockets'
+gem 'uglifier'
 gem 'hamlit' # Faster version of Haml
 gem 'sass'
 gem 'mkfifo'
