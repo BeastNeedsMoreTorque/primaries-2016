@@ -8,6 +8,17 @@
   padding: 10px;
   border: 1px solid #bdbdbd;
 }
+.primary-right-rail .button{
+  margin-top: 15px;
+  border-radius: 5px;
+  display: inline-block;
+  color: white;
+  background-color: gray;
+  padding: 10px;
+}
+.primary-right-rail .button:hover{
+  background-color: #000000;
+}
 .primary-right-rail .t-pollster {
   border-collapse: collapse;
   min-width: 275px;

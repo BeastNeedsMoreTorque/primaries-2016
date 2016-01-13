@@ -1,7 +1,5 @@
 require_relative './base_view'
 require_relative '../../lib/primaries_embed_view'
-require_relative '../collections/parties'
-require_relative '../collections/states'
 
 class PrimariesRightRailView < BaseView
   include PrimariesEmbedView
