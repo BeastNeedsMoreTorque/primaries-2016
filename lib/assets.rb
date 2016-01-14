@@ -12,13 +12,12 @@ module Assets
   )
 
   StaticAssets = %w(
-    topojson
     images
     javascripts/pym.min.js
   )
 
   def self.clear
-    %w(javascripts stylesheets images topojson).each do |subdir|
+    %w(javascripts stylesheets images).each do |subdir|
       FileUtils.rm_rf("#{Paths.Dist}/2016/#{subdir}")
     end
   end
@@ -26,7 +25,6 @@ module Assets
   def self.build(database)
     $logger.info("Building assets...")
 
-    self.build_dynamic_js(database)
     self.build_sprockets_assets
     self.build_static_assets
   end
@@ -55,25 +53,12 @@ module Assets
 
   private
 
-  def self.build_dynamic_js(database)
-    $logger.debug('Writing javascripts/state.js')
-    File.open("#{Paths.Assets}/javascripts/states.js", 'w') do |f|
-      f.write <<-EOT.gsub(/^\s{8}/, '')
-        var States = #{JSON.dump(database.states.all)};
-        var StatesByCode = {};
-        var StatesByFipsInt = {};
-        States.forEach(function(state) {
-          StatesByCode[state.code] = state;
-          StatesByFipsInt[state.fipsInt] = state;
-        });
-        EOT
-    end
-  end
-
   def self.build_sprockets_assets
     sprockets = Sprockets::Environment.new("#{Paths.Dist}/2016") do |env|
       env.cache = Sprockets::Cache::FileStore.new(Paths.Cache)
       env.digest_class = Digest::SHA1
+      env.js_compressor = :uglify
+      env.css_compressor = :sass
       env.logger = $logger
     end
     sprockets.append_path(Paths.Assets)

@@ -4,12 +4,12 @@ gem 'archieml'
 gem 'aws-sdk'
 gem 'oj'
 gem 'sprockets'
+gem 'uglifier'
 gem 'hamlit' # Faster version of Haml
 gem 'sass'
 gem 'mkfifo'
 
 group :development do
-  gem 'capistrano'
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'listen'

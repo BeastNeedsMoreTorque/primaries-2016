@@ -5,13 +5,41 @@
     %title Huffington Post 2016 Primaries Results
     %link{rel: 'stylesheet', href: asset_path('right-rail.css')}
   %body.primary-right-rail
-    != render(partial: 'delegate-bars')
+    %div.container
+      - if current_race_day
+        != render(partial: 'delegate-bars')
+        %a{target: '_parent', href: "/2016/primaries/#{current_race_day.id}"} Live results
+      - elsif next_race_day.id == '2016-02-01'
+        %h3= state_iowa[0].name
+        - parties.each do |party|
+          %h4= party.name
+          - race = races.find_by_party_and_state(party, state_iowa[0])
+          %table.t-pollster
+            %thead
+              %tr
+                %th img
+                %th candidate
+                %th pollster
+            %tbody
+              - race.candidate_states.each do |cd_state|
+                - cd = cd_state.candidate
+                - if cd_state.poll_percent
+                  %tr.candidate{'data-candidate-id': cd.id}
+                    %td.cd-img img
+                    %td.cd-name= cd.full_name
+                    %td.pollster= "#{cd_state.poll_percent}%"
+        %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Click for preview of the Iowa Caucus
 
-    - if current_race_day
-      %a{target: '_parent', href: "/2016/primaries/#{current_race_day.id}"} Live results
-    - elsif next_race_day
-      %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}= "Next race: #{next_race_day.id}"
+        %h4 Coming Up
+        - coming = following_races(next_race_day.id)
+        - for i in 0..4
+          %a.upcoming-link{target: '_parent', href: "/2016/primaries/#{coming[i].id}"}
+            %span.upcoming-date="#{coming[i].id}:"
+            %span.upcoming-dem="#{dem_states_string(coming[i].races_codified[:Dem])}"
+            %span.upcoming-gop="#{gop_states_string(coming[i].races_codified[:GOP])}"
 
+      - elsif next_race_day
+        %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}= "Next race: #{next_race_day.id}"
     %script{src: '/2016/javascripts/pym.min.js'}
     %script
       var pymChild = new pym.Child();

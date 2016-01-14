@@ -11,6 +11,11 @@ class RaceDayView < BaseView
   end
 
   def output_path; "2016/primaries/#{race_day.id}.html"; end
+  def page_title; "2016 Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"; end
+  def layout; 'main'; end
+  def stylesheets; [ asset_path('main.css') ]; end
+  def body_class; 'race-day'; end
+
   def hed; race_day_copy ? race_day_copy['title'] : nil; end
   def body; race_day_copy ? race_day_copy['body'] : nil; end
 

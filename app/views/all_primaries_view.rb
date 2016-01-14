@@ -2,6 +2,8 @@ require_relative './base_view'
 
 class AllPrimariesView < BaseView
   def output_path; "2016/primaries.html"; end
+  def layout; 'main'; end
+  def stylesheets; [ asset_path('main.css') ]; end
   def hed; copy['primaries']['landing-page']['hed']; end
   def body; copy['primaries']['landing-page']['body']; end
 

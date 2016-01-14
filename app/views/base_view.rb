@@ -13,14 +13,35 @@ class BaseView
   def today; database.today; end
   def copy; database.copy; end
 
+  def page_title; '2016 Election Coverage'; end
+
+  def layout; nil; end
+  def layout_stylesheets; []; end
+
+  # e.g., for AllPrimariesView, "all-primaries"
+  def body_class
+    self.class.name.gsub(/([A-Z])/){ "_#{$1.downcase}" }[1..-6]
+  end
+
+  def meta
+    @meta ||= {
+      page_description: 'Huffington Post coverage of the 2016 Presidential Primaries and Election',
+    }
+  end
+
   Database::CollectionNames.each do |collection_name|
     define_method(collection_name.to_sym) { database.send(collection_name) }
   end
 
-  def render(options)
+  def render(options, locals={})
     if options[:partial]
       template = BaseView.load_template("_#{options[:partial]}")
-      template.render(self)
+      template.render(self, locals)
+    elsif options[:layout]
+      raise "You tried to render a layout without a block" if !block_given?
+      text = yield
+      template = BaseView.load_template("layouts/#{options[:layout]}")
+      template.render(self, { main_content: text }.merge(locals))
     end
   end
 
@@ -85,6 +106,10 @@ class BaseView
     path = "#{Paths.Dist}/#{view.output_path}"
     $logger.debug("Generating #{path}")
     output = render_view(view)
+    if view.layout
+      template = load_template("layouts/#{view.layout}")
+      output = template.render(view, { main: output })
+    end
     self.write_contents(path, output)
   end
 

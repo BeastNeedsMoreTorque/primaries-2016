@@ -1,1 +1,50 @@
 //= require ./delegate-bars
+
+.primary-right-rail{
+  width: 300px;
+}
+.primary-right-rail .container {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border: 1px solid #bdbdbd;
+}
+.primary-right-rail .button{
+  margin-top: 15px;
+  border-radius: 5px;
+  display: inline-block;
+  color: white;
+  background-color: gray;
+  padding: 10px;
+}
+.primary-right-rail .upcoming-link{
+  width: 100%;
+  display: inline-block;
+}
+.primary-right-rail .upcoming-link .upcoming-dem {
+  color: #5c6b95;
+}
+.primary-right-rail .upcoming-link .upcoming-gop {
+  color: #bc5c5c;
+}
+.primary-right-rail .button:hover{
+  background-color: #000000;
+}
+.primary-right-rail .t-pollster {
+  border-collapse: collapse;
+  min-width: 275px;
+}
+.t-pollster td {
+  text-align: left;
+  padding: 5px;
+  height: 10px;
+  border-bottom: 1px solid #bdbdbd;
+}
+.t-pollster td.pollster{
+  width: 10%;
+  text-align: center;
+  /*border-left: 1px solid gray;*/
+}
+.t-pollster th {
+  text-align: left;
+  border-bottom: 1px solid #bdbdbd;
+}
