@@ -11,6 +11,7 @@ class BaseView
   end
 
   def today; database.today; end
+  def last_date; database.last_date; end
   def copy; database.copy; end
 
   def page_title; '2016 Election Coverage'; end

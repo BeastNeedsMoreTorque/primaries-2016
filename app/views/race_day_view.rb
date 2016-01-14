@@ -43,7 +43,7 @@ class RaceDayView < BaseView
   end
 
   def self.generate_all(database)
-    database.race_days.each do |race_day|
+    database.race_days.select(&:enabled?).each do |race_day|
       self.generate_for_view(RaceDayView.new(database, race_day))
     end
   end

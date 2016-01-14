@@ -11,6 +11,8 @@ require_relative '../collections/race_days'
 # The Database contains every Collection we use -- e.g., `candidates`, `states`
 # -- plus the rendering date.
 class Database
+  LastDate = Date.parse('2016-02-09') # because we haven't coded+tested everything yet
+
   CollectionNames = %w(
     candidates
     candidate_counties
@@ -25,9 +27,10 @@ class Database
 
   attr_reader(*CollectionNames)
   attr_reader(:today)
+  attr_reader(:last_date)
   attr_reader(:copy)
 
-  def initialize(collections, today, copy)
+  def initialize(collections, today, last_date, copy)
     CollectionNames.each { |n| require_relative "../collections/#{n}.rb" }
 
     CollectionNames.each do |collection_name|
@@ -49,6 +52,7 @@ class Database
     end
 
     @today = today
+    @last_date = last_date
     @copy = copy
   end
 
@@ -182,7 +186,7 @@ class Database
       county_parties: county_parties,
       parties: parties,
       races: races
-    }, Date.today, production_copy)
+    }, Date.today, LastDate, production_copy)
   end
 
   # Adds more races to the passed Array of races.

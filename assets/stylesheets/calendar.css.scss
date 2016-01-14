@@ -1,3 +1,5 @@
+@import '_variables';
+
 .calendar {
   clear: both;
 
@@ -23,7 +25,10 @@
     position: relative;
   }
 
-  a.race-day {
+  span.race-day {
+    color: $muted;
+  }
+  .race-day {
     display: block;
     text-align: center;
     font-size: 2rem;

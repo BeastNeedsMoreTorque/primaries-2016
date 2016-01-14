@@ -6,7 +6,10 @@
         %ol.race-days
           - race_days.each do |race_day|
             %li.race-day{"data-date": race_day.id}
-              %a.race-day{href: "/2016/primaries/#{race_day.id}"}= race_day.date.strftime('%-d')
+              - if last_date && race_day.date > last_date
+                %span.race-day= race_day.date.strftime('%-d')
+              - else
+                %a.race-day{href: "/2016/primaries/#{race_day.id}"}= race_day.date.strftime('%-d')
               %ul.parties
                 - parties.each do |party|
                   - party_states = race_day.states_for_party(party)
