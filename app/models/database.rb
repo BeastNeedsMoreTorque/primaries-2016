@@ -237,23 +237,26 @@ class Database
 
         for estimate in chart[:estimates]
           last_name = estimate[:last_name]
-          poll_percent = estimate[:value]
 
-          if state_code == 'US'
-            candidate = last_name_to_candidate[last_name]
-            if candidate
+          candidate = last_name_to_candidate[last_name]
+          if candidate
+            poll_percent = estimate[:value]
+
+            if state_code == 'US'
               candidate[6] = poll_percent
               candidate[7] = last_updated
-            end
-          else
-            candidate_state = key_to_candidate_state[[last_name, state_code]]
-            if candidate_state
-              candidate_state[5] = poll_percent
+            else
+              candidate_state = key_to_candidate_state["#{candidate[0]}-#{state_code}"]
+              if candidate_state
+                candidate_state[5] = poll_percent
+              end
             end
           end
         end
       end
     end
+
+    nil
   end
 
   def self.production_copy

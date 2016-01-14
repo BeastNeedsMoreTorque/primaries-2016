@@ -10,10 +10,10 @@
         != render(partial: 'delegate-bars')
         %a{target: '_parent', href: "/2016/primaries/#{current_race_day.id}"} Live results
       - elsif next_race_day.id == '2016-02-01'
-        %h3= state_iowa[0].name
+        %h3= state_iowa.name
         - parties.each do |party|
           %h4= party.name
-          - race = races.find_by_party_and_state(party, state_iowa[0])
+          - race = races.find_by_party_and_state(party, state_iowa)
           %table.t-pollster
             %thead
               %tr
