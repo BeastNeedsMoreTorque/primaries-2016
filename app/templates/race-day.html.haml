@@ -39,7 +39,6 @@
                 %div{class: "race #{is_this_page_date ? 'race-this-page-date' : 'race-another-date'}"}
                   - if !is_this_page_date
                     %p= "This race happened on #{race.race_day.date.strftime('%B %-d')}"
-                  .state-map{'data-state-code': state.code, 'data-party-id': party.id}
                   %table.race{'data-state-code': state.code, 'data-party-id': party.id}
                     %thead
                       %tr
