@@ -22,12 +22,15 @@
       %meta{property: 'twitter:creator', content: meta[:author_twitter]}
     %meta{property: 'fb:app_id', content: '46744042133'}
 
+    %link{href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic', rel: 'stylesheet'}
     - for stylesheet in (stylesheets || [])
       %link{rel: 'stylesheet', href: stylesheet}
+
   %body{class: body_class}
     != render(partial: 'topbar')
 
     != main
+
 
     .footer
       :plain
