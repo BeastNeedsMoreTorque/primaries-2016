@@ -16,17 +16,18 @@
           - race = races.find_by_party_and_state(party, state_iowa[0])
           %table.t-pollster
             %thead
-              %th img
-              %th candidate
-              %th pollster
+              %tr
+                %th img
+                %th candidate
+                %th pollster
             %tbody
-            - race.candidate_states.each do |cd_state|
-              - cd = cd_state.candidate
-              - if cd_state.poll_percent
-                %tr.candidate{'data-candidate-id': cd.id}
-                  %td.cd-img img
-                  %td.cd-name= cd.name
-                  %td.pollster= "#{cd_state.poll_percent}%"
+              - race.candidate_states.each do |cd_state|
+                - cd = cd_state.candidate
+                - if cd_state.poll_percent
+                  %tr.candidate{'data-candidate-id': cd.id}
+                    %td.cd-img img
+                    %td.cd-name= cd.full_name
+                    %td.pollster= "#{cd_state.poll_percent}%"
         %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Click for preview of the Iowa Caucus
 
         %h4 Coming Up
