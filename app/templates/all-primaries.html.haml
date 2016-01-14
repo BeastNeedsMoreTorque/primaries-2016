@@ -1,23 +1,20 @@
 -# Called with a AllPrimariesPageGenerator::HtmlContext
 #main
-  %h1= hed
-  
-  #main
-    %h1.main-hed= hed
+  %h1.main-hed= hed
 
-    %p.intro-copy= body
+  %p.intro-copy= body
 
-    %h3.section-hed Who&rsquo;s ahead?
-    != render(partial: 'delegate-bars')
+  %h3.section-hed Who&rsquo;s ahead?
+  != render(partial: 'delegate-bars')
 
-    %h3.section-hed Another hed here?
-    != render(partial: 'dem-pollster-table')
-    != render(partial: 'gop-pollster-table')
+  %h3.section-hed Another hed here?
+  != render(partial: 'dem-pollster-table')
+  != render(partial: 'gop-pollster-table')
 
-    %h3.section-hed What&rsquo;s next?
-    != render(partial: 'calendar')
+  %h3.section-hed What&rsquo;s next?
+  != render(partial: 'calendar')
 
-    != render(partial: 'state-race-days')
+  != render(partial: 'state-race-days')
 
-  %script{src: asset_path('stats.js')}
-  %script{src: asset_path('main.js')}
+%script{src: asset_path('stats.js')}
+%script{src: asset_path('main.js')}
