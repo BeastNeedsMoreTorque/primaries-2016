@@ -7,14 +7,10 @@
   %p.date Published Monday, Jan. TK, 9:00 AM EDT
   %p.date Last updated Monday, Jan. TK, 10:00 AM EDT
 
-  %h3.section-hed Who&rsquo;s ahead?
-  != render(partial: 'delegate-bars')
   != render(partial: 'dem-pollster-table')
   != render(partial: 'gop-pollster-table')
 
   %h3.section-hed What&rsquo;s next?
-  != render(partial: 'calendar')
-
   != render(partial: 'state-race-days')
 
 %script{src: asset_path('stats.js')}

@@ -1,7 +1,29 @@
 @import '_variables';
 
 .state-race-days {
-  td.party span {
+  .disabled {
     color: $muted;
+  }
+
+  span time {
+    color: $muted;
+  }
+
+  td {
+    border-top: 1px solid transparent; // so no-repeated td takes no extra space
+    padding: .4rem;
+
+    &.repeated {
+      visibility: hidden;
+    }
+  }
+
+  tr.no-repeated td {
+    border-top: 1px solid $tableBorderColor;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin: 1rem auto;
   }
 }
