@@ -13,6 +13,11 @@ class PrimariesRightRailView < BaseView
     database.race_days.select { |r| r.id > date_s }
   end
 
+  def previous_races(date)
+    date_s = date.to_s
+    database.race_days.select { |r| r.id < date_s }
+  end
+
   def dem_states_string(coded_party)
     state_string = ""
     if !coded_party.nil?

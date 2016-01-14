@@ -1,7 +1,7 @@
 %div.delegate-counts
   - parties.each do |par|
     %div.party-container{:id => par.adjective}
-      %h4.bar-chart-hed= "#{par.adjective} Party"
+      %h3.bar-chart-hed= "#{par.adjective} Party"
       - par.candidates.each do |cd|
         %div.candidate-container{ :'data-candidate-id' => cd.id }
           - if par.adjective == 'Republican'

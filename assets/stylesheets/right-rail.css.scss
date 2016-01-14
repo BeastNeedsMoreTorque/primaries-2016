@@ -1,0 +1,63 @@
+.primary-right-rail{
+  width: 300px;
+  div.countdown {
+    float: right;
+    width: 20%;
+    height: 40px;
+    background-color: gray;
+  }
+  div.container {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border: 1px solid #bdbdbd;
+    a.button{
+      margin-top: 15px;
+      border-radius: 5px;
+      display: inline-block;
+      color: white;
+      background-color: gray;
+      padding: 10px;
+      :hover{
+        background-color: #000000;
+      }
+    }
+    a.upcoming-link{
+      width: 100%;
+      display: inline-block;
+      .upcoming-dem {
+        color: #5c6b95;
+      }
+      .upcoming-gop {
+        color: #bc5c5c;
+      }
+    }
+    a.happened-link{
+      width: 100%;
+      display: inline-block;
+      .happened-dem {
+        color: #5c6b95;
+      }
+      .happened-gop {
+        color: #bc5c5c;
+      }
+    }
+    table.t-pollster {
+      border-collapse: collapse;
+      min-width: 275px;
+      td {
+        text-align: left;
+        padding: 5px;
+        height: 10px;
+        border-bottom: 1px solid #bdbdbd;
+      }
+      td.pollster{
+        width: 10%;
+        text-align: center;
+      }
+      th {
+        text-align: left;
+        border-bottom: 1px solid #bdbdbd;
+      }
+    }
+  }
+}

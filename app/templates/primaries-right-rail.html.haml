@@ -3,20 +3,30 @@
   %head
     %meta{charset: 'utf-8'}
     %title Huffington Post 2016 Primaries Results
-    %link{rel: 'stylesheet', href: asset_path('right-rail.css')}
+    %link{rel: 'stylesheet', href: asset_path('main.css')}
   %body.primary-right-rail
     %div.container
-      - if current_race_day
+      - test_views = {:current => "2016-02-01", :preview => current_race_day}
+      - if next_race_day.id == test_views[:preview]#'2016-02-01' or current_race_day
+        %h4 Recent Races
+        - happened = previous_races("2016-02-09")
+        - limit = happened.length > 3 ? 0..2 : 0..happened.length - 1
+        - for i in limit
+          %a.happened-link{target: '_parent', href: "/2016/primaries/#{happened[i].id}"}
+            %span.happened-date="#{happened[i].id}:"
+            %span.happened-dem="#{dem_states_string(happened[i].races_codified[:Dem])}"
+            %span.happened-gop="#{gop_states_string(happened[i].races_codified[:GOP])}"
+        %h3 Overview
         != render(partial: 'delegate-bars')
-        %a{target: '_parent', href: "/2016/primaries/#{current_race_day.id}"} Live results
+        %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Live results
         %h4 Coming Up
-        - coming = following_races(current_race_day.id)
-        - for i in 0..4
+        - coming = following_races(next_race_day.id)
+        - limit = coming.length > 3 ? 0..2 : 0..coming.length - 1
+        - for i in limit
           %a.upcoming-link{target: '_parent', href: "/2016/primaries/#{coming[i].id}"}
             %span.upcoming-date="#{coming[i].id}:"
             %span.upcoming-dem="#{dem_states_string(coming[i].races_codified[:Dem])}"
             %span.upcoming-gop="#{gop_states_string(coming[i].races_codified[:GOP])}"
-
       - elsif next_race_day.id == '2016-02-01'
         %div.countdown
         %h3= state_iowa.name
@@ -41,12 +51,12 @@
 
         %h4 Coming Up
         - coming = following_races(next_race_day.id)
-        - for i in 0..4
+        - limit = coming.length > 3 ? 0..2 : 0..coming.length - 1
+        - for i in limit
           %a.upcoming-link{target: '_parent', href: "/2016/primaries/#{coming[i].id}"}
             %span.upcoming-date="#{coming[i].id}:"
             %span.upcoming-dem="#{dem_states_string(coming[i].races_codified[:Dem])}"
             %span.upcoming-gop="#{gop_states_string(coming[i].races_codified[:GOP])}"
-
       - elsif next_race_day
         %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}= "Next race: #{next_race_day.id}"
     %script{src: '/2016/javascripts/pym.min.js'}
