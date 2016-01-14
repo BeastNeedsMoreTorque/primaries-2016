@@ -6,7 +6,7 @@ class PrimariesRightRailView < BaseView
 
   def output_path; '2016/primaries/right-rail.html'; end
 
-  def state_iowa; @state_iowa ||= database.states.find!('IA'); end
+  def state_iowa; @state_iowa = database.states.find!('IA'); end
 
   def following_races(date)
     date_s = date.to_s

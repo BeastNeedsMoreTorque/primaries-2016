@@ -7,10 +7,10 @@
           - if par.adjective == 'Republican'
             %span.cd-name= cd.name
             %div.total-delegates-bar
-              %div.n-delegates-bar{ :style => "width: #{cd.n_delegates.to_f / 2472.0 * 100}%;" }
+              %div.n-delegates-bar{ :style => "width: #{cd.n_delegates.to_f / par.n_delegates_total.to_f * 100}%;" }
             %span.n-delegates-count= cd.n_delegates
           - else
             %span.cd-name= cd.name
             %div.total-delegates-bar
-              %div.n-delegates-bar{ :style => "width: #{cd.n_delegates.to_f / 4764.0 * 100}%;" }
+              %div.n-delegates-bar{ :style => "width: #{cd.n_delegates.to_f / par.n_delegates_total.to_f * 100}%;" }
             %span.n-delegates-count= cd.n_delegates
