@@ -2,6 +2,7 @@ require 'date'
 
 require_relative '../../lib/api_sources'
 require_relative '../collections/parties'
+require_relative '../collections/race_days'
 
 # All data that goes into page rendering.
 #
@@ -82,9 +83,7 @@ class Database
         for del_candidate in del_state[:Cand]
           candidate_id = del_candidate[:cId]
           last_name = del_candidate[:cName]
-          if candidate_id.length == 6
-            candidate_id = "#{party_id}-#{candidate_id}"
-          end
+          next if candidate_id.length >= 6
           n_delegates = del_candidate[:dTot].to_i
           n_unpledged_delegates = del_candidate[:sdTot].to_i
 
@@ -128,9 +127,7 @@ class Database
 
             for candidate_hash in reporting_unit[:candidates]
               candidate_id = candidate_hash[:polID]
-              if candidate_id.length == 6
-                candidate_id = "#{party_id}-#{candidate_id}"
-              end
+              next if candidate_id.length >= 6
               candidate = id_to_candidate[candidate_id]
 
               next if !candidate
@@ -200,6 +197,8 @@ class Database
       end
     end
 
+    stub_races_ap_isnt_reporting_yet(races)
+
     Database.new({
       candidates: candidates,
       candidate_counties: candidate_counties,
@@ -209,6 +208,29 @@ class Database
       parties: parties,
       races: races
     }, Date.today, production_copy)
+  end
+
+  # Adds more races to the passed Array of races.
+  #
+  # They'll have lots of nils.
+  def self.stub_races_ap_isnt_reporting_yet(races)
+    # Create unique key
+    existing_race_keys = Set.new() # "key" means race_day.id, state.code, party.id
+    races.each { |r| existing_race_keys.add(r[1..4]) }
+
+    RaceDays::HardCodedData.each do |date_sym, party_races|
+      race_day_id = date_sym.to_s
+      party_races.each do |party_id_sym, state_code_syms|
+        party_id = party_id_sym.to_s
+        state_code_syms.each do |state_code_sym|
+          state_code = state_code_sym.to_s
+          key = [ race_day_id, state_code, party_id ]
+          next if existing_race_keys.include?(key)
+
+          races << [ nil, race_day_id, party_id, state_code, nil, nil, nil, nil ]
+        end
+      end
+    end
   end
 
   def self.production_copy
