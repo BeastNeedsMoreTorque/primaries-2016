@@ -8,6 +8,7 @@ running_rspec_through_script_serve = (ENV['AP_API_KEY'] != nil)
 ENV['AP_API_KEY'] = 'no-api-key-because-this-is-a-test-suite'
 
 require_relative '../lib/env'
+require_relative '../lib/paths'
 Bundler.require(:development)
 
 RSpec.configure do |config|
@@ -22,23 +23,33 @@ Capybara.configure do |config|
   config.app_host = 'http://localhost:3000'
   config.run_server = false
 end
+Capybara::Webkit.configure do |config|
+  config.block_unknown_urls = true
+end
 
 require_relative '../app/models/database'
 
-def mock_database(collections, date_string)
+def mock_database(collections, date_string, last_date_string)
   date = Date.parse(date_string)
+  last_date = Date.parse(last_date_string)
+
   collections[:parties] ||= [
     [ 'Dem', 'Democrats', 'Democratic', '1000', '500' ],
     [ 'GOP', 'Republicans', 'Republican', '2000', '1000' ]
   ]
   collections[:candidates] ||= [
-    [ '1', 'Dem', 'Hillary Clinton', 50, 10 ],
-    [ '2', 'GOP', 'Marco Rubio', 100, 20 ]
+    [ '1', 'Dem', 'Hillary Clinton', 'Clinton', 50, 10, 30.1, DateTime.parse('2016-01-14T19:37:00.000Z') ],
+    [ '2', 'GOP', 'Marco Rubio', 'Rubio', 100, 20, 20.1, DateTime.parse('2016-01-14T19:37:00.000Z') ]
   ]
-  Database.new(collections, date)
+  collections[:races] ||= []
+  Database.stub_races_ap_isnt_reporting_yet(collections[:races])
+
+  Database.new(collections, date, last_date, Database.production_copy)
 end
 
 def render_from_database(database)
+  Dir["#{Paths.Dist}/**/*.html"].each { |f| File.unlink(f) }
+
   Dir[File.dirname(__FILE__) + '/../app/views/*.rb'].each do |path|
     next if path =~ /base_view.rb$/
     require File.absolute_path(path)
