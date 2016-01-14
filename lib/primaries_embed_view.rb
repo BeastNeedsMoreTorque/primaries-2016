@@ -12,12 +12,6 @@ module PrimariesEmbedView
     next_id ? database.race_days.find(next_id) : nil
   end
 
-  def following_races(date)
-    all_ids = database.race_days.all.map(&:id)
-    next_id = all_ids.sort!.find { |id| id > date }
-    next_id ? database.race_days.find(next_id) : nil
-  end
-
   def leading_democrat
     parties.find!(:Dem).candidates.max_by(&:n_delegates)
   end

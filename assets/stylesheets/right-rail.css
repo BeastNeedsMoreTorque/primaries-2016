@@ -16,6 +16,16 @@
   background-color: gray;
   padding: 10px;
 }
+.primary-right-rail .upcoming-link{
+  width: 100%;
+  display: inline-block;
+}
+.primary-right-rail .upcoming-link .upcoming-dem {
+  color: blue;
+}
+.primary-right-rail .upcoming-link .upcoming-gop {
+  color: red;
+}
 .primary-right-rail .button:hover{
   background-color: #000000;
 }
