@@ -10,6 +10,7 @@
         != render(partial: 'delegate-bars')
         %a{target: '_parent', href: "/2016/primaries/#{current_race_day.id}"} Live results
       - elsif next_race_day.id == '2016-02-01'
+        %div.countdown
         %h3= state_iowa[0].name
         - parties.each do |party|
           %h4= party.name

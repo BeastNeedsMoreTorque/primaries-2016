@@ -3,6 +3,12 @@
 .primary-right-rail{
   width: 300px;
 }
+.primary-right-rail .countdown {
+  float: right;
+  width: 20%;
+  height: 40px;
+  background-color: gray;
+}
 .primary-right-rail .container {
   background-color: #f1f1f1;
   padding: 10px;
