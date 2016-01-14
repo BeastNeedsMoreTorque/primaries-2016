@@ -22,4 +22,5 @@
             %span.integer
               = race.n_delegates
             %span{'class': "dots dots-#{race.party_id.downcase}"}
-              = '•' * race.n_delegates
+              -# yup, that's a zero-width space (zwsp) between each dot, so they can wrap
+              = "\u200b•" * race.n_delegates
