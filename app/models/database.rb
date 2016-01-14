@@ -215,8 +215,8 @@ class Database
   # They'll have lots of nils.
   def self.stub_races_ap_isnt_reporting_yet(races)
     # Create unique key
-    existing_race_keys = Set.new() # "key" means race_day.id, state.code, party.id
-    races.each { |r| existing_race_keys.add(r[1..4]) }
+    existing_race_keys = Set.new() # "key" means race_day.id, party.id, state.code
+    races.each { |r| existing_race_keys.add(r[1...4].join(',')) }
 
     RaceDays::HardCodedData.each do |date_sym, party_races|
       race_day_id = date_sym.to_s
@@ -224,7 +224,7 @@ class Database
         party_id = party_id_sym.to_s
         state_code_syms.each do |state_code_sym|
           state_code = state_code_sym.to_s
-          key = [ race_day_id, state_code, party_id ]
+          key = "#{race_day_id},#{party_id},#{state_code}"
           next if existing_race_keys.include?(key)
 
           races << [ nil, race_day_id, party_id, state_code, nil, nil, nil, nil ]
