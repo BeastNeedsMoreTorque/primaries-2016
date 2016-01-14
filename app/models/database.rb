@@ -82,9 +82,7 @@ class Database
         for del_candidate in del_state[:Cand]
           candidate_id = del_candidate[:cId]
           last_name = del_candidate[:cName]
-          if candidate_id.length == 6
-            candidate_id = "#{party_id}-#{candidate_id}"
-          end
+          next if candidate_id.length >= 6
           n_delegates = del_candidate[:dTot].to_i
           n_unpledged_delegates = del_candidate[:sdTot].to_i
 
@@ -128,9 +126,7 @@ class Database
 
             for candidate_hash in reporting_unit[:candidates]
               candidate_id = candidate_hash[:polID]
-              if candidate_id.length == 6
-                candidate_id = "#{party_id}-#{candidate_id}"
-              end
+              next if candidate_id.length >= 6
               candidate = id_to_candidate[candidate_id]
 
               next if !candidate
