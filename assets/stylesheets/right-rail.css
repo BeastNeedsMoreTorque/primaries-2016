@@ -21,10 +21,10 @@
   display: inline-block;
 }
 .primary-right-rail .upcoming-link .upcoming-dem {
-  color: blue;
+  color: #5c6b95;
 }
 .primary-right-rail .upcoming-link .upcoming-gop {
-  color: red;
+  color: #bc5c5c;
 }
 .primary-right-rail .button:hover{
   background-color: #000000;

@@ -24,7 +24,7 @@ class PrimariesRightRailView < BaseView
     state_string = ""
     if !coded_party.nil?
       coded_party.each do |state|
-        state_string += state.to_s + " "
+        state_string += state.to_s + "(D.) "
       end
     end
     return state_string
@@ -34,7 +34,7 @@ class PrimariesRightRailView < BaseView
     state_string = ""
     if !coded_party.nil?
       coded_party.each do |state|
-        state_string += state.to_s + " "
+        state_string += state.to_s + "(R.) "
       end
     end
     return state_string
