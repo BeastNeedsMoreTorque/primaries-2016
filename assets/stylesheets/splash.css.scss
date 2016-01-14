@@ -1,0 +1,17 @@
+@import '_variables';
+
+body.primary-splash-banner {
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid #ccc;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  width: 977px;
+  color: #333;
+  background: #f6f6f6;
+  * {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+  }
+}

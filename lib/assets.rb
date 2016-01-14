@@ -9,6 +9,7 @@ module Assets
     javascripts/main.js
     stylesheets/main.css
     stylesheets/right-rail.css
+    stylesheets/splash.css
   )
 
   StaticAssets = %w(
