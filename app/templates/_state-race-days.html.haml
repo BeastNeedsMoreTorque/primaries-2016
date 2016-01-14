@@ -1,23 +1,25 @@
 .state-race-days
-  %h2 When's my race?
-
-  %p Here are all races, sorted by state.
-
   %table
     %thead
       %tr
+        %th.date Date
         %th.state State
-        - for party in parties
-          %th{class: "party party-#{party.id.downcase}"}= party.name
+        %th.party Party
+        %th.n-delegates Delegates at stake
     %tbody
-      - for state in states.sort_by(&:name)
-        %tr
-          %td.state= state.name
-          - for party in parties
-            %td{class: "party party-#{party.id.downcase}"}
-              - race = races.find_by_party_and_state(party, state)
-              - if race
-                - if race.enabled?
-                  %a{href: "/2016/primaries/#{race.race_day_id}##{state.code}"}= race.date.strftime('%B %-d')
-                - else
-                  %span= race.date.strftime('%B %-d')
+      - for race in races
+        %tr{'class': race.disabled? ? 'disabled' : '', 'data-race-day': race.race_day_id, 'data-party-name': race.party_name, 'data-state-name': race.state_name}
+          %td.date
+            - if race.enabled?
+              %a{href: "/2016/primaries/#{race.race_day_id}"}
+                %time{datetime: race.race_day_id}= race.date.strftime('%B %-d')
+            - else
+              %span
+                %time{datetime: race.race_day_id}= race.date.strftime('%B %-d')
+          %td.state= race.state_name
+          %td.party= race.party_name
+          %td.n-delegates
+            %span.integer
+              = race.n_delegates
+            %span.dots
+              = '•' * race.n_delegates

@@ -13,16 +13,19 @@ require_relative '../collections/race_days'
 class Database
   LastDate = Date.parse('2016-02-09') # because we haven't coded+tested everything yet
 
+  # Order these collections correctly: when each is built it will be sorted,
+  # and if it depends on other collections that aren't initialized yet, the
+  # sort will crash.
   CollectionNames = %w(
+    parties
     candidates
+    states
     candidate_counties
     candidate_states
     counties
     county_parties
-    parties
-    races
     race_days
-    states
+    races
   )
 
   attr_reader(*CollectionNames)

@@ -1,8 +1,10 @@
 !!! 5
 %html{lang: 'en'}
   %meta{charset: 'utf-8'}
-  %title Huffington Post 2016 Primaries
-%body
+  %title Huffington Post 2016 Primary Results
+  %link{rel: 'stylesheet', href: asset_path('splash.css')}
+
+%body.primary-splash-banner
   %p.leading-democrat= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
   %p.leading-republican= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
   %p

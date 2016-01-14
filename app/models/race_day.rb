@@ -8,17 +8,15 @@ RaceDay = Struct.new(:database, :id, :races_codified) do
 
   # States that have one or more races on this day
   def states
-    @states ||= begin
-      state_codes = Set.new(races_codified.values.flatten.map(&:to_s))
-      database.states.select{ |s| state_codes.include?(s.code) }.sort_by(&:name)
-    end
+    @states ||= races.map(&:state).uniq.sort_by(&:name)
+  end
+
+  def races
+    @races ||= database.races.select { |r| r.race_day_id == id }
   end
 
   def states_for_party(party)
     @states_for_party ||= {}
-    @states_for_party[party.id] ||= begin
-      state_codes = (races_codified[party.id.to_sym] || []).map(&:to_s)
-      database.states.select{ |s| state_codes.include?(s.code) }.sort_by(&:name)
-    end
+    @states_for_party[party.id] ||= races.select{ |r| r.party_id == party.id }.map(&:state)
   end
 end

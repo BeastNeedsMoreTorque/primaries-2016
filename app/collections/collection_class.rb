@@ -1,7 +1,5 @@
 module CollectionClass
   def self.new(plural_id, singular_id, item_class)
-    require_relative "../models/#{singular_id}.rb"
-
     ret = Class.new do
       attr_reader(:plural_id, :singular_id, :item_class)
 
