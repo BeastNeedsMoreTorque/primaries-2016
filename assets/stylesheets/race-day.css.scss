@@ -5,55 +5,39 @@ body.race-day {
     padding: 0;
   }
 
-  .state-map {
-    margin: 0 auto;
-    max-width: 350px;
-    height: 0;
-    padding-bottom: 100%;
-    position: relative;
-
-    svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+  table.race {
+    border-collapse: collapse;
+    width: 90%;
+    td {
+      text-align: left;
+      padding: 5px;
+      height: 10px;
+      border-bottom: 1px solid gray;
+    }
+    td.pollster{
+      width: 10%;
+      text-align: center;
+      border-left: 1px solid gray;
+    }
+    td.candidate{
+      width: 30%;
+    }
+    td.n-votes{
+      border-left: 1px solid gray;
+      text-align: center;
+    }
+    td.n-delegates{
+      border-left: 1px solid gray;
+      text-align: center;
+    }
+    tr:nth-child(even) {
+      background-color: #f1f1f1;
+    }
+    th {
+      text-align: left;
+      border-bottom: 1px solid black;
     }
   }
-
-table.race {
-  border-collapse: collapse;
-  width: 90%;
-  td {
-    text-align: left;
-    padding: 5px;
-    height: 10px;
-    border-bottom: 1px solid gray;
-  }
-  td.pollster{
-    width: 10%;
-    text-align: center;
-    border-left: 1px solid gray;
-  }
-  td.candidate{
-    width: 30%;
-  }
-  td.n-votes{
-    border-left: 1px solid gray;
-    text-align: center;
-  }
-  td.n-delegates{
-    border-left: 1px solid gray;
-    text-align: center;
-  }
-  tr:nth-child(even) {
-    background-color: #f1f1f1;
-  }
-  th {
-    text-align: left;
-    border-bottom: 1px solid black;
-  }
-}
 
   ul.parties, ul.party-state {
     display: flex;

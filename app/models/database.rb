@@ -65,10 +65,8 @@ class Database
     races = []
 
     id_to_candidate = {}
-    last_name_to_candidate = {}
     seen_county_ids = Set.new([])
     ids_to_candidate_state = {}
-    last_name_and_state_code_to_candidate_state = {}
 
     # Fill CandidateState (no ballot_order or n_votes) and Candidate (no name)
     for del in ApiSources.GET_del_super[:del]
@@ -88,15 +86,13 @@ class Database
           n_unpledged_delegates = del_candidate[:sdTot].to_i
 
           if state_code == 'US'
-            c = [ candidate_id, party_id, nil, last_name, n_delegates, n_unpledged_delegates, nil ]
+            c = [ candidate_id, party_id, nil, last_name, n_delegates, n_unpledged_delegates, nil, nil ]
             candidates << c
             id_to_candidate[candidate_id] = c
-            last_name_to_candidate[last_name] = c
           else
             cs = [ candidate_id, state_code, -1, 0, n_delegates, nil ]
             candidate_states << cs
             ids_to_candidate_state[[candidate_id, state_code]] = cs
-            last_name_and_state_code_to_candidate_state[[last_name, state_code]] = cs
           end
         end
       end
@@ -109,7 +105,7 @@ class Database
         party_id = race_hash[:party]
         race_type = race_hash[:raceType]
 
-        race = [ race_id, race_day_id, party_id, nil, race_type, nil, nil, nil ]
+        race = [ race_id, race_day_id, party_id, nil, race_type, nil, nil, nil, nil ]
         races << race
 
         for reporting_unit in race_hash[:reportingUnits]
@@ -175,29 +171,8 @@ class Database
       end
     end
 
-    for party_id in [ 'Dem', 'GOP' ]
-      for chart in ApiSources.GET_pollster_primaries(party_id)
-        state_code = chart[:state]
-        for estimate in chart[:estimates]
-          last_name = estimate[:last_name]
-          poll_percent = estimate[:value]
-
-          if state_code == 'US'
-            candidate = last_name_to_candidate[last_name]
-            if candidate
-              candidate[6] = poll_percent
-            end
-          else
-            candidate_state = last_name_and_state_code_to_candidate_state[[last_name, state_code]]
-            if candidate_state
-              candidate_state[5] = poll_percent
-            end
-          end
-        end
-      end
-    end
-
     stub_races_ap_isnt_reporting_yet(races)
+    add_pollster_estimates(parties, candidates, candidate_states, races)
 
     Database.new({
       candidates: candidates,
@@ -227,7 +202,55 @@ class Database
           key = "#{race_day_id},#{party_id},#{state_code}"
           next if existing_race_keys.include?(key)
 
-          races << [ nil, race_day_id, party_id, state_code, nil, nil, nil, nil ]
+          races << [ nil, race_day_id, party_id, state_code, nil, nil, nil, nil, nil ]
+        end
+      end
+    end
+  end
+
+  # Writes Candidate.poll_percent, Candidate.poll_updated_at,
+  # CandidateState.poll_percent, Race.poll_last_updated.
+  def self.add_pollster_estimates(parties, candidates, candidate_states, races)
+    last_name_to_candidate = {}
+    candidates.each { |c| last_name_to_candidate[c[3]] = c }
+
+    key_to_candidate_state = {}
+    candidate_states.each { |cs| key_to_candidate_state["#{cs[0]}-#{cs[1]}"] = cs }
+
+    key_to_races = {}
+    races.each do |race|
+      key = "#{race[2]}-#{race[3]}"
+      key_to_races[key] ||= []
+      key_to_races[key] << race
+    end
+
+    for party in parties
+      party_id = party[0]
+
+      for chart in ApiSources.GET_pollster_primaries(party_id)
+        state_code = chart[:state]
+        last_updated = DateTime.parse(chart[:last_updated])
+
+        for race in (key_to_races["#{party_id}-#{state_code}"] || [])
+          race[8] = last_updated
+        end
+
+        for estimate in chart[:estimates]
+          last_name = estimate[:last_name]
+          poll_percent = estimate[:value]
+
+          if state_code == 'US'
+            candidate = last_name_to_candidate[last_name]
+            if candidate
+              candidate[6] = poll_percent
+              candidate[7] = last_updated
+            end
+          else
+            candidate_state = key_to_candidate_state[[last_name, state_code]]
+            if candidate_state
+              candidate_state[5] = poll_percent
+            end
+          end
         end
       end
     end
