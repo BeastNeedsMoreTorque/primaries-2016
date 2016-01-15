@@ -48,12 +48,12 @@ class BaseView
     render(partial: 'state-race-days-table', locals: {
       columns: [
         [ 'state', 'State' ],
-        [ 'party', 'Party' ],
         [ 'date', 'Date' ],
+        [ 'party', 'Party' ],
         [ 'n-delegates', 'Delegates' ]
       ].map { |arr| StateRaceDaysColumn.new(*arr) },
       hide_repeats_column: 'state',
-      races: races.sorted_by_state_name_and_party_name
+      races: races.sorted_by_state_name_and_race_day
     })
   end
 

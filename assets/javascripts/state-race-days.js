@@ -12,13 +12,8 @@ $(function() {
   $toggle = $('.state-race-days-toggle');
 
   function reset_height() {
-    var h = 0;
     $flipper.children().css({ position: 'absolute' });
-    $flipper.children().each(function() {
-      var ch = $(this).height();
-      if (ch > h) h = ch;
-    });
-    $flipper.height(h);
+    $flipper.height($flipper.children('.selected').height());
   }
 
   // Shows 'date' and hides 'state', or vice-versa.
@@ -63,4 +58,6 @@ $(function() {
       reset_height();
     }
   });
+
+  $(window).on('resize', reset_height);
 });

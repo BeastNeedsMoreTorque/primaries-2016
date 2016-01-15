@@ -15,6 +15,10 @@
     vertical-align: top;
     padding: .4rem;
 
+    &.party {
+      text-align: center;
+    }
+
     &.repeated {
       visibility: hidden;
     }

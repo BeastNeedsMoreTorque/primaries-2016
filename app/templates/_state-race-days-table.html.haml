@@ -21,7 +21,7 @@
             - when 'state'
               = race.state_name
             - when 'party'
-              = race.party_name
+              = race.party_name[0]
             - when 'n-delegates'
               %span.integer
                 = race.n_delegates

@@ -10,17 +10,17 @@ Races = CollectionClass.new('races', 'race', Race) do
     @by_party_and_state["#{party.id}-#{state.code}"]
   end
 
-  def sorted_by_state_name_and_party_name
+  def sorted_by_state_name_and_race_day
     all.sort do |a,b|
       c1 = a.state_name.<=>(b.state_name)
       if c1 != 0
         c1
       else
-        c2 = a.party_name.<=>(b.party_name)
+        c2 = a.race_day_id.<=>(b.race_day_id)
         if c2 != 0
           c2
         else
-          a.race_day_id.<=>(b.race_day_id)
+          a.party_name.<=>(b.party_name)
         end
       end
     end
