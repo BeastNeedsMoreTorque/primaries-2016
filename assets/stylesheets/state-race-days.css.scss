@@ -1,15 +1,10 @@
 @import '_variables';
 
+.main-hed--race-day {
+  text-align: center;
+}
+
 .state-race-days {
-  .disabled {
-    color: $muted;
-  }
-
-  span time {
-    // as opposed to `a time`
-    color: $muted;
-  }
-
   td {
     border-top: 1px solid $tableBorderColor;
     vertical-align: top;

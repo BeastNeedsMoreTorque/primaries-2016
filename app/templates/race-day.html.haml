@@ -1,6 +1,6 @@
 -# Called with a RaceDayPageGenerator::HtmlContext
 #main
-  %h1= page_title
+  %h1.main-hed--race-day= page_title
 
   != render(partial: 'delegate-bars')
   != render(partial: 'calendar')
@@ -20,7 +20,6 @@
         %ul.party-state
           - parties.each do |party|
             %li.party-state
-              %h4= party.name
               - race = database.races.find_by_party_and_state(party, state)
               - text = race_text(race)
               - if text
