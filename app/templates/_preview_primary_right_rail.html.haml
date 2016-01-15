@@ -1,0 +1,30 @@
+%div.countdown
+%h3= state_iowa.name
+%p explanatory text about the first primary in Iowa Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- parties.each do |party|
+  %h4= party.name
+  - race = races.find_by_party_and_state(party, state_iowa)
+  %table.t-pollster
+    %thead
+      %tr
+        %th img
+        %th candidate
+        %th pollster
+    %tbody
+      - race.candidate_states.each do |cd_state|
+        - cd = cd_state.candidate
+        - if cd_state.poll_percent
+          %tr.candidate{'data-candidate-id': cd.id}
+            %td.cd-img img
+            %td.cd-name= cd.full_name
+            %td.pollster= "#{cd_state.poll_percent}%"
+%a.button{href: "http://elections.huffingtonpost.com/pollster"} Click for pollster charts
+
+%h4 Coming Up
+- coming = following_races(next_race_day.id)
+- limit = coming.length > 3 ? 0..2 : 0..coming.length - 1
+- for i in limit
+  %a.upcoming-link{target: '_parent', href: "/2016/primaries/#{coming[i].id}"}
+    %span.upcoming-date="#{coming[i].id}:"
+    %span.upcoming-dem="#{dem_states_string(coming[i].races_codified[:Dem])}"
+    %span.upcoming-gop="#{gop_states_string(coming[i].races_codified[:GOP])}"

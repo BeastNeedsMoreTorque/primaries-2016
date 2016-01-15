@@ -7,9 +7,12 @@
   %body.primary-right-rail
     %div.container
       - test_views = {:live => "2016-02-01", :preview => current_race_day}
-      - if next_race_day.id == test_views[:preview]#'2016-02-01' or current_race_day
-        %h4 Recent Races
-        - happened = previous_races("2016-02-09")
+      - if next_race_day.id == test_views[:live]#'2016-02-01' or current_race_day
+        %h4 Live States
+        -parties.each do |par|
+          %ul
+            %li{class: "live-state-name #{par.name}"}= "#{next_race_day.states_for_party(par)[0][:name]} (#{par.id})"
+        - happened = previous_races(current_race_day)
         - limit = happened.length > 3 ? 0..2 : 0..happened.length - 1
         - for i in limit
           %a.happened-link{target: '_parent', href: "/2016/primaries/#{happened[i].id}"}
@@ -27,9 +30,9 @@
             %span.upcoming-date="#{coming[i].id}:"
             %span.upcoming-dem="#{dem_states_string(coming[i].races_codified[:Dem])}"
             %span.upcoming-gop="#{gop_states_string(coming[i].races_codified[:GOP])}"
-      - elsif next_race_day.id == '2016-02-01'
+      - elsif next_race_day.id == '2016-02-01' #preview of Iowa before February 1st
         != render(partial: 'preview_primary_right_rail')
-      - elsif next_race_day
+      - elsif next_race_day #preview for next race, no race currently happening
         %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}= "Next race: #{next_race_day.id}"
     %script{src: '/2016/javascripts/pym.min.js'}
     %script
