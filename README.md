@@ -24,9 +24,7 @@ still run `script/update-primaries` periodically while this is running.)
 Set the environment variable `AP_TEST=true` to incorporate test data from the
 Associated Press.
 
-Set the environment variable `LOG_LEVEL=debug` to see more log data. You'll
-probably also want to set `SKIP_RSPEC=true` in this case; otherwise the specs
-will create confusing log messages.
+Set the environment variable `LOG_LEVEL=debug` to see more log data.
 
 Another useful command is `AP_API_KEY=abcdgef RPROF=true script/build`, which
 will dump profiling data to `profile.html`.
@@ -34,7 +32,7 @@ will dump profiling data to `profile.html`.
 Oh yeah, and `script/update-copy` will update our static copy. We edit that at
 https://docs.google.com/document/d/1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w/edit.
 
-Finally, if you run `rspec` directly you'll run integration tests. You must
+Finally, if you run `rspec` directly you'll run automated tests. You must
 have `script/serve` running in another console (to serve the files). This will
 overwrite all HTML files once per test. Run `script/build` again to revert to
 the results AP gives.
