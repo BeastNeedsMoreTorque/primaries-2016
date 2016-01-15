@@ -24,7 +24,7 @@ rescue IO::WaitWritable, Errno::EINTR
   end
 end while n_written < bytes.length
 
-if !IO.select([ output_reader ], nil, nil, 1)
+if !IO.select([ output_reader ], nil, nil, 3)
   raise 'Production server is not running'
 end
 

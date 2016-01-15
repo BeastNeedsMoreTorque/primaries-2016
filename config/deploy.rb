@@ -12,6 +12,7 @@ task :reset_env do
   ask(:ap_api_key, nil)
   on roles(:all) do |host|
     execute "echo AP_API_KEY='#{fetch(:ap_api_key)}' > #{shared_path}/env"
+    execute "echo AWS_REGION=us-east-1 >> #{shared_path}/env"
   end
 end
 
@@ -35,10 +36,11 @@ namespace :deploy do
 
   after :finished, :start_or_restart do
     on roles(:all) do |host|
-      execute("(cd #{deploy_to}/current && script/run-production-command exit || true)")
+      execute("#{deploy_to}/current/script/run-production-command exit || true")
 
-      # http://hervalicio.us/post/34109894575/executing-nohup-commands-with-capistrano
-      execute("(cd #{deploy_to}/current && /usr/bin/env $(cat #{shared_path}/env | xargs) script/production-server >> #{shared_path}/production.log &) && sleep 1", pty: true)
+      execute("(cd #{deploy_to}/current && screen -dm /usr/bin/env $(cat #{shared_path}/env | xargs) script/production-server >> #{shared_path}/production.log 2>&1)")
+
+      execute("echo Started server")
     end
   end
 end
