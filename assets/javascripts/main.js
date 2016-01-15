@@ -2,4 +2,3 @@
 //
 //= require './state-race-days.js'
 //= require './race-day.js'
-//= require './countdown.js'

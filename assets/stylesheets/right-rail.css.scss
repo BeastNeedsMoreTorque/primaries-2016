@@ -6,7 +6,6 @@
     font-size:20px;
     float: right;
     height: 50px;
-    background-color: #bdbdbd;
     div {
       display: inline-block;
       text-align: center;
@@ -23,6 +22,9 @@
     background-color: #f1f1f1;
     padding: 10px;
     border: 1px solid #bdbdbd;
+    span.last-updated{
+      font-size: 12px;
+    }
     li.live-state-name.Democrats{
       color: #5c6b95;
     }
@@ -60,16 +62,20 @@
         color: #bc5c5c;
       }
     }
+    img {
+      height: 25px;
+    }
     table.t-pollster {
       border-collapse: collapse;
       min-width: 275px;
       td {
         text-align: left;
-        padding: 5px;
-        height: 10px;
+        padding: 1px;
+        height: 8px;
         border-bottom: 1px solid #bdbdbd;
       }
       td.pollster{
+        font-weight: bold;
         width: 10%;
         text-align: center;
       }

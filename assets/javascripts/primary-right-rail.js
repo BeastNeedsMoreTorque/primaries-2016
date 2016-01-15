@@ -1,3 +1,4 @@
+//= require './vendor/jquery-2.2.0.js'
 $(function() {
   var iowa_starts = '2016-02-01'
   function timeTillIowa(end) {
@@ -16,21 +17,20 @@ $(function() {
     var hSpan = countdown.querySelector('.hours');
     var mSpan = countdown.querySelector('.minutes');
     var sSpan = countdown.querySelector('.seconds');
-    function updateClock() {
+    function updateCountdown() {
+      debugger;
       var time = timeTillIowa(starttime);
       dSpan.innerHTML = time.days;
       hSpan.innerHTML = time.hours;
       mSpan.innerHTML = ('0' + time.minutes).slice(-2);
       sSpan.innerHTML = ('0' + time.seconds).slice(-2);
 
-      if(time.total<=0){
+      if(time.total <= 0) {
         clearInterval(timeinterval);
       }
     }
-    updateClock();
-    var timeinterval = setInterval(updateClock, 1000);
-  }
-  function updateCountdown() {
+    updateCountdown();
+    var timeinterval = setInterval(updateCountdown, 1000);
   }
   initClock('countdown', iowa_starts);
 });
