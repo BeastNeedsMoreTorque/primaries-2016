@@ -7,7 +7,7 @@
   %body.primary-right-rail
     %div.container
       - test_views = {:live => "2016-02-01", :preview => current_race_day}
-      - if next_race_day.id == test_views[:live]#'2016-02-01' or current_race_day
+      - if next_race_day.id == test_views[:preview]#'2016-02-01' or current_race_day
         %h4 Live States
         -parties.each do |par|
           %ul
