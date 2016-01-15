@@ -4,12 +4,29 @@
   %title Huffington Post 2016 Primary Results
   %link{rel: 'stylesheet', href: asset_path('splash.css')}
 
-%body.primary-splash-banner
-  %p.leading-democrat= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
-  %p.leading-republican= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
-  %p
-    - if current_race_day
-      %a{href: "/2016/primaries/#{current_race_day.id}"} Live updates
-    - elsif next_race_day
+%body
+  %div.primary-splash-banner
+    %h1= "Iowa"
+    %p.intro-copy= "Intro Copy"
+    %p.leading-democrat= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
+    %p.leading-republican= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
+    -parties.each do |party|
+      %h4= party.name
+      - race = races.find_by_party_and_state(party, cur_state)
+      %table.t-pollster
+        %thead
+          %tbody
+          %tr.candidate-names
+            - race.candidate_states.each do |cd_state|
+              - cd = cd_state.candidate
+              %td.candidate-{'data-candidate-id': cd.id}
+                %div.cd-name= cd.full_name
+                %div.cd-img img
+          %tr.candidate-votes
+            - race.candidate_states.each do |cd_state|
+              - cd = cd_state.candidate
+              %td.candidate-{'data-candidate-id': cd.id}
+                %div.cd-votes= cd_state.n_votes
+    %p
       Next race:
       %a{href: "/2016/primaries/#{next_race_day.id}"}= next_race_day.date.strftime('%A, %B %-d')
