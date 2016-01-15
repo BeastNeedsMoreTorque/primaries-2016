@@ -37,7 +37,7 @@ module CollectionClass
       def self.build(database, array_of_param_arrays)
         all = array_of_param_arrays.map { |param_array| @item_class.new(database, *param_array) }
         if @item_class.included_modules.include?(Comparable)
-          all.sort
+          all.sort!
         end
         self.new(all)
       end
