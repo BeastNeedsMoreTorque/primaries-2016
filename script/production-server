@@ -51,6 +51,8 @@ class Server
   end
 
   def run
+    ApiSources.GET_all_primary_election_days
+
     run_poll_dates([ latest_race_date_string ])
 
     while true

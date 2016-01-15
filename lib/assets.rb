@@ -7,8 +7,8 @@ module Assets
   SprocketsAssets = %w(
     javascripts/stats.js
     javascripts/main.js
+    javascripts/primary-right-rail.js
     stylesheets/main.css
-    stylesheets/right-rail.css
     stylesheets/splash.css
   )
 
