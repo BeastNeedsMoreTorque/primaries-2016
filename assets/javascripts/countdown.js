@@ -18,9 +18,9 @@ $(function() {
     var sSpan = countdown.querySelector('.seconds');
     function updateClock() {
       var time = timeTillIowa(starttime);
-      dSpan.innerHTML = time.days + ' :';
-      hSpan.innerHTML = time.hours + ' :';
-      mSpan.innerHTML = ('0' + time.minutes).slice(-2) + ' :';
+      dSpan.innerHTML = time.days;
+      hSpan.innerHTML = time.hours;
+      mSpan.innerHTML = ('0' + time.minutes).slice(-2);
       sSpan.innerHTML = ('0' + time.seconds).slice(-2);
 
       if(time.total<=0){
