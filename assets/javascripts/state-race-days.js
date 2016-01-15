@@ -1,83 +1,63 @@
 $(function() {
-  var $table = $('.state-race-days table');
-  var tbody = $table.find('tbody')[0];
-
-  var $th_state = $table.find('th.state');
-  var $th_date = $table.find('th.date');
-
-  var trs = [];
-  $table.find('tbody tr').each(function() {
-    trs.push({
-      tr: this,
-      $date: $('td.date', this),
-      $state: $('td.state', this),
-      date: this.getAttribute('data-race-day'),
-      state: this.getAttribute('data-state-name'),
-      party: this.getAttribute('data-party-name')
-    });
+  $('a[href="#state-race-days-by-date"]').click(function(ev) {
+    ev.preventDefault();
+    switch_to('date');
+  });
+  $('a[href="#state-race-days-by-state"]').click(function(ev) {
+    ev.preventDefault();
+    switch_to('state');
   });
 
-  var cmp = {
-    by_date: function(a, b) {
-      if (a.date != b.date) {
-        return a.date < b.date ? -1 : 1;
-      } else if (a.state != b.state) {
-        return a.state < b.state ? -1 : 1;
-      } else {
-        return a.party < b.party ? -1 : 1;
-      }
-    },
-    by_state: function(a, b) {
-      if (a.state != b.state) {
-        return a.state < b.state ? -1 : 1;
-      } else if (a.date != b.date) {
-        return a.date < b.date ? -1 : 1;
-      } else {
-        return a.party < b.party ? -1 : 1;
-      }
+  $flipper = $('.state-race-days .flipper');
+  $toggle = $('.state-race-days-toggle');
+
+  function reset_height() {
+    $flipper.children().css({ position: 'absolute' });
+    $flipper.height($flipper.children('.selected').height());
+  }
+
+  // Shows 'date' and hides 'state', or vice-versa.
+  function switch_to(name) {
+    window.location.hash = '#state-race-days-by-' + name;
+
+    $toggle.children('.selected').removeClass('selected');
+    $toggle.children('.by-' + name).addClass('selected');
+
+    $flipper.children('.selected').removeClass('selected');
+    $flipper.children('.state-race-days-by-' + name).addClass('selected');
+    $flipper[0].className = name + '-selected flipper';
+
+    reset_height();
+  }
+
+  var $wait_for_fonts_span = $('<span class="waiting-for-fonts-to-load" style="display:none; font-family: foo,Arial;"></span>')
+    .appendTo('body');
+  function waitForFontThen(font_name, callback) {
+    // Render "." in a monospace font and in the desired font. Presumably, the
+    // desired font's <span> will be thinner than a monospace one.
+    var $span1 = $('<span class="wait-for-font-mono" style="position: absolute; visibility: hidden; font-family: monospace; font-size: 20px;">.</span>')
+      .appendTo('body');
+    var $span2 = $('<span class="wait-for-font-non-mono" style="position: absolute; visibility: hidden; font-family: ' + font_name + ', monospace; font-size: 20px;">.</span>')
+      .appendTo('body');
+
+    var loaded = $span1.width() != $span2.width();
+    $span1.remove();
+    $span2.remove();
+
+    if (loaded) {
+      callback();
+    } else {
+      window.setTimeout(function() { waitForFontThen(font_name, callback); }, 50);
     }
-  };
-
-  /** Sets ".repeated" on any <td> that has the same value as the one above.
-    *
-    * Applies to "date" _or_ "state".
-    */
-  function refresh_repeated_class(name) {
-    $table.find('.repeated').removeClass('repeated');
-    $table.find('.no-repeated').removeClass('no-repeated');
-
-    var property = '$' + name;
-    var attribute = {
-      date: 'data-race-day',
-      state: 'data-state-name'
-    }[name];
-
-    var last_value = null;
-
-    trs.forEach(function(tr) {
-      var current_value = tr.tr.getAttribute(attribute);
-
-      if (current_value != last_value) {
-        last_value = current_value;
-        $(tr.tr).addClass('no-repeated');
-      } else {
-        tr[property].addClass('repeated');
-      }
-    });
   }
 
-  function resort_trs(by) {
-    var comparator = cmp['by_' + by];
-    trs.sort(comparator);
+  waitForFontThen('Source Sans Pro', function() {
+    if (window.location.hash == '#state-race-days-by-state') {
+      switch_to('state');
+    } else {
+      reset_height();
+    }
+  });
 
-    trs.forEach(function(tr) {
-      tbody.appendChild(tr.tr);
-    });
-
-    refresh_repeated_class(by);
-  }
-
-  $th_state.click(function() { resort_trs('state'); });
-  $th_date.click(function() { resort_trs('date'); });
-  refresh_repeated_class('date'); // initial view
+  $(window).on('resize', reset_height);
 });

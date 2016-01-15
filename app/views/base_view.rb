@@ -5,6 +5,7 @@ require_relative '../../lib/paths'
 
 class BaseView
   attr_reader(:database)
+  StateRaceDaysColumn = Struct.new(:html_class, :label)
 
   def initialize(database)
     @database = database
@@ -30,11 +31,38 @@ class BaseView
     }
   end
 
+  def render_state_race_days_by_date
+    render(partial: 'state-race-days-table', locals: {
+      columns: [
+        [ 'date', 'Date' ],
+        [ 'state', 'State' ],
+        [ 'party', 'Party' ],
+        [ 'n-delegates', 'Delegates' ]
+      ].map { |arr| StateRaceDaysColumn.new(*arr) },
+      hide_repeats_column: 'date',
+      races: races
+    })
+  end
+
+  def render_state_race_days_by_state
+    render(partial: 'state-race-days-table', locals: {
+      columns: [
+        [ 'state', 'State' ],
+        [ 'date', 'Date' ],
+        [ 'party', 'Party' ],
+        [ 'n-delegates', 'Delegates' ]
+      ].map { |arr| StateRaceDaysColumn.new(*arr) },
+      hide_repeats_column: 'state',
+      races: races.sorted_by_state_name_and_race_day
+    })
+  end
+
   Database::CollectionNames.each do |collection_name|
     define_method(collection_name.to_sym) { database.send(collection_name) }
   end
 
-  def render(options, locals={})
+  def render(options)
+    locals = options[:locals] || {}
     if options[:partial]
       template = BaseView.load_template("_#{options[:partial]}")
       template.render(self, locals)

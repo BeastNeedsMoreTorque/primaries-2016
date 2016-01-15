@@ -6,25 +6,51 @@
   }
 
   span time {
+    // as opposed to `a time`
     color: $muted;
   }
 
   td {
-    border-top: 1px solid transparent; // so no-repeated td takes no extra space
+    border-top: 1px solid $tableBorderColor;
+    vertical-align: top;
     padding: .4rem;
+
+    &.party {
+      text-align: center;
+    }
 
     &.repeated {
       visibility: hidden;
     }
+
+    &.n-delegates {
+      vertical-align: middle;
+    }
   }
 
-  tr.no-repeated td {
-    border-top: 1px solid $tableBorderColor;
+  tr.key-repeated td {
+    border-top-color: transparent;
   }
 
   table {
     border-collapse: collapse;
-    margin: 1rem auto;
+    margin: 0 auto;
+  }
+
+  .flipper>* {
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .n-delegates .integer {
+    display: none;
+  }
+
+  .dots {
+    display: inline-block;
+    line-height: .4;
+    max-width: 12em;
   }
 
   .dots-dem {
@@ -33,5 +59,61 @@
 
   .dots-gop {
     color: $strongGOP;
+  }
+
+  .state-race-days-toggle {
+    text-align: center;
+
+    a {
+      text-decoration: none;
+      margin: .5rem;
+      padding: .5rem 1rem;
+      border: 1px solid transparent;
+      border-radius: .4rem;
+
+      &.selected {
+        color: inherit;
+        background: #efefef;
+        border-color: #ddd;
+      }
+    }
+  }
+
+  // https://davidwalsh.name/css-flip
+  .both-tables {
+    margin: 2rem 0 1rem;
+    perspective: 1000rem;
+    -webkit-perspective: 1000rem;
+
+    .flipper {
+      transition: 0.5s;
+      transform-style: preserve-3d;
+      position: relative;
+
+      &.state-selected {
+        transform: rotateY(180deg);
+      }
+    }
+
+    .flipper>* {
+      backface-visibility: hidden;
+      transform: rotateY(180deg);
+    }
+
+    .flipper>:first-child {
+      z-index: 2; // above back
+      transform: rotateY(0deg);
+    }
+
+    .flipper>:last-child {
+      // We'll eventually set the :first-child position: absolute, but that
+      // only comes after we load the font. So we go like this:
+      //
+      // 1. Render :first-child, with :last-child absolute; browser calculates
+      //    all heights.
+      // 2. When font loads, change :first-child to position: absolute,
+      //    read the rendered heights, and set .flipper's height.
+      position: absolute;
+    }
   }
 }

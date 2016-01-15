@@ -1,26 +1,72 @@
 #!/usr/bin/env ruby
 
+require 'date'
+
 require_relative '../lib/env'
 Bundler.require(:development)
 
 require_relative '../lib/paths'
 
-def on_event
-  system("#{Paths.Script}/build")
-  system("rspec") unless ENV['SKIP_RSPEC']
+$error_status = nil # if nil, HTTP response is 503; if non-zero, 500; if 0, 200/404.
+$error_text = nil
+
+def rebuild
+  $error_status = nil
+  $error_text = ''
+
+  command = "#{Paths.Script}/build"
+  IO.popen(command, err: [ :child, :out ]) { |io|
+    io.each_line do |line|
+      $error_text << line
+    end
+  }
+
+  $error_status = $?
 end
 
 listener = Listen.to('app', 'lib', 'assets', 'spec', 'script', only: /\.(csv|rb|js|json|png|css|sass|scss|haml)$/) do |modified, added, removed|
   files = Set.new(modified + added + removed) - [ "#{Paths.Assets}/javascripts/states.js", "#{Paths.Assets}/javascripts/race_days.js" ]
   if !files.empty?
-    on_event
+    rebuild
   end
 end
 
-on_event
+rebuild
 listener.start
 
-app = Rack::Builder.new do
+class StatusReporter
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    if $error_status == nil
+      [ 503, { 'Content-Type' => 'text/plain; charset=utf-8' }, [ 'Regenerating...' ] ]
+    elsif $error_status != 0
+      [ 500, { 'Content-Type' => 'text/plain; charset=utf-8' }, [ "ERROR #{$error_status}. Output:\n\n#{$error_text}" ] ]
+    else
+      @app.call(env)
+    end
+  end
+end
+
+class Logger
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    response = @app.call(env)
+
+    $stderr.write("#{env['REQUEST_METHOD']} #{env['PATH_INFO']} => #{response[0]}\n")
+
+    response
+  end
+end
+
+app = Rack::Builder.new(quiet: true) do
+  use(Logger)
+  use(StatusReporter)
   no_cache = { 'Cache-Control' => 'no-cache' }
   use(Rack::Static, urls: { '/2016' => '2016.html' }, root: Paths.Dist, header_rules: [[ :all, no_cache ]])
   use(Rack::TryStatic, root: Paths.Dist, urls: [ '/2016/primaries' ], try: [ '.html' ], header_rules: [[ :all, no_cache ]])
@@ -35,9 +81,9 @@ app = Rack::Builder.new do
       ]
   )
 
-  run lambda { |env| [ 404, { 'Content-Type' => 'text/html' }, [ 'Not Found' ]] }
+  run lambda { |env| [ 404, { 'Content-Type' => 'text/html; charset=utf-8' }, [ 'Not Found' ]] }
 end
 
-Rack::Server.start(app: app, Port: 3000) # will return after Ctrl+C
+Rack::Server.start(app: app, Port: 3000, environment: 'none', AccessLog: []) # will return after Ctrl+C
 
 listener.stop
