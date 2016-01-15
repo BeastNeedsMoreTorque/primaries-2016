@@ -30,7 +30,7 @@ for path in [ Paths.ProductionCommands, Paths.ProductionOutput ]
 end
 
 class Server
-  Timeout = 30 # seconds
+  Timeout = 300 # seconds
 
   def initialize
     @command_reader = open(Paths.ProductionCommands, 'r+')

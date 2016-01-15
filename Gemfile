@@ -10,6 +10,8 @@ gem 'sass'
 gem 'mkfifo'
 
 group :development do
+  gem 'capistrano'
+  gem 'capistrano-bundler'
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'listen'

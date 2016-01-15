@@ -1,14 +1,34 @@
 #!/usr/bin/env ruby
 #
 # Runs a command on the server, or exits if the server isn't running.
+#
+# Bonus: No dependencies. No Bundler.
 
 require_relative '../lib/paths'
 
-command_writer = open(Paths.ProductionCommands, 'a')
-command_writer.sync = true
-output_reader = open(Paths.ProductionOutput, 'r')
+begin
+  output_reader = open(Paths.ProductionOutput, 'r+')
+  command_writer = open(Paths.ProductionCommands, 'a+')
+  command_writer.sync = true
+rescue Errno::ENOENT
+  raise 'Production server is not running'
+end
 
-command_writer.puts("#{ARGV[0]}\n")
+bytes = "#{ARGV[0]}\n"
+n_written = 0
+begin
+  n_written += command_writer.write_nonblock(bytes[n_written..-1])
+rescue IO::WaitWritable, Errno::EINTR
+  if IO.select(nil, [ command_writer ], nil, 1)
+    retry
+  else
+    raise 'Production server is not running'
+  end
+end while n_written < bytes.length
+
+if !IO.select([ output_reader ], nil, nil, 3)
+  raise 'Production server is not running'
+end
 
 while true
   line = output_reader.gets
