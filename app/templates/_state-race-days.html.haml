@@ -1,26 +1,11 @@
 .state-race-days
-  %table
-    %thead
-      %tr
-        %th.date Date
-        %th.state State
-        %th.party Party
-        %th.n-delegates Delegates in state
-    %tbody
-      - for race in races
-        %tr{'class': race.disabled? ? 'disabled' : '', 'data-race-day': race.race_day_id, 'data-party-name': race.party_name, 'data-state-name': race.state_name}
-          %td.date
-            - if race.enabled?
-              %a{href: "/2016/primaries/#{race.race_day_id}"}
-                %time{datetime: race.race_day_id}= race.date.strftime('%B %-d')
-            - else
-              %span
-                %time{datetime: race.race_day_id}= race.date.strftime('%B %-d')
-          %td.state= race.state_name
-          %td.party= race.party_name
-          %td.n-delegates
-            %span.integer
-              = race.n_delegates
-            %span{'class': "dots dots-#{race.party_id.downcase}"}
-              -# That's a zero-width space (zwsp) between each dot, so they can wrap
-              = "\u200b•" * race.n_delegates
+  .state-race-days-toggle
+    %a.by-date.selected{href: '#state-race-days-by-date'} Sorted by date
+    %a.by-state{href: '#state-race-days-by-state'} Sorted by state
+
+  .both-tables
+    .flipper.date-selected
+      .state-race-days-by-date.selected
+        != render_state_race_days_by_date
+      .state-race-days-by-state
+        != render_state_race_days_by_state
