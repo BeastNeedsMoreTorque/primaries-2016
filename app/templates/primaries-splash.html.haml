@@ -8,8 +8,8 @@
   %div.primary-splash-banner
     %h1= "Happening Now: Iowa Caucus"
     %p.intro-copy= "See live-updating results for the Caucus here."
-    %p.leading-democrat= "#{leading_democrat.name} is currently leading the Democratic caucus with delegates #{leading_democrat.n_delegates}"
-    %p.leading-republican= "#{leading_republican.name} is leading the Republican caucus with  #{leading_republican.n_delegates} delegates"
+    %p.leading-democrat= "Current Democratic frontrunner: #{leading_democrat.name} with #{leading_democrat.n_delegates} delegates"
+    %p.leading-republican= "Current Republican frontrunner: #{leading_republican.name} with  #{leading_republican.n_delegates} delegates"
     -parties.each do |party|
       %h4= party.name
       - race = races.find_by_party_and_state(party, cur_state)
@@ -26,7 +26,7 @@
             - race.candidate_states.each do |cd_state|
               - cd = cd_state.candidate
               %td.candidate-{'data-candidate-id': cd.id}
-                %div.cd-votes= cd_state.n_votes
+                %div.cd-votes= "#{cd_state.n_votes} votes"
     %p
       Next race:
       %a{href: "/2016/primaries/#{next_race_day.id}"}= next_race_day.date.strftime('%A, %B %-d')
