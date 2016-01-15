@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 #
 # Runs a command on the server, or exits if the server isn't running.
+#
+# Bonus: No dependencies. No Bundler.
 
 require_relative '../lib/paths'
 

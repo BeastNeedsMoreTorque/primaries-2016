@@ -26,6 +26,16 @@ task :ensure_env do
   end
 end
 
+desc 'Refresh AP results for a certain date'
+task :tell_server do
+  if !ENV['command']
+    raise %q{You must specify a command. e.g., "cap staging tell_server command='poll_dates 2016-02-01'}
+  end
+  on roles(:all) do
+    execute "#{deploy_to}/current/script/run-production-command #{ENV['command']}"
+  end
+end
+
 # Janky namespaces. https://github.com/capistrano/capistrano/issues/1543
 namespace :deploy do
   namespace :symlink do
