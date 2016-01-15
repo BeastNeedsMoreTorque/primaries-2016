@@ -35,12 +35,16 @@
   &.democratic {
     box-sizing: border-box;
     float: left;
-    padding-right: 20px;
+    @media (min-width: 500px) {
+      padding-right: 20px;
+    }
   }
   &.republican {
     box-sizing: border-box;
     float: right;
-    padding-left: 20px;
+    @media (min-width: 500px) {
+      padding-left: 20px;
+    }
   }
   @media (min-width: 500px) {
     width: 50%;
