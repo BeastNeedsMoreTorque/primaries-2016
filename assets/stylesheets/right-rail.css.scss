@@ -18,6 +18,23 @@
       display: block;
     }
   }
+  div.delegates-available{
+    font-size: 14px;
+    display: inline-block;
+    color: #5c6b95;
+    span.Dem{
+      color: #5c6b95;
+    }
+    span.GOP{
+      color: #bc5c5c;
+    }
+  }
+  div.race-name{
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    display: inline-block;
+  }
   div.container {
     background-color: #f1f1f1;
     padding: 10px;

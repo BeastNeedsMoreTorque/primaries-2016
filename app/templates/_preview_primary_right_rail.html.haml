@@ -15,8 +15,11 @@
 %p explanatory text about the first primary in Iowa Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 - parties.each do |party|
   - del_key = "n_#{party.id.downcase}_delegates"
-  %h4= "#{party.adjective} Caucus - #{state_iowa[del_key]} Delegates"
-  %h3 Pollster Leaders
+  %div.race-name
+    %span= "#{party.adjective} Caucus"
+  %div.delegates-available
+    %span{class: party.id}= "#{state_iowa[del_key]} Delegates"
+  %h4 Pollster Leaders
   - race = sort_iowa_data(party, state_iowa)
   %table.t-pollster
     %thead
