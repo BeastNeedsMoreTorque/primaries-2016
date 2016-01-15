@@ -1,4 +1,8 @@
-%div.countdown
+%div{id: 'countdown'}
+  %span.days
+  %span.hours
+  %span.minutes
+  %span.seconds
 %h3= state_iowa.name
 %p explanatory text about the first primary in Iowa Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 - parties.each do |party|
@@ -28,3 +32,4 @@
     %span.upcoming-date="#{coming[i].id}:"
     %span.upcoming-dem="#{dem_states_string(coming[i].races_codified[:Dem])}"
     %span.upcoming-gop="#{gop_states_string(coming[i].races_codified[:GOP])}"
+%script{src: '/2016/javascripts/main.js'}

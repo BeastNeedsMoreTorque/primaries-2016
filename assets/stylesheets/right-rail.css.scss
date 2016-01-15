@@ -1,10 +1,12 @@
 .primary-right-rail{
   width: 300px;
-  div.countdown {
+  div#countdown {
+    padding: 5px;
+    text-align: right;
+    font-size:20px;
     float: right;
-    width: 20%;
-    height: 40px;
-    background-color: gray;
+    height: 20px;
+    background-color: #bdbdbd;
   }
   div.container {
     background-color: #f1f1f1;
