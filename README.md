@@ -53,7 +53,7 @@ Here's the full list of commands:
 
 * `cap production setup`: set up server on production (prompts for variables).
 * `cap production deploy`: update code, start/restart `production-server`.
-* `cap production tell-server 'poll_dates 2016-02-01'`: give the server a
+* `cap production tell-server command='poll_dates 2016-02-01'`: give the server a
   command. Commands are:
   * `poll_dates [YYYY-MM-DD ...]`: updates AP data for races that day
   * `exit`: terminates the server gracefully

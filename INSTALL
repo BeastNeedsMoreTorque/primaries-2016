@@ -1,0 +1,18 @@
+# To deploy to a fresh web server (see README.md for why).
+# Run these commands on a fresh server:
+
+sudo yum install -y git-core zlib zlib-devel gcc-c++ patch readline readline-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel nodejs
+
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+cd ~/.rbenv && src/configure && make -C src
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
+echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+. ~/.bash_profile
+
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+rbenv install 2.2.3
+rbenv global 2.2.3
+gem install bundler
+
+# Then run `cap staging deploy` (or `cap production deploy`) on a dev machine
