@@ -13,3 +13,53 @@ $libertarian: #7f5217;
 
 $facebookBlue: #3b5998 ;
 $twitterBlue: #c0deed ;
+
+
+@mixin clearfix {
+	.clearfix {
+	  overflow: auto;
+	}
+}
+
+@mixin body-copy {
+	margin: 0;
+	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+	background-color: #fff;
+	@include clearfix;
+}
+
+
+@mixin splash-base {
+	.header {
+		background-color: black;
+		color: white;
+		padding: 5px;
+		h1 {
+			display: inline;
+			margin: 0;
+		}
+		.tease-link {
+			display: inline;
+			a {
+				color: white;
+				margin: 5px;
+			}
+			background: red;
+		}
+	}	
+}
+
+@mixin desktop-splash-base {
+	@include splash-base;
+	width: 977px;
+}
+
+@mixin mobile-splash-base {
+	@include splash-base;
+	width: 320px;
+}
+
+@mixin right-rail-base {
+	//TK
+}
+

@@ -4,7 +4,7 @@ lock '3.4.0'
 set :application, 'election-2016'
 set :repo_url, 'ssh://git@github.com/huffpostdata/election-2016'
 
-set :deploy_to, '/home/rails/election-2016'
+set :deploy_to, '/opt/election-2016'
 set :linked_dirs, fetch(:linked_dirs, []).push('tmp', 'cache')
 
 desc 'Set new AP API key'

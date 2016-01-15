@@ -1,6 +1,7 @@
+@import '_variables';
+
 body {
-  margin: 0;
-  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+  @include body-copy;
 }
 
 .topbar {

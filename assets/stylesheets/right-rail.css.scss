@@ -1,15 +1,47 @@
 .primary-right-rail{
   width: 300px;
-  div.countdown {
+  div#countdown {
+    padding: 5px;
+    text-align: right;
+    font-size:20px;
     float: right;
-    width: 20%;
-    height: 40px;
-    background-color: gray;
+    height: 50px;
+    div {
+      display: inline-block;
+      text-align: center;
+    }
+    div.time-text {
+      font-size: 12px;
+    }
+    span {
+      text-align: center;
+      display: block;
+    }
+  }
+  div.delegates-available{
+    font-size: 14px;
+    display: inline-block;
+    color: #5c6b95;
+    span.Dem{
+      color: #5c6b95;
+    }
+    span.GOP{
+      color: #bc5c5c;
+    }
+  }
+  div.race-name{
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    display: inline-block;
   }
   div.container {
     background-color: #f1f1f1;
     padding: 10px;
     border: 1px solid #bdbdbd;
+    span.last-updated{
+      font-size: 12px;
+    }
     li.live-state-name.Democrats{
       color: #5c6b95;
     }
@@ -52,15 +84,17 @@
       min-width: 275px;
       td {
         text-align: left;
-        padding: 5px;
-        height: 10px;
+        padding: 1px;
+        height: 8px;
         border-bottom: 1px solid #bdbdbd;
       }
       td.pollster{
+        font-weight: bold;
         width: 10%;
         text-align: center;
       }
       th {
+        font-size: 12px;
         text-align: left;
         border-bottom: 1px solid #bdbdbd;
       }
