@@ -105,3 +105,11 @@ You can use or ignore each level of the cache using the following commands:
   code changes, so you can't help but see test results :).
 * To upload to S3, run `script/upload`. You'll need to set `AWS_ACCESS_KEY_ID`,
   `AWS_SECRET_ACCESS_KEY` and `AWS_REGION` in your environment.
+
+# Sources
+
+Here's an attempt to document all the sources of information we build upon.
+
+* `app/collections/states.csv`: states and FIPS codes from Wikipedia; delegate
+  counts from AP-emailed Excel file, `2016 State Party Delegate Numbers_121715.xlsx`
+* Vote counts, candidate list, delegate counts: AP's API

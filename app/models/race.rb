@@ -25,7 +25,7 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def date; race_day.date; end
   def disabled?; !race_day || race_day.disabled?; end
   def enabled?; race_day && race_day.enabled?; end
-  def n_delegates; candidate_states.map(&:n_delegates).reduce(0, :+); end
+  def n_delegates; state.n_delegates(party_id); end
 
   def candidate_states
     @candidate_states ||= if ap_id

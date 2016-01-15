@@ -1,0 +1,59 @@
+fips_int,state_code,abbreviation,name,n_dem_delegates,n_gop_delegates
+1,AL,Ala.,Alabama,60,50
+2,AK,Alaska,Alaska,20,28
+60,AS,American Samoa,American Samoa,10,9
+4,AZ,Ariz.,Arizona,85,58
+5,AR,Ark.,Arkansas,37,40
+6,CA,Calif.,California,546,172
+8,CO,Colo.,Colorado,79,37
+9,CT,Conn.,Connecticut,70,28
+10,DE,Del.,Delaware,31,16
+-1,DA,Dems abroad,Democrats Abroad,17,0
+11,DC,D.C.,District of Columbia,45,19
+12,FL,Fla.,Florida,246,99
+13,GA,Ga.,Georgia,116,76
+66,GU,Guam,Guam,12,9
+15,HI,Hawaii,Hawaii,34,19
+16,ID,Idaho,Idaho,27,32
+17,IL,Ill.,Illinois,182,69
+18,IN,Ind.,Indiana,92,57
+19,IA,Iowa,Iowa,52,30
+20,KS,Kan.,Kansas,37,40
+21,KY,Ky.,Kentucky,60,46
+22,LA,La.,Louisiana,58,46
+23,ME,Maine,Maine,30,23
+24,MD,Md.,Maryland,118,38
+25,MA,Mass.,Massachusetts,116,42
+26,MI,Mich.,Michigan,147,59
+27,MN,Minn.,Minnesota,93,38
+28,MS,Miss.,Mississippi,41,40
+29,MO,Mo.,Missouri,84,52
+30,MT,Mont.,Montana,27,27
+31,NE,Neb.,Nebraska,30,36
+32,NV,Nev.,Nevada,43,30
+33,NH,N.H.,New Hampshire,32,23
+34,NJ,N.J.,New Jersey,142,51
+35,NM,N.M.,New Mexico,43,24
+36,NY,N.Y.,New York,291,95
+37,NC,N.C.,North Carolina,121,72
+38,ND,N.D.,North Dakota,23,28
+69,MP,Northern Mariana Islands,Northern Mariana Islands,11,9
+39,OH,Ohio,Ohio,159,66
+40,OK,Okla.,Oklahoma,42,43
+41,OR,Ore.,Oregon,74,28
+42,PA,Pa.,Pennsylvania,210,71
+72,PR,P.R.,Puerto Rico,67,23
+44,RI,R.I.,Rhode Island,33,19
+45,SC,S.C.,South Carolina,59,50
+46,SD,S.D.,South Dakota,25,29
+47,TN,Tenn.,Tennessee,76,58
+48,TX,Texas,Texas,252,155
+49,UT,Utah,Utah,37,40
+50,VT,Vt.,Vermont,26,16
+78,VI,V.I.,Virgin Islands,12,9
+51,VA,Va.,Virginia,110,49
+53,WA,Wash.,Washington,118,44
+54,WV,W.Va.,West Virginia,37,34
+55,WI,Wis.,Wisconsin,96,42
+56,WY,Wyo.,Wyoming,18,29
+-2,_1,Other,"Unassigned, Other",3,0

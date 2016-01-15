@@ -5,7 +5,7 @@
         %th.date Date
         %th.state State
         %th.party Party
-        %th.n-delegates Delegates at stake
+        %th.n-delegates Delegates in state
     %tbody
       - for race in races
         %tr{'class': race.disabled? ? 'disabled' : '', 'data-race-day': race.race_day_id, 'data-party-name': race.party_name, 'data-state-name': race.state_name}
@@ -22,5 +22,5 @@
             %span.integer
               = race.n_delegates
             %span{'class': "dots dots-#{race.party_id.downcase}"}
-              -# yup, that's a zero-width space (zwsp) between each dot, so they can wrap
+              -# That's a zero-width space (zwsp) between each dot, so they can wrap
               = "\u200b•" * race.n_delegates
