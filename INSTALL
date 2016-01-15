@@ -1,5 +1,7 @@
 # To deploy to a fresh web server (see README.md for why).
-# Run these commands on a fresh server:
+# Run these commands on a fresh server, while logged in as "rails".
+#
+# (This isn't rails. This username is a misnomer.)
 
 sudo yum install -y git-core zlib zlib-devel gcc-c++ patch readline readline-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel nodejs
 
@@ -14,5 +16,8 @@ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 rbenv install 2.2.3
 rbenv global 2.2.3
 gem install bundler
+
+sudo mkdir /opt/election-2016
+sudo chown rails:rails /opt/election-2016
 
 # Then run `cap staging deploy` (or `cap production deploy`) on a dev machine
