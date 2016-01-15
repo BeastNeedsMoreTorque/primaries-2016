@@ -38,7 +38,7 @@ namespace :deploy do
     on roles(:all) do |host|
       execute("#{deploy_to}/current/script/run-production-command exit || true")
 
-      execute("(cd #{deploy_to}/current && screen -dm /usr/bin/env $(cat #{shared_path}/env | xargs) script/production-server >> #{shared_path}/production.log 2>&1)")
+      execute("(cd #{deploy_to}/current && bash -c '/usr/bin/env $(cat #{shared_path}/env | xargs) script/production-server >> #{shared_path}/production.log 2>&1 &')")
 
       execute("echo Started server")
     end
