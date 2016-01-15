@@ -1,37 +1,56 @@
-.tables{
+.tables {
   width: 100%;
-  clear:both;
+  clear: both;
+}
+.party-hed {
+  text-align: center;
+  font-size: 1.3em;
+  margin-bottom: 15px;
 }
 .t-pollster {
-  width: 45%;
+  width: 100%;
   table {
     border-collapse: collapse;
   }
+  thead tr {
+    height: 30px;
+  }
   td {
     text-align: left;
-    padding: 5px;
-    height: 10px;
-    border-bottom: 1px solid gray;
+    padding: 2px;
+    border-bottom: 1px solid #ccc;
   }
-  td.pollster{
-    width: 10%;
-    text-align: center;
-    border-left: 1px solid gray;
+  .cd-name {
+    width: 70%;
   }
-  tr:nth-child(even) {
-    background-color: #f1f1f1;
+  .pollster{
+    width: 35%;
+    text-align: right;
+    font-weight: bold;
   }
   th {
     text-align: left;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #999;
   }
   &.democratic {
+    box-sizing: border-box;
     float: left;
+    padding-right: 20px;
   }
   &.republican {
+    box-sizing: border-box;
     float: right;
+    padding-left: 20px;
+  }
+  @media (min-width: 500px) {
+    width: 50%;
   }
 }
 .cd-img {
-  height: 30px;
+  width: 30px;
+  img {
+    height: 30px;
+    vertical-align: middle;
+    padding: 2px;
+  }
 }
