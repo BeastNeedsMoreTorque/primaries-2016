@@ -1,10 +1,21 @@
 .primary-right-rail{
   width: 300px;
+  div.rail-banner{
+    background-color: black;
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+    div.banner-title {
+      display: inline-block;
+      font-size: 18px;
+    }
+  }
   div#countdown {
+    display: inline-block;
+    margin: auto;
     padding: 5px;
     text-align: right;
-    font-size:20px;
-    float: right;
+    font-size:16px;
     height: 50px;
     div {
       display: inline-block;
@@ -22,10 +33,10 @@
     font-size: 14px;
     display: inline-block;
     color: #5c6b95;
-    span.Dem{
+    span.dem{
       color: #5c6b95;
     }
-    span.GOP{
+    span.gop{
       color: #bc5c5c;
     }
   }
@@ -49,12 +60,17 @@
       color: #bc5c5c;
     }
     a.button{
+      text-decoration: none;
+      width: 260px;
       margin-top: 15px;
+      margin-left: auto;
+      margin-right: auto;
       border-radius: 5px;
       display: inline-block;
       color: white;
-      background-color: gray;
+      background-color: #e41a1c;
       padding: 10px;
+      text-align: center;
       &:hover{
         background-color: #000000;
       }
@@ -87,6 +103,14 @@
         padding: 1px;
         height: 8px;
         border-bottom: 1px solid #bdbdbd;
+      }
+      td.cd-name{
+        &.dem{
+          color: #5c6b95;
+        }
+        &.gop{
+          color: #bc5c5c;
+        }
       }
       td.pollster{
         font-weight: bold;
