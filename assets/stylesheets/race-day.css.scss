@@ -7,31 +7,30 @@ body.race-day {
 
   table.race {
     border-collapse: collapse;
-    width: 90%;
+    width: 100%;
+    th {
+      padding: 5px;
+    }
     td {
       text-align: left;
       padding: 5px;
       height: 10px;
-      border-bottom: 1px solid gray;
+      border-bottom: 1px solid #ccc;
     }
-    td.pollster{
+    .pollster{
       width: 10%;
-      text-align: center;
-      border-left: 1px solid gray;
+      text-align: right;
+      padding-right: 0;
     }
-    td.candidate{
+    .candidate{
       width: 30%;
+      padding-left: 0;
     }
-    td.n-votes{
-      border-left: 1px solid gray;
-      text-align: center;
+    .n-votes{
+      text-align: right;
     }
-    td.n-delegates{
-      border-left: 1px solid gray;
-      text-align: center;
-    }
-    tr:nth-child(even) {
-      background-color: #f1f1f1;
+    .n-delegates{
+      text-align: right;
     }
     th {
       text-align: left;
@@ -40,11 +39,22 @@ body.race-day {
   }
 
   ul.parties, ul.party-state {
-    display: flex;
-    -webkit-display: flex;
-
+    display: block;
+    overflow: auto;
     li {
-      width: 50%;
+      float: left;
+      display: block;
+      width: 100%;
+      @media (min-width: 650px) {
+        width: 50%;
+        box-sizing: border-box;
+        &:first-child {
+          padding-right: 20px;
+        }
+        &:last-child {
+          padding-left: 20px;
+        }
+      }
     }
   }
 

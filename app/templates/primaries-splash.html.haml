@@ -6,27 +6,37 @@
 
 %body
   %div.primary-splash-banner
-    %h1= "Happening Now: Iowa Caucus"
-    %p.intro-copy= "See live-updating results for the Caucus here."
-    %p.leading-democrat= "Current Democratic frontrunner: #{leading_democrat.name} with #{leading_democrat.n_delegates} delegates"
-    %p.leading-republican= "Current Republican frontrunner: #{leading_republican.name} with  #{leading_republican.n_delegates} delegates"
+    %div.header
+      %h1= "HAPPENING NOW: Iowa Caucus"
+      %div.tease-link
+        %a{href: "/2016/primaries/#{next_race_day.id}"}= "See live-updating results for the Caucus here."
     -parties.each do |party|
-      %h4= party.name
+      - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
       - race = races.find_by_party_and_state(party, cur_state)
-      %table.t-pollster
-        %thead
-          %tbody
-          %tr.candidate-names
-            - race.candidate_states.each do |cd_state|
-              - cd = cd_state.candidate
-              %td.candidate-{'data-candidate-id': cd.id}
-                %div.cd-name= cd.full_name
-                %div.cd-img img
-          %tr.candidate-votes
-            - race.candidate_states.each do |cd_state|
-              - cd = cd_state.candidate
-              %td.candidate-{'data-candidate-id': cd.id}
-                %div.cd-votes= "#{cd_state.n_votes} votes"
+      %div{class: "party-container #{party_abbrev} clearfix"}
+        -if party.adjective == 'Democratic'
+          %div.leading-candidate-img.left
+            %img{src: "/2016/images/#{leading_democrat.slug}.png", alt: ''}
+          %div.leading-candidate-delegates.left
+            %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
+            %p.frontrunner-cd= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
+        -else
+          %div.leading-candidate-img.left
+            %img{src: "/2016/images/#{leading_republican.slug}.png", alt: ''}
+          %div.leading-candidate-delegates.left
+            %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
+            %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
+        %div.candidate-delegates-lbl.left
+          %p= "VOTE"
+          %p= "COUNTS"
+        %div.candidate-position-listing.left.clearfix
+          - race.candidate_states.each do |cd_state|
+            - cd = cd_state.candidate
+            %div.left.candidate{'data-candidate-id': cd.id}
+              %table
+                %tr
+                  %td= cd.name
+                  %td= cd_state.n_votes
     %p
       Next race:
       %a{href: "/2016/primaries/#{next_race_day.id}"}= next_race_day.date.strftime('%A, %B %-d')
