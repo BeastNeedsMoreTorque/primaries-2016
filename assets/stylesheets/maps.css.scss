@@ -1,4 +1,9 @@
 .party-state-map {
+  svg {
+    display: block;
+    margin: 0 auto;
+  }
+
   g.counties path {
     stroke: white;
     stroke-width: 10; // divided by 10
