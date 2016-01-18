@@ -78,6 +78,13 @@ class BaseView
   def image_path(path); Assets.image_path(path); end
   def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
 
+  def map_svg(path)
+    # a .svg file includes a DOCTYPE, but we're including it inline so we don't
+    # want it.
+    header_length = 137
+    File.read("#{Paths.Assets}/maps/#{path}.svg")[header_length .. -1]
+  end
+
   def template_name
     t = self.class.name.gsub(/([A-Z])/) { "-#{$1.downcase}" }
     t[1..-6]

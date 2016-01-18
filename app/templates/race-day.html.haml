@@ -18,7 +18,8 @@
         %h3= state.name
         %ul.party-state
           - parties.each do |party|
-            %li.party-state
+            %li.party-state{'data-party-id': party.id, 'data-state-code': state.code}
+              .party-state-map!= map_svg("states/#{state.code}")
               - race = database.races.find_by_party_and_state(party, state)
               - text = race_text(race)
               - if text
