@@ -24,8 +24,9 @@ body {
 	height: $splash-height;
 	border-right: 1px solid black;
 	padding: $map-countdown-padding;
-	h3 {
+	h3,h5 {
 		margin: 0;
+		text-align: center;
 	}
 }
 
@@ -95,6 +96,13 @@ $leading-candidates-left: 90px;
 	margin-left: -20px;
 	margin-top: -30px;
 	height: 105px;
+	&.preview {
+		margin-left: 0;
+		margin-top: 0px;
+		img {
+			width: 85px;
+		}
+	}
 }
 
 .leading-candidate-delegates {
@@ -171,6 +179,11 @@ $candidate-position-listing-width: $parties-container-width - $candidate-img-wid
 	.leading-candidate-delegates {
 		p:first-child {
 			padding-top: 25px;
+		}
+		&.preview {
+			p:first-child {
+				margin-top: 10px;
+			}
 		}
 	}
 	.leading-candidate-img {

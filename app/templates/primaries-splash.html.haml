@@ -1,6 +1,7 @@
 !!! 5
 - dem_list = ['Clinton', 'Sanders', "O'Malley"]
 - gop_list = ["Trump", "Christie", "Bush", "Cruz", "Paul", "Rubio", "Carson", "Huckabee", "Kasich", "Fiorina", "Santorum"]
+- preview = true
 %html{lang: 'en'}
   %meta{charset: 'utf-8'}
   %title Huffington Post 2016 Primary Results
@@ -15,7 +16,10 @@
         %div.arrow-right
     %div.countdown-map-container.left
       %div.countdown-container
-        %h3= "POLLS CLOSE IN"
+        -if preview
+          %h3= "POLLS CLOSE IN"
+        -else
+          %h5= "POLLS CLOSED FOR"
         %table
           %tr
             %td= "01"
@@ -35,18 +39,30 @@
         - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
         - race = races.find_by_party_and_state(party, cur_state)
         %div{class: "party-container #{party_abbrev} clearfix"}
-          -if party.adjective == 'Democratic'
-            %div.leading-candidate-img.left
-              %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
-            %div.leading-candidate-delegates.left
-              %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
-              %p.frontrunner-cd= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
+          -if not preview
+            -if party.adjective == 'Democratic'
+              %div.leading-candidate-img.left
+                %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
+              %div.leading-candidate-delegates.left
+                %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
+                %p.frontrunner-cd= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
+            -else
+              %div.leading-candidate-img.left
+                %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
+              %div.leading-candidate-delegates.left
+                %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
+                %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
           -else
-            %div.leading-candidate-img.left
-              %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
-            %div.leading-candidate-delegates.left
-              %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
-              %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
+            -if party.adjective == 'Democratic'
+              %div.leading-candidate-img.left.preview
+                %img{src: image_path("democrats.svg"), alt: ''}
+              %div.leading-candidate-delegates.left.preview
+                %p.frontrunner-lbl="DEMOCRATIC CANDIDATES"
+            -else
+              %div.leading-candidate-img.left.preview
+                %img{src: image_path("republicans.svg"), alt: ''}
+              %div.leading-candidate-delegates.left.preview
+                %p.frontrunner-lbl="REPUBLICAN CANDIDATES"
 
           %div.left.candidate-position-lbl
             %p= "VOTES"
@@ -58,7 +74,7 @@
                   %table
                     %tr
                       %td= cd.name
-                      %td= rand(0..100000).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse#cd_state.n_votes
+                      %td= cd_state.n_votes#rand(0..100000).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
                 - if party_abbrev == 'gop' and race.candidate_states.count - 1 == idx
                   %div.candidate{'data-candidate-id': 99}
                     %table
