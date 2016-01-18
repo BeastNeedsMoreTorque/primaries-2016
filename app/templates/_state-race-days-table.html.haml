@@ -7,7 +7,7 @@
     - last_value = nil
     - for race in races
       - current_value = race.send(hide_repeats_column)
-      %tr{'class': "#{race.disabled? ? 'disabled' : ''} #{current_value == last_value ? 'key-repeated' : ''}", 'data-race-day': race.race_day_id, 'data-party-name': race.party_name, 'data-state-name': race.state_name}
+      %tr{'class': "#{race.disabled? ? 'disabled' : 'enabled'} #{current_value == last_value ? 'key-repeated' : ''}", 'data-race-day': race.race_day_id, 'data-party-name': race.party_name, 'data-state-name': race.state_name}
         - for column in columns
           %td{'class': "#{column.html_class} #{(column.html_class == hide_repeats_column && current_value == last_value) ? 'repeated' : ''}"}
             - case column.html_class
@@ -28,4 +28,8 @@
               %span{'class': "dots dots-#{race.party_id.downcase}"}
                 -# That's a zero-width space (zwsp) between each dot, so they can wrap
                 = "\u200b•" * race.n_delegates
+        %td{'class': "#{race.disabled? ? 'disabled' : 'enabled'}-button"}
+          %div.results-button
+            %span.results-button-desktop See results
+            &raquo;
         - last_value = current_value

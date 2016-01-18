@@ -5,24 +5,50 @@
 }
 
 .state-race-days {
+  .enabled {
+    cursor: pointer;
+    &:hover {
+      background: aliceblue;
+      .results-button {
+        border-color: #666;
+        color: #666;
+        background: #fff;
+      }
+    }
+  }
   td {
     border-top: 1px solid $tableBorderColor;
-    vertical-align: top;
+    vertical-align: middle;
     padding: .4rem;
-
     &.party {
       text-align: center;
     }
-
-    &.repeated {
+    &.repeated time {
       visibility: hidden;
     }
-
+    &.repeated.state {
+      visibility: hidden;
+    }
     &.n-delegates {
       vertical-align: middle;
     }
   }
-
+  .disabled-button {
+    visibility: hidden;
+  }
+  .results-button {
+    border: 1px solid #ccc;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    font-size: 13px;
+    color: #999;
+    white-space: nowrap;
+  }
+  .results-button-desktop {
+    @media (max-width: 600px) {
+      display: none;
+    }
+  }
   tr.key-repeated td {
     border-top-color: transparent;
   }
