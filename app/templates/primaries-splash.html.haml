@@ -14,8 +14,21 @@
         %a{href: "/2016/primaries/#{next_race_day.id}"}= "See live-updating results for the Caucus here."
         %div.arrow-right
     %div.countdown-map-container.left
-      %div.countdown
-      %div.map
+      %div.countdown-container
+        %h3= "POLLS CLOSE IN"
+        %table
+          %tr
+            %td= "01"
+            %td= "27"
+            %td= "06"
+          %tr
+            %td= "HR"
+            %td= "MIN"
+            %td= "SEC"
+      %div.map-container
+        %span.counties-reporting= "TK COUNTIES REPORTING"
+        %img{src: image_path("tmp-ia-map.png"), alt: ''}
+        %span.footnote= "TK% PRECINCTS REPORTING"
     %div.parties-container.left
       -parties.each do |party|
         - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
