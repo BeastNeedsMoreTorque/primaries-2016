@@ -19,7 +19,7 @@ task :reset_env do
     # prior to 2016-01-31, but we want to render pages before that date. But
     # AP_TEST=true doesn't actually solve that problem. Really, we need to
     # maintain our own list of candidates somewhere.
-    execute "echo AP_TEST=true" >> #{shared_path}/env"
+    execute "echo AP_TEST=true >> #{shared_path}/env"
   end
 end
 
