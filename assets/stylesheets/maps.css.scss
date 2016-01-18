@@ -20,5 +20,13 @@
     // JavaScript will position this text correctly; only JavaScript can
     // measure the width, because only JavaScript has the font.
     fill: none;
+    font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+
+    &.above, &.left, &.right, &.below {
+      fill: #333;
+      stroke: white;
+      stroke-width: 0.1;
+    }
   }
 }
