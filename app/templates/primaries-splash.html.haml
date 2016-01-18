@@ -27,7 +27,8 @@
             %td= "SEC"
       %div.map-container
         %span.counties-reporting= "TK COUNTIES REPORTING"
-        %img{src: image_path("tmp-ia-map.png"), alt: ''}
+        %div.map
+          != map_svg("states/IA")
         %span.footnote= "TK% PRECINCTS REPORTING"
     %div.parties-container.left
       -parties.each do |party|

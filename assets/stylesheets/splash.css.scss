@@ -1,6 +1,6 @@
 @import '_variables';
 
-$splash-height: 240px;
+$splash-height: 245px;
 $splash-width: 977px;
 $ele-bg: #eee;
 
@@ -52,6 +52,20 @@ body {
 .map-container {
 	margin-top: 10px;
 	width: 100%;
+	.map {
+		svg {
+			width: $map-countdown-width;
+			height: $map-countdown-width - 50px;
+		  g.counties path {
+		    stroke: white;
+		    stroke-width: 10; // divided by 10
+		    fill: #eee;
+		  }
+		  text {
+		  	opacity: 0;
+		  }
+		}
+	}
 	img {
 		width: 100%;
 	}
@@ -62,6 +76,7 @@ body {
 	span.footnote {
 		color: #999;
 		font-size: 11px;
+		margin-top: -20px;
 	}
 }
 
@@ -78,11 +93,9 @@ $leading-candidates-left: 90px;
 .leading-candidate-img {
 	position: absolute;	
 	margin-left: -20px;
-	margin-top: -12px;
-	width: $candidate-img-width;
-	img {
-		width: 100%;
-	}
+	margin-top: -30px;
+	height: 105px;
+	//width: $candidate-img-width;
 }
 
 .leading-candidate-delegates {
@@ -143,11 +156,11 @@ $candidate-position-listing-width: $parties-container-width - $candidate-img-wid
 	background-color: $ele-bg;
 	border: 1px solid black;
 	margin-left: 20px;
-	margin-top: 20px;
+	margin-top: 25px;
 	&.dem {
 		height: 90px;
 		.leading-candidate-delegates {
-			padding-top: 20px;
+			padding-top: 15px;
 		}
 		.leading-candidate-img {
 			padding-top: 4px;
