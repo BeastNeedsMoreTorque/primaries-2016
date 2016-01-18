@@ -16,19 +16,18 @@
       %div{class: "party-container #{party_abbrev} clearfix"}
         -if party.adjective == 'Democratic'
           %div.leading-candidate-img.left
-            %img{src: "/2016/images/#{leading_democrat.slug}.png", alt: ''}
+            %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
           %div.leading-candidate-delegates.left
             %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
             %p.frontrunner-cd= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
         -else
           %div.leading-candidate-img.left
-            %img{src: "/2016/images/#{leading_republican.slug}.png", alt: ''}
+            %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
           %div.leading-candidate-delegates.left
             %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
             %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
         %div.candidate-delegates-lbl.left
-          %p= "VOTE"
-          %p= "COUNTS"
+          %p= "VOTES"
         %div.candidate-position-listing.left.clearfix
           - race.candidate_states.each do |cd_state|
             - cd = cd_state.candidate
@@ -37,6 +36,3 @@
                 %tr
                   %td= cd.name
                   %td= cd_state.n_votes
-    %p
-      Next race:
-      %a{href: "/2016/primaries/#{next_race_day.id}"}= next_race_day.date.strftime('%A, %B %-d')

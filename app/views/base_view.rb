@@ -75,6 +75,7 @@ class BaseView
   end
 
   def asset_path(path); Assets.asset_path(path); end
+  def image_path(path); Assets.image_path(path); end
   def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
 
   def template_name
