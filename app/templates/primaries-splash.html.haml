@@ -27,8 +27,7 @@
             %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
             %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
         %div.candidate-delegates-lbl.left
-          %p= "VOTE"
-          %p= "COUNTS"
+          %p= "VOTES"
         %div.candidate-position-listing.left.clearfix
           - race.candidate_states.each do |cd_state|
             - cd = cd_state.candidate
@@ -37,6 +36,3 @@
                 %tr
                   %td= cd.name
                   %td= cd_state.n_votes
-    %p
-      Next race:
-      %a{href: "/2016/primaries/#{next_race_day.id}"}= next_race_day.date.strftime('%A, %B %-d')
