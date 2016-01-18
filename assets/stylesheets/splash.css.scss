@@ -1,6 +1,6 @@
 @import '_variables';
 
-$splash-height: 90px;
+$splash-height: 140px;
 $splash-width: 977px;
 body {
 	@include body-copy;
@@ -14,65 +14,53 @@ body {
   @include desktop-splash-base;
 }
 
-.party-container {
-	background-color: #eee;
-	border: 1px solid black;
-	margin: 5px;
-	margin-left: 20px;
-	margin-top: 20px;
-	height: $splash-height;
-	overflow: hidden;
-	&.dem {
-		.frontrunner-lbl { color: $strongDem; }
-	}
-	&.gop {
-		.frontrunner-lbl { color: $strongGOP; }
-	}
+.countdown-map-container {
+	width: 250px;
+	height: 260px;
+	border-right: 1px solid black;
 }
 
-.leading-candidate-img,
-.leading-candidate-delegates,
-.candidate-delegates-lbl,
-.candidate-position-listing {
-	margin-left: 10px;	
+.parties-container {
+	width: $splash-width - 252;
 }
 
 .leading-candidate-img {
 	position: absolute;	
 	margin-left: -20px;
 	margin-top: -12px;
-	width: 110px;
+	width: 95px;
+	img {
+		width: 100%;
+	}
 }
 
 .leading-candidate-delegates {
 	font-weight: bold;
-	margin-left: 90px;
+	margin-left: 75px;
 	padding-right: 10px;
-	height: 100%;
 	width: 238px;
 	p {
 		margin-top: 0;
 		margin-bottom: 5px;
 	}
-	p:first-child {
-		margin-top: $splash-height * .25;
-	}
-	border-right: 1px solid #999;
 }
 
 .candidate-delegates-lbl {
 	font-weight: bold;
-	height: 100%;
-
+	text-align: center;
 	p:first-child {
-		margin-top: $splash-height * .4;
+		margin-top: 5px;
+		margin-bottom: 0;
+		padding-bottom: 5px;
 	}
 }
 
 .candidate-position-listing {
-	width: 520px;
+	width: 379px;
+	border-left: 1px solid #999;
+	height: 100%;
 	.candidate {
-		width: 77px;
+		width: 118px;
 		background: #fff;
 		margin: 3px;
 		margin-right: 5px;
@@ -87,8 +75,44 @@ body {
 					&:last-child {
 						text-align: right;
 					}
+					&.see-all {
+						text-align: left;
+					}
 				}
 			}
 		}
+	}
+}
+
+.party-container {
+	background-color: #eee;
+	border: 1px solid black;
+	margin-left: 20px;
+	margin-top: 10px;
+	&.dem {
+		height: 90px;
+		.leading-candidate-delegates {
+			padding-top: 20px;
+		}
+		.leading-candidate-img {
+			padding-top: 4px;
+		}
+	}
+	&.gop {
+		height: 145px;
+		.leading-candidate-delegates {
+			padding-top: 40px;
+		}
+		.leading-candidate-img {
+			padding-top: 20px;
+		}
+	}
+	
+	overflow: hidden;
+	&.dem {
+		.frontrunner-lbl { color: $strongDem; }
+	}
+	&.gop {
+		.frontrunner-lbl { color: $strongGOP; }
 	}
 }
