@@ -6,13 +6,12 @@
 
 .state-race-days {
   .enabled {
-    cursor: pointer;
+    background: aliceblue;
     &:hover {
-      background: aliceblue;
+      background: darken(aliceblue, 5%);
       .results-button {
-        border-color: #666;
-        color: #666;
-        background: #fff;
+        border-color: #999;
+        color: #999;
       }
     }
   }
@@ -37,6 +36,7 @@
     visibility: hidden;
   }
   .results-button {
+    background: #fff;
     border: 1px solid #ccc;
     text-transform: uppercase;
     padding: 2px 6px;

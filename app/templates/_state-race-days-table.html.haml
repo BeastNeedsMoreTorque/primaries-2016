@@ -19,9 +19,13 @@
                 %span
                   %time{datetime: race.race_day_id}= race.date.strftime('%B %-d')
             - when 'state'
-              = race.state_name
+              - if race.enabled?
+                %a{href: "/2016/primaries/#{race.race_day_id}"}
+                  = race.state_name
             - when 'party'
-              = race.party_name[0]
+              - if race.enabled?
+                %a{href: "/2016/primaries/#{race.race_day_id}"}
+                  = race.party_name[0]
             - when 'n-delegates'
               %span.integer
                 = race.n_delegates
