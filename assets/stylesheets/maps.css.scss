@@ -1,0 +1,19 @@
+.party-state-map {
+  g.counties path {
+    stroke: white;
+    stroke-width: 10; // divided by 10
+    fill: #eee;
+  }
+
+  circle {
+    fill: #666;
+    stroke: #666;
+    stroke-width: 3;
+  }
+
+  text {
+    // JavaScript will position this text correctly; only JavaScript can
+    // measure the width, because only JavaScript has the font.
+    fill: none;
+  }
+}

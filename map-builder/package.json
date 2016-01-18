@@ -1,0 +1,27 @@
+{
+  "name": "election-2016-map-builder",
+  "version": "0.0.1",
+  "description": "Build map assets for election-2016",
+  "scripts": {
+    "main": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huffpostdata/election-2016.git"
+  },
+  "author": "Adam Hooper <adam.hooper@huffingtonpost.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/huffpostdata/election-2016/issues"
+  },
+  "homepage": "https://github.com/huffpostdata/election-2016#readme",
+  "dependencies": {
+    "coffee-script": "^1.10.0",
+    "d3": "^3.5.12",
+    "d3-geo-projection": "^0.2.16",
+    "shapefile": "^0.3.0",
+    "simple-get": "^1.4.3",
+    "tar-fs": "^1.9.0",
+    "topojson": "^1.6.20"
+  }
+}
