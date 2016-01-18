@@ -16,13 +16,13 @@
       %div{class: "party-container #{party_abbrev} clearfix"}
         -if party.adjective == 'Democratic'
           %div.leading-candidate-img.left
-            %img{src: "/2016/images/#{leading_democrat.slug}.png", alt: ''}
+            %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
           %div.leading-candidate-delegates.left
             %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
             %p.frontrunner-cd= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
         -else
           %div.leading-candidate-img.left
-            %img{src: "/2016/images/#{leading_republican.slug}.png", alt: ''}
+            %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
           %div.leading-candidate-delegates.left
             %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
             %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"

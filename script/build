@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'fileutils'
+
 require_relative '../lib/env'
 
 $logger.info('Starting build')
@@ -15,7 +17,8 @@ require_relative '../app/models/database'
 
 database = Database.load
 
-Assets.clear
+FileUtils.rm_rf(Paths.Dist)
+
 Assets.build(database) # HTML pages depend on asset paths, which include hashes of contents
 
 $logger.info('Building views...')

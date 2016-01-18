@@ -100,6 +100,10 @@ Dir["#{Paths.Dist}/**/*.*"].select{ |s| s !~ /\.html$/ }.sort.each do |filename|
     'text/css; charset=utf-8'
   elsif relative_path =~ /\.png$/
     'image/png'
+  elsif relative_path =~ /\.jpg$/
+    'image/jpeg'
+  elsif relative_path =~ /\.gif$/
+    'image/gif'
   elsif relative_path =~ /\.svg$/
     'image/svg+xml'
   elsif relative_path =~ /\.js$/
