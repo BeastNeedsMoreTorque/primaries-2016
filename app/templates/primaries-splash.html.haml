@@ -47,19 +47,20 @@
             %div.leading-candidate-delegates.left
               %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
               %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
+
+          %div.left.candidate-position-lbl
+            %p= "VOTES"
           %div.candidate-position-listing.left.clearfix
-            %div.candidate-delegates-lbl
-              %p= "VOTES"
             - race.candidate_states.each_with_index do |cd_state, idx|
               - cd = cd_state.candidate
               - if (party_abbrev == 'gop' and gop_list.include? cd.name) or (party_abbrev == 'dem' and dem_list.include? cd.name)
-                %div.left.candidate{'data-candidate-id': cd.id}
+                %div.candidate{'data-candidate-id': cd.id}
                   %table
                     %tr
                       %td= cd.name
                       %td= rand(0..100000).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse#cd_state.n_votes
                 - if party_abbrev == 'gop' and race.candidate_states.count - 1 == idx
-                  %div.left.candidate{'data-candidate-id': 99}
+                  %div.candidate{'data-candidate-id': 99}
                     %table
                       %tr
                         %td.see-all{:colspan => 3}

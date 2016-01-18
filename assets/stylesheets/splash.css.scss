@@ -1,6 +1,6 @@
 @import '_variables';
 
-$splash-height: 245px;
+$splash-height: 240px;
 $splash-width: 977px;
 $ele-bg: #eee;
 
@@ -44,7 +44,7 @@ body {
 			}
 		}
 		tr:first-child {
-			font-size: 40px;
+			font-size: 36px;
 		}
 	}	
 }
@@ -55,7 +55,7 @@ body {
 	.map {
 		svg {
 			width: $map-countdown-width;
-			height: $map-countdown-width - 50px;
+			height: $map-countdown-width - 60px;
 		  g.counties path {
 		    stroke: white;
 		    stroke-width: 10; // divided by 10
@@ -95,7 +95,6 @@ $leading-candidates-left: 90px;
 	margin-left: -20px;
 	margin-top: -30px;
 	height: 105px;
-	//width: $candidate-img-width;
 }
 
 .leading-candidate-delegates {
@@ -103,35 +102,45 @@ $leading-candidates-left: 90px;
 	margin-left: $leading-candidates-left;
 	padding-right: 10px;
 	width: $leading-candidates-width;
+	border-right: 1px solid #999;
+	height: 100%;
 	p {
 		margin-top: 0;
 		margin-bottom: 5px;
 	}
 }
 
-.candidate-delegates-lbl {
+$candidate-position-lbl-width: 65px;
+
+.candidate-position-lbl {
 	font-weight: bold;
 	text-align: center;
+	width: $candidate-position-lbl-width;
 	p:first-child {
-		margin-top: 5px;
-		margin-bottom: 0;
-		padding-bottom: 5px;
+		padding-top: 30px;
 	}
 }
 
-$candidate-position-listing-width: $parties-container-width - $candidate-img-width - $leading-candidates-width - $leading-candidates-left + 60;
+$candidate-position-listing-width: $parties-container-width - $candidate-img-width - $leading-candidates-width - $leading-candidates-left - $candidate-position-lbl-width + 62px;
 
 .candidate-position-listing {
 	width: $candidate-position-listing-width;
-	border-left: 1px solid #999;
 	height: 100%;
 	margin: 0 auto;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+
 	.candidate {
-		width: 116px;
+		width: 130px;
 		background: #fff;
 		margin: 3px;
 		margin-right: 5px;
 		font-size: 13px;
+
 		table {
 			width: 100%;
 			font-weight: bold;
@@ -156,29 +165,25 @@ $candidate-position-listing-width: $parties-container-width - $candidate-img-wid
 	background-color: $ele-bg;
 	border: 1px solid black;
 	margin-left: 20px;
-	margin-top: 25px;
-	&.dem {
-		height: 90px;
-		.leading-candidate-delegates {
-			padding-top: 15px;
-		}
-		.leading-candidate-img {
-			padding-top: 4px;
+	margin-top: 15px;
+
+	height: 110px;
+	.leading-candidate-delegates {
+		p:first-child {
+			padding-top: 25px;
 		}
 	}
-	&.gop {
-		height: 120px;
-		.leading-candidate-delegates {
-			padding-top: 30px;
-		}
-		.leading-candidate-img {
-			padding-top: 10px;
-		}
+	.leading-candidate-img {
+		padding-top: 8px;
 	}
 	
-	overflow: hidden;
 	&.dem {
 		.frontrunner-lbl { color: $strongDem; }
+		.candidate-position-listing {
+			.candidate:first-child {
+				margin-top: 16px;//account for only 3 candidates and vertically center
+			}
+		}
 	}
 	&.gop {
 		.frontrunner-lbl { color: $strongGOP; }
