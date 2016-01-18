@@ -1,3 +1,5 @@
+//= require './wait_for_font_then.js'
+
 $(function() {
   $('a[href="#state-race-days-by-date"]').click(function(ev) {
     ev.preventDefault();
@@ -30,28 +32,7 @@ $(function() {
     reset_height();
   }
 
-  var $wait_for_fonts_span = $('<span class="waiting-for-fonts-to-load" style="display:none; font-family: foo,Arial;"></span>')
-    .appendTo('body');
-  function waitForFontThen(font_name, callback) {
-    // Render "." in a monospace font and in the desired font. Presumably, the
-    // desired font's <span> will be thinner than a monospace one.
-    var $span1 = $('<span class="wait-for-font-mono" style="position: absolute; visibility: hidden; font-family: monospace; font-size: 20px;">.</span>')
-      .appendTo('body');
-    var $span2 = $('<span class="wait-for-font-non-mono" style="position: absolute; visibility: hidden; font-family: ' + font_name + ', monospace; font-size: 20px;">.</span>')
-      .appendTo('body');
-
-    var loaded = $span1.width() != $span2.width();
-    $span1.remove();
-    $span2.remove();
-
-    if (loaded) {
-      callback();
-    } else {
-      window.setTimeout(function() { waitForFontThen(font_name, callback); }, 50);
-    }
-  }
-
-  waitForFontThen('Source Sans Pro', function() {
+  wait_for_font_then('Source Sans Pro', function() {
     if (window.location.hash == '#state-race-days-by-state') {
       switch_to('state');
     } else {
