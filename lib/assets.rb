@@ -13,6 +13,7 @@ module Assets
   SprocketsAssets = %w(
     javascripts/stats.js
     javascripts/main.js
+    javascripts/splash.js
     javascripts/primary-right-rail.js
     stylesheets/main.css
     stylesheets/splash.css

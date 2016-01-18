@@ -21,10 +21,10 @@
         -else
           %h5= "POLLS CLOSED FOR"
         %table
-          %tr
-            %td= "01"
-            %td= "27"
-            %td= "06"
+          %tr#countdown
+            %td.hours= "01"
+            %td.minutes= "27"
+            %td.seconds= "06"
           %tr
             %td= "HR"
             %td= "MIN"
@@ -81,3 +81,5 @@
                       %tr
                         %td.see-all{:colspan => 3}
                           %a{href:"/2016/primaries/#{next_race_day.id}"}= "All candidates"
+  %script{src: asset_path('splash.js')}
+
