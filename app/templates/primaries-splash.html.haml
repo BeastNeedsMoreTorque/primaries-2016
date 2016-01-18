@@ -10,7 +10,10 @@
 %body
   %div.primary-splash-banner
     %div.header
-      %h1= "HAPPENING NOW: Iowa Caucus"
+      -if preview
+        %h1= "HAPPENING TODAY: Iowa Caucus"
+      -else
+        %h1= "HAPPENING NOW: Iowa Caucus"
       %div.tease-link
         %a{href: "/2016/primaries/#{next_race_day.id}"}= "See live-updating results for the Caucus here."
         %div.arrow-right
