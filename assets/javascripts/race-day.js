@@ -252,7 +252,7 @@ function poll_results() {
       var n_votes = arr[2];
       var n_delegates = arr[3];
 
-      var key = state_code + '-' + candidate_id;
+      var key = candidate_id + '-' + state_code;
       var elems = els_by_candidate_id_and_state_code[key];
       if (elems) {
         elems.n_votes.text(n_votes);
@@ -274,15 +274,13 @@ function poll_results() {
 
       var key = party_id + '-' + state_code;
 
-      var elems = els_by_candidate_id_and_state_code[key];
+      var elems = els_by_party_id_and_state_code[key];
       if (elems) {
         elems.n_reporting.text(n_reporting);
         elems.n_total.text(n_total);
         elems.last_updated.text(last_updated.toISOString());
       }
     });
-
-    // TODO
   }
 
   function handle_poll_results(json) {
