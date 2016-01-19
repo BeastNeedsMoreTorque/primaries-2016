@@ -169,8 +169,10 @@ body {
 
 	&.dem {
 		.frontrunner-lbl { color: $strongDem; }
+		table.leader {background: $weakDem;}
 	}
 	&.gop {
 		.frontrunner-lbl { color: $strongGOP; }
+		table.leader {background: $weakGOP;}
 	}
 }
