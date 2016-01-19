@@ -22,7 +22,7 @@
           %div{class: "n-delegates-bar #{party.id.downcase}", :style => "width: #{cd.n_delegates.to_f / party.n_delegates_total.to_f * 100}%"}
         %span.n-delegates-count= cd.n_delegates
 
-%a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Live results
+%a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Live results
 %h4 Coming Up
 - coming = following_races(next_race_day.id)
 - limit = coming.length > 3 ? 0..2 : 0..coming.length - 1

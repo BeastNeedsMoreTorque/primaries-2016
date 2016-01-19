@@ -1,7 +1,27 @@
 @import '_variables';
 
+.project-hed {
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 70px;
+  a {
+    text-decoration: none;
+    color: #000;
+    &:hover {
+      border-bottom: 1px solid #ababab;
+    }
+  }
+}
+
+.date-hed {
+  text-align: center;
+  margin-bottom: 0;
+}
+
 .main-hed--race-day {
   text-align: center;
+  margin-top: 0;
+  font-size: 3em;
 }
 
 .state-race-days {

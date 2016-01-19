@@ -1,9 +1,15 @@
 -# Called with a RaceDayPageGenerator::HtmlContext
 #main
-  %h1.main-hed--race-day= page_title
+  %h1.project-hed
+    %a{href: '/2016/primaries'} Presidential Primaries
+  %h3.date-hed= race_date
+  %h1.main-hed--race-day= hed
+
+  %p.intro-date Published Monday, Jan. TK, 9:00 AM EDT
+  %p.intro-date Last updated Monday, Jan. TK, 10:00 AM EDT
 
   - if body
-    %p= body
+    %p.intro-copy= body
 
   %ul.parties
     - parties.each do |party|
