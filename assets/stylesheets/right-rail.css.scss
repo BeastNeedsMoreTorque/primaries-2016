@@ -46,6 +46,22 @@
     font-size: 18px;
     display: inline-block;
   }
+  a.button{
+    text-decoration: none;
+    width: 260px;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    display: inline-block;
+    color: white;
+    background-color: #e41a1c;
+    padding: 10px;
+    text-align: center;
+    &:hover{
+      background-color: #000000;
+    }
+  }
   div.container {
     background-color: #f1f1f1;
     padding: 10px;
@@ -58,22 +74,6 @@
     }
     li.live-state-name.Republicans{
       color: #bc5c5c;
-    }
-    a.button{
-      text-decoration: none;
-      width: 260px;
-      margin-top: 15px;
-      margin-left: auto;
-      margin-right: auto;
-      border-radius: 5px;
-      display: inline-block;
-      color: white;
-      background-color: #e41a1c;
-      padding: 10px;
-      text-align: center;
-      &:hover{
-        background-color: #000000;
-      }
     }
     a.upcoming-link{
       text-decoration: none;
