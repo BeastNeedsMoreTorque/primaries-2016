@@ -30,5 +30,6 @@ $(function() {
     updateCountdown();
     var timeinterval = setInterval(updateCountdown, 1000);
   }
-  initClock('countdown', iowa_starts);
+  //initClock('countdown', iowa_starts);
+  new pym.Child();
 });
