@@ -79,14 +79,15 @@ body {
 }
 
 .tease-link {
-	display: block !important;
-	margin: 20px;
+	padding: 20px;
+	margin: 5px;
 	text-align: center;
+	background-color: red;
+	&:hover {
+		background-color: lighten(red, 20%);
+	}
 	a {
-		padding: 20px !important;
 		text-decoration: none;
-		&:hover {
-			background-color: lighten(red, 20%);
-		}
+		color: white;
 	}
 }
