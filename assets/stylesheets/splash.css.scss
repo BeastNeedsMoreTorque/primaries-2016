@@ -23,7 +23,6 @@ body {
 
 .primary-splash-banner {
   @include desktop-splash-base;
-  margin-top: 10px;
 }
 
 .countdown-map-container {
@@ -90,7 +89,7 @@ body {
 }
 
 .parties-container {
-	width: $splash-width - $map-countdown-width;
+	width: 100%;
 	display: flex;
 	flex-flow: column;
 	display: -webkit-flex;
