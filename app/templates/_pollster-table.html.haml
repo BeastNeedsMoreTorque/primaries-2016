@@ -1,0 +1,17 @@
+.t-pollster
+  %h4.party-hed= party.name
+  %table
+    %thead
+      %tr
+        %th{colspan: "2"}
+          Candidate
+        %th.pollster
+          Pollster average
+    %tbody
+      - party.candidates.each do |cd|
+        - if cd.poll_percent
+          %tr.rep-candidate
+            %td.cd-img
+              %img{src: image_path("#{cd.slug}.png"), alt: ''}
+            %td.cd-name= cd.full_name
+            %td.pollster= "#{cd.poll_percent}%"

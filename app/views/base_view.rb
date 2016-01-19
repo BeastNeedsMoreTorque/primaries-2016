@@ -19,7 +19,6 @@ class BaseView
   def page_title; '2016 Election Coverage'; end
 
   def layout; nil; end
-  def layout_stylesheets; []; end
 
   # e.g., for AllPrimariesView, "all-primaries"
   def body_class
