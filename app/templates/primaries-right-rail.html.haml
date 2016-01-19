@@ -15,7 +15,7 @@
         - races.each do |rc|
           %span.event-name= "#{rc.state_name} #{rc.race_type}(#{rc.party_id})"
       %div
-        %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} See full live updating results for the races here
+        %a.button{target: '_parent', href: "/2016/primaries"} See full live-updating results for the races here
     %div.container
       - test_views = {:live => "2016-02-01", :preview => current_race_day}
       - if next_race_day.id == test_views[:preview]#'2016-02-01' or current_race_day
