@@ -34,6 +34,7 @@ $splash-ele-bg: #eee;
   flex-wrap: wrap; //wraps left to right
   -webkit-justify-content: center;
   justify-content: center; //centers vertically if there is not a full column
+  -webkit-align-content: start;
   align-content: start;
 }
 
@@ -75,7 +76,7 @@ $splash-ele-bg: #eee;
 		background-color: black;
 		color: white;
 		padding: 5px;
-		h1 {
+		h1, h5, h4 {
 			display: inline;
 			margin: 0;
 		}

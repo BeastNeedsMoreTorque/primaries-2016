@@ -13,19 +13,28 @@ body {
 	border-bottom: 1px solid black;
 	font-weight: bold;
 	margin: 5px;
+	text-align: center;
 	span {
 		&:not(.lbl) {
-			font-size: 30px;
+			font-size: 20px;
 		}
 		&.lbl {
-			font-size: 15px;
+			font-size: 12px;
 			padding-top: 10px;
 		}
 	}
 }
 
 .parties-container {
-	@include vertical-center-flex;
+	//@include vertical-center-flex;
+	display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-justify-content: center;
+	width: 100%;
+
 }
 
 .party-container {
@@ -36,10 +45,12 @@ body {
 
 .frontrunner-lbl {
 	margin: 5px;
+	margin-bottom: 0;
 }
 
 .img-stats-container {
 	@include vertical-center-flex;
+	margin-top: -10px;
 }
 
 .leading-candidate-img {
@@ -56,11 +67,27 @@ body {
 .dem {
 	.frontrunner-cd, .frontrunner-num { color: $strongDem; }
 }
+
 .gop {
 	.frontrunner-cd, .frontrunner-num { color: $strongGOP; }
 }
 
+.no-results {
+	h4 {
+		text-align: center;
+	}
+	margin: 0 auto;
+}
+
 .tease-link {
 	display: block !important;
-	margin: 5px;
+	margin: 20px;
+	text-align: center;
+	a {
+		padding: 20px !important;
+		text-decoration: none;
+		&:hover {
+			background-color: lighten(red, 20%);
+		}
+	}
 }

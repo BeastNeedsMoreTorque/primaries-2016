@@ -11,26 +11,26 @@
   %div.primary-mobile-ad
     %div.header
       -if preview
-        %h1= "HAPPENING TODAY: Iowa Caucus"
+        %h4= "HAPPENING TODAY: Iowa Caucus"
       -else
-        %h1= "HAPPENING NOW: Iowa Caucus"
+        %h4= "HAPPENING NOW: Iowa Caucus"
     %div.countdown-container
       -if preview
         %span.lbl= "POLLS CLOSE IN:"
       -else
         %span.lbl= "POLLS CLOSED FOR:"
-        %span.hours= "01"
-        %span.lbl= "HR"
-        %span.minutes= "27"
-        %span.lbl= "MIN"
-        %span.seconds= "06"
-        %span.lbl= "SEC"
+      %span.hours= "01"
+      %span.lbl= "HR"
+      %span.minutes= "27"
+      %span.lbl= "MIN"
+      %span.seconds= "06"
+      %span.lbl= "SEC"
     %div.parties-container
-      -parties.each do |party|
-        - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
-        - race = races.find_by_party_and_state(party, cur_state)
-        %div{class: "party-container #{party_abbrev} clearfix"}
-          -if not preview
+      -if not preview
+        -parties.each do |party|
+          - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
+          - race = races.find_by_party_and_state(party, cur_state)
+          %div{class: "party-container #{party_abbrev} clearfix"}
             -if party.adjective == 'Democratic'
               %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
               %div.img-stats-container
@@ -47,16 +47,8 @@
                 %div.leading-candidate-delegates
                   %p.frontrunner-cd= "#{leading_republican.name.upcase}"
                   %p.frontrunner-num= " #{leading_republican.n_delegates} delegates"
-          -else
-            -if party.adjective == 'Democratic'
-              %div.leading-candidate-img.preview
-                %img{src: image_path("democrats.svg"), alt: ''}
-              %div.leading-candidate-delegates.left.preview
-                %p.frontrunner-lbl="DEMOCRATIC CANDIDATES"
-            -else
-              %div.leading-candidate-img.preview
-                %img{src: image_path("republicans.svg"), alt: ''}
-              %div.leading-candidate-delegates.left.preview
-                %p.frontrunner-lbl="REPUBLICAN CANDIDATES"
+      -else
+        %div.no-results
+          %h4= "NO PRECINCTS REPORTING"
     %div.tease-link
-      %a{href: "/2016/primaries/#{next_race_day.id}"}= "See live-updating results for the Caucus here."
+      %a{href: "/2016/primaries/#{next_race_day.id}"}= "View The Latest Results"
