@@ -28,7 +28,7 @@ body {
 
 .countdown-map-container {
 	width: $map-countdown-width;
-	height: $splash-height;
+	//height: $splash-height;
 	border-right: 1px solid black;
 	padding: $map-countdown-padding;
 	h3,h5 {
@@ -112,14 +112,17 @@ body {
 .leading-candidate-delegates {
 	font-weight: bold;
 	padding: 10px;
-	width: 110px;
 	border-right: 1px solid #999;
 	height: 100%;
 	p {
 		margin-top: 0;
 		margin-bottom: 5px;
 	}
-	@include vertical-center-flex;
+	width: 135px;
+	&.preview {
+		width: 110px;
+		@include vertical-center-flex;
+	}
 }
 
 

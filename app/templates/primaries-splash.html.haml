@@ -1,7 +1,7 @@
 !!! 5
 - dem_list = ['Clinton', 'Sanders', "O'Malley"]
 - gop_list = ["Trump", "Christie", "Bush", "Cruz", "Paul", "Rubio", "Carson", "Huckabee", "Kasich", "Fiorina", "Santorum"]
-- preview = true
+- preview = !true
 %html{lang: 'en'}
   %meta{charset: 'utf-8'}
   %title Huffington Post 2016 Primary Results
@@ -49,13 +49,15 @@
                   %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
                 %div.leading-candidate-delegates
                   %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
-                  %p.frontrunner-cd= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
+                  %p.frontrunner-cd= "#{leading_democrat.name}"
+                  %p.frontrunner-num= "#{leading_democrat.n_delegates} delegates"
               -else
                 %div.leading-candidate-img
                   %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
                 %div.leading-candidate-delegates
                   %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
-                  %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
+                  %p.frontrunner-cd= "#{leading_republican.name}"
+                  %p.frontrunner-num= " #{leading_republican.n_delegates} delegates"
             -else
               -if party.adjective == 'Democratic'
                 %div.leading-candidate-img.preview
@@ -86,5 +88,5 @@
                           %td.see-all{:colspan => 3}
                             %a{href:"/2016/primaries/#{next_race_day.id}"}= "All candidates"
 
-  %script{:type => "text/javascript", :src => "http://staging-elections.huffpost.net/2016/javascripts/pym.min.js"}
+  %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script{src: asset_path('splash.js')}
