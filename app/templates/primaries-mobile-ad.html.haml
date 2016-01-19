@@ -51,7 +51,7 @@
         %div.no-results
           %h4= "NO PRECINCTS REPORTING"
   %div.tease-link
-    %a{href: "/2016/primaries/#{next_race_day.id}"}= "View The Latest Results"
+    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "View The Latest Results"
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script{src: asset_path('splash.js')}
