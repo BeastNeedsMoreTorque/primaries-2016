@@ -14,15 +14,14 @@
   %ul.parties
     - parties.each do |party|
       %li.party
-        %h2= party.name
 
   %ul.states
     - race_day_states.each do |state|
       %li.state
-        %h3= state.name
         %ul.party-state
           - parties.each do |party|
             %li.party-state{'data-party-id': party.id, 'data-state-code': state.code}
+              %h3= state.name + " " + party.name
               .party-state-map!= map_svg("states/#{state.code}")
               - race = database.races.find_by_party_and_state(party, state)
               - text = race_text(race)
