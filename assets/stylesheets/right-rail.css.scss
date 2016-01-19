@@ -76,6 +76,7 @@
       }
     }
     a.upcoming-link{
+      text-decoration: none;
       width: 100%;
       display: inline-block;
       .upcoming-dem {
@@ -89,10 +90,38 @@
       width: 100%;
       display: inline-block;
       .happened-dem {
-        color: #5c6b95;
+        color: #384da0;
       }
       .happened-gop {
-        color: #bc5c5c;
+        color: #ca3d28;
+      }
+    }
+    .party-division{
+      border: 1px solid gray;
+    }
+    .delegate-chart{
+      min-width: 275px;
+      width: 50%;
+      .total-delegates-bar{
+        height: 10px;
+        display: inline-block;
+        width: 50%;
+        .n-delegates-bar{
+          height: 10px;
+          &.dem{
+            background-color: #384da0;
+          }
+          &.gop{
+            background-color: #ca3d28;
+          }
+        }
+      }
+      .cd-name{
+        display: inline-block;
+        width: 35%;
+      }
+      .n-delegates-count{
+        display: inline-block;
       }
     }
     table.t-pollster {
@@ -106,10 +135,10 @@
       }
       td.cd-name{
         &.dem{
-          color: #5c6b95;
+          color: #384da0;
         }
         &.gop{
-          color: #bc5c5c;
+          color: #ca3d28;
         }
       }
       td.pollster{

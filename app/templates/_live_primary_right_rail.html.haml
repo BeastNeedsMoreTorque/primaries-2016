@@ -1,0 +1,33 @@
+%div.rail-banner
+  %div
+    %span.status= "HAPPENING NOW: #{next_race_day.id}"
+-parties.each do |par|
+  %ul
+    %li{class: "live-state-name #{par.name}"}= "#{next_race_day.states_for_party(par)[0][:name]} (#{par.id})"
+- happened = previous_races(current_race_day)
+- limit = happened.length > 3 ? 0..2 : 0..happened.length - 1
+- for i in limit
+  %a.happened-link{target: '_parent', href: "/2016/primaries/#{happened[i].id}"}
+    %span.happened-date="#{happened[i].id}:"
+    %span.happened-dem="#{dem_states_string(happened[i].races_codified[:Dem])}"
+    %span.happened-gop="#{gop_states_string(happened[i].races_codified[:GOP])}"
+%h3 Delegate Counts
+- parties.each do |party|
+  %h4= "party.adjective Candidates"
+  %div{class: "delegate-chart #{party.id.downcase}" }
+    - party.candidates.each do |cd|
+      %div.candidate-container{ :'data-candidate-id' => cd.id }
+        %span.cd-name= cd.name
+        %div.total-delegates-bar
+          %div{class: "n-delegates-bar #{party.id.downcase}", :style => "width: #{cd.n_delegates.to_f / party.n_delegates_total.to_f * 100}%"}
+        %span.n-delegates-count= cd.n_delegates
+
+%a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Live results
+%h4 Coming Up
+- coming = following_races(next_race_day.id)
+- limit = coming.length > 3 ? 0..2 : 0..coming.length - 1
+- for i in limit
+  %a.upcoming-link{target: '_parent', href: "/2016/primaries/#{coming[i].id}"}
+    %span.upcoming-date="#{coming[i].id}:"
+    %span.upcoming-dem="#{dem_states_string(coming[i].races_codified[:Dem])}"
+    %span.upcoming-gop="#{gop_states_string(coming[i].races_codified[:GOP])}"
