@@ -1,4 +1,5 @@
 //= require './vendor/jquery-2.2.0.js'
+
 $(function() {
   var iowa_starts = '2016-02-01 20:00:00 GMT'
   function timeTill(end) {

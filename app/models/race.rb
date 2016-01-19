@@ -21,6 +21,7 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def party_name; party.name; end
   def race_day; database.race_days.find!(race_day_id); end
   def state; database.states.find!(state_code); end
+  def state_fips_int; state.fips_int; end
   def state_name; state.name; end
   def date; race_day.date; end
   def disabled?; !race_day || race_day.disabled?; end
@@ -28,10 +29,14 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def n_delegates; state.n_delegates(party_id); end
 
   def candidate_states
-    @candidate_states ||= if ap_id
-      database.candidate_states.find_all_by_party_id_and_state_code(party_id, state_code).sort
-    else
-      []
-    end
+    @candidate_states ||= database.candidate_states.find_all_by_party_id_and_state_code(party_id, state_code).sort
+  end
+
+  def candidate_counties
+    @candidate_counties ||= database.candidate_counties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int)
+  end
+
+  def county_parties
+    @county_parties ||= database.county_parties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int)
   end
 end

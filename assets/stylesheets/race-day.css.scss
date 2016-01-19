@@ -39,15 +39,20 @@ body.race-day {
   }
 
   ul.parties, ul.party-state {
-    display: block;
-    overflow: auto;
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+
     li {
-      float: left;
+      box-sizing: border-box;
       display: block;
       width: 100%;
+      flex: 0 0 auto;
+      -webkit-flex: 0 0 auto;
+
       @media (min-width: 650px) {
         width: 50%;
-        box-sizing: border-box;
         &:first-child {
           padding-right: 20px;
         }
@@ -66,28 +71,15 @@ body.race-day {
     margin-bottom: 4rem;
   }
 
-  svg {
-    path.county {
-      stroke: white;
-      stroke-width: 1px;
-      fill: #eed;
-    }
-
-    path.hover {
-      fill: transparent;
-      stroke: #aaa;
-      stroke-width: 2px;
-      z-index: 1;
-    }
+  .party-state-map {
+    position: relative;
   }
 
   .race-tooltip {
-    &.show {
-      display: inline-block;
-    }
-
-    display: none;
     position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 20rem;
     border: 1px solid #ddd;
     padding: 1rem;
     background: white;

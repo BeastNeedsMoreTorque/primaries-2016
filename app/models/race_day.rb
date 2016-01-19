@@ -19,4 +19,16 @@ RaceDay = Struct.new(:database, :id, :races_codified) do
     @states_for_party ||= {}
     @states_for_party[party.id] ||= races.select{ |r| r.party_id == party.id }.map(&:state)
   end
+
+  def candidate_states
+    @candidate_states ||= races.flat_map(&:candidate_states)
+  end
+
+  def candidate_counties
+    @candidate_counties ||= races.flat_map(&:candidate_counties)
+  end
+
+  def county_parties
+    @county_parties ||= races.flat_map(&:county_parties)
+  end
 end

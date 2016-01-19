@@ -8,6 +8,16 @@
     stroke: white;
     stroke-width: 10; // divided by 10
     fill: #eee;
+
+    &.hover {
+      stroke: #aaa;
+      fill: #d6d6d6;
+      pointer-events: none; // so it doesn't cause mouseleave
+    }
+  }
+
+  g.cities {
+    pointer-events: none;
   }
 
   circle {
