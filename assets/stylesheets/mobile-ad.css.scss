@@ -64,6 +64,9 @@ body {
 .frontrunner-cd, .frontrunner-num {
 	font-weight: bold;
 	margin: 0;
+	&.frontrunner-num {
+		font-size: 15px;
+	}
 }
 
 .dem {
