@@ -169,7 +169,7 @@ class Database
 
               n_votes = candidate_hash[:voteCount]
 
-              candidate_counties << [ candidate_id, county_id, n_votes ]
+              candidate_counties << [ party_id, candidate_id, county_id, n_votes ]
             end
           else
             raise "Invalid reporting unit level `#{reporting_unit[:level]}'"
