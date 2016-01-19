@@ -17,9 +17,10 @@
         %ul.party-state
           - parties.each do |party|
             %li.party-state{'data-party-id': party.id, 'data-state-code': state.code}
+
               != render(partial: 'race', locals: { party: party, state: state })
 
-  != render(partial: 'calendar')
+  != render(partial: 'race-day-nav')
 
 %script{src: asset_path('stats.js')}
 %script{src: asset_path('main.js')}

@@ -2,6 +2,7 @@
 
 $(function() {
   $('a[href="#state-race-days-by-date"]').click(function(ev) {
+    console.log(ev);
     ev.preventDefault();
     switch_to('date');
   });
@@ -20,13 +21,13 @@ $(function() {
 
   // Shows 'date' and hides 'state', or vice-versa.
   function switch_to(name) {
-    window.location.hash = '#state-race-days-by-' + name;
+    history.replaceState({}, '', '#state-race-days-by-' + name);
 
     $toggle.children('.selected').removeClass('selected');
     $toggle.children('.by-' + name).addClass('selected');
 
     $flipper.children('.selected').removeClass('selected');
-    $flipper.children('.state-race-days-by-' + name).addClass('selected');
+    $flipper.children('#state-race-days-by-' + name).addClass('selected');
     $flipper[0].className = name + '-selected flipper';
 
     reset_height();

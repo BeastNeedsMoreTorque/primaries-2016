@@ -1,3 +1,5 @@
+//= require ./render_time.js
+
 var database = {
   candidate_csv: "",
   candidate_county_csv: "",
@@ -77,7 +79,7 @@ function add_tooltips() {
     $tooltip.find('h4').text(county_name);
     $tooltip.find('span.n-reporting').text(n_reporting);
     $tooltip.find('span.n-total').text(n_total);
-    $tooltip.find('.updated time').text(last_updated.toString());
+    $tooltip.find('.updated time').attr('datetime', last_updated.toISOString()).render_time();
 
     var $tbody = $tooltip.find('tbody').empty();
 
@@ -278,7 +280,7 @@ function poll_results() {
       if (elems) {
         elems.n_reporting.text(n_reporting);
         elems.n_total.text(n_total);
-        elems.last_updated.text(last_updated.toISOString());
+        elems.last_updated.attr('datetime', last_updated.toISOString()).render_time();
       }
     });
   }
@@ -298,6 +300,8 @@ function poll_results() {
 }
 
 $(function() {
+  $('body.race-day time').render_time();
+
   wait_for_font_then('Source Sans Pro', function() {
     position_cities_correctly();
     add_tooltips();

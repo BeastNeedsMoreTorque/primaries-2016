@@ -20,6 +20,20 @@ class RaceDayView < BaseView
   def race_date; "#{race_day.date.strftime('%B %-d, %Y')}"; end
   def body; race_day_copy ? race_day_copy['body'] : nil; end
 
+  # The race day prior to the one we're focused on
+  def previous_race_day
+    database.race_days
+      .select { |rd| rd.id < race_day.id }
+      .last
+  end
+
+  # The race day immediately after the one we're focused on
+  def next_race_day
+    database.race_days
+      .select { |rd| rd.id > race_day.id }
+      .first
+  end
+
   def race_day_states; race_day.states.sort_by(&:name); end
 
   def race_day_copy

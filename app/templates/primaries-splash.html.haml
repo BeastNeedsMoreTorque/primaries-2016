@@ -75,12 +75,13 @@
             %div.candidate-position-listing
               - race.candidate_states.each_with_index do |cd_state, idx|
                 - cd = cd_state.candidate
+                - highlight_class = ((cd.name == leading_republican.name or cd.name == leading_democrat.name) and !preview) ? "leader" : ""
                 - if (party_abbrev == 'gop' and gop_list.include? cd.name) or (party_abbrev == 'dem' and dem_list.include? cd.name)
                   %div.candidate{'data-candidate-id': cd.id}
-                    %table
+                    %table{class: "#{highlight_class}"}
                       %tr
                         %td= cd.name
-                        %td= cd_state.n_votes#rand(0..100000).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
+                        %td= cd_state.n_votes
                   - if party_abbrev == 'gop' and race.candidate_states.count - 1 == idx
                     %div.candidate{'data-candidate-id': 99}
                       %table

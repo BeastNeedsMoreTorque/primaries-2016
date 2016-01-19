@@ -14,10 +14,10 @@
             - when 'date' then
               - if race.enabled?
                 %a{href: "/2016/primaries/#{race.race_day_id}"}
-                  %time{datetime: race.race_day_id}= race.date.strftime('%B %-d')
+                  %time{datetime: race.race_day_id}= format_date(race.date)
               - else
                 %span
-                  %time{datetime: race.race_day_id}= race.date.strftime('%B %-d')
+                  %time{datetime: race.race_day_id}= format_date(race.date)
             - when 'state'
               - if race.enabled?
                 %a{href: "/2016/primaries/#{race.race_day_id}"}

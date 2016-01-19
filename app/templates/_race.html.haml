@@ -22,7 +22,7 @@
       %table.race
         %thead
           %tr
-            %th.candidate Candidate
+            %th.candidate{colspan: "2"} Candidate
             %th.n-votes Votes
             %th.n-delegates Delegates
             %th.pollster Pollster
@@ -30,6 +30,8 @@
           - race.candidate_states.each do |candidate_state|
             - candidate = candidate_state.candidate
             %tr{'data-candidate-id': candidate.id}
+              %td.cd-img
+                %img{src: image_path("#{candidate.slug}.png"), alt: ''}
               %td.candidate= candidate.name
               %td.n-votes= candidate_state.n_votes
               %td.n-delegates= candidate_state.n_delegates
@@ -42,6 +44,6 @@
           precincts reporting
         %p.last-updated
           Last updated
-          %time= race.last_updated.new_offset(0).iso8601.sub('+00:00', '.000Z')
+          %time{datetime: format_datetime(race.last_updated)}
         - if race.poll_last_updated
-          %p.poll-last-updated!= "Poll averages updated <time>#{race.poll_last_updated.new_offset(0).iso8601.sub('+00:00', '.000Z')}</time>. <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">View on Pollster</a>"
+          %p.poll-last-updated!= "Poll averages updated <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time> <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">View on Pollster</a>"
