@@ -1,43 +1,49 @@
-%h3= state.name + " " + party.name
-.party-state-map!= map_svg("states/#{state.code}")
-- race = database.races.find_by_party_and_state(party, state)
-- text = race_text(race)
-- if text
-  %p.text= text
-- if !race
-  %p= "#{state.name} #{party.name} won't pledge any delegates to a 2016 presidential nominee."
-- elsif !race.ap_id
-  - if race.race_day == race_day
-    %p= "Come back #{race_day.date.strftime('%B %-d')} for live results"
+.race{'data-party-id': party.id, 'data-state-code': state.code}
+  %h3= state.name + " " + party.name
+  .party-state-map!= map_svg("states/#{state.code}")
+  - race = database.races.find_by_party_and_state(party, state)
+  - text = race_text(race)
+  - if text
+    %p.text= text
+  - if !race
+    %p= "#{state.name} #{party.name} won't pledge any delegates to a 2016 presidential nominee."
+  - elsif !race.ap_id
+    - if race.race_day == race_day
+      %p= "Come back #{race_day.date.strftime('%B %-d')} for live results"
+    - else
+      %p
+        This race will happen on
+        %a{href: "/2016/primaries/#{race.race_day.id}"}= race.race_day.date.strftime('%B %-d')
   - else
-    %p
-      This race will happen on
-      %a{href: "/2016/primaries/#{race.race_day.id}"}= race.race_day.date.strftime('%B %-d')
-- else
-  - is_this_page_date = race.race_day == race_day
-  %div{class: "race #{is_this_page_date ? 'race-this-page-date' : 'race-another-date'}"}
-    - if !is_this_page_date
-      %p= "This race happened on #{race.race_day.date.strftime('%B %-d')}"
-    %table.race{'data-state-code': state.code, 'data-party-id': party.id}
-      %thead
-        %tr
-          %th.candidate Candidate
-          %th.n-votes Votes
-          %th.n-delegates Delegates
-          %th.pollster Pollster
-      %tbody
-        - race.candidate_states.each do |candidate_state|
-          - candidate = candidate_state.candidate
-          %tr{'data-candidate-id': candidate.id}
-            %td.candidate= candidate.name
-            %td.n-votes= candidate_state.n_votes
-            %td.n-delegates= candidate_state.n_delegates
-            %td.pollster= candidate_state.poll_percent ? "#{candidate_state.poll_percent}%" : ""
-    %p.race-precincts-reporting{'data-state-code': state.code, 'data-party-id': party.id}
-      %span.n-reporting= race.n_precincts_reporting
-      of
-      %span.n-total= race.n_precincts_total
-      precincts reporting
-    %p.last-updated
-      Last updated
-      %time= race.last_updated.new_offset(0).iso8601.sub('+00:00', '.000Z')
+    - is_this_page_date = race.race_day == race_day
+    %div{class: "#{is_this_page_date ? 'race-this-page-date' : 'race-another-date'}"}
+      - if !is_this_page_date
+        %p= "This race happened on #{race.race_day.date.strftime('%B %-d')}"
+      %table.race
+        %thead
+          %tr
+            %th.candidate Candidate
+            %th.n-votes Votes
+            %th.n-delegates Delegates
+            %th.pollster Pollster
+        %tbody
+          - race.candidate_states.each do |candidate_state|
+            - candidate = candidate_state.candidate
+            %tr{'data-candidate-id': candidate.id}
+              %td.candidate= candidate.name
+              %td.n-votes= candidate_state.n_votes
+              %td.n-delegates= candidate_state.n_delegates
+              %td.pollster= candidate_state.poll_percent ? "#{candidate_state.poll_percent}%" : ""
+      .metadata
+        %p.precincts-reporting
+          %span.n-reporting= race.n_precincts_reporting
+          of
+          %span.n-total= race.n_precincts_total
+          precincts reporting
+        %p.last-updated
+          Last updated
+          %time= race.last_updated.new_offset(0).iso8601.sub('+00:00', '.000Z')
+        - if race.poll_last_updated
+          %p.poll-last-updated
+            Poll averages updated
+            %time= race.poll_last_updated.new_offset(0).iso8601.sub('+00:00', '.000Z')

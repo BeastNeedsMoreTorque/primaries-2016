@@ -211,7 +211,7 @@ function poll_results() {
 
     var els = els_by_candidate_id_and_state_code = {};
 
-    $('table.race').each(function() {
+    $('.race[data-state-code]').each(function() {
       var state_code = this.getAttribute('data-state-code');
 
       $('tr[data-candidate-id]', this).each(function() {
@@ -231,13 +231,13 @@ function poll_results() {
 
     var els = els_by_party_id_and_state_code = {};
 
-    $('p.race-precincts-reporting').each(function() {
+    $('.race[data-party-id][data-state-code]').each(function() {
       var party_id = this.getAttribute('data-party-id');
       var state_code = this.getAttribute('data-state-code');
       els[party_id + '-' + state_code] = {
-        n_reporting: $('.n-reporting', this),
-        n_total: $('.n-total', this),
-        last_updated: $('.last-updated time', this.parentNode)
+        n_reporting: $('.metadata .n-reporting', this),
+        n_total: $('.metadata .n-total', this),
+        last_updated: $('.metadata .last-updated time', this.parentNode)
       };
     });
   }
