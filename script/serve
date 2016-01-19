@@ -41,7 +41,8 @@ class StatusReporter
 
   def call(env)
     if $error_status == nil
-      [ 503, { 'Content-Type' => 'text/plain; charset=utf-8' }, [ 'Regenerating...' ] ]
+      # TODO instead of refreshing every 1s, use a callback somewhere to actually respond when the request is done
+      [ 503, { 'Content-Type' => 'text/plain; charset=utf-8', 'Refresh' => '1' }, [ 'Regenerating...' ] ]
     elsif $error_status != 0
       [ 500, { 'Content-Type' => 'text/plain; charset=utf-8' }, [ "ERROR #{$error_status}. Output:\n\n#{$error_text}" ] ]
     else
