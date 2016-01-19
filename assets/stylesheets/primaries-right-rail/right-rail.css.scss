@@ -176,9 +176,10 @@
         border-top: 1px solid #bdbdbd;
       }
       td.img img{
+        height: 60px; //same as table row
         position: absolute;
-        left: -7.5px;
-        bottom: 7.5px;
+        left: -10px;
+        bottom: 0px;
       }
       td.img{
         border-left: 1px solid #bdbdbd;

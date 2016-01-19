@@ -17,6 +17,7 @@ module Assets
     javascripts/primary-right-rail.js
     stylesheets/main.css
     stylesheets/splash.css
+    stylesheets/primaries-right-rail.css
   )
 
   # Assets we serve with a sha1 digest.
