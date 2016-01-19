@@ -33,7 +33,7 @@
                 %span.disabled= race.party_name[0]
             - when 'n-delegates'
               %span.integer
-                = race.n_delegates
+                = format_int(race.n_delegates)
               %span{'class': "dots dots-#{race.party_id.downcase}"}
                 -# That's a zero-width space (zwsp) between each dot, so they can wrap
                 = "\u200b•" * race.n_delegates

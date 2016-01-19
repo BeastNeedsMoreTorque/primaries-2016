@@ -20,7 +20,7 @@
         %span.cd-name= cd.name
         %div.total-delegates-bar
           %div{class: "n-delegates-bar #{party.id.downcase}", :style => "width: #{cd.n_delegates.to_f / party.n_delegates_total.to_f * 100}%"}
-        %span.n-delegates-count= cd.n_delegates
+        %span.n-delegates-count= format_int(cd.n_delegates)
 
 %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Live results
 %h4 Coming Up

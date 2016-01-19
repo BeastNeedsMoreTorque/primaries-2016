@@ -38,7 +38,7 @@
                   %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
                 %div.leading-candidate-delegates
                   %p.frontrunner-cd= "#{leading_democrat.name.upcase}"
-                  %p.frontrunner-num= "#{leading_democrat.n_delegates} delegates"
+                  %p.frontrunner-num= "#{format_int(leading_democrat.n_delegates)} delegates"
             -else
               %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
               %div.img-stats-container
@@ -46,7 +46,7 @@
                   %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
                 %div.leading-candidate-delegates
                   %p.frontrunner-cd= "#{leading_republican.name.upcase}"
-                  %p.frontrunner-num= " #{leading_republican.n_delegates} delegates"
+                  %p.frontrunner-num= " #{format_int(leading_republican.n_delegates)} delegates"
       -else
         %div.no-results
           %h4= "NO PRECINCTS REPORTING"
