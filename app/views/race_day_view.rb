@@ -17,6 +17,7 @@ class RaceDayView < BaseView
   def body_class; 'race-day'; end
 
   def hed; race_day_copy ? race_day_copy['title'] : nil; end
+  def race_date; "#{race_day.date.strftime('%B %-d, %Y')}"; end
   def body; race_day_copy ? race_day_copy['body'] : nil; end
 
   def race_day_states; race_day.states.sort_by(&:name); end
