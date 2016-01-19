@@ -1,6 +1,7 @@
 .primary-right-rail{
   width: 300px;
   div.rail-banner{
+    position:relative;
     background-color: black;
     padding: 5px;
     color: white;
@@ -27,24 +28,43 @@
     font-size: 18px;
     display: inline-block;
   }
-  a.button{
-    font-size: 12px;
-    font-weight:lighter;
-    text-decoration: none;
+  div.teaser-link{
+    position: relative;
     margin-top: 15px;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 5px;
-    display: inline-block;
-    color: white;
-    background-color: #e41a1c;
-    padding: 10px;
-    text-align: center;
+    a.button{
+      height: 26px;
+      width: 250px;
+      font-size: 11px;
+      font-weight:lighter;
+      text-decoration: none;
+      margin-top: 15px;
+      display: table-cell;
+      vertical-align: middle;
+      color: white;
+      background-color: #e41a1c;
+      text-align: center;
+    }
+    div.arrow-right{
+      position:absolute;
+      display: inline-block;
+      width: 0;
+      height: 0;
+      left: 250px;
+      bottom: 0px;
+      border-top: 13px solid transparent;
+      border-bottom: 13px solid transparent;
+      border-left: 13px solid #e41a1c;
+    }
     &:hover{
+    .arrow-right{
+      border-left: 13px solid #f1f1f1;
+    }
+    .button{
       background-color: #f1f1f1;
       color: black;
     }
   }
+}
   div.container {
     background-color: #ffffff;
     padding: 10px;
@@ -164,6 +184,8 @@
         border-left: 1px solid #bdbdbd;
       }
       td.cd-name{
+        text-align: left;
+        padding-left: 20px;
         &.dem{
           color: #384da0;
         }

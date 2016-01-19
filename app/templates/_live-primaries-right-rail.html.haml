@@ -1,6 +1,3 @@
-%div.rail-banner
-  %div
-    %span.status= "HAPPENING NOW: #{next_race_day.id}"
 -parties.each do |par|
   %ul
     %li{class: "live-state-name #{par.name}"}= "#{next_race_day.states_for_party(par)[0][:name]} (#{par.id})"
@@ -22,7 +19,9 @@
           %div{class: "n-delegates-bar #{party.id.downcase}", :style => "width: #{cd.n_delegates.to_f / party.n_delegates_total.to_f * 100}%"}
         %span.n-delegates-count= cd.n_delegates
 
-%a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Live results
+%div.teaser-link
+  %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Live results
+  %div.arrow-right
 %h4 Coming Up
 - coming = following_races(next_race_day.id)
 - limit = coming.length > 3 ? 0..2 : 0..coming.length - 1
