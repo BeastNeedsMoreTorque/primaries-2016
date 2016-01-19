@@ -23,8 +23,8 @@ $twitterBlue: #c0deed ;
 }
 
 @mixin vertical-center-column-flex {
-  display: -webkit-inline-flex;
-  display: inline-flex; //allows divs to stack next to each other
+  display: -webkit-flex;
+  display: flex; //allows divs to stack next to each other
   -webkit-flex-direction: column;
   flex-direction: column; //orders top to bottom
   -webkit-flex-wrap: wrap;
@@ -102,7 +102,6 @@ $twitterBlue: #c0deed ;
 
 @mixin desktop-splash-base {
 	@include splash-base;
-	width: 977px;
 }
 
 @mixin mobile-splash-base {
