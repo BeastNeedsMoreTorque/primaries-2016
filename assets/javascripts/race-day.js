@@ -1,4 +1,5 @@
 //= require ./render_time.js
+//= require ./format_int.js
 
 var database = {
   candidate_csv: "",
@@ -77,8 +78,8 @@ function add_tooltips() {
 
   function update_tooltip(county_name, candidates, n_reporting, n_total, last_updated) {
     $tooltip.find('h4').text(county_name);
-    $tooltip.find('span.n-reporting').text(n_reporting);
-    $tooltip.find('span.n-total').text(n_total);
+    $tooltip.find('span.n-reporting').text(format_int(n_reporting));
+    $tooltip.find('span.n-total').text(format_int(n_total));
     $tooltip.find('.updated time').attr('datetime', last_updated.toISOString()).render_time();
 
     var $tbody = $tooltip.find('tbody').empty();
@@ -86,7 +87,7 @@ function add_tooltips() {
     candidates.forEach(function(candidate) {
       $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td></tr>');
       $tr.find('.candidate').text(candidate.name);
-      $tr.find('.n-votes').text(candidate.n_votes);
+      $tr.find('.n-votes').text(format_int(candidate.n_votes));
       $tbody.append($tr);
     });
   }
@@ -251,14 +252,14 @@ function poll_results() {
       var arr = line.split(',');
       var candidate_id = arr[0];
       var state_code = arr[1];
-      var n_votes = arr[2];
-      var n_delegates = arr[3];
+      var n_votes = +arr[2];
+      var n_delegates = +arr[3];
 
       var key = candidate_id + '-' + state_code;
       var elems = els_by_candidate_id_and_state_code[key];
       if (elems) {
-        elems.n_votes.text(n_votes);
-        elems.n_delegates.text(n_delegates);
+        elems.n_votes.text(format_int(n_votes));
+        elems.n_delegates.text(format_int(n_delegates));
       }
     });
   }
@@ -270,16 +271,16 @@ function poll_results() {
       var arr = line.split(',');
       var party_id = arr[0];
       var state_code = arr[1];
-      var n_reporting = arr[2];
-      var n_total = arr[3];
+      var n_reporting = +arr[2];
+      var n_total = +arr[3];
       var last_updated = new Date(arr[4]);
 
       var key = party_id + '-' + state_code;
 
       var elems = els_by_party_id_and_state_code[key];
       if (elems) {
-        elems.n_reporting.text(n_reporting);
-        elems.n_total.text(n_total);
+        elems.n_reporting.text(format_int(n_reporting));
+        elems.n_total.text(format_int(n_total));
         elems.last_updated.attr('datetime', last_updated.toISOString()).render_time();
       }
     });
