@@ -44,7 +44,7 @@
                   %table.race{'data-state-code': state.code, 'data-party-id': party.id}
                     %thead
                       %tr
-                        %th.candidate Candidate
+                        %th.candidate{colspan: "2"} Candidate
                         %th.n-votes Votes
                         %th.n-delegates Delegates
                         %th.pollster Pollster
@@ -52,6 +52,8 @@
                       - race.candidate_states.each do |candidate_state|
                         - candidate = candidate_state.candidate
                         %tr{'data-candidate-id': candidate.id}
+                          %td.cd-img
+                            %img{src: image_path("#{candidate.slug}.png"), alt: ''}
                           %td.candidate= candidate.name
                           %td.n-votes= candidate_state.n_votes
                           %td.n-delegates= candidate_state.n_delegates
