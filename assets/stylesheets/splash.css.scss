@@ -96,15 +96,11 @@ body {
 }
 
 .leading-candidate-img {
-	height: 105px;
 	@include vertical-center-flex;
-	&.preview {
-		margin-left: 0;
-		margin-top: 0px;
-		img {
-			width: 85px;
-		}
+	img {
+		width: 85px;
 	}
+	margin-left: -10px;
 }
 
 .leading-candidate-delegates {
