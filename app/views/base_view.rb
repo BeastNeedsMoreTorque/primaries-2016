@@ -6,6 +6,7 @@ require_relative '../../lib/paths'
 class BaseView
   attr_reader(:database)
   StateRaceDaysColumn = Struct.new(:html_class, :label)
+  Months = %w(Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.)
 
   def initialize(database)
     @database = database
@@ -23,6 +24,24 @@ class BaseView
   # e.g., for AllPrimariesView, "all-primaries"
   def body_class
     self.class.name.gsub(/([A-Z])/){ "_#{$1.downcase}" }[1..-6]
+  end
+
+  # 1234567 -> "1,234,567"
+  def format_int(int)
+    int.to_s.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,")
+  end
+
+  # a DateTime -> "2016-01-19T20:54:12.345Z"
+  #
+  # (We need to format times in JavaScript, because only JavaScript knows the
+  # user's time zone.)
+  def format_datetime(datetime)
+    datetime.new_offset(0).iso8601.sub('+00:00', '.000Z')
+  end
+
+  # 2016-01-19 -> "Jan. 19"
+  def format_date(date)
+    "#{Months[date.month]} #{date.day}"
   end
 
   def meta
