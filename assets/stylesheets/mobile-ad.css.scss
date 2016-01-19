@@ -6,7 +6,6 @@ body {
 
 .primary-mobile-ad {
 	@include mobile-ad-base;
-	min-width: 320px;
 }
 
 .countdown-container {
