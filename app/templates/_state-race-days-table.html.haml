@@ -29,6 +29,8 @@
               - if race.enabled?
                 %a{href: "/2016/primaries/#{race.race_day_id}"}
                   = race.party_name[0]
+              - else
+                %span.disabled= race.party_name[0]
             - when 'n-delegates'
               %span.integer
                 = race.n_delegates
