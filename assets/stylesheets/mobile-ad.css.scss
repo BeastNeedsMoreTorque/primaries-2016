@@ -1,0 +1,66 @@
+@import '_variables';
+
+body {
+	@include body-copy;
+}
+
+.primary-mobile-ad {
+	@include mobile-ad-base;
+	min-width: 320px;
+}
+
+.countdown-container {
+	border-bottom: 1px solid black;
+	font-weight: bold;
+	margin: 5px;
+	span {
+		&:not(.lbl) {
+			font-size: 30px;
+		}
+		&.lbl {
+			font-size: 15px;
+			padding-top: 10px;
+		}
+	}
+}
+
+.parties-container {
+	@include vertical-center-flex;
+}
+
+.party-container {
+	background-color: $splash-ele-bg;
+	border: 1px solid #999;
+	margin: 5px;
+}
+
+.frontrunner-lbl {
+	margin: 5px;
+}
+
+.img-stats-container {
+	@include vertical-center-flex;
+}
+
+.leading-candidate-img {
+	img {
+		width: 50px;
+	}
+}
+
+.frontrunner-cd, .frontrunner-num {
+	font-weight: bold;
+	margin: 0;
+}
+
+.dem {
+	.frontrunner-cd, .frontrunner-num { color: $strongDem; }
+}
+.gop {
+	.frontrunner-cd, .frontrunner-num { color: $strongGOP; }
+}
+
+.tease-link {
+	display: block !important;
+	margin: 5px;
+}

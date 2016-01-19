@@ -2,7 +2,7 @@
 
 $splash-height: 235px;
 $splash-width: 977px;
-$ele-bg: #eee;
+$splash-ele-bg: #eee;
 
 $map-countdown-width: 200px;
 $map-countdown-padding: 10px;
@@ -37,7 +37,7 @@ body {
 
 .countdown-container {
 	table {
-		background-color: $ele-bg;
+		background-color: $splash-ele-bg;
 		margin: 0 auto;
     border-collapse: collapse;
     border-spacing: 0;
@@ -159,7 +159,7 @@ body {
 }
 
 .party-container {
-	background-color: $ele-bg;
+	background-color: $splash-ele-bg;
 	border: 1px solid black;
 	margin-left: 20px;
 	margin-top: 15px;

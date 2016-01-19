@@ -14,6 +14,9 @@ $libertarian: #7f5217;
 $facebookBlue: #3b5998 ;
 $twitterBlue: #c0deed ;
 
+$splash-ele-bg: #eee;
+
+
 @mixin vertical-center-flex {
 	display: -webkit-inline-flex;
   display: inline-flex;
@@ -76,37 +79,35 @@ $twitterBlue: #c0deed ;
 			display: inline;
 			margin: 0;
 		}
-		.tease-link {
+	}	
+	.tease-link {
+		position: relative;
+		display: inline;
+		a {
+			color: white;
+			background: red;
+			padding: 3px;
+		}
+		.arrow_box {
 			position: relative;
-			display: inline;
-			a {
-				color: white;
-				background: red;
-				padding: 3px;
-			}
-			.arrow_box {
-				position: relative;
-				background: #red;
-				position: absolute;
-				right: 0px;
+			background: #red;
+			position: absolute;
+			right: 0px;
 
-			}
-			.arrow_box:after {
-				left: 100%;
-				top: 50%;
-				border: solid transparent;
-				content: " ";
-				height: 0;
-				width: 0;
-				position: absolute;
-				pointer-events: none;
-				border-color: rgba(213, 7, 0, 0);
-				border-left-color: #d50700;
-				border-width: 12.5px;
-				margin-top: -25.5px;
-			}
-
-
+		}
+		.arrow_box:after {
+			left: 100%;
+			top: 50%;
+			border: solid transparent;
+			content: " ";
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+			border-color: rgba(213, 7, 0, 0);
+			border-left-color: #d50700;
+			border-width: 12.5px;
+			margin-top: -25.5px;
 		}
 	}	
 }
@@ -115,9 +116,8 @@ $twitterBlue: #c0deed ;
 	@include splash-base;
 }
 
-@mixin mobile-splash-base {
+@mixin mobile-ad-base {
 	@include splash-base;
-	width: 320px;
 }
 
 @mixin right-rail-base {
