@@ -205,16 +205,82 @@ function poll_results() {
   var interval_ms = 30000;
   var json_url = window.location.toString().split('#')[0] + '.json';
 
+  var els_by_candidate_id_and_state_code = null; // Maps "123-CA" to { n_votes, n_delegates }.
+  function ensure_els_by_candidate_id_and_state_code_is_populated() {
+    if (els_by_candidate_id_and_state_code) return;
+
+    var els = els_by_candidate_id_and_state_code = {};
+
+    $('.race[data-state-code]').each(function() {
+      var state_code = this.getAttribute('data-state-code');
+
+      $('tr[data-candidate-id]', this).each(function() {
+        var candidate_id = this.getAttribute('data-candidate-id');
+
+        els[candidate_id + '-' + state_code] = {
+          n_votes: $('td.n-votes', this),
+          n_delegates: $('td.n-delegates', this)
+        };
+      });
+    });
+  }
+
+  var els_by_party_id_and_state_code = null;
+  function ensure_els_by_party_id_and_state_code_is_populated() {
+    if (els_by_party_id_and_state_code) return;
+
+    var els = els_by_party_id_and_state_code = {};
+
+    $('.race[data-party-id][data-state-code]').each(function() {
+      var party_id = this.getAttribute('data-party-id');
+      var state_code = this.getAttribute('data-state-code');
+      els[party_id + '-' + state_code] = {
+        n_reporting: $('.metadata .n-reporting', this),
+        n_total: $('.metadata .n-total', this),
+        last_updated: $('.metadata .last-updated time', this.parentNode)
+      };
+    });
+  }
+
   function update_race_tables_from_database() {
-    // TODO
+    ensure_els_by_candidate_id_and_state_code_is_populated();
+
+    database.candidate_state_csv.split('\n').slice(1).forEach(function(line) {
+      var arr = line.split(',');
+      var candidate_id = arr[0];
+      var state_code = arr[1];
+      var n_votes = arr[2];
+      var n_delegates = arr[3];
+
+      var key = candidate_id + '-' + state_code;
+      var elems = els_by_candidate_id_and_state_code[key];
+      if (elems) {
+        elems.n_votes.text(n_votes);
+        elems.n_delegates.text(n_delegates);
+      }
+    });
   }
 
   function update_race_precincts_from_database() {
-    // TODO
-  }
+    ensure_els_by_party_id_and_state_code_is_populated();
 
-  function update_delegate_counts_from_database() {
-    // TODO
+    database.race_csv.split('\n').slice(1).forEach(function(line) {
+      var arr = line.split(',');
+      var party_id = arr[0];
+      var state_code = arr[1];
+      var n_reporting = arr[2];
+      var n_total = arr[3];
+      var last_updated = new Date(arr[4]);
+
+      var key = party_id + '-' + state_code;
+
+      var elems = els_by_party_id_and_state_code[key];
+      if (elems) {
+        elems.n_reporting.text(n_reporting);
+        elems.n_total.text(n_total);
+        elems.last_updated.text(last_updated.toISOString());
+      }
+    });
   }
 
   function handle_poll_results(json) {
@@ -222,7 +288,6 @@ function poll_results() {
 
     update_race_tables_from_database();
     update_race_precincts_from_database();
-    update_delegate_counts_from_database();
   }
 
   $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {

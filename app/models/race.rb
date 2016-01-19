@@ -1,5 +1,5 @@
 # Could almost be called PartyState. Gives the votes/delegates of a state.
-Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :poll_last_updated) do
+Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :pollster_slug, :poll_last_updated) do
   include Comparable
 
   # Sort by date, then state name, then party name

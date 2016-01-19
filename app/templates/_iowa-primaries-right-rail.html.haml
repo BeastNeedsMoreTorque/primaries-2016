@@ -14,7 +14,6 @@
       %td.time-text Seconds
   %div
     %span.seconds
-%h3 Pollster Leaders
 - parties.each do |party|
   - del_key = "n_#{party.id.downcase}_delegates"
   %div.race-name
@@ -33,12 +32,12 @@
         - cd = cd_state.candidate
         - if cd_state.poll_percent
           %tr.candidate{'data-candidate-id': cd.id}
-            %td
+            %td.img
               %img.cd-img{src: image_path("#{cd.slug}.png"), alt: ''}
             %td{class: "cd-name #{cd.party_id.downcase}"}= cd.full_name
             %td.pollster= "#{cd_state.poll_percent}%"
   %span.last-updated= "Last updated:  #{race[0].candidate.poll_last_update.strftime('%r - %x')}"
-  %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Click for Iowa Preview
+%a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Click for Iowa Preview
 
 %h4 Coming Up
 - coming = following_races(next_race_day.id)

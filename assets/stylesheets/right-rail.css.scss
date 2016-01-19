@@ -28,6 +28,8 @@
     display: inline-block;
   }
   a.button{
+    font-size: 12px;
+    font-weight:lighter;
     text-decoration: none;
     margin-top: 15px;
     margin-left: auto;
@@ -39,7 +41,8 @@
     padding: 10px;
     text-align: center;
     &:hover{
-      background-color: #000000;
+      background-color: #f1f1f1;
+      color: black;
     }
   }
   div.container {
@@ -55,7 +58,6 @@
       margin: auto;
       text-align: right;
       font-size:16px;
-      height: 80px;
       div {
         display: inline-block;
         text-align: center;
@@ -68,12 +70,14 @@
         width: 100%;
         border-collapse: collapse;
         th{
+          background-color: #f1f1f1;
           height: 30px;
           text-align: center;
           font-size: 18px;
           border: 1px solid #bdbdbd;
         }
         td{
+          background-color: #f1f1f1;
           text-align: center;
           font-size: 12px;
           border: 1px solid #bdbdbd;
@@ -136,15 +140,28 @@
       }
     }
     table.t-pollster {
-      border: 1px solid #bdbdbd;
-      background-color: #f1f1f1;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0 5px;
       min-width: 275px;
+      tr {
+        background-color: #f1f1f1;
+        height: 60px;
+      }
       td {
+        position:relative;
         text-align: left;
-        padding: 3px;
+        padding: 5px;
         height: 8px;
         border-bottom: 1px solid #bdbdbd;
+        border-top: 1px solid #bdbdbd;
+      }
+      td.img img{
+        position: absolute;
+        left: -7.5px;
+        bottom: 7.5px;
+      }
+      td.img{
+        border-left: 1px solid #bdbdbd;
       }
       td.cd-name{
         &.dem{
@@ -158,12 +175,15 @@
         font-weight: bold;
         width: 10%;
         text-align: center;
+        border-right: 1px solid #bdbdbd;
+        border-left: 1px solid #bdbdbd;
       }
       th {
+        background-color: #ffffff;
         padding: 3px;
         font-size: 12px;
         text-align: left;
-        border-bottom: 1px solid #bdbdbd;
+        border: none;
       }
     }
   }
