@@ -237,9 +237,11 @@ class Database
       for chart in ApiSources.GET_pollster_primaries(party_id)
         state_code = chart[:state]
         last_updated = DateTime.parse(chart[:last_updated])
+        slug = chart[:slug]
 
         for race in (key_to_races["#{party_id}-#{state_code}"] || [])
-          race[8] = last_updated
+          race[8] = slug
+          race[9] = last_updated
         end
 
         for estimate in chart[:estimates]
