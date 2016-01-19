@@ -35,7 +35,7 @@
         - if cd_state.poll_percent
           %tr.candidate{'data-candidate-id': cd.id}
             %td
-              %img.cd-img{src: "/2016/images/#{cd.slug}.png", alt: ''}
+              %img.cd-img{src: image_path("#{cd.slug}.png"), alt: ''}
             %td{class: "cd-name #{cd.party_id.downcase}"}= cd.full_name
             %td.pollster= "#{cd_state.poll_percent}%"
   %span.last-updated= "Last updated:  #{race[0].candidate.poll_last_update.strftime('%r - %x')}"

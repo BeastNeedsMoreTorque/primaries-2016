@@ -39,12 +39,25 @@ $twitterBlue: #c0deed ;
 			margin: 0;
 		}
 		.tease-link {
+			position: relative;
 			display: inline;
 			a {
 				color: white;
-				margin: 5px;
+				background: red;
+				padding: 3px;
+				line-height: 10px;
 			}
-			background: red;
+			.arrow-right {
+				width: 10px; 
+				height: 0;
+				$aheight: 12.9px;
+				border-top: $aheight solid transparent;
+				border-bottom: $aheight solid transparent;
+				border-left: $aheight solid red;
+				position: absolute;
+				right: -22px;
+				top: -3.5px;
+			}
 		}
 	}	
 }

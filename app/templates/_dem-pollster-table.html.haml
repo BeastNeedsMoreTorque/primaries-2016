@@ -12,6 +12,6 @@
         - if cd.poll_percent
           %tr.dem-candidate
             %td.cd-img
-              %img{src: "images/#{cd.slug}.png", alt: ''}
+              %img{src: image_path("#{cd.slug}.png"), alt: ''}
             %td.cd-name= cd.full_name
             %td.pollster= "#{cd.poll_percent}%"

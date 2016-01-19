@@ -1,4 +1,7 @@
 !!! 5
+- dem_list = ['Clinton', 'Sanders', "O'Malley"]
+- gop_list = ["Trump", "Christie", "Bush", "Cruz", "Paul", "Rubio", "Carson", "Huckabee", "Kasich", "Fiorina", "Santorum"]
+- preview = true
 %html{lang: 'en'}
   %meta{charset: 'utf-8'}
   %title Huffington Post 2016 Primary Results
@@ -7,36 +10,79 @@
 %body
   %div.primary-splash-banner
     %div.header
-      %h1= "HAPPENING NOW: Iowa Caucus"
+      -if preview
+        %h1= "HAPPENING TODAY: Iowa Caucus"
+      -else
+        %h1= "HAPPENING NOW: Iowa Caucus"
       %div.tease-link
         %a{href: "/2016/primaries/#{next_race_day.id}"}= "See live-updating results for the Caucus here."
-    -parties.each do |party|
-      - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
-      - race = races.find_by_party_and_state(party, cur_state)
-      %div{class: "party-container #{party_abbrev} clearfix"}
-        -if party.adjective == 'Democratic'
-          %div.leading-candidate-img.left
-            %img{src: "/2016/images/#{leading_democrat.slug}.png", alt: ''}
-          %div.leading-candidate-delegates.left
-            %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
-            %p.frontrunner-cd= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
+        %div.arrow-right
+    %div.countdown-map-container.left
+      %div.countdown-container
+        -if preview
+          %h3= "POLLS CLOSE IN"
         -else
-          %div.leading-candidate-img.left
-            %img{src: "/2016/images/#{leading_republican.slug}.png", alt: ''}
-          %div.leading-candidate-delegates.left
-            %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
-            %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
-        %div.candidate-delegates-lbl.left
-          %p= "VOTE"
-          %p= "COUNTS"
-        %div.candidate-position-listing.left.clearfix
-          - race.candidate_states.each do |cd_state|
-            - cd = cd_state.candidate
-            %div.left.candidate{'data-candidate-id': cd.id}
-              %table
-                %tr
-                  %td= cd.name
-                  %td= cd_state.n_votes
-    %p
-      Next race:
-      %a{href: "/2016/primaries/#{next_race_day.id}"}= next_race_day.date.strftime('%A, %B %-d')
+          %h5= "POLLS CLOSED FOR"
+        %table
+          %tr#countdown
+            %td.hours= "01"
+            %td.minutes= "27"
+            %td.seconds= "06"
+          %tr
+            %td= "HR"
+            %td= "MIN"
+            %td= "SEC"
+      %div.map-container
+        %span.counties-reporting= "TK COUNTIES REPORTING"
+        %div.map
+          != map_svg("states/IA")
+        %span.footnote= "TK% PRECINCTS REPORTING"
+    %div.parties-container.left
+      -parties.each do |party|
+        - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
+        - race = races.find_by_party_and_state(party, cur_state)
+        %div{class: "party-container #{party_abbrev} clearfix"}
+          -if not preview
+            -if party.adjective == 'Democratic'
+              %div.leading-candidate-img.left
+                %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
+              %div.leading-candidate-delegates.left
+                %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
+                %p.frontrunner-cd= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
+            -else
+              %div.leading-candidate-img.left
+                %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
+              %div.leading-candidate-delegates.left
+                %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
+                %p.frontrunner-cd= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
+          -else
+            -if party.adjective == 'Democratic'
+              %div.leading-candidate-img.left.preview
+                %img{src: image_path("democrats.svg"), alt: ''}
+              %div.leading-candidate-delegates.left.preview
+                %p.frontrunner-lbl="DEMOCRATIC CANDIDATES"
+            -else
+              %div.leading-candidate-img.left.preview
+                %img{src: image_path("republicans.svg"), alt: ''}
+              %div.leading-candidate-delegates.left.preview
+                %p.frontrunner-lbl="REPUBLICAN CANDIDATES"
+
+          %div.left.candidate-position-lbl
+            %p= "VOTES"
+          %div.candidate-position-listing.left.clearfix
+            - race.candidate_states.each_with_index do |cd_state, idx|
+              - cd = cd_state.candidate
+              - if (party_abbrev == 'gop' and gop_list.include? cd.name) or (party_abbrev == 'dem' and dem_list.include? cd.name)
+                %div.candidate{'data-candidate-id': cd.id}
+                  %table
+                    %tr
+                      %td= cd.name
+                      %td= cd_state.n_votes#rand(0..100000).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
+                - if party_abbrev == 'gop' and race.candidate_states.count - 1 == idx
+                  %div.candidate{'data-candidate-id': 99}
+                    %table
+                      %tr
+                        %td.see-all{:colspan => 3}
+                          %a{href:"/2016/primaries/#{next_race_day.id}"}= "All candidates"
+  %script{src: asset_path('splash.js')}
+

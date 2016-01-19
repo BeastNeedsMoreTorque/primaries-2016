@@ -1,5 +1,12 @@
 @import '_variables';
 
+$splash-height: 240px;
+$splash-width: 977px;
+$ele-bg: #eee;
+
+$map-countdown-width: 160px;
+$map-countdown-padding: 10px;
+
 body {
 	@include body-copy;
 }
@@ -12,48 +19,139 @@ body {
   @include desktop-splash-base;
 }
 
-.party-container {
-	background-color: #eee;
-	margin-top: 20px;
-	border: 1px solid black;
-	margin: 5px;
-
-	&.dem {
-		.frontrunner-lbl { color: $strongDem; }
-	}
-	&.gop {
-		.frontrunner-lbl { color: $strongGOP; }
+.countdown-map-container {
+	width: $map-countdown-width;
+	height: $splash-height;
+	border-right: 1px solid black;
+	padding: $map-countdown-padding;
+	h3,h5 {
+		margin: 0;
+		text-align: center;
 	}
 }
 
-.leading-candidate-img,
-.leading-candidate-delegates,
-.candidate-delegates-lbl,
-.candidate-position-listing {
-	margin-left: 10px;	
+.countdown-container {
+	table {
+		background-color: $ele-bg;
+		margin: 0 auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+		tr {
+			font-weight: bold;
+			text-align: center;
+			td {
+				padding: 3px;
+				border: 1px solid #999;
+			}
+		}
+		tr:first-child {
+			font-size: 36px;
+		}
+	}	
+}
+
+.map-container {
+	margin-top: 10px;
+	width: 100%;
+	.map {
+		svg {
+			width: $map-countdown-width;
+			height: $map-countdown-width - 60px;
+		  g.counties path {
+		    stroke: white;
+		    stroke-width: 10; // divided by 10
+		    fill: #eee;
+		  }
+		  text {
+		  	opacity: 0;
+		  }
+		}
+	}
+	img {
+		width: 100%;
+	}
+	span.counties-reporting {
+		font-size: 12px;
+		font-weight: bold;
+	}
+	span.footnote {
+		color: #999;
+		font-size: 11px;
+		margin-top: -20px;
+	}
+}
+
+$parties-container-width: $splash-width - $map-countdown-width - ($map-countdown-padding * 2) - 1;
+
+.parties-container {
+	width: $parties-container-width;
+}
+
+$candidate-img-width: 95px;
+$leading-candidates-width: 170px;
+$leading-candidates-left: 90px;
+
+.leading-candidate-img {
+	position: absolute;	
+	margin-left: -20px;
+	margin-top: -30px;
+	height: 105px;
+	&.preview {
+		margin-left: 0;
+		margin-top: 0px;
+		img {
+			width: 85px;
+		}
+	}
 }
 
 .leading-candidate-delegates {
 	font-weight: bold;
+	margin-left: $leading-candidates-left;
+	padding-right: 10px;
+	width: $leading-candidates-width;
+	border-right: 1px solid #999;
+	height: 100%;
 	p {
 		margin-top: 0;
-		margin-bottom: 5px
+		margin-bottom: 5px;
 	}
 }
 
-.candidate-delegates-lbl {
+$candidate-position-lbl-width: 65px;
+
+.candidate-position-lbl {
 	font-weight: bold;
+	text-align: center;
+	width: $candidate-position-lbl-width;
+	p:first-child {
+		padding-top: 30px;
+	}
 }
 
+$candidate-position-listing-width: $parties-container-width - $candidate-img-width - $leading-candidates-width - $leading-candidates-left - $candidate-position-lbl-width + 62px;
+
 .candidate-position-listing {
-	width: 500px;
+	width: $candidate-position-listing-width;
+	height: 100%;
+	margin: 0 auto;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+
 	.candidate {
-		width: 100px;
+		width: 130px;
 		background: #fff;
-		padding: 5px;
+		margin: 3px;
 		margin-right: 5px;
+		font-size: 13px;
+
 		table {
 			width: 100%;
+			font-weight: bold;
 			tr {
 				td {
 					&:first-child {
@@ -62,8 +160,45 @@ body {
 					&:last-child {
 						text-align: right;
 					}
+					&.see-all {
+						text-align: center;
+					}
 				}
 			}
 		}
+	}
+}
+
+.party-container {
+	background-color: $ele-bg;
+	border: 1px solid black;
+	margin-left: 20px;
+	margin-top: 15px;
+
+	height: 110px;
+	.leading-candidate-delegates {
+		p:first-child {
+			padding-top: 25px;
+		}
+		&.preview {
+			p:first-child {
+				margin-top: 10px;
+			}
+		}
+	}
+	.leading-candidate-img {
+		padding-top: 8px;
+	}
+	
+	&.dem {
+		.frontrunner-lbl { color: $strongDem; }
+		.candidate-position-listing {
+			.candidate:first-child {
+				margin-top: 16px;//account for only 3 candidates and vertically center
+			}
+		}
+	}
+	&.gop {
+		.frontrunner-lbl { color: $strongGOP; }
 	}
 }

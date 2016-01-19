@@ -51,8 +51,6 @@ class Server
   end
 
   def run
-    ApiSources.GET_all_primary_election_days
-
     run_poll_dates([ latest_race_date_string ])
 
     while true
@@ -78,9 +76,11 @@ class Server
     $logger.info("Updating Pollster primaries data")
     ApiSources.poll_pollster_primaries
 
+    $logger.info("Wiping old output")
+    FileUtils.rm_rf(Paths.Dist)
+
     $logger.info("Generating")
     database = Database.load
-    Assets.clear
     Assets.build(database)
 
     for view in @views
