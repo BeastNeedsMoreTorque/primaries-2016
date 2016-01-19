@@ -1,22 +1,29 @@
 @import '_variables';
 
-$splash-height: 240px;
+$splash-height: 235px;
 $splash-width: 977px;
 $ele-bg: #eee;
 
-$map-countdown-width: 160px;
+$map-countdown-width: 200px;
 $map-countdown-padding: 10px;
+
+$party-container-height: 110px;
 
 body {
 	@include body-copy;
+	width: $splash-width;
 }
 
-.left {
-	float: left;
+.flex-container {
+	display: flex;
+	flex-flow: row;
+	display: -webkit-flex;
+  -webkit-flex-direction: row;
 }
 
 .primary-splash-banner {
   @include desktop-splash-base;
+  margin-top: 10px;
 }
 
 .countdown-map-container {
@@ -53,10 +60,11 @@ body {
 .map-container {
 	margin-top: 10px;
 	width: 100%;
+	text-align: center;
 	.map {
 		svg {
 			width: $map-countdown-width;
-			height: $map-countdown-width - 60px;
+			height: $map-countdown-width * .48;
 		  g.counties path {
 		    stroke: white;
 		    stroke-width: 10; // divided by 10
@@ -81,21 +89,17 @@ body {
 	}
 }
 
-$parties-container-width: $splash-width - $map-countdown-width - ($map-countdown-padding * 2) - 1;
-
 .parties-container {
-	width: $parties-container-width;
+	width: $splash-width - $map-countdown-width;
+	display: flex;
+	flex-flow: column;
+	display: -webkit-flex;
+  -webkit-flex-direction: column;
 }
 
-$candidate-img-width: 95px;
-$leading-candidates-width: 170px;
-$leading-candidates-left: 90px;
-
 .leading-candidate-img {
-	position: absolute;	
-	margin-left: -20px;
-	margin-top: -30px;
 	height: 105px;
+	@include vertical-center-flex;
 	&.preview {
 		margin-left: 0;
 		margin-top: 0px;
@@ -107,40 +111,28 @@ $leading-candidates-left: 90px;
 
 .leading-candidate-delegates {
 	font-weight: bold;
-	margin-left: $leading-candidates-left;
-	padding-right: 10px;
-	width: $leading-candidates-width;
+	padding: 10px;
+	width: 110px;
 	border-right: 1px solid #999;
 	height: 100%;
 	p {
 		margin-top: 0;
 		margin-bottom: 5px;
 	}
+	@include vertical-center-flex;
 }
 
-$candidate-position-lbl-width: 65px;
 
 .candidate-position-lbl {
 	font-weight: bold;
-	text-align: center;
-	width: $candidate-position-lbl-width;
-	p:first-child {
-		padding-top: 30px;
-	}
+	padding-left: 5px;
+	padding-right: 5px;
+	@include vertical-center-flex;
 }
 
-$candidate-position-listing-width: $parties-container-width - $candidate-img-width - $leading-candidates-width - $leading-candidates-left - $candidate-position-lbl-width + 62px;
-
 .candidate-position-listing {
-	width: $candidate-position-listing-width;
 	height: 100%;
-	margin: 0 auto;
-  display: -webkit-inline-flex;
-  display: inline-flex;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  -webkit-flex-wrap: wrap;
-  flex-wrap: wrap;
+	@include vertical-center-column-flex;
 
 	.candidate {
 		width: 130px;
@@ -174,29 +166,12 @@ $candidate-position-listing-width: $parties-container-width - $candidate-img-wid
 	border: 1px solid black;
 	margin-left: 20px;
 	margin-top: 15px;
+	height: $party-container-height;
 
-	height: 110px;
-	.leading-candidate-delegates {
-		p:first-child {
-			padding-top: 25px;
-		}
-		&.preview {
-			p:first-child {
-				margin-top: 10px;
-			}
-		}
-	}
-	.leading-candidate-img {
-		padding-top: 8px;
-	}
-	
+	@include left-column-flex;
+
 	&.dem {
 		.frontrunner-lbl { color: $strongDem; }
-		.candidate-position-listing {
-			.candidate:first-child {
-				margin-top: 16px;//account for only 3 candidates and vertically center
-			}
-		}
 	}
 	&.gop {
 		.frontrunner-lbl { color: $strongGOP; }
