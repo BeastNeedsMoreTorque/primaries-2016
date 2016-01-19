@@ -25,7 +25,6 @@ body {
 }
 
 .parties-container {
-	//@include vertical-center-flex;
 	display: -webkit-flex;
   display: flex;
   align-items: center;
@@ -54,8 +53,12 @@ body {
 
 .leading-candidate-img {
 	img {
-		width: 50px;
+		width: 40px;
 	}
+}
+
+.leading-candidate-delegates {
+	margin-left: 8px;
 }
 
 .frontrunner-cd, .frontrunner-num {
