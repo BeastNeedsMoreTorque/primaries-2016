@@ -26,6 +26,8 @@ Associated Press.
 
 Set the environment variable `LOG_LEVEL=debug` to see more log data.
 
+Set the environment variable `DEBUG_ASSETS=true` to skip minimizing assets.
+
 Another useful command is `AP_API_KEY=abcdgef RPROF=true script/build`, which
 will dump profiling data to `profile.html`.
 
