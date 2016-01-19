@@ -6,7 +6,7 @@ require_relative '../../lib/paths'
 class BaseView
   attr_reader(:database)
   StateRaceDaysColumn = Struct.new(:html_class, :label)
-  Months = %w(Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.)
+  Months = %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec) # http://www.apstylebook.com/online/?do=entry&id=1939&src=AE
 
   def initialize(database)
     @database = database
