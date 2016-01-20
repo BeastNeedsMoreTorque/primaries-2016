@@ -1,4 +1,5 @@
 require 'date'
+require 'set'
 
 require_relative '../../lib/api_sources'
 require_relative '../collections/parties'
@@ -63,6 +64,8 @@ class Database
   #
   # If AP_TEST=true, we use AP's test data.
   def self.load
+    copy = production_copy
+
     candidates = []
     candidate_counties = []
     candidate_states = []
@@ -178,6 +181,7 @@ class Database
       end
     end
 
+    fix_invalid_ap_candidate_data(copy, candidates, candidate_states, candidate_counties)
     stub_races_ap_isnt_reporting_yet(races)
     add_pollster_estimates(parties, candidates, candidate_states, races)
 
@@ -189,7 +193,20 @@ class Database
       county_parties: county_parties,
       parties: parties,
       races: races
-    }, Date.today, LastDate, production_copy)
+    }, Date.today, LastDate, copy)
+  end
+
+  # Removes candidates AP shouldn't be reporting to us, and override AP's
+  # delegate counts.
+  #
+  # Prior to 2016-01-31, AP reports the wrong list of candidates and the
+  # wrong delegate counts. We put the correct data in our `copy`.
+  def self.fix_invalid_ap_candidate_data(copy, candidates, candidate_states, candidate_counties)
+    candidate_ids = Set.new(copy.fetch('candidates', []).map{ |c| c['id'] })
+
+    candidates.select! { |arr| candidate_ids.include?(arr[0]) }
+    candidate_states.select! { |arr| candidate_ids.include?(arr[0]) }
+    candidate_counties.select! { |arr| candidate_ids.include?(arr[1]) }
   end
 
   # Adds more races to the passed Array of races.
