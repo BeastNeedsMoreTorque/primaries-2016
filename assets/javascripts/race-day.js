@@ -106,6 +106,7 @@ function add_tooltips() {
   }
 
   function position_tooltip_near_svg_path(svg_path) {
+    // Remember: getBoundingClientRect() returns *viewport* coordinates.
     var margin = 10; // px
     var path_rect = svg_path.getBoundingClientRect();
 
@@ -116,12 +117,21 @@ function add_tooltips() {
     var div_rect = $div[0].getBoundingClientRect();
     var tooltip_rect = $tooltip[0].getBoundingClientRect();
 
+    // x: make it center the tooltip with the center of the state, respecting
+    // the bounds of the page.
     var cx = Math.round(path_rect.left - div_rect.left + path_rect.width / 2);
-    var y = Math.round(path_rect.top - div_rect.top - tooltip_rect.height - margin);
     var x = cx - $tooltip.width() / 2;
 
     if (div_rect.left + x < 0) x = -div_rect.left;
     if (div_rect.left + x + tooltip_rect.width > body_width) x = body_width - tooltip_rect.width - div_rect.left;
+
+    // y: if the tooltip fits above, show it above. Otherwise, show it below.
+    var y;
+    if (path_rect.top - tooltip_rect.height - margin >= 0) {
+      y = Math.round(path_rect.top - div_rect.top - tooltip_rect.height - margin); // above
+    } else {
+      y = Math.round(path_rect.bottom - div_rect.top + margin);
+    }
 
     $tooltip.css({ left: x + 'px', top: y + 'px' });
   }
