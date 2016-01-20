@@ -109,4 +109,24 @@ body.race-day {
       color: #999;
     }
   }
+
+  .no-precincts-reporting {
+    th.n-votes, td.n-votes {
+      display: none;
+    }
+
+    .poll-last-updated.some-precincts-reporting {
+      display: none;
+    }
+  }
+
+  .some-precincts-reporting {
+    th.pollster, td.pollster {
+      display: none;
+    }
+
+    .poll-last-updated.no-precincts-reporting {
+      display: none;
+    }
+  }
 }
