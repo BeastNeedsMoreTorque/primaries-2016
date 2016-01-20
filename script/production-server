@@ -21,6 +21,7 @@ require_relative '../lib/env'
 require_relative '../lib/paths'
 require_relative '../lib/api_sources'
 require_relative '../app/models/database'
+require_relative '../config/schedule'
 
 FileUtils.mkdir_p(Paths.ProductionDir)
 
@@ -30,7 +31,7 @@ for path in [ Paths.ProductionCommands, Paths.ProductionOutput ]
 end
 
 class Server
-  Timeout = 300 # seconds
+  include ServerSchedule
 
   def initialize
     @command_reader = open(Paths.ProductionCommands, 'r+')
@@ -51,30 +52,28 @@ class Server
   end
 
   def run
-    run_poll_dates([ latest_race_date_string ])
+    run_scheduled_tasks
 
-    while true
-      tick
-    end
+    loop { wait_and_handle_command_or_run_scheduled_tasks }
   end
 
   private
 
-  def run_poll_dates(date_strings)
-    $logger.info("Updating AP data for #{date_strings.join(' ')}")
-    begin
-      ApiSources.poll_dates(date_strings)
-    rescue RuntimeError => e
-      valid_message = 'HTTP 500'
-      if e.message[0 .. valid_message.length] != valid_message && e.message =~ /QuotaViolation/
-        $logger.info("AP's API reports a quota violation. Falling back to cached results.")
-      else
-        raise e
-      end
+  def run_scheduled_tasks
+    if RefreshDelegates
+      $logger.info('Updating delegate counts from AP')
+      ignoring_ap_quota_error { ApiSources.poll_del_super }
     end
 
-    $logger.info("Updating Pollster primaries data")
-    ApiSources.poll_pollster_primaries
+    if !RefreshPrimariesRaceDays.empty?
+      $logger.info("Updating race-day results for #{RefreshPrimariesRaceDays.join(', ')}")
+      ignoring_ap_quota_error { ApiSources.poll_dates(RefreshPrimariesRaceDays) }
+    end
+
+    if RefreshPollsterPrimaries
+      $logger.info('Updating Pollster primaries estimates')
+      ApiSources.poll_pollster_primaries
+    end
 
     $logger.info("Wiping old output")
     FileUtils.rm_rf(Paths.Dist)
@@ -91,38 +90,53 @@ class Server
     system("#{Paths.Script}/upload")
   end
 
-  def latest_race_date_string
-    # Polls usually close at 10:00 p.m.; we'll assume they're finalized before
-    # 2 p.m. the next day.
-    (DateTime.now - 2.0/3).to_date.to_s
+  def ignoring_ap_quota_error(&block)
+    begin
+      block.call
+    rescue RuntimeError => e
+      valid_message = 'HTTP 500'
+      if e.message[0 .. valid_message.length] != valid_message && e.message =~ /QuotaViolation/
+        $logger.info("AP's API reports a quota violation. Falling back to cached results.")
+      else
+        raise e
+      end
+    end
   end
 
-  def tick
-    if !IO.select([ @command_reader ], [], [], Timeout)
-      run_poll_dates([ latest_race_date_string ])
+  # Waits up to TimeoutInS seconds for an incoming command, then runs it.
+  #
+  # If no command arrives, runs scheduled tasks as configured in
+  # `config/schedule.rb`.
+  def wait_and_handle_command_or_run_scheduled_tasks
+    if IO.select([ @command_reader ], nil, nil, TimeoutInS)
+      handle_command
     else
-      command = @command_reader.gets.strip
-      $logger.info("Handling command: #{command}")
-
-      $stderr.reopen(@output_writer)
-
-      parts = command.split(/\s+/)
-
-      case parts[0]
-      when 'poll_dates' then run_poll_dates(parts[1..-1])
-      when 'exit'
-        $logger.info("Exiting")
-        $stderr.write("\n") # so client can exit -- see below
-        exit 0
-      else
-        $logger.warn("Ignoring invalid command `#{command}`")
-      end
-
-      # The client is running this command until output finishes. Write an empty
-      # line to indicate the end of output.
-      $stderr.write("\n")
-      $stderr.reopen(@real_stderr)
+      run_scheduled_tasks
     end
+  end
+
+  def handle_command
+    command = @command_reader.gets.strip
+    $logger.info("Handling command: #{command}")
+
+    $stderr.reopen(@output_writer)
+
+    parts = command.split(/\s+/)
+
+    case parts[0]
+    when 'poll_dates' then run_poll_dates(parts[1..-1])
+    when 'exit'
+      $logger.info("Exiting")
+      $stderr.write("\n") # so client can exit -- see below
+      exit 0
+    else
+      $logger.warn("Ignoring invalid command `#{command}`")
+    end
+
+    # The client is running this command until output finishes. Write an empty
+    # line to indicate the end of output.
+    $stderr.write("\n")
+    $stderr.reopen(@real_stderr)
   end
 end
 

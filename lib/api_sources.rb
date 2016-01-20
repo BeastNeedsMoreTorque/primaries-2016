@@ -34,8 +34,11 @@ module ApiSources
     @cache.wipe_all
   end
 
-  def self.poll_dates(dates)
+  def self.poll_del_super
     poll_or_fetch(:del_super, nil)
+  end
+
+  def self.poll_dates(dates)
     #poll_or_fetch(:election_days, nil)
     for date in dates
       poll_or_fetch(:election_day, date)
