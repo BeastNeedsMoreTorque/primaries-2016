@@ -150,6 +150,29 @@ $splash-ele-bg: #eee;
 	}
 }
 
+@mixin ellipsized-table {
+  tr.ellipsized {
+    display: none;
+  }
+
+  & + .ellipsize-table-prompt {
+    height: 2rem;
+    text-align: center;
+
+    button {
+      margin: 0;
+      padding: .5rem 1rem;
+      height: 1rem;
+      line-height: 1rem;
+      border: none;
+      font: inherit;
+      background: none;
+      cursor: pointer;
+      color: blue;
+    }
+  }
+}
+
 @mixin desktop-splash-base {
 	@include splash-base;
 }

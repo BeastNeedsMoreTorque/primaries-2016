@@ -1,8 +1,14 @@
+@import '../_variables';
+
 .pollster-tables {
   display: flex;
   display: -webkit-flex;
   flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
+
+  table {
+    @include ellipsized-table;
+  }
 
   .party-hed {
     text-align: center;
