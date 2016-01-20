@@ -50,6 +50,10 @@
     border-top-color: transparent;
   }
 
+  tr[data-href] {
+    cursor: pointer;
+  }
+
   table {
     border-collapse: collapse;
     margin: 0 auto;
