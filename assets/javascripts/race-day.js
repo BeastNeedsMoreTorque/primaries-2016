@@ -86,14 +86,14 @@ function add_tooltips() {
         '</thead>' +
         '<tbody></tbody>' +
       '</table>' +
-      '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="updated">Last updated <time></time></p></div></div>');
+      '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="last-updated">Last updated <time></time></p></div></div>');
   var svg_hover_path = null;
 
   function update_tooltip(county_name, candidates, n_reporting, n_total, last_updated) {
     $tooltip.find('h4').text(county_name);
     $tooltip.find('span.n-reporting').text(format_int(n_reporting));
     $tooltip.find('span.n-total').text(format_int(n_total));
-    $tooltip.find('.updated time').attr('datetime', last_updated.toISOString()).render_time();
+    $tooltip.find('.last-updated time').attr('datetime', last_updated.toISOString()).render_datetime();
 
     var $tbody = $tooltip.find('tbody').empty();
 
@@ -304,7 +304,7 @@ function poll_results() {
       if (elems) {
         elems.n_reporting.text(format_int(n_reporting));
         elems.n_total.text(format_int(n_total));
-        elems.last_updated.attr('datetime', last_updated.toISOString()).render_time();
+        elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();
       }
     });
   }
@@ -325,7 +325,7 @@ function poll_results() {
 
 $(function() {
   $('body.race-day').each(function() {
-    $('time').render_time();
+    $('time').render_datetime();
 
     // Changing n_trs? Change _race.html.haml as well, or page will scroll while loading
     $('table.race').ellipsize_table(5, 'ellipsized', '<button>Show more…</button>', '<button>Show fewer…</button>');
