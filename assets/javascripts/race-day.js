@@ -73,7 +73,19 @@ function position_cities_correctly() {
 
 function add_tooltips() {
   // One $tooltip for all <svg>s
-  var $tooltip = $('<div class="race-tooltip"><div class="tooltip-contents"><h4></h4><table><thead><tr><th class="candidate">Candidate</th><th class="n-votes">Votes</th></thead><tbody></tbody></table><p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="updated">Last update: <time></time></p></div></div>');
+  var $tooltip = $('<div class="race-tooltip">' +
+    '<div class="tooltip-contents">' +
+      '<h4></h4>' +
+      '<table>' +
+        '<thead>' +
+          '<tr>' +
+            '<th class="candidate">Candidate</th>' +
+            '<th class="n-votes">Votes</th>' +
+          '</tr>' +
+        '</thead>' +
+        '<tbody></tbody>' +
+      '</table>' +
+      '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="updated">Last updated <time></time></p></div></div>');
   var svg_hover_path = null;
 
   function update_tooltip(county_name, candidates, n_reporting, n_total, last_updated) {
