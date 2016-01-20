@@ -35,8 +35,8 @@ h1, h2, h3, h4{
     background-color: #ffffff;
     padding: 10px;
     border: 1px solid #bdbdbd;
-    span.last-updated-date,
-    span.last-updated{
+    span.last-updated,
+    span.last-updated-prefix{
       font-size: 12px;
     }
     .party-container{
@@ -142,6 +142,7 @@ h1, h2, h3, h4{
       }
     }
     table.t-pollster {
+      margin-top: 15px;
       border-collapse: collapse;
       border-spacing: 0 5px;
       min-width: 275px;
