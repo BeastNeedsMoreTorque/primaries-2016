@@ -22,7 +22,8 @@
       %meta{property: 'twitter:creator', content: meta[:author_twitter]}
     %meta{property: 'fb:app_id', content: '46744042133'}
 
-    %link{href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic', rel: 'stylesheet'}
+    %link{rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic'}
+    %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
     - for stylesheet in (stylesheets || [])
       %link{rel: 'stylesheet', href: stylesheet}
 
@@ -31,8 +32,7 @@
 
     != main
 
-
-    .footer
+    %footer
       :plain
         &copy; 2015 TheHuffingtonPost.com, Inc. |
         <a href="http://privacy.aol.com">Privacy</a> |

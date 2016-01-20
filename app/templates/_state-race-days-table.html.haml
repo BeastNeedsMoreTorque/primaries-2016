@@ -16,19 +16,24 @@
                 %a{href: "/2016/primaries/#{race.race_day_id}"}
                   %time{datetime: race.race_day_id}= format_date(race.date)
               - else
-                %span
+                %span.disabled
                   %time{datetime: race.race_day_id}= format_date(race.date)
             - when 'state'
               - if race.enabled?
                 %a{href: "/2016/primaries/#{race.race_day_id}"}
                   = race.state_name
+              - else
+                %span.disabled
+                  = race.state_name
             - when 'party'
               - if race.enabled?
                 %a{href: "/2016/primaries/#{race.race_day_id}"}
                   = race.party_name[0]
+              - else
+                %span.disabled= race.party_name[0]
             - when 'n-delegates'
               %span.integer
-                = race.n_delegates
+                = format_int(race.n_delegates)
               %span{'class': "dots dots-#{race.party_id.downcase}"}
                 -# That's a zero-width space (zwsp) between each dot, so they can wrap
                 = "\u200b•" * race.n_delegates

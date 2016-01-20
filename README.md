@@ -48,19 +48,31 @@ server called `production-server` which handles various tasks:
 * It updates from the AP API from time to time
 * It builds and pushes to S3 after each update
 
+## To install on a production machine
+
 We control this server with [Capistrano](http://capistranorb.com/).
 `cap staging deploy` will gracefully kill the previously-running
 `production-server`, pull new code, and start a new `production-server`.
 Here's the full list of commands:
 
-* `cap production setup`: set up server on production (prompts for variables).
-* `cap production deploy`: update code, start/restart `production-server`.
-* `cap production tell-server command='poll_dates 2016-02-01'`: give the server a
-  command. Commands are:
+* `cap production deploy`: update code, start/restart `production-server`. Will
+  install correctly on a fresh server, prompting for the AP API key.
+* `cap production reset_env`: prompts for a new AP API key.
+* `cap production tell-server command='poll_dates 2016-02-01'`: give the server
+  a command. Commands are:
   * `poll_dates [YYYY-MM-DD ...]`: updates AP data for races that day
   * `exit`: terminates the server gracefully
 
-And here's what you do when you want to change copy:
+## To adjust schedule
+
+On a race day, we want frequent updates of a specific date; other days, we'll
+probably want to do less.
+
+We adjust this schedule in this git repo. See `config/schedule.rb`.
+
+Race day? Adjust `config/schedule.rb` and run `cap production deploy`.
+
+## To change copy
 
 1. Update the copy on Google Docs, at
    https://docs.google.com/document/d/1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w/edit.
@@ -71,10 +83,16 @@ And here's what you do when you want to change copy:
 
 # Endpoints
 
-* `/2016/primaries`: Landing page page
-* `/2016/primaries/YYYY-MM-DD`: Dashboard for primaries on a certain day
-* `/2016/primaries/results.json`: New numbers of votes and delegate counts
-* `/2016/primaries/right-rail`: Embeddable right rail
+* `/2016/primaries`: Landing page page.
+* `/2016/primaries/YYYY-MM-DD`: Dashboard for primaries on a certain day.
+* `/2016/primaries/YYYY-MM-DD.json`: New numbers for YYYY-MM-DD. Includes
+  county-level vote counts.
+* `/2016/primaries/right-rail`: Embeddable right rail.
+* `/2016/primaries/mobile-ad`: Embeddable mobile ad.
+* `/2016/primaries/splash`: Embeddable splash.
+* `/2016/javascripts/pym.min.js`: [Pym.js](http://blog.apps.npr.org/pym.js/):
+  the embeddable endpoints call `new pym.Child();`, so the code that embeds
+  them should use `pym.min.js` and call `new pym.Parent(...);`.
 
 To build these files, we iterate over `app/views/*.rb` and run
 `[SomethingView].generate_all` on each class. The `generate_all` method will

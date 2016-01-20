@@ -1,13 +1,57 @@
 !!! 5
+- dem_list = ['Clinton', 'Sanders', "O'Malley"]
+- gop_list = ["Trump", "Christie", "Bush", "Cruz", "Paul", "Rubio", "Carson", "Huckabee", "Kasich", "Fiorina", "Santorum"]
+- preview = !true
 %html{lang: 'en'}
   %meta{charset: 'utf-8'}
-  %title Huffington Post 2016 Primaries
+  %title Huffington Post 2016 Primary Results
+  %link{rel: 'stylesheet', href: asset_path('mobile-ad.css')}
+
 %body
-  %p.leading-democrat= "#{leading_democrat.name}: #{leading_democrat.n_delegates} delegates"
-  %p.leading-republican= "#{leading_republican.name}: #{leading_republican.n_delegates} delegates"
-  %p
-    - if current_race_day
-      %a{href: "/2016/primaries/#{current_race_day.id}"} Live updates
-    - elsif next_race_day
-      Next race:
-      %a{href: "/2016/primaries/#{next_race_day.id}"}= next_race_day.date.strftime('%A, %B %-d')
+  %div.primary-mobile-ad
+    %div.header
+      -if preview
+        %h4= "HAPPENING TODAY: Iowa Caucus"
+      -else
+        %h4= "HAPPENING NOW: Iowa Caucus"
+    %div.countdown-container
+      -if preview
+        %span.lbl= "POLLS CLOSE IN:"
+      -else
+        %span.lbl= "POLLS CLOSED FOR:"
+      %span.hours= "01"
+      %span.lbl= "HR"
+      %span.minutes= "27"
+      %span.lbl= "MIN"
+      %span.seconds= "06"
+      %span.lbl= "SEC"
+    %div.parties-container
+      -if not preview
+        -parties.each do |party|
+          - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
+          - race = races.find_by_party_and_state(party, cur_state)
+          %div{class: "party-container #{party_abbrev} clearfix"}
+            -if party.adjective == 'Democratic'
+              %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
+              %div.img-stats-container
+                %div.leading-candidate-img
+                  %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
+                %div.leading-candidate-delegates
+                  %p.frontrunner-cd= "#{leading_democrat.name.upcase}"
+                  %p.frontrunner-num= "#{format_int(leading_democrat.n_delegates)} delegates"
+            -else
+              %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
+              %div.img-stats-container
+                %div.leading-candidate-img
+                  %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
+                %div.leading-candidate-delegates
+                  %p.frontrunner-cd= "#{leading_republican.name.upcase}"
+                  %p.frontrunner-num= " #{format_int(leading_republican.n_delegates)} delegates"
+      -else
+        %div.no-results
+          %h4= "NO PRECINCTS REPORTING"
+  %div.tease-link
+    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "View The Latest Results"
+
+  %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
+  %script{src: asset_path('splash.js')}

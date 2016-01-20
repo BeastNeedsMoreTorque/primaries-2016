@@ -1,5 +1,5 @@
-.t-pollster.republican
-  %h4.party-hed Republican Party
+.t-pollster
+  %h4.party-hed= party.name
   %table
     %thead
       %tr
@@ -8,7 +8,7 @@
         %th.pollster
           Pollster average
     %tbody
-      - gop_candidates.each do |cd|
+      - party.candidates.each do |cd|
         - if cd.poll_percent
           %tr.rep-candidate
             %td.cd-img

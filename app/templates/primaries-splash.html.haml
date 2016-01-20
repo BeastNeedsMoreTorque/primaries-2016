@@ -15,8 +15,7 @@
       -else
         %h1= "HAPPENING NOW: Iowa Caucus"
       %div.tease-link
-        %a{href: "/2016/primaries/#{next_race_day.id}"}= "See live-updating results for the Caucus here."
-        %div.arrow-right
+        %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See live-updating results for the Caucus here."
     %div.flex-container
       %div.countdown-map-container
         %div.countdown-container
@@ -50,14 +49,14 @@
                 %div.leading-candidate-delegates
                   %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
                   %p.frontrunner-cd= "#{leading_democrat.name}"
-                  %p.frontrunner-num= "#{leading_democrat.n_delegates} delegates"
+                  %p.frontrunner-num= "#{format_int(leading_democrat.n_delegates)} delegates"
               -else
                 %div.leading-candidate-img
                   %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
                 %div.leading-candidate-delegates
                   %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
                   %p.frontrunner-cd= "#{leading_republican.name}"
-                  %p.frontrunner-num= " #{leading_republican.n_delegates} delegates"
+                  %p.frontrunner-num= " #{format_int(leading_republican.n_delegates)} delegates"
             -else
               -if party.adjective == 'Democratic'
                 %div.leading-candidate-img.preview
@@ -81,7 +80,7 @@
                     %table{class: "#{highlight_class}"}
                       %tr
                         %td= cd.name
-                        %td= cd_state.n_votes
+                        %td= format_int(cd_state.n_votes)
                   - if party_abbrev == 'gop' and race.candidate_states.count - 1 == idx
                     %div.candidate{'data-candidate-id': 99}
                       %table

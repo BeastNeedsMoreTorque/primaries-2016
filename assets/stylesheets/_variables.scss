@@ -14,6 +14,9 @@ $libertarian: #7f5217;
 $facebookBlue: #3b5998 ;
 $twitterBlue: #c0deed ;
 
+$splash-ele-bg: #eee;
+
+
 @mixin vertical-center-flex {
 	display: -webkit-inline-flex;
   display: inline-flex;
@@ -31,6 +34,7 @@ $twitterBlue: #c0deed ;
   flex-wrap: wrap; //wraps left to right
   -webkit-justify-content: center;
   justify-content: center; //centers vertically if there is not a full column
+  -webkit-align-content: start;
   align-content: start;
 }
 
@@ -51,9 +55,6 @@ $twitterBlue: #c0deed ;
   align-content: flex-start;
 }
 
-
-
-
 @mixin clearfix {
 	.clearfix {
 	  overflow: auto;
@@ -72,30 +73,39 @@ $twitterBlue: #c0deed ;
 		background-color: black;
 		color: white;
 		padding: 5px;
-		h1 {
+		h1, h5, h4 {
 			display: inline;
 			margin: 0;
 		}
-		.tease-link {
+	}
+	.tease-link {
+		position: relative;
+		display: inline;
+		a {
+			color: white;
+			background: red;
+			padding: 3px;
+		}
+		.arrow_box {
 			position: relative;
-			display: inline;
-			a {
-				color: white;
-				background: red;
-				padding: 3px;
-				line-height: 10px;
-			}
-			.arrow-right {
-				width: 10px;
-				height: 0;
-				$aheight: 12.9px;
-				border-top: $aheight solid transparent;
-				border-bottom: $aheight solid transparent;
-				border-left: $aheight solid red;
-				position: absolute;
-				right: -22px;
-				top: -3.5px;
-			}
+			background: #red;
+			position: absolute;
+			right: 0px;
+
+		}
+		.arrow_box:after {
+			left: 100%;
+			top: 50%;
+			border: solid transparent;
+			content: " ";
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+			border-color: rgba(213, 7, 0, 0);
+			border-left-color: #d50700;
+			border-width: 12.5px;
+			margin-top: -25.5px;
 		}
 	}
 }
@@ -144,9 +154,8 @@ $twitterBlue: #c0deed ;
 	@include splash-base;
 }
 
-@mixin mobile-splash-base {
+@mixin mobile-ad-base {
 	@include splash-base;
-	width: 320px;
 }
 
 @mixin right-rail-base {

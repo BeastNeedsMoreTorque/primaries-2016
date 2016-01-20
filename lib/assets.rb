@@ -18,6 +18,7 @@ module Assets
     stylesheets/main.css
     stylesheets/splash.css
     stylesheets/primaries-right-rail.css
+    stylesheets/mobile-ad.css
   )
 
   # Assets we serve with a sha1 digest.
@@ -39,6 +40,7 @@ module Assets
   # To refer to `javascripts/pym.min.js` from a template, write it explicitly.
   StaticAssets = %w(
     javascripts/pym.min.js
+    stylesheets/proxima-nova-condensed.css
   )
 
   def self.build(database)
