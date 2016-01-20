@@ -104,11 +104,12 @@
   // https://davidwalsh.name/css-flip
   .both-tables {
     margin: 2rem 0 1rem;
-    perspective: 1000rem;
     -webkit-perspective: 1000rem;
+    perspective: 1000rem;
 
     .flipper {
       transition: 0.5s;
+      -webkit-transform-style: preserve-3d;
       transform-style: preserve-3d;
       position: relative;
 
@@ -118,6 +119,7 @@
     }
 
     .flipper>* {
+      -webkit-backface-visibility: hidden; // https://trello.com/c/rONHJUbe/88-mobile-schedule-table-has-overlapping-elements-text
       backface-visibility: hidden;
       transform: rotateY(180deg);
     }
