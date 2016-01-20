@@ -12,33 +12,33 @@ body.race-day {
 
     border-collapse: collapse;
     width: 100%;
-    th {
+
+    td, th {
+      white-space: nowrap;
       padding: 5px;
     }
+
     td {
-      text-align: left;
-      padding: 5px;
-      height: 10px;
       border-bottom: 1px solid #ccc;
     }
-    .pollster{
-      width: 10%;
-      text-align: right;
-      padding-right: 0;
-    }
-    .candidate{
-      width: 30%;
-      padding-left: 0;
-    }
-    .n-votes{
-      text-align: right;
-    }
-    .n-delegates{
-      text-align: right;
-    }
+
     th {
       text-align: left;
       border-bottom: 1px solid black;
+    }
+
+    .pollster{
+      text-align: right;
+      padding-right: 0;
+    }
+    .candidate {
+      width: 100%;
+    }
+    .candidate, .cd-img {
+      padding-left: 0;
+    }
+    .n-votes, .n-delegates {
+      text-align: right;
     }
   }
 
@@ -107,6 +107,26 @@ body.race-day {
       margin: 0;
       font-size: 0.8em;
       color: #999;
+    }
+  }
+
+  .no-precincts-reporting {
+    th.n-votes, td.n-votes {
+      display: none;
+    }
+
+    .poll-last-updated.some-precincts-reporting {
+      display: none;
+    }
+  }
+
+  .some-precincts-reporting {
+    th.pollster, td.pollster {
+      display: none;
+    }
+
+    .poll-last-updated.no-precincts-reporting {
+      display: none;
     }
   }
 }

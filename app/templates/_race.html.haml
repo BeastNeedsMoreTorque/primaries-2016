@@ -16,7 +16,7 @@
         %a{href: "/2016/primaries/#{race.race_day.id}"}= race.race_day.date.strftime('%B %-d')
   - else
     - is_this_page_date = race.race_day == race_day
-    %div{class: "#{is_this_page_date ? 'race-this-page-date' : 'race-another-date'}"}
+    %div{class: "race-inner #{is_this_page_date ? 'race-this-page-date' : 'race-another-date'} #{race.n_precincts_reporting > 0 ? 'some-precincts-reporting' : 'no-precincts-reporting'}"}
       - if !is_this_page_date
         %p= "This race happened on #{race.race_day.date.strftime('%B %-d')}"
       %table.race
@@ -50,4 +50,5 @@
           Last updated
           %time{datetime: format_datetime(race.last_updated)}
         - if race.poll_last_updated
-          %p.poll-last-updated!= "<a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">Pollster averages</a> updated <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
+          %p.poll-last-updated.no-precincts-reporting!= "<a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">Pollster averages</a> updated <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
+          %p.poll-last-updated.some-precincts-reporting!= "You can also check <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">Pollster averages</a> that relate to this race."
