@@ -7,38 +7,28 @@
     - last_value = nil
     - for race in races
       - current_value = race.send(hide_repeats_column)
-      %tr{'class': "#{race.disabled? ? 'disabled' : 'enabled'} #{current_value == last_value ? 'key-repeated' : ''}", 'data-race-day': race.race_day_id, 'data-party-name': race.party_name, 'data-state-name': race.state_name}
+      %tr{'class': "#{race.enabled? ? 'enabled' : 'disabled'} #{current_value == last_value ? 'key-repeated' : ''}", 'data-href': race.enabled? ? "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}" : nil}
         - for column in columns
           %td{'class': "#{column.html_class} #{(column.html_class == hide_repeats_column && current_value == last_value) ? 'repeated' : ''}"}
             - case column.html_class
-            - when 'date' then
-              - if race.enabled?
-                %a{href: "/2016/primaries/#{race.race_day_id}"}
-                  %time{datetime: race.race_day_id}= format_date(race.date)
-              - else
-                %span.disabled
-                  %time{datetime: race.race_day_id}= format_date(race.date)
-            - when 'state'
-              - if race.enabled?
-                %a{href: "/2016/primaries/#{race.race_day_id}"}
-                  = race.state_name
-              - else
-                %span.disabled
-                  = race.state_name
-            - when 'party'
-              - if race.enabled?
-                %a{href: "/2016/primaries/#{race.race_day_id}"}
-                  = race.party_name[0]
-              - else
-                %span.disabled= race.party_name[0]
-            - when 'n-delegates'
-              %span.integer
-                = format_int(race.n_delegates)
-              %span{'class': "dots dots-#{race.party_id.downcase}"}
-                -# That's a zero-width space (zwsp) between each dot, so they can wrap
-                = "\u200b•" * race.n_delegates
-        %td{'class': "#{race.disabled? ? 'disabled' : 'enabled'}-button"}
+              - when 'date'
+                - if race.enabled?
+                  %a{href: "/2016/primaries/#{race.race_day_id}"}
+                    %time{datetime: race.race_day_id}= format_date(race.date)
+                - else
+                  %span.disabled
+                    %time{datetime: race.race_day_id}= format_date(race.date)
+              - when 'state'
+                = race.state_name
+              - when 'party'
+                = race.party_name[0]
+              - when 'n-delegates'
+                %span.integer = format_int(race.n_delegates)
+                %span{'class': "dots dots-#{race.party_id.downcase}"}
+                  -# That's a zero-width space (zwsp) between each dot, so they can wrap
+                  = "\u200b•" * race.n_delegates
+        %td{'class': "#{race.enabled? ? 'enabled-button' : 'disabled-button'}"}
           %div.results-button
             %span.results-button-desktop See results
             &raquo;
-        - last_value = current_value
+      - last_value = current_value
