@@ -1,3 +1,5 @@
+@import '../_variables';
+
 body.race-day {
   ul {
     list-style: none;
@@ -6,6 +8,8 @@ body.race-day {
   }
 
   table.race {
+    @include ellipsized-table;
+
     border-collapse: collapse;
     width: 100%;
     th {

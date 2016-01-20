@@ -8,10 +8,13 @@
         %th.pollster
           Pollster average
     %tbody
-      - party.candidates.each do |cd|
-        - if cd.poll_percent
-          %tr.rep-candidate
-            %td.cd-img
-              %img{src: image_path("#{cd.slug}.png"), alt: ''}
-            %td.cd-name= cd.full_name
-            %td.pollster= "#{cd.poll_percent}%"
+      - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
+      - for candidate in party.candidates.sort_by(&:poll_percent).reverse
+        %tr.rep-candidate{class: n_unellipsized <= 0 ? 'ellipsized' : ''}
+          %td.cd-img
+            %img{src: image_path("#{candidate.slug}.png"), alt: ''}
+          %td.cd-name= candidate.full_name
+          %td.pollster= "#{candidate.poll_percent}%"
+        - n_unellipsized -= 1
+  -# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
+  .ellipsize-table-prompt

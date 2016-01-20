@@ -1,5 +1,6 @@
 //= require ./render_time.js
 //= require ./format_int.js
+//= require ./ellipsize_table.js
 
 var database = {
   candidate_csv: "",
@@ -313,11 +314,16 @@ function poll_results() {
 }
 
 $(function() {
-  $('body.race-day time').render_time();
+  $('body.race-day').each(function() {
+    $('time').render_time();
 
-  wait_for_font_then('Source Sans Pro', function() {
-    position_cities_correctly();
-    add_tooltips();
-    poll_results();
+    // Changing n_trs? Change _race.html.haml as well, or page will scroll while loading
+    $('table.race').ellipsize_table(5, 'ellipsized', '<button>Show more…</button>', '<button>Show fewer…</button>');
+
+    wait_for_font_then('Source Sans Pro', function() {
+      position_cities_correctly();
+      add_tooltips();
+      poll_results();
+    });
   });
 });
