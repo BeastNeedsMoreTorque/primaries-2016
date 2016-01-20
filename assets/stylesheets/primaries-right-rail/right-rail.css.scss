@@ -152,39 +152,40 @@ h1, h2, h3, h4{
         border-bottom: 1px solid #bdbdbd;
       }
       td {
-        text-align: left;
         padding: 5px;
-      }
-      td.img{
-        position: relative;
-        img{
-          height: 30px; //same as table row
-          position: absolute;
-          left: 0px;
-          bottom: 0px;
+        &.img{
+          position: relative;
+          img{
+            height: 30px; //same as table row
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+          }
         }
-      }
-      td.cd-name{
-        text-align: left;
-        &.dem{
-          color: #384da0;
+        &.cd-name{
+          width: 100%;
+          text-align: left;
+          &.dem{
+            color: #384da0;
+          }
+          &.gop{
+            color: #ca3d28;
+          }
         }
-        &.gop{
-          color: #ca3d28;
+        &.pollster{
+          font-weight: bold;
+          text-align: right;
         }
-      }
-      td.pollster{
-        font-weight: bold;
-        text-align: right;
       }
       th {
-        padding: 3px;
         font-size: 12px;
         border-bottom: 1px solid black;
-      }
-      th.pollster{
-        width: 20%;
-        text-align: right;
+        &.img{
+          text-align: left;
+        }
+        &.pollster{
+          text-align: right;
+        }
       }
     }
   }

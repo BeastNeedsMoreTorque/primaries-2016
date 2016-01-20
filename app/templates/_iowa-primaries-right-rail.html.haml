@@ -20,8 +20,7 @@
         %thead
           %tr
             %th.img Candidate
-            %th
-            %th{class: "pollster", colspan: 2, scope: "colgroup"} Latest Pollster Average, Iowa Polls
+            %th.pollster{:colspan => 2} Latest Pollster Average, Iowa Polls
         %tbody
           - race.each do |cd_state|
             - cd = cd_state.candidate
@@ -30,7 +29,7 @@
                 %td.img
                   %img.cd-img{src: image_path("#{cd.slug}.png"), alt: ''}
                 %td{class: "cd-name #{cd.party_id.downcase}"}= cd.full_name
-                %td{class: "pollster", colspan: 2}= "#{cd_state.poll_percent}%"
+                %td{class: "pollster"}= "#{cd_state.poll_percent}%"
       %span.last-updated-prefix Last Updated:
       %span.last-updated{datetime: race[0].candidate.poll_last_update}
     %script{src: asset_path('primary-right-rail.js')}
