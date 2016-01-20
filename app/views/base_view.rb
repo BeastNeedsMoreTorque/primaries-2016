@@ -22,7 +22,7 @@ class BaseView
 
   # e.g., for AllPrimariesView, "all-primaries"
   def body_class
-    self.class.name.gsub(/([A-Z])/){ "_#{$1.downcase}" }[1..-6]
+    self.class.name.gsub(/([A-Z])/){ "-#{$1.downcase}" }[1..-6]
   end
 
   # 1234567 -> "1,234,567"

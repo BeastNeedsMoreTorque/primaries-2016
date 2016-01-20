@@ -1,6 +1,6 @@
 %div.rail-banner
   %div
-    %span.status= "NEXT RACE DAY: #{next_race_day.date.strftime("%B %C, %Y")}"
+    %h3.status= "COMING SOON: #{state_iowa.name}"
 %div.container
   %p= "In #{"TK days"}, Iowans will be the first Americans to cast their vote for the candidates  be the Republican and Democratic nominees. See who currently is favored to win in Iowa based on the most recent polls from HuffPost Pollster. Check our Election Center for live-updates on who is winning once the race begins in February."
   %div.teaser-link
@@ -21,7 +21,7 @@
           %tr
             %th.img Candidate
             %th
-            %th.pollster{colspan: 3} Latest Pollster Average, Iowa Polls
+            %th{class: "pollster", colspan: 2} Latest Pollster Average, Iowa Polls
         %tbody
           - race.each do |cd_state|
             - cd = cd_state.candidate
@@ -30,6 +30,7 @@
                 %td.img
                   %img.cd-img{src: image_path("#{cd.slug}.png"), alt: ''}
                 %td{class: "cd-name #{cd.party_id.downcase}"}= cd.full_name
-                %td.pollster{colspan: 3}= "#{cd_state.poll_percent}%"
-      %span.last-updated= "Last updated:  #{race[0].candidate.poll_last_update.strftime('%r - %x')}"
+                %td{class: "pollster", colspan: 2}= "#{cd_state.poll_percent}%"
+      %span.last-updated-date= "Last Updated: #{race[0].candidate.poll_last_update.strftime("%B %d, %Y")}"
+      %span.last-updated{datetime: race[0].candidate.poll_last_update}
     %script{src: asset_path('primary-right-rail.js')}

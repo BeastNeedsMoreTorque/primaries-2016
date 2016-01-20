@@ -1,4 +1,10 @@
 @import '../_variables';
+body{
+  @include body-copy;
+}
+h1, h2, h3, h4{
+  @include header-copy;
+}
 .primary-right-rail{
   width: 300px;
   div.rail-banner{
@@ -29,6 +35,7 @@
     background-color: #ffffff;
     padding: 10px;
     border: 1px solid #bdbdbd;
+    span.last-updated-date,
     span.last-updated{
       font-size: 12px;
     }
@@ -140,7 +147,6 @@
       min-width: 275px;
       tr {
         display: table-row;
-        // background-color: #f1f1f1;
         height: 30px;
         border-bottom: 1px solid #bdbdbd;
       }

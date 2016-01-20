@@ -1,5 +1,6 @@
 //= require ./render_time.js
 //= require ./format_int.js
+//= require ./ellipsize_table.js
 
 var database = {
   candidate_csv: "",
@@ -73,7 +74,19 @@ function position_cities_correctly() {
 
 function add_tooltips() {
   // One $tooltip for all <svg>s
-  var $tooltip = $('<div class="race-tooltip"><div class="tooltip-contents"><h4></h4><table><thead><tr><th class="candidate">Candidate</th><th class="n-votes">Votes</th></thead><tbody></tbody></table><p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="updated">Last update: <time></time></p></div></div>');
+  var $tooltip = $('<div class="race-tooltip">' +
+    '<div class="tooltip-contents">' +
+      '<h4></h4>' +
+      '<table>' +
+        '<thead>' +
+          '<tr>' +
+            '<th class="candidate">Candidate</th>' +
+            '<th class="n-votes">Votes</th>' +
+          '</tr>' +
+        '</thead>' +
+        '<tbody></tbody>' +
+      '</table>' +
+      '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="updated">Last updated <time></time></p></div></div>');
   var svg_hover_path = null;
 
   function update_tooltip(county_name, candidates, n_reporting, n_total, last_updated) {
@@ -93,6 +106,7 @@ function add_tooltips() {
   }
 
   function position_tooltip_near_svg_path(svg_path) {
+    // Remember: getBoundingClientRect() returns *viewport* coordinates.
     var margin = 10; // px
     var path_rect = svg_path.getBoundingClientRect();
 
@@ -103,12 +117,21 @@ function add_tooltips() {
     var div_rect = $div[0].getBoundingClientRect();
     var tooltip_rect = $tooltip[0].getBoundingClientRect();
 
+    // x: make it center the tooltip with the center of the state, respecting
+    // the bounds of the page.
     var cx = Math.round(path_rect.left - div_rect.left + path_rect.width / 2);
-    var y = Math.round(path_rect.top - div_rect.top - tooltip_rect.height - margin);
     var x = cx - $tooltip.width() / 2;
 
     if (div_rect.left + x < 0) x = -div_rect.left;
     if (div_rect.left + x + tooltip_rect.width > body_width) x = body_width - tooltip_rect.width - div_rect.left;
+
+    // y: if the tooltip fits above, show it above. Otherwise, show it below.
+    var y;
+    if (path_rect.top - tooltip_rect.height - margin >= 0) {
+      y = Math.round(path_rect.top - div_rect.top - tooltip_rect.height - margin); // above
+    } else {
+      y = Math.round(path_rect.bottom - div_rect.top + margin);
+    }
 
     $tooltip.css({ left: x + 'px', top: y + 'px' });
   }
@@ -301,11 +324,16 @@ function poll_results() {
 }
 
 $(function() {
-  $('body.race-day time').render_time();
+  $('body.race-day').each(function() {
+    $('time').render_time();
 
-  wait_for_font_then('Source Sans Pro', function() {
-    position_cities_correctly();
-    add_tooltips();
-    poll_results();
+    // Changing n_trs? Change _race.html.haml as well, or page will scroll while loading
+    $('table.race').ellipsize_table(5, 'ellipsized', '<button>Show more…</button>', '<button>Show fewer…</button>');
+
+    wait_for_font_then('Source Sans Pro', function() {
+      position_cities_correctly();
+      add_tooltips();
+      poll_results();
+    });
   });
 });

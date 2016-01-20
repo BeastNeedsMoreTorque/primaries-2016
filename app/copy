@@ -23,6 +23,80 @@ body: Here is an introduction to this project. Donec vehicula sem id nibh posuer
 :end
 
 
+[candidates]
+
+
+Don’t edit this list for now. We’ll add some properties later, such as the dates candidates dropped out.
+
+
+name: Hillary Clinton
+party: Dem
+id: 1746
+
+
+name: Bernie Sanders
+party: Dem
+id: 1445
+
+
+name: Martin O'Malley
+party: Dem
+id: 22603
+
+
+name: John Kasich
+party: GOP
+id: 36679
+
+
+name: Ted Cruz
+party: GOP
+id: 61815
+
+
+name: Jeb Bush
+party: GOP
+id: 1239
+
+
+name: Chris Christie
+party: GOP
+id: 60051
+
+
+name: Rick Santorum
+party: GOP
+id: 1752
+
+
+name: Donald Trump
+party: GOP
+id: 8639
+
+
+name: Marco Rubio
+party: GOP
+id: 53044
+
+
+name: Ben Carson
+party: GOP
+id: 64509
+
+
+name: Rand Paul
+party: GOP
+id: 60208
+
+
+name: Carly Fiorina
+party: GOP
+id: 60339
+
+
+name: Mike Huckabee
+party: GOP
+id: 1187
 [primaries.race-days]
 
 

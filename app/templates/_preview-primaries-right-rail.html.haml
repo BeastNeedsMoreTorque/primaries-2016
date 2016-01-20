@@ -46,7 +46,7 @@
                 %img.cd-img{src: image_path("#{cd.slug}.png"), alt: ''}
               %td{class: "cd-name #{cd.party_id.downcase}"}= cd.full_name
               %td.pollster= "#{cd_state.poll_percent}%"
-    %span.last-updated= "Last updated:  #{race[0].candidate.poll_last_update.strftime('%r - %x')}"
+    %span.last-updated-date= "Last updated:  #{race[0].candidate.poll_last_update.strftime('%B %d, %Y')}"
   %div.teaser-link
     %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Click for Iowa Preview
     %div.arrow-right
