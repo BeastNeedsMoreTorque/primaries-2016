@@ -1,4 +1,10 @@
 @import '../_variables';
+body{
+  @include body-copy;
+}
+h1, h2, h3, h4{
+  @include header-copy;
+}
 .primary-right-rail{
   width: 300px;
   div.rail-banner{
@@ -13,16 +19,11 @@
     }
   }
   @include rail-link-out;
-  div.delegates-available{
-    font-size: 14px;
-    display: inline-block;
+  span.dem-del-available{
     color: #5c6b95;
-    span.dem{
-      color: #5c6b95;
-    }
-    span.gop{
-      color: #bc5c5c;
-    }
+  }
+  span.gop-del-available{
+    color: #bc5c5c;
   }
   div.race-name{
     margin-top: 15px;
@@ -34,39 +35,22 @@
     background-color: #ffffff;
     padding: 10px;
     border: 1px solid #bdbdbd;
-    span.last-updated{
+    span.last-updated,
+    span.last-updated-prefix{
       font-size: 12px;
     }
-    div#countdown {
-      width: 100%;
-      display: inline-block;
-      margin: auto;
-      text-align: right;
-      font-size:16px;
-      div {
-        display: inline-block;
-        text-align: center;
-      }
-      span {
-        text-align: center;
-        display: block;
-      }
-      table{
+    .party-container{
+      position: relative;
+      margin-top: 20px;
+      a.race-day-link{
+        position: absolute;
         width: 100%;
-        border-collapse: collapse;
-        th{
-          background-color: #f1f1f1;
-          height: 30px;
-          text-align: center;
-          font-size: 18px;
-          border: 1px solid #bdbdbd;
-        }
-        td{
-          background-color: #f1f1f1;
-          text-align: center;
-          font-size: 12px;
-          border: 1px solid #bdbdbd;
-        }
+        height: 100%;
+        top: 0;
+        left: 0;
+        text-decoration: none;
+        z-index: 10;
+        opacity: 0;
       }
     }
     li.live-state-name.Democrats{
@@ -100,6 +84,7 @@
       border: 1px solid gray;
     }
     .delegate-chart{
+      position: relative;
       min-width: 275px;
       .candidate-container{
         margin-top: 5px;
@@ -157,53 +142,50 @@
       }
     }
     table.t-pollster {
-      border-collapse: separate;
+      margin-top: 15px;
+      border-collapse: collapse;
       border-spacing: 0 5px;
       min-width: 275px;
       tr {
-        background-color: #f1f1f1;
-        height: 60px;
+        display: table-row;
+        height: 30px;
+        border-bottom: 1px solid #bdbdbd;
       }
       td {
-        position:relative;
-        text-align: left;
         padding: 5px;
-        height: 8px;
-        border-bottom: 1px solid #bdbdbd;
-        border-top: 1px solid #bdbdbd;
-      }
-      td.img img{
-        height: 60px; //same as table row
-        position: absolute;
-        left: -10px;
-        bottom: 0px;
-      }
-      td.img{
-        border-left: 1px solid #bdbdbd;
-      }
-      td.cd-name{
-        text-align: left;
-        padding-left: 20px;
-        &.dem{
-          color: #384da0;
+        &.img{
+          position: relative;
+          img{
+            height: 30px; //same as table row
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+          }
         }
-        &.gop{
-          color: #ca3d28;
+        &.cd-name{
+          width: 100%;
+          text-align: left;
+          &.dem{
+            color: #384da0;
+          }
+          &.gop{
+            color: #ca3d28;
+          }
         }
-      }
-      td.pollster{
-        font-weight: bold;
-        width: 10%;
-        text-align: center;
-        border-right: 1px solid #bdbdbd;
-        border-left: 1px solid #bdbdbd;
+        &.pollster{
+          font-weight: bold;
+          text-align: right;
+        }
       }
       th {
-        background-color: #ffffff;
-        padding: 3px;
         font-size: 12px;
-        text-align: left;
-        border: none;
+        border-bottom: 1px solid black;
+        &.img{
+          text-align: left;
+        }
+        &.pollster{
+          text-align: right;
+        }
       }
     }
   }

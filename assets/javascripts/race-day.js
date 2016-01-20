@@ -261,6 +261,7 @@ function poll_results() {
       var party_id = this.getAttribute('data-party-id');
       var state_code = this.getAttribute('data-state-code');
       els[party_id + '-' + state_code] = {
+        inner: $('.race-inner', this),
         n_reporting: $('.metadata .n-reporting', this),
         n_total: $('.metadata .n-total', this),
         last_updated: $('.metadata .last-updated time', this.parentNode)
@@ -302,6 +303,8 @@ function poll_results() {
 
       var elems = els_by_party_id_and_state_code[key];
       if (elems) {
+        elems.inner.removeClass('no-precincts-reporting some-precincts-reporting');
+        elems.inner.addClass(n_reporting ? 'some-precincts-reporting' : 'no-precincts-reporting');
         elems.n_reporting.text(format_int(n_reporting));
         elems.n_total.text(format_int(n_total));
         elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();

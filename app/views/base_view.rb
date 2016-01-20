@@ -40,7 +40,7 @@ class BaseView
 
   # 2016-01-19 -> "Jan. 19"
   def format_date(date)
-    "#{Months[date.month]} #{date.day}"
+    "#{Months[date.month - 1]} #{date.day}"
   end
 
   def meta
