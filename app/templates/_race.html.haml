@@ -50,4 +50,4 @@
           Last updated
           %time{datetime: format_datetime(race.last_updated)}
         - if race.poll_last_updated
-          %p.poll-last-updated!= "Poll averages updated <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time> <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">View on Pollster</a>"
+          %p.poll-last-updated!= "<a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">Pollster averages</a> updated <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"

@@ -88,19 +88,39 @@
   }
 
   .state-race-days-toggle {
-    text-align: center;
-
+    width: 300px;
+    margin: auto;
+    font-size: 0.9em;
+    height: 30px;
+    box-sizing: border-box;
+    text-transform: uppercase;
     a {
+      box-sizing: border-box;
       text-decoration: none;
-      margin: .5rem;
-      padding: .5rem 1rem;
-      border: 1px solid transparent;
-      border-radius: .4rem;
-
+      margin: 0;
+      border: 1px solid #ccc;
+      width: 50%;
+      float: left;
+      text-align: center;
+      color: #ccc;
+      padding: 6px 3px;
+      &:first-child {
+        border-right: none;
+      }
+      &:last-child {
+        border-left: none;
+      }
       &.selected {
         color: inherit;
         background: #efefef;
-        border-color: #ddd;
+        border: 1px solid #666;
+        color: #666;
+        &:first-child {
+          border-right: 1px solid #666;
+        }
+        &:last-child {
+          border-left: 1px solid #666;
+        }
       }
     }
   }
