@@ -5,27 +5,14 @@
     %title Huffington Post 2016 Primaries Results
     %link{rel: 'stylesheet', href: asset_path('primaries-right-rail.css')}
   %body.primary-right-rail
-    %div.rail-banner
-      %div
-        - if next_race_day.id == current_race_day
-          %span.status= "HAPPENING NOW: "
-        - elsif next_race_day
-          %span.status= "COMING SOON: "
-        - races = next_race_day.races
-        - races.each do |rc|
-          %span.event-name= "#{rc.state_name} #{rc.race_type}(#{rc.party_id})"
-      %div.teaser-link
-        %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} See the full preview here
-        %div.arrow-right
-    %div.container
-      - test_views = {:live => "2016-02-01", :preview => current_race_day}
-      - if next_race_day.id == test_views[:preview]#'2016-02-01' or current_race_day
-        != render(partial: 'live-primaries-right-rail')
-      - elsif next_race_day.id == '2016-02-01' #preview of Iowa before February 1st
-        != render(partial: 'iowa-primaries-right-rail')
-      - elsif next_race_day #preview for next race, no race currently happening
-        != render(partial: 'preview-primaries-right-rail')
-        %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}= "Next race: #{next_race_day.id}"
-    %script{src: '/2016/javascripts/pym.min.js'}
-    %script
-      var pymChild = new pym.Child();
+    - test_views = {:live => false, :preview => false, :iowa => true}
+    - if test_views[:live]#next_race_day.id == current_race_day
+      != render(partial: 'live-primaries-right-rail')
+    - elsif test_views[:iowa]#next_race_day.id == '2016-02-01' #preview of Iowa before February 1st
+      != render(partial: 'iowa-primaries-right-rail')
+    - elsif test_views[:preview]#next_race_day #preview for next race, no race currently happening
+      != render(partial: 'preview-primaries-right-rail')
+      %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}= "Next race: #{next_race_day.id}"
+  %script{src: '/2016/javascripts/pym.min.js'}
+  %script
+    var pymChild = new pym.Child();

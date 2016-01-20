@@ -150,6 +150,41 @@ $splash-ele-bg: #eee;
 	}
 }
 
+@mixin countdown-table {
+	div#countdown {
+		width: 100%;
+		display: inline-block;
+		margin: auto;
+		text-align: right;
+		font-size:16px;
+		div {
+			display: inline-block;
+			text-align: center;
+		}
+		span {
+			text-align: center;
+			display: block;
+		}
+		table{
+			width: 100%;
+			border-collapse: collapse;
+			th{
+				background-color: #f1f1f1;
+				height: 30px;
+				text-align: center;
+				font-size: 18px;
+				border: 1px solid #bdbdbd;
+			}
+			td{
+				background-color: #f1f1f1;
+				text-align: center;
+				font-size: 12px;
+				border: 1px solid #bdbdbd;
+			}
+		}
+	}
+}
+
 @mixin desktop-splash-base {
 	@include splash-base;
 }
