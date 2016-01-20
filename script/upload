@@ -62,7 +62,7 @@ def upload_asset(relative_path, content_type)
 
     S3UploadCache.set_digest(absolute_path, digest)
   else
-    $logger.info("SKIP #{debug_path}")
+    $logger.debug("SKIP #{debug_path}")
   end
 end
 
