@@ -10,14 +10,18 @@
     %span.happened-gop="#{gop_states_string(happened[i].races_codified[:GOP])}"
 %h3 Delegate Counts
 - parties.each do |party|
-  %h4= "party.adjective Candidates"
+  %h4= "#{party.adjective} Candidates"
   %div{class: "delegate-chart #{party.id.downcase}" }
     - party.candidates.each do |cd|
       %div.candidate-container{ :'data-candidate-id' => cd.id }
-        %span.cd-name= cd.name
-        %div.total-delegates-bar
+        %div.small-partition.img
+          %img.cd-img{src: image_path("#{cd.slug}.png"), alt: ''}
+        %div.small-partition
+          %span.cd-name= cd.name
+        %div.large-partition
           %div{class: "n-delegates-bar #{party.id.downcase}", :style => "width: #{cd.n_delegates.to_f / party.n_delegates_total.to_f * 100}%"}
-        %span.n-delegates-count= cd.n_delegates
+        %div.small-partition.count
+          %span.n-delegates-count= cd.n_delegates
 
 %div.teaser-link
   %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} Live results

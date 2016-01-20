@@ -1,3 +1,4 @@
+@import '../_variables';
 .primary-right-rail{
   width: 300px;
   div.rail-banner{
@@ -11,6 +12,7 @@
       font-size: 18px;
     }
   }
+  @include rail-link-out;
   div.delegates-available{
     font-size: 14px;
     display: inline-block;
@@ -28,43 +30,6 @@
     font-size: 18px;
     display: inline-block;
   }
-  div.teaser-link{
-    position: relative;
-    margin-top: 15px;
-    a.button{
-      height: 26px;
-      width: 250px;
-      font-size: 11px;
-      font-weight:lighter;
-      text-decoration: none;
-      margin-top: 15px;
-      display: table-cell;
-      vertical-align: middle;
-      color: white;
-      background-color: #e41a1c;
-      text-align: center;
-    }
-    div.arrow-right{
-      position:absolute;
-      display: inline-block;
-      width: 0;
-      height: 0;
-      left: 250px;
-      bottom: 0px;
-      border-top: 13px solid transparent;
-      border-bottom: 13px solid transparent;
-      border-left: 13px solid #e41a1c;
-    }
-    &:hover{
-    .arrow-right{
-      border-left: 13px solid #f1f1f1;
-    }
-    .button{
-      background-color: #f1f1f1;
-      color: black;
-    }
-  }
-}
   div.container {
     background-color: #ffffff;
     padding: 10px;
@@ -136,11 +101,50 @@
     }
     .delegate-chart{
       min-width: 275px;
-      width: 50%;
-      .total-delegates-bar{
-        height: 10px;
-        display: inline-block;
-        width: 50%;
+      .candidate-container{
+        margin-top: 5px;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-flow: row nowrap;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        border: 1px solid #bdbdbd;
+        background-color: #f1f1f1;
+        height: 60px;
+        min-width: 275px;
+        .small-partition{
+          position: relative;
+          width: 15%;
+          &.img{
+            height: 60px;
+          }
+          &.count{
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-flow: row nowrap;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            height: 60px;
+            border-left: 1px solid #bdbdbd;
+          }
+        }
+        .large-partition{
+          width: 40%;
+        }
+        .cd-img{
+          position: absolute;
+          top: 0px;
+          left: -10px;
+          height: 100%;
+        }
         .n-delegates-bar{
           height: 10px;
           &.dem{
@@ -150,13 +154,6 @@
             background-color: #ca3d28;
           }
         }
-      }
-      .cd-name{
-        display: inline-block;
-        width: 35%;
-      }
-      .n-delegates-count{
-        display: inline-block;
       }
     }
     table.t-pollster {

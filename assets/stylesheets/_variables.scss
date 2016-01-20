@@ -44,7 +44,7 @@ $twitterBlue: #c0deed ;
 	-webkit-flex-wrap: wrap;
   flex-wrap: wrap;
 
- 	-webkit-justify-content: flex-start; 
+ 	-webkit-justify-content: flex-start;
   justify-content: flex-start;
 
   -webkit-align-content: flex-start;
@@ -86,7 +86,7 @@ $twitterBlue: #c0deed ;
 				line-height: 10px;
 			}
 			.arrow-right {
-				width: 10px; 
+				width: 10px;
 				height: 0;
 				$aheight: 12.9px;
 				border-top: $aheight solid transparent;
@@ -97,7 +97,47 @@ $twitterBlue: #c0deed ;
 				top: -3.5px;
 			}
 		}
-	}	
+	}
+}
+
+@mixin rail-link-out{
+		div.teaser-link{
+			position: relative;
+			margin-top: 15px;
+			a.button{
+				height: 26px;
+				width: 250px;
+				font-size: 14px;
+				font-weight:lighter;
+				text-decoration: none;
+				margin-top: 15px;
+				display: table-cell;
+				vertical-align: middle;
+				color: white;
+				background-color: #e41a1c;
+				text-align: center;
+			}
+			div.arrow-right{
+				position:absolute;
+				display: inline-block;
+				width: 0;
+				height: 0;
+				left: 250px;
+				bottom: 0px;
+				border-top: 13px solid transparent;
+				border-bottom: 13px solid transparent;
+				border-left: 13px solid #e41a1c;
+			}
+			&:hover{
+			.arrow-right{
+				border-left: 13px solid #f1f1f1;
+			}
+			.button{
+				background-color: #f1f1f1;
+				color: black;
+			}
+		}
+	}
 }
 
 @mixin desktop-splash-base {
@@ -110,6 +150,5 @@ $twitterBlue: #c0deed ;
 }
 
 @mixin right-rail-base {
-	//TK
+	@include rail-link-out;
 }
-
