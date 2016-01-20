@@ -6,3 +6,54 @@ body.all-primaries {
     padding-top: 30px;
   }
 }
+
+  .t-pollster {
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+
+    width: 100%;
+
+    @media (min-width: 500px) {
+      width: 50%;
+
+      &:first-child {
+        padding-right: 20px;
+      }
+      &:last-child {
+        padding-left: 20px;
+      }
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+    thead tr {
+      height: 30px;
+    }
+    td {
+      text-align: left;
+      padding: 2px;
+      border-bottom: 1px solid #ccc;
+    }
+    .cd-name {
+      width: 70%;
+    }
+    .pollster{
+      width: 35%;
+      text-align: right;
+      font-weight: bold;
+    }
+    th {
+      text-align: left;
+      border-bottom: 1px solid #999;
+    }
+  }
+  .cd-img {
+    width: 30px;
+    img {
+      height: 30px;
+      vertical-align: middle;
+      padding: 2px;
+    }
+  }
