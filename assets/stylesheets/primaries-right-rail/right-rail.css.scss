@@ -13,10 +13,14 @@ h1, h2, h3, h4{
     padding: 5px;
     color: white;
     font-weight: bold;
+    h3 {
+      margin: 0;
+    }
     div.banner-title {
       display: inline-block;
       font-size: 18px;
     }
+    padding: 5px;
   }
   @include rail-link-out;
   span.dem-del-available{
@@ -42,6 +46,9 @@ h1, h2, h3, h4{
     .party-container{
       position: relative;
       margin-top: 20px;
+      h3 {
+        margin-bottom: 0;
+      }
       a.race-day-link{
         position: absolute;
         width: 100%;
@@ -148,43 +155,44 @@ h1, h2, h3, h4{
       min-width: 275px;
       tr {
         display: table-row;
-        height: 30px;
+        height: 40px;
         border-bottom: 1px solid #bdbdbd;
       }
       td {
-        text-align: left;
         padding: 5px;
-      }
-      td.img{
-        position: relative;
-        img{
-          height: 30px; //same as table row
-          position: absolute;
-          left: 0px;
-          bottom: 0px;
+        &.img{
+          position: relative;
+          img{
+            height: 40px; //same as table row
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+          }
         }
-      }
-      td.cd-name{
-        text-align: left;
-        &.dem{
-          color: #384da0;
+        &.cd-name{
+          width: 100%;
+          text-align: left;
+          &.dem{
+            color: #384da0;
+          }
+          &.gop{
+            color: #ca3d28;
+          }
         }
-        &.gop{
-          color: #ca3d28;
+        &.pollster{
+          font-weight: bold;
+          text-align: right;
         }
-      }
-      td.pollster{
-        font-weight: bold;
-        text-align: right;
       }
       th {
-        padding: 3px;
         font-size: 12px;
         border-bottom: 1px solid black;
-      }
-      th.pollster{
-        width: 20%;
-        text-align: right;
+        &.img{
+          text-align: left;
+        }
+        &.pollster{
+          text-align: right;
+        }
       }
     }
   }
