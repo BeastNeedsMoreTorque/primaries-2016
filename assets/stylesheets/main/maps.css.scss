@@ -1,3 +1,5 @@
+@import '../_variables';
+
 .party-state-map {
   svg {
     display: block;
@@ -36,8 +38,34 @@
 
     &.above, &.left, &.right, &.below {
       fill: #333;
-      stroke: white;
-      stroke-width: 0.1;
     }
+  }
+}
+
+.race[data-party-id=Dem] svg g.counties {
+  path.candidate-came-first {
+    fill: $strongDem;
+  }
+
+  path.candidate-came-second {
+    fill: $weakDem;
+  }
+
+  path.candidate-did-badly {
+    fill: $undecided;
+  }
+}
+
+.race[data-party-id=GOP] svg g.counties {
+  path.candidate-came-first {
+    fill: $strongGOP;
+  }
+
+  path.candidate-came-second {
+    fill: $weakGOP;
+  }
+
+  path.candidate-did-badly {
+    fill: $undecided;
   }
 }

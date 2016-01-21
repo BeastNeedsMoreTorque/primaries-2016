@@ -25,8 +25,8 @@ class RaceDayResultsView < BaseView
   protected
 
   def candidate_csv
-    header = "candidate_id,n_delegates,n_unpledged_delegates\n"
-    data = candidates.map{ |c| "#{c.id},#{c.n_delegates},#{c.n_unpledged_delegates}" }.join("\n")
+    header = "candidate_id,party_id,n_delegates,n_unpledged_delegates\n"
+    data = candidates.map{ |c| "#{c.id},#{c.party_id},#{c.n_delegates},#{c.n_unpledged_delegates}" }.join("\n")
     header + data
   end
 

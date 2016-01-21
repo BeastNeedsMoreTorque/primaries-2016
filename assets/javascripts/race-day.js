@@ -9,6 +9,24 @@ var database = {
   county_party_csv: "",
   race_csv: ""
 };
+var on_database_change = []; // Array of zero-argument callbacks
+
+/**
+ * Returns a list of { id, name, n_votes } from a <table class="race">.
+ */
+function extract_candidate_list($party_state_table) {
+  var ret = [];
+
+  $party_state_table.find('tr[data-candidate-id]').each(function() {
+    ret.push({
+      id: this.getAttribute('data-candidate-id'),
+      name: $('td.candidate', this).text(),
+      n_votes: 0 // we'll overwrite this
+    });
+  });
+
+  return ret;
+}
 
 function position_cities_correctly() {
   function position_svg_cities_correctly(el) {
@@ -140,21 +158,6 @@ function add_tooltips() {
     $tooltip.remove();
   }
 
-  /** Returns a list of { id, name, n_votes } from a <table class="race">. */
-  function extract_candidate_list($party_state_table) {
-    var ret = [];
-
-    $party_state_table.find('tr[data-candidate-id]').each(function() {
-      ret.push({
-        id: this.getAttribute('data-candidate-id'),
-        name: $('td.candidate', this).text(),
-        n_votes: 0 // we'll overwrite this
-      });
-    });
-
-    return ret;
-  }
-
   function show_tooltip_for_svg_path(svg_path) {
     var county_name = svg_path.getAttribute('data-name');
     var fips_int = +svg_path.getAttribute('data-fips-int');
@@ -224,6 +227,124 @@ function add_tooltips() {
 
   $('.party-state-map svg').each(function() {
     add_tooltip(this);
+  });
+}
+
+function color_counties() {
+  var county_results = null; // party_id -> fips_int -> { candidate_id_to_n_votes, winner_n_votes, runner_up_n_votes }
+
+  /**
+   * Builds an Object mapping candidate_id to party_id, from
+   * database.candidate_csv
+   */
+  function build_candidate_id_to_party_id() {
+    var ret = {};
+
+    var regex = new RegExp('^(\\d+),(\\w{3})', 'gm');
+    var match;
+    while ((match = regex.exec(database.candidate_csv)) !== null) {
+      var candidate_id = match[1];
+      var party_id = match[2];
+      ret[candidate_id] = party_id;
+    }
+
+    return ret;
+  }
+
+  function refresh_county_results() {
+    county_results = {};
+
+    var candidate_id_to_party_id = build_candidate_id_to_party_id(); // candidate_id -> party_id
+
+    var regex = new RegExp('^(\\d+),(\\d+),(\\d+)$', 'gm');
+    var match;
+    while ((match = regex.exec(database.candidate_county_csv)) !== null) {
+      var candidate_id = match[1];
+      var party_id = candidate_id_to_party_id[candidate_id];
+      if (!party_id) continue;
+
+      var fips_int = match[2];
+      var n_votes = +match[3];
+
+      if (!county_results[party_id]) county_results[party_id] = {};
+
+      var counts = county_results[party_id][fips_int];
+      if (!counts) {
+        counts = county_results[party_id][fips_int] = {
+          candidate_id_to_n_votes: {},
+          winner_n_votes: 0,
+          runner_up_n_votes: 0
+        };
+      }
+
+      counts.candidate_id_to_n_votes[candidate_id] = n_votes;
+
+      if (n_votes > counts.winner_n_votes) {
+        counts.runner_up_n_votes = counts.winner_n_votes;
+        counts.winner_n_votes = n_votes;
+      } else if (n_votes > counts.runner_up_n_votes) {
+        counts.runner_up_n_votes = n_votes;
+      }
+    }
+  }
+  on_database_change.push(refresh_county_results);
+
+  /**
+   * Returns a className for an svg <path>, from county_results.
+   *
+   * @param party_id String party ID.
+   * @param fips_int String county ID.
+   * @param candidate_id String candidate ID.
+   * @return One of 'candidate-came-first', 'candidate-came-second',
+   *         'candidate-did-badly', 'no-results-yet'. Or the empty String, which
+   *         means lookup failed.
+   */
+  function lookup_candidate_class(party_id, fips_int, candidate_id) {
+    var counts = county_results[party_id][fips_int];
+
+    if (!counts) {
+      return '';
+    } else {
+      var n_votes = counts.candidate_id_to_n_votes[candidate_id];
+      if (typeof n_votes === 'undefined') {
+        return '';
+      } else {
+        console.log(n_votes, counts);
+        if (counts.winner_n_votes == 0) {
+          return 'no-results-yet';
+        } else if (n_votes == counts.winner_n_votes) {
+          return 'candidate-came-first';
+        } else if (n_votes == counts.runner_up_n_votes) {
+          return 'candidate-came-second';
+        } else {
+          return 'candidate-did-badly';
+        }
+      }
+    }
+  }
+
+  function refresh_svg_classes(svg, table, party_id) {
+    var candidate_id = $(table).find('tbody tr:first').attr('data-candidate-id');
+
+    $(svg).find('g.counties path:not(.hover)').each(function() {
+      var fips_int = this.getAttribute('data-fips-int');
+      var class_name = lookup_candidate_class(party_id, fips_int, candidate_id);
+      this.setAttribute('class', class_name);
+    });
+  }
+
+  function monitor_svg(svg, table, party_id) {
+    on_database_change.push(function() {
+      refresh_svg_classes(svg, table, party_id);
+    });
+  }
+
+  $('.party-state-map svg').each(function() {
+    var $race = $(this).closest('.race');
+    var $table = $race.find('table');
+    var party_id = $race.attr('data-party-id');
+
+    monitor_svg(this, $table[0], party_id);
   });
 }
 
@@ -314,10 +435,11 @@ function poll_results() {
 
   function handle_poll_results(json) {
     database = json;
-
-    update_race_tables_from_database();
-    update_race_precincts_from_database();
+    on_database_change.forEach(function(f) { f(); });
   }
+
+  on_database_change.push(update_race_tables_from_database);
+  on_database_change.push(update_race_precincts_from_database);
 
   $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {
     handle_poll_results(json);
@@ -337,6 +459,7 @@ $(function() {
       position_cities_correctly();
       add_tooltips();
       poll_results();
+      color_counties();
     });
   });
 });
