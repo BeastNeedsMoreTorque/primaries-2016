@@ -333,7 +333,11 @@ function color_counties() {
   }
 
   function refresh_svg_classes(svg, table, party_id) {
-    var candidate_id = $(table).find('tbody tr:first').attr('data-candidate-id');
+    $(table).find('.highlight-on-map').removeClass('highlight-on-map');
+    var $candidate_tr = $(table).find('tbody tr:first');
+    $candidate_tr.addClass('highlight-on-map');
+
+    var candidate_id = $candidate_tr.attr('data-candidate-id');
 
     $(svg).find('g.counties path:not(.hover)').each(function() {
       var fips_int = this.getAttribute('data-fips-int');

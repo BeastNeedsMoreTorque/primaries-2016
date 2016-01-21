@@ -20,6 +20,7 @@ body.race-day {
 
     td {
       border-bottom: 1px solid #ccc;
+      cursor: pointer;
     }
 
     th {
@@ -135,5 +136,17 @@ body.race-day {
     .poll-last-updated.no-precincts-reporting {
       display: none;
     }
+  }
+
+  .race[data-party-id=Dem] tr.highlight-on-map td {
+    color: white;
+    background: $strongDem;
+    font-weight: bold;
+  }
+
+  .race[data-party-id=GOP] tr.highlight-on-map td {
+    color: white;
+    background: $strongGOP;
+    font-weight: bold;
   }
 }
