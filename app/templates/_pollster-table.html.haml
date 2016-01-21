@@ -3,10 +3,10 @@
   %table
     %thead
       %tr
-        %th{colspan: "2"}
+        %th{colspan: "1"}
           Candidate
-        %th.pollster
-          Pollster average
+        %th.pollster{colspan: "2"}
+          National Polling Average
     %tbody
       - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
       - for candidate in party.candidates.sort_by(&:poll_percent).reverse
@@ -16,5 +16,5 @@
           %td.cd-name= candidate.full_name
           %td.pollster= "#{candidate.poll_percent}%"
         - n_unellipsized -= 1
-  -# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
-  .ellipsize-table-prompt
+  .metadata.footnotes
+    %p.pollster-note Polling average based on latest national polls aggregated by HuffPost Pollster.

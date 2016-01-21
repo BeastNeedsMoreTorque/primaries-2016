@@ -17,7 +17,7 @@ States and parties are case-sensitive
 
 
 hed: Presidential Primaries
-body: Here is an introduction to this project. Donec vehicula sem id nibh posuere, euismod consequat urna maximus. Sed ullamcorper, eros sed volutpat iaculis, mi sapien viverra velit, vitae pharetra est ante ac nisl. Duis dignissim in nisi in suscipit. Cras posuere posuere libero, eu blandit eros vestibulum a. Curabitur varius non tellus vitae iaculis. Mauris vel tortor nec lorem commodo euismod.
+body: See which candidates are leading the pack for their party’s nomination, find key election dates and watch live-updating election results.
 
 
 :end
@@ -102,19 +102,15 @@ id: 1187
 
 date: 2016-02-01
 title: Iowa Caucuses
-body: Some introduction to this page, why Iowa is important, etc. Donec vehicula sem id nibh posuere, euismod consequat urna maximus. Sed ullamcorper, eros sed volutpat iaculis, mi sapien viverra velit, vitae pharetra est ante ac nisl. Duis dignissim in nisi in suscipit.
+body: Iowa residents will be the first in the nation to cast their ballot for a candidate seeking the Republican or Democratic presidential nomination. Check here before the race begins to see who is favored to win. Tune in on election night for live updates to find out who is winning.
 
 
-More text
 :end
 
 
 date: 2016-02-09
 title: New Hampshire Primaries
-body: New Hampshire is crucial becuase
-
-
-... really? Is it?
+body: Check here before the race begins to see who is favored to win. Tune in on election night for live updates to find out who is winning.
 :end
 
 
@@ -123,13 +119,13 @@ body: New Hampshire is crucial becuase
 
 state: IA
 party: Dem
-text: Any democrat *needs* Iowa.
+text: 
 :end
 
 
 state: IA
 party: GOP
-text: Some more text for Republicans. Donec vehicula sem id nibh posuere, euismod consequat urna maximus. Sed ullamcorper, eros sed volutpat iaculis, mi sapien viverra velit, vitae pharetra est ante ac nisl. Duis dignissim in nisi in suscipit. Cras posuere posuere libero, eu blandit eros vestibulum a. Curabitur varius non tellus vitae iaculis. Mauris vel tortor nec lorem commodo euismod.
+text: 
 :end
 
 
