@@ -83,18 +83,25 @@ body.race-day {
     position: absolute;
     box-sizing: border-box;
     width: 100%;
-    max-width: 20rem;
+    max-width: 16rem;
     box-shadow: 0 0 10px #ccc;
     padding: 1rem;
     background: white;
     h4 {
       margin: 0 0 6px 0;
-      font-size: 1.5em;
+      font-size: 1.3em;
     }
     table {
+      width: 100%;
       margin: 0 0 10px 0;
       padding: 0;
       border-collapse: collapse;
+    }
+    tr {
+      border-bottom: 1px dotted #ccc;
+      &:last-child {
+        border-bottom: none;
+      }
     }
     .candidate {
       padding-right: 5px;
