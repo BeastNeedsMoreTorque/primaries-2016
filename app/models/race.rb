@@ -19,6 +19,7 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
 
   def party; database.parties.find!(party_id); end
   def party_name; party.name; end
+  def party_adjective; party.adjective; end
   def race_day; database.race_days.find!(race_day_id); end
   def state; database.states.find!(state_code); end
   def state_fips_int; state.fips_int; end

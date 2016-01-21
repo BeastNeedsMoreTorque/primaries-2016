@@ -1,7 +1,10 @@
 .race{id: "#{state.code}-#{party.id}", 'data-party-id': party.id, 'data-state-code': state.code}
-  %h3= state.name + " " + party.name
-  .party-state-map!= map_svg("states/#{state.code}")
   - race = database.races.find_by_party_and_state(party, state)
+  - if race
+    %h3= "#{race.state_name} #{race.party_adjective} #{race.race_type}"
+  - else
+    %h3= "#{state.name} #{party.name}"
+  .party-state-map!= map_svg("states/#{state.code}")
   - text = race_text(race)
   - if text
     %p.text= text
