@@ -13,8 +13,9 @@
     fill: #eee;
 
     &.hover {
-      stroke: #aaa;
-      fill: #d6d6d6;
+      stroke: black;
+      stroke-width: 20; // divided by 10
+      fill: rgba(255, 255, 255, 0.2);
       pointer-events: none; // so it doesn't cause mouseleave
     }
   }
