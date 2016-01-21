@@ -95,8 +95,8 @@ function position_cities_correctly() {
     });
   }
 
-  $('.party-state-map').each(function() {
-    position_svg_cities_correctly(this);
+  $('.party-state-map svg').each(function() {
+    position_svg_cities_correctly(this.parentNode);
   });
 }
 
@@ -121,7 +121,9 @@ function add_tooltips() {
     $tooltip.find('h4').text(county_name);
     $tooltip.find('span.n-reporting').text(format_int(n_reporting));
     $tooltip.find('span.n-total').text(format_int(n_total));
-    $tooltip.find('.last-updated time').attr('datetime', last_updated.toISOString()).render_datetime();
+    if (last_updated) {
+      $tooltip.find('.last-updated time').attr('datetime', last_updated.toISOString()).render_datetime();
+    }
 
     var $tbody = $tooltip.find('tbody').empty();
 
@@ -452,6 +454,7 @@ function poll_results() {
       var n_reporting = +arr[2];
       var n_total = +arr[3];
       var last_updated = new Date(arr[4]);
+      if (isNaN(last_updated.getFullYear())) last_updated = null;
 
       var key = party_id + '-' + state_code;
 
@@ -461,7 +464,9 @@ function poll_results() {
         elems.inner.addClass(n_reporting ? 'some-precincts-reporting' : 'no-precincts-reporting');
         elems.n_reporting.text(format_int(n_reporting));
         elems.n_total.text(format_int(n_total));
-        elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();
+        if (last_updated) {
+          elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();
+        }
       }
     });
   }
@@ -481,6 +486,43 @@ function poll_results() {
     .always(function() { window.setTimeout(poll_results, interval_ms); });
 }
 
+/**
+ * Ensures that when Democratic and Republican <p class="text"> blurbs are
+ * aligned, their heights are identical.
+ *
+ * This makes the rest of the page flow nicely.
+ */
+function fix_text_heights() {
+  var refresh_requested = false;
+
+  function refresh_text_heights() {
+    refresh_requested = false;
+
+    $('li.state p.text').css({ height: 'auto' });
+
+    $('li.state').each(function() {
+      var $ps = $('p.text', this);
+      if ($ps.length == 2) {
+        if ($ps[0].getBoundingClientRect().top == $ps[1].getBoundingClientRect().top) {
+          var $p1 = $ps.first();
+          var $p2 = $ps.last();
+          var h = Math.max($p1.height(), $p2.height());
+          $ps.css({ height: h + 'px' });
+        }
+      }
+    });
+  }
+
+  window.addEventListener('resize', function() {
+    if (!refresh_requested) {
+      refresh_requested = true;
+      window.requestAnimationFrame(refresh_text_heights);
+    }
+  });
+
+  refresh_text_heights();
+}
+
 $(function() {
   $('body.race-day').each(function() {
     $('time').render_datetime();
@@ -489,6 +531,7 @@ $(function() {
     $('table.race').ellipsize_table(5, 'ellipsized', '<button>Show more…</button>', '<button>Show fewer…</button>');
 
     wait_for_font_then('Source Sans Pro', function() {
+      fix_text_heights();
       position_cities_correctly();
       add_tooltips();
       poll_results();

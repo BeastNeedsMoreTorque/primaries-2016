@@ -4,10 +4,8 @@
     %h3= "#{race.state_name} #{race.party_adjective} #{race.race_type}"
   - else
     %h3= "#{state.name} #{party.name}"
+  %p.text= race_text(race) # may be null, but we still print it so two <p>s will line up on desktop
   .party-state-map!= map_svg("states/#{state.code}")
-  - text = race_text(race)
-  - if text
-    %p.text= text
   - if !race
     %p= "#{state.name} #{party.name} won't pledge any delegates to a 2016 presidential nominee."
   - elsif !race.ap_id

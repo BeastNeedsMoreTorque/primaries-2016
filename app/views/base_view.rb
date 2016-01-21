@@ -97,6 +97,8 @@ class BaseView
   def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
 
   def map_svg(path)
+    return '' if %w(states/AS states/DA).include?(path)
+
     # a .svg file includes a DOCTYPE, but we're including it inline so we don't
     # want it.
     header_length = 137
