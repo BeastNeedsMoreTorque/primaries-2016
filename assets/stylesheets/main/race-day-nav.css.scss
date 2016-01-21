@@ -1,18 +1,59 @@
 @import '../_variables';
 
 .race-day-nav {
+  position: relative;
+  height: 80px;
+  width: 100%;
+  background: #f8f8f8;
   text-align: center;
-
-  &>* {
-    display: inline-block;
-  }
-
+  text-transform: uppercase;
   a {
-    margin: 1rem 0;
+    color: #666;
+    display: inline-block;
+    text-decoration: none;
+    height: 80px;
+    margin: 0;
     padding: 0 1rem;
+    &:hover {
+      background: $strongDem;
+      color: #fff;
+    }
   }
-
+  .calendar {
+    position: absolute;
+    left: 50%;
+    width: 180px;
+    margin-left: -90px;
+    padding-top: 30px;
+    height: 80px;
+    box-sizing: border-box;
+  }
+  .label {
+    font-size: 0.9em;
+    margin: 0;
+  }
+  .date {
+    font-size: 1.4em;
+    margin: 0;
+  }
+  .previous {
+    position: absolute;
+    left: 0;
+  }
+  .next {
+    position: absolute;
+    right: 0;
+  }
+  .previous-inner {
+    box-sizing: border-box;
+    padding: 18px 24px 18px 24px;
+  }
+  .next-inner {
+    box-sizing: border-box;
+    padding: 18px 14px 18px 24px;
+  }
   span.disabled {
+    display: inline-block;
     color: $muted;
   }
 }
