@@ -103,11 +103,11 @@
     <path data-fips-int="19025" data-name="Calhoun County" d="M1202,737l0,59 22,0 0,55 -1,51 -1,77 -118,-1 -118,-3 1,-67 2,-53 1,-63 -30,0 2,-60 100,3 52,0 43,1Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="162.7" cy="140.4"/>
+    <circle r="3" cx="162.7" cy="140.4"/>
     <text x="162.7" y="140.4">Des Moines</text>
-    <circle r="1" cx="263.8" cy="111.3"/>
+    <circle r="3" cx="263.8" cy="111.3"/>
     <text x="263.8" y="111.3">Cedar Rapids</text>
-    <circle r="1" cx="319.8" cy="143.4"/>
+    <circle r="3" cx="319.8" cy="143.4"/>
     <text x="319.8" y="143.4">Davenport</text>
   </g>
 </svg>

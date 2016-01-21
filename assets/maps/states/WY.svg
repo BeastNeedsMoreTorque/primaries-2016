@@ -27,11 +27,11 @@
     <path data-fips-int="56045" data-name="Weston County" d="M3328,585l3,63 4,115 2,36 3,90 5,122 -117,6 -75,2 -24,2 -74,2 -95,5 -82,3 -2,-32 -1,-67 -2,-58 0,-41 -2,-9 -2,-54 0,-52 -4,-113 177,-9 141,-6 59,-1Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="304.5" cy="251.3"/>
+    <circle r="3" cx="304.5" cy="251.3"/>
     <text x="304.5" y="251.3">Cheyenne</text>
-    <circle r="1" cx="231.4" cy="145.7"/>
+    <circle r="3" cx="231.4" cy="145.7"/>
     <text x="231.4" y="145.7">Casper</text>
-    <circle r="1" cx="267.7" cy="241.6"/>
+    <circle r="3" cx="267.7" cy="241.6"/>
     <text x="267.7" y="241.6">Laramie</text>
   </g>
 </svg>

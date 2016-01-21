@@ -86,11 +86,11 @@
     <path data-fips-int="28013" data-name="Calhoun County" d="M1460,668l1,60 60,0 1,100 0,80 -29,0 -1,50 0,12 -19,0 -95,0 -66,1 0,-100 -1,-108 -2,-46 0,-49Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="92.1" cy="195.1"/>
+    <circle r="3" cx="92.1" cy="195.1"/>
     <text x="92.1" y="195.1">Jackson</text>
-    <circle r="1" cx="156.6" cy="327.9"/>
+    <circle r="3" cx="156.6" cy="327.9"/>
     <text x="156.6" y="327.9">Gulfport</text>
-    <circle r="1" cx="102.4" cy="9.9"/>
+    <circle r="3" cx="102.4" cy="9.9"/>
     <text x="102.4" y="9.9">Southaven</text>
   </g>
 </svg>

@@ -226,7 +226,7 @@ render_state = (state_code, features, callback) ->
     p = city.geometry.coordinates
     x = p[0].toFixed(1)
     y = p[1].toFixed(1)
-    data.push("    <circle r=\"1\" cx=\"#{x}\" cy=\"#{y}\"/>")
+    data.push("    <circle r=\"3\" cx=\"#{x}\" cy=\"#{y}\"/>")
     data.push("    <text x=\"#{x}\" y=\"#{y}\">#{city.properties.name}</text>")
   data.push('  </g>')
 

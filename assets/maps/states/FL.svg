@@ -71,11 +71,11 @@
     <path data-fips-int="12013" data-name="Calhoun County" d="M1245,306l-5,12 -10,1 2,8 -14,22 0,15 -5,6 8,3 -6,7 7,8 -16,4 -5,6 2,12 5,6 -10,4 -5,19 7,14 -10,4 -2,21 -8,5 -2,11 -14,14 -119,-1 2,-32 0,-68 2,-15 1,-69 92,3 2,-21 72,1Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="265.7" cy="43.8"/>
+    <circle r="3" cx="265.7" cy="43.8"/>
     <text x="265.7" y="43.8">Jacksonville</text>
-    <circle r="1" cx="335.5" cy="269.9"/>
+    <circle r="3" cx="335.5" cy="269.9"/>
     <text x="335.5" y="269.9">Miami</text>
-    <circle r="1" cx="232.4" cy="163.3"/>
+    <circle r="3" cx="232.4" cy="163.3"/>
     <text x="232.4" y="163.3">Tampa</text>
   </g>
 </svg>

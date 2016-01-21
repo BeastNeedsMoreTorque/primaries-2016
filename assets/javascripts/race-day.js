@@ -83,6 +83,16 @@ function position_cities_correctly() {
 
       console.warn('Could not position text', text);
     });
+
+    // Turn each <text> into a <text class="background"> and <text class="foreground">.
+    var cities = $texts[0].parentNode;
+    $texts.each(function() {
+      var class_name = this.getAttribute('class');
+      var text2 = this.cloneNode(true);
+      this.setAttribute('class', class_name + ' background');
+      text2.setAttribute('class', class_name + ' foreground');
+      cities.appendChild(text2);
+    });
   }
 
   $('.party-state-map').each(function() {
@@ -309,7 +319,6 @@ function color_counties() {
       if (typeof n_votes === 'undefined') {
         return '';
       } else {
-        console.log(n_votes, counts);
         if (counts.winner_n_votes == 0) {
           return 'no-results-yet';
         } else if (n_votes == counts.winner_n_votes) {
