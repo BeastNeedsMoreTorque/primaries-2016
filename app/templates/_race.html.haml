@@ -25,7 +25,7 @@
             %th.candidate{colspan: "2"} Candidate
             %th.n-votes Votes
             %th.n-delegates Delegates
-            %th.pollster Pollster
+            %th.pollster Polling Average 
         %tbody
           - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
           - race.candidate_states.each do |candidate_state|
@@ -40,15 +40,15 @@
             - n_unellipsized -= 1
       -# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
       .ellipsize-table-prompt
-      .metadata
+      .metadata.footnotes
         %p.precincts-reporting
           %span.n-reporting= race.n_precincts_reporting
           of
           %span.n-total= race.n_precincts_total
           precincts reporting
         %p.last-updated
-          Last updated
+          Last updated:
           %time{datetime: format_datetime(race.last_updated)}
         - if race.poll_last_updated
-          %p.poll-last-updated.no-precincts-reporting!= "<a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">Pollster averages</a> updated <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
-          %p.poll-last-updated.some-precincts-reporting!= "You can also check <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">Pollster averages</a> that relate to this race."
+          %p.poll-last-updated.no-precincts-reporting!= "Polling averages based on latest Iowa polls compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> and were lasted updated at <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
+          %p.poll-last-updated.some-precincts-reporting!= "Check <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> to see how who lead the race before the Iowa caucus."

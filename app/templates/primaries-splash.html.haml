@@ -1,6 +1,6 @@
 !!! 5
 - dem_list = ['Clinton', 'Sanders', "O'Malley"]
-- gop_list = ["Trump", "Christie", "Bush", "Cruz", "Paul", "Rubio", "Carson", "Huckabee", "Kasich", "Fiorina", "Santorum"]
+- gop_list = ["Trump", "Christie", "Bush", "Cruz", "Paul", "Rubio", "Carson", "Huckabee", "Kasich", "Fiorina", "Santorum", "Gilmore"]
 - preview = !true
 %html{lang: 'en'}
   %meta{charset: 'utf-8'}
@@ -81,12 +81,6 @@
                       %tr
                         %td= cd.name
                         %td= format_int(cd_state.n_votes)
-                  - if party_abbrev == 'gop' and race.candidate_states.count - 1 == idx
-                    %div.candidate{'data-candidate-id': 99}
-                      %table
-                        %tr
-                          %td.see-all{:colspan => 3}
-                            %a{href:"/2016/primaries/#{next_race_day.id}"}= "All candidates"
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script{src: asset_path('splash.js')}
