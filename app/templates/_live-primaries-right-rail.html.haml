@@ -4,8 +4,8 @@
     %span.status= "HAPPENING NOW: "
     - races.each do |rc|
       %span.event-name= "#{rc.state_name} #{rc.race_type}(#{rc.party_id})"
-  %div.teaser-link
-    %a.button{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} See the full preview here
+  %div.tease-link.clearfix
+    %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"} See the full preview here
     %div.arrow-right
 %div.container
   -parties.each do |par|

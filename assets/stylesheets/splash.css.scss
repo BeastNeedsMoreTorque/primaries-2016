@@ -28,6 +28,15 @@ h1, h2, h3, h4{
   @include desktop-splash-base;
 }
 
+.header {
+	@include vertical-center-flex;
+	width: 100%;
+	.tease-link {
+		margin-left: 5px;
+		padding-top: 2px;
+	}
+}
+
 .countdown-map-container {
 	width: $map-countdown-width;
 	//height: $splash-height;

@@ -71,6 +71,36 @@ $splash-ele-bg: #eee;
 	font-family: ProximaNovaCond-Extrabld, Arial, Helvetica, sans-serif;
 }
 
+@mixin rail-link-out {
+	$arrow-fill: #e41a1c;
+	.tease-link {
+		display: flex;
+		display: -webkit-flex;
+	 	align-items: center;
+		-webkit-align-items: center;
+		a {
+			padding: 3px 10px 3px 10px;
+			text-decoration: none;
+			color: white;
+			text-align: center;
+			background: $arrow-fill;
+		}
+		.arrow-right{
+			border-top: 13px solid transparent;
+			border-bottom: 13px solid transparent;
+			border-left: 13px solid $arrow-fill;
+		}
+		&:hover {
+			.arrow-right {
+				border-left: 13px solid lighten($arrow-fill, 20%);
+			}
+			a {
+				background-color: lighten($arrow-fill, 20%);
+			}
+		}
+	}
+}
+
 @mixin splash-base {
 	.header {
 		background-color: black;
@@ -81,6 +111,7 @@ $splash-ele-bg: #eee;
 			margin: 0;
 		}
 	}
+	/*
 	.tease-link {
 		position: relative;
 		display: inline;
@@ -111,47 +142,10 @@ $splash-ele-bg: #eee;
 			margin-top: -25.5px;
 		}
 	}
+	*/
+	@include rail-link-out;
 }
 
-@mixin rail-link-out{
-		div.teaser-link{
-			position: relative;
-			margin-top: 15px;
-			a.button{
-				height: 26px;
-				width: 250px;
-				font-size: 14px;
-				font-weight:lighter;
-				text-decoration: none;
-				margin-top: 15px;
-				display: table-cell;
-				vertical-align: middle;
-				color: white;
-				background-color: #e41a1c;
-				text-align: center;
-			}
-			div.arrow-right{
-				position:absolute;
-				display: inline-block;
-				width: 0;
-				height: 0;
-				left: 250px;
-				bottom: 0px;
-				border-top: 13px solid transparent;
-				border-bottom: 13px solid transparent;
-				border-left: 13px solid #e41a1c;
-			}
-			&:hover{
-			.arrow-right{
-				border-left: 13px solid #f1f1f1;
-			}
-			.button{
-				background-color: #f1f1f1;
-				color: black;
-			}
-		}
-	}
-}
 
 @mixin countdown-table {
 	div#countdown {

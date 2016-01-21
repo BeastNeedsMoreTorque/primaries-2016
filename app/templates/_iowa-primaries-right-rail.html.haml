@@ -2,15 +2,13 @@
   %div
     %h3.status COMING SOON: Iowa Caucus
 %div.container
-  %p= "Iowa residents will be the first in the nation to cast their ballot for a candidate seeking the Republican or Democratic presidential nomination. See who is currently favored to win based on the most recent polls and check our Election Center on Feb. 1 for live-updating election results."
-  %div.teaser-link
-    %a.button{target: '_parent', href: "/2016/primaries"} See the election calendar
+  %p= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
+  %div.tease-link.clearfix
+    %a{target: '_blank', href: "/2016/primaries"} See the election calendar
     %div.arrow-right
-    %div
-      %span.seconds
   - parties.each do |party|
     %div.party-container
-      %a.race-day-link{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}
+      %a.race-day-link{target: '_blank', href: "/2016/primaries/#{next_race_day.id}"}
       - del_key = "n_#{party.id.downcase}_delegates"
       %h3.race-name= "#{party.adjective} Caucus"
       %span Delegates Up For Grabs:

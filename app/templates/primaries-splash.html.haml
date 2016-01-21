@@ -14,8 +14,9 @@
         %h1= "HAPPENING TODAY: Iowa Caucus"
       -else
         %h1= "HAPPENING NOW: Iowa Caucus"
-      %div.tease-link
-        %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See live-updating results for the Caucus here."
+      %div.tease-link.clearfix
+        %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See live-updating results"
+        %div.arrow-right
     %div.flex-container
       %div.countdown-map-container
         %div.countdown-container
