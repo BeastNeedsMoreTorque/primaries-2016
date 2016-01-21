@@ -334,9 +334,11 @@ function color_counties() {
   }
 
   function refresh_svg_classes(svg, table, party_id) {
-    $(table).find('.highlight-on-map').removeClass('highlight-on-map');
-    var $candidate_tr = $(table).find('tbody tr:first');
-    $candidate_tr.addClass('highlight-on-map');
+    var $candidate_tr = $(table).find('tbody tr.highlight-on-map');
+    if ($candidate_tr.length == 0) {
+      $candidate_tr = $(table).find('tbody tr:first');
+      $candidate_tr.addClass('highlight-on-map');
+    }
 
     var candidate_id = $candidate_tr.attr('data-candidate-id');
 
@@ -349,6 +351,15 @@ function color_counties() {
 
   function monitor_svg(svg, table, party_id) {
     on_database_change.push(function() {
+      refresh_svg_classes(svg, table, party_id);
+    });
+
+    var $table = $(table);
+    $table.on('click', 'tbody tr', function(ev) {
+      var $tr = $(ev.currentTarget);
+
+      $table.find('tr.highlight-on-map').removeClass('highlight-on-map');
+      $tr.addClass('highlight-on-map');
       refresh_svg_classes(svg, table, party_id);
     });
   }
