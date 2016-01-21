@@ -86,12 +86,9 @@ calculate_projection_width_height = (features) ->
 
   # Calculate projection parameters...
 
-  longitude_skew = 50
-  alaska_safe_projection = (arr) -> [ arr[0] + longitude_skew, arr[1] ]
+  alaska_safe_projection = (arr) -> [ (if arr[0] > 172 then -360 + arr[0] else arr[0]), arr[1] ]
   path1 = d3.geo.path().projection(alaska_safe_projection)
   ll_bounds = path1.bounds(feature_collection)
-  ll_bounds[0][0] -= longitude_skew
-  ll_bounds[1][0] -= longitude_skew
 
   lon = (ll_bounds[0][0] + ll_bounds[1][0]) / 2
   lat = (ll_bounds[0][1] + ll_bounds[1][1]) / 2

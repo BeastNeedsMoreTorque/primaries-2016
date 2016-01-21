@@ -32,6 +32,9 @@ function position_cities_correctly() {
   function position_svg_cities_correctly(el) {
     var $el = $(el);
     var $texts = $el.find('text');
+
+    if ($texts.length == 0) return;
+
     var $svg = $texts.closest('svg');
     var viewBoxStrings = $svg[0].getAttribute('viewBox').split(' ');
     var width = +viewBoxStrings[2];
