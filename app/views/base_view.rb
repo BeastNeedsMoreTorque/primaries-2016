@@ -38,7 +38,7 @@ class BaseView
     datetime.new_offset(0).iso8601.sub('+00:00', '.000Z')
   end
 
-  # 2016-01-19 -> "Jan. 19"
+  # 2016-01-19 -> "Jan 19"
   def format_date(date)
     "#{Months[date.month - 1]} #{date.day}"
   end

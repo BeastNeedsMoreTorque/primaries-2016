@@ -88,11 +88,11 @@
     <path data-fips-int="26025" data-name="Calhoun County" d="M2087,3048l2,87 4,46 1,43 -44,-1 -138,2 -36,1 -2,-43 -2,-132 84,-1 44,-2Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="271.0" cy="307.5"/>
+    <circle r="3" cx="271.0" cy="307.5"/>
     <text x="271.0" y="307.5">Detroit</text>
-    <circle r="1" cx="173.3" cy="278.0"/>
+    <circle r="3" cx="173.3" cy="278.0"/>
     <text x="173.3" y="278.0">Grand Rapids</text>
-    <circle r="1" cx="272.1" cy="298.9"/>
+    <circle r="3" cx="272.1" cy="298.9"/>
     <text x="272.1" y="298.9">Warren</text>
   </g>
 </svg>

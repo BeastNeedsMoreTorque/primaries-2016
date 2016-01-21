@@ -97,11 +97,11 @@
     <path data-fips-int="18183" data-name="Whitley County" d="M1857,505l-1,11 1,60 -18,0 2,86 1,59 -70,0 -15,2 -109,3 -24,0 -1,-37 -2,-53 -1,-57 21,0 0,-97 73,-1 -1,24 10,0Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="132.9" cy="175.6"/>
+    <circle r="3" cx="132.9" cy="175.6"/>
     <text x="132.9" y="175.6">Indianapolis</text>
-    <circle r="1" cx="197.1" cy="61.6"/>
+    <circle r="3" cx="197.1" cy="61.6"/>
     <text x="197.1" y="61.6">Fort Wayne</text>
-    <circle r="1" cx="41.5" cy="324.7"/>
+    <circle r="3" cx="41.5" cy="324.7"/>
     <text x="41.5" y="324.7">Evansville</text>
   </g>
 </svg>

@@ -119,11 +119,11 @@
     <path data-fips-int="29510" data-name="Saint Louis City" d="M2797,1408l-8,-11 -12,-8 -12,-21 4,-15 3,-23 25,-43 13,-6 18,-18 2,-12 9,2 -10,20 -8,4 -4,17 14,21 4,20 -3,23 -6,11 -15,13Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="64.6" cy="104.6"/>
+    <circle r="3" cx="64.6" cy="104.6"/>
     <text x="64.6" y="104.6">Kansas City</text>
-    <circle r="1" cx="282.6" cy="134.6"/>
+    <circle r="3" cx="282.6" cy="134.6"/>
     <text x="282.6" y="134.6">Saint Louis</text>
-    <circle r="1" cx="127.0" cy="226.1"/>
+    <circle r="3" cx="127.0" cy="226.1"/>
     <text x="127.0" y="226.1">Springfield</text>
   </g>
 </svg>

@@ -57,11 +57,11 @@
     <path data-fips-int="38027" data-name="Eddy County" d="M2511,820l3,111 11,0 2,54 -134,3 -196,3 -1,-54 -14,-1 -1,-111 59,-1 75,-1 27,0 161,-4Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="328.4" cy="141.4"/>
+    <circle r="3" cx="328.4" cy="141.4"/>
     <text x="328.4" y="141.4">Fargo</text>
-    <circle r="1" cx="154.0" cy="149.2"/>
+    <circle r="3" cx="154.0" cy="149.2"/>
     <text x="154.0" y="149.2">Bismarck</text>
-    <circle r="1" cx="315.0" cy="74.9"/>
+    <circle r="3" cx="315.0" cy="74.9"/>
     <text x="315.0" y="74.9">Grand Forks</text>
   </g>
 </svg>
