@@ -211,7 +211,7 @@ render_state = (state_code, features, callback) ->
     "  <defs>"
     "    <pattern id=\"pattern-no-results\" width=\"50\" height=\"50\" patternUnits=\"userSpaceOnUse\">"
     "      <rect width=\"50\" height=\"50\" fill=\"#ddd\"/>"
-    "      <path d=\"M-5,5L5,-5M-5,55L55,-5M45,55L55,45\" stroke-width=\"10\" stroke=\"#666666\"/>"
+    "      <path d=\"M-5,5L5,-5M-5,55L55,-5M45,55L55,45\" stroke-width=\"10\" stroke=\"#ffffff\"/>"
     "    </pattern>"
     "  </defs>"
   ]
