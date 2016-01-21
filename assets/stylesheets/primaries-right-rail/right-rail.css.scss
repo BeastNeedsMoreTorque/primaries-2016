@@ -148,7 +148,7 @@ h1, h2, h3, h4{
       min-width: 275px;
       tr {
         display: table-row;
-        height: 30px;
+        height: 40px;
         border-bottom: 1px solid #bdbdbd;
       }
       td {
@@ -156,7 +156,7 @@ h1, h2, h3, h4{
         &.img{
           position: relative;
           img{
-            height: 30px; //same as table row
+            height: 40px; //same as table row
             position: absolute;
             left: 0px;
             bottom: 0px;
