@@ -23,6 +23,7 @@ h1, h2, h3, h4{
     padding: 5px;
   }
   @include rail-link-out;
+  @include footnotes;
   span.dem-del-available{
     //color: #5c6b95;
   }
@@ -40,13 +41,17 @@ h1, h2, h3, h4{
     padding-left: 10px;
     padding-right: 10px;
     //border: 1px solid #bdbdbd;
+
+    .race-name.gop {color: $strongGOP;}
+    .race-name.dem {color: $strongDem;}
+
     span.last-updated,
     span.last-updated-prefix{
       font-size: 12px;
     }
     .party-container{
       position: relative;
-      //margin-top: 20px;
+      margin-top: 30px;
       h3 {
         margin-bottom: 0;
       }
@@ -150,7 +155,6 @@ h1, h2, h3, h4{
       }
     }
     table.t-pollster {
-      margin-top: 15px;
       border-collapse: collapse;
       border-spacing: 0 5px;
       min-width: 275px;
@@ -174,10 +178,10 @@ h1, h2, h3, h4{
           width: 100%;
           text-align: left;
           &.dem{
-            color: #384da0;
+            //color: #384da0;
           }
           &.gop{
-            color: #ca3d28;
+            //color: #ca3d28;
           }
         }
         &.pollster{
@@ -186,7 +190,6 @@ h1, h2, h3, h4{
         }
       }
       th {
-        font-size: 12px;
         border-bottom: 1px solid black;
         &.img{
           text-align: left;

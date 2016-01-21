@@ -146,6 +146,21 @@ $splash-ele-bg: #eee;
 	@include rail-link-out;
 }
 
+@mixin footnotes {
+	.footnotes {
+	  color: #666;
+	  font-size: 12px;
+	  line-height: 13px;
+	  p {
+	    margin-top: 2px;
+	    margin-bottom: 2px;
+	  }
+	  &.footer {
+	    margin-top: 10px;
+	    margin-bottom: 10px;
+	  }
+	}
+}
 
 @mixin countdown-table {
 	div#countdown {

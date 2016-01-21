@@ -1,4 +1,5 @@
 !!! 5
+- preview = true
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
@@ -7,14 +8,58 @@
     %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
     %link{rel: 'stylesheet', href: asset_path('primaries-right-rail.css')}
   %body.primary-right-rail
-    - test_views = {:live => false, :preview => false, :iowa => true}
-    - if test_views[:live]#next_race_day.id == current_race_day
-      != render(partial: 'live-primaries-right-rail')
-    - elsif test_views[:iowa]#next_race_day.id == '2016-02-01' #preview of Iowa before February 1st
-      != render(partial: 'iowa-primaries-right-rail')
-    - elsif test_views[:preview]#next_race_day #preview for next race, no race currently happening
-      != render(partial: 'preview-primaries-right-rail')
-      %a{target: '_parent', href: "/2016/primaries/#{next_race_day.id}"}= "Next race: #{next_race_day.id}"
+    %div.rail-banner
+      %div
+        - if preview
+          %h3.status COMING SOON: Iowa Caucus
+        - else 
+          %h3.status HAPPENING NOW: Iowa Caucus
+    %div.container
+      - if preview
+        %p= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
+        %div.tease-link.clearfix
+          %a{target: '_blank', href: "/2016/primaries"} See the election calendar
+          %div.arrow-right
+      - else
+        %p= "Results from the first presidential are coming in."
+        %div.tease-link.clearfix
+          %a{target: '_blank', href: "/2016/primaries"} See live-updating results 
+          %div.arrow-right
+      - parties.each do |party|
+        - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
+        %div.party-container
+          %a.race-day-link{target: '_blank', href: "/2016/primaries/#{next_race_day.id}"}
+          - del_key = "n_#{party.id.downcase}_delegates"
+          %h3{'class': "race-name #{party_abbrev}"}= "#{party.adjective} Caucus"
+          %span Delegates Up For Grabs:
+          %span{class: "#{party.id.downcase}-del-available"}= state_iowa[del_key]
+          - race = sort_iowa_data(party, state_iowa)
+          %table.t-pollster
+            %thead
+              %tr
+                %th.img Candidate
+                - if preview
+                  %th.pollster{:colspan => 2} Polling Average
+                - else
+                  %th.pollster{:colspan => 2} Votes
+            %tbody
+              - race.each do |cd_state|
+                - cd = cd_state.candidate
+                - if cd_state.poll_percent
+                  %tr.candidate{'data-candidate-id': cd.id}
+                    %td.img
+                      %img.cd-img{src: image_path("#{cd.slug}.png"), alt: ''}
+                    %td{class: "cd-name #{cd.party_id.downcase}"}= cd.full_name
+                    - if preview 
+                      %td{class: "pollster"}= "#{cd_state.poll_percent}%"
+                    -else 
+                      %td{class: "pollster"}= format_int(cd_state.n_votes) 
+          - if preview
+            %div.footnotes
+              %p Polling average based on latest Iowa polls aggregated by HuffPost Pollster.
+              %p.last-updated-prefix Last Updated:
+              %p.last-updated{datetime: race[0].candidate.poll_last_update}
+
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
     var pymChild = new pym.Child();
