@@ -366,7 +366,7 @@ function poll_results() {
   var interval_ms = 30000;
   var json_url = window.location.toString().split('#')[0] + '.json';
 
-  var els_by_candidate_id_and_state_code = null; // Maps "123-CA" to { n_votes, n_delegates }.
+  var els_by_candidate_id_and_state_code = null; // Maps "123-CA" to { n_votes, n_delegates, tr }.
   function ensure_els_by_candidate_id_and_state_code_is_populated() {
     if (els_by_candidate_id_and_state_code) return;
 
@@ -379,6 +379,7 @@ function poll_results() {
         var candidate_id = this.getAttribute('data-candidate-id');
 
         els[candidate_id + '-' + state_code] = {
+          tr: this,
           n_votes: $('td.n-votes', this),
           n_delegates: $('td.n-delegates', this)
         };
@@ -407,6 +408,8 @@ function poll_results() {
   function update_race_tables_from_database() {
     ensure_els_by_candidate_id_and_state_code_is_populated();
 
+    var trs_in_order = []; // The server gives us the correct ordering.
+
     database.candidate_state_csv.split('\n').slice(1).forEach(function(line) {
       var arr = line.split(',');
       var candidate_id = arr[0];
@@ -417,9 +420,14 @@ function poll_results() {
       var key = candidate_id + '-' + state_code;
       var elems = els_by_candidate_id_and_state_code[key];
       if (elems) {
+        trs_in_order.push(elems.tr);
         elems.n_votes.text(format_int(n_votes));
         elems.n_delegates.text(format_int(n_delegates));
       }
+    });
+
+    trs_in_order.forEach(function(tr) {
+      tr.parentNode.appendChild(tr);
     });
   }
 
