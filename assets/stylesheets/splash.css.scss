@@ -13,6 +13,10 @@ body {
 	@include body-copy;
 }
 
+h1, h2, h3, h4{
+  @include header-copy;
+}
+
 .flex-container {
 	display: flex;
 	flex-flow: row;
