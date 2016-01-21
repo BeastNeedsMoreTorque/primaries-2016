@@ -213,6 +213,7 @@ function add_tooltips() {
   }
 
   function remove_hover_path() {
+    if (svg_hover_path === null) return; // Sometimes happens when leaving page
     svg_hover_path.parentNode.removeChild(svg_hover_path);
     svg_hover_path = null;
   }
