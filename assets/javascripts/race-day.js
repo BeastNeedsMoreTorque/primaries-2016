@@ -62,7 +62,11 @@ function position_cities_correctly() {
         { position: 'above', x: (x - width / 2), y: y - margin, width: width, height: height },
         { position: 'right', x: x + margin, y: y + x_height, width: width, height: height },
         { position: 'left', x: x - width - margin, y: y + x_height, width: width, height: height },
-        { position: 'below', x: (x - width / 2), y: (y + height + margin), width: width, height: height }
+        { position: 'below', x: (x - width / 2), y: (y + height + margin), width: width, height: height },
+        { position: 'above-right', x: x + margin, y: y - margin, width: width, height: height },
+        { position: 'above-left', x: x - width - margin, y: y - margin, width: width, height: height },
+        { position: 'below-right', x: x + margin, y: y + height + margin, width: width, height: height },
+        { position: 'below-left', x: x - width - margin, y: y + height + margin, width: width, height: height }
       ];
     }
 
