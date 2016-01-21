@@ -133,10 +133,10 @@ project_features = (features, projection) ->
 topojsonize = (features) ->
   # Modeled after topojson's bin/topojson
   options =
-    'pre-quantization': 5000
-    'post-quantization': 5000
+    'pre-quantization': 2000
+    'post-quantization': 2000
     'coordinate-system': 'cartesian'
-    'minimum-area': 0.5
+    'minimum-area': 5
     'preserve-attached': false
     'property-transform': (d) ->
       p = d.properties
@@ -218,6 +218,8 @@ render_state = (state_code, features, callback) ->
 
   data.push('  <g class="counties" transform="scale(0.1)">')
   for geometry in topology.objects.counties.geometries
+    # Minnesota has a weird FIPS code, 27000, for Lake Superior
+    continue if /000$/.test(geometry.properties.fips_string)
     d = path(topojson.feature(topology, geometry))
     d = compress_svg_path(d)
     data.push("    <path data-fips-int=\"#{+geometry.properties.fips_string}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")

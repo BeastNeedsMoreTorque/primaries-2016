@@ -68,6 +68,7 @@ end
 app = Rack::Builder.new(quiet: true) do
   use(Logger)
   use(StatusReporter)
+  use(Rack::Deflater)
   no_cache = { 'Cache-Control' => 'no-cache' }
   use(Rack::Static, urls: { '/2016' => '2016.html' }, root: Paths.Dist, header_rules: [[ :all, no_cache ]])
   use(Rack::TryStatic, root: Paths.Dist, urls: [ '/2016/primaries' ], try: [ '.html' ], header_rules: [[ :all, no_cache ]])
