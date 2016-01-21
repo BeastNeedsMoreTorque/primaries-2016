@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="313" viewBox="0 0 350 313">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="54001" data-name="Barbour County" d="M1955,1240l18,7 10,18 0,18 14,7 8,0 7,9 -5,11 2,8 -8,13 3,3 -7,30 -2,25 7,10 1,8 -10,10 -7,0 -9,19 -5,27 -9,30 -5,23 -5,7 -95,17 -30,5 8,-3 6,-9 -6,-6 14,-6 -2,-26 6,-7 -9,-8 3,-11 -8,-2 -42,0 -10,-16 -5,-13 -11,-14 -18,-8 -11,-1 -11,-13 2,-51 39,-61 11,3 86,-8 41,-20 16,-23 2,7 12,-4 5,4 2,-12Z"/>
     <path data-fips-int="54003" data-name="Berkeley County" d="M3202,946l9,14 23,2 9,-8 7,3 3,18 7,-3 1,-17 -7,-8 10,0 4,10 25,6 4,-8 -4,-6 20,5 11,0 6,5 2,14 -3,15 -5,3 -23,1 -8,8 17,16 -1,15 11,2 6,-11 10,-1 0,11 -14,10 1,6 14,4 -8,18 -6,23 -55,59 -10,0 2,6 -15,6 1,15 -11,0 3,5 -7,22 -12,12 -12,23 -5,13 -118,-94 -15,-13 18,-45 4,-18 12,-49 22,-65 16,0 16,9 8,-16 14,2 15,-19Z"/>

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="269" viewBox="0 0 350 269">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="36001" data-name="Albany County" d="M2617,1327l-5,24 -3,5 -4,22 -16,29 -5,22 5,16 -4,30 -9,17 0,15 -11,2 -48,10 -135,24 -4,-7 11,-36 3,-5 1,-19 -7,-13 3,-14 17,-25 9,-28 1,-28 -6,-6 151,-29 0,-3 13,-7 5,3 12,-19 6,-1 0,10 13,14Z"/>
     <path data-fips-int="36003" data-name="Allegany County" d="M814,1473l-1,2 83,2 -1,25 49,3 -2,37 -3,17 -7,113 -2,48 -4,51 -105,-3 -127,-5 2,-113 2,-23 0,-65 4,-92Z"/>

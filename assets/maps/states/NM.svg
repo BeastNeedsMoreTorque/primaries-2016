@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="314" height="350" viewBox="0 0 314 350">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="35001" data-name="Bernalillo County" d="M1486,1152l1,25 -1,77 0,51 45,0 1,48 -92,0 -34,0 0,-11 -6,-7 -60,-3 -66,0 -17,21 -90,0 -55,-2 -20,-50 -24,-63 -28,-69 -8,-22 58,1 175,2 123,0 58,1Z"/>
     <path data-fips-int="35003" data-name="Catron County" d="M773,1518l-2,42 0,77 -2,68 5,2 0,30 -3,67 0,77 -1,39 1,47 0,51 -2,52 -1,93 -10,-1 -102,0 -28,-2 -3,161 -108,-1 -32,-1 -81,-2 -45,-5 -43,-1 -40,-2 -65,-2 -45,0 -53,-2 2,-90 7,-221 3,-97 2,-82 4,-120 5,-192 31,0 159,5 105,2 22,2 142,1 47,3 42,0 22,1Z"/>

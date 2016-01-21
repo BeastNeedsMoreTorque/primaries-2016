@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="171" viewBox="0 0 350 171">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="40001" data-name="Adair County" d="M3376,697l-129,5 -3,-65 -2,-60 4,0 -3,-57 -2,-67 90,-5 12,62 16,91Z"/>
     <path data-fips-int="40003" data-name="Alfalfa County" d="M1961,82l2,27 0,102 0,64 2,0 1,63 -165,0 0,-62 -3,0 0,-166 -2,0 0,-27 68,0Z"/>

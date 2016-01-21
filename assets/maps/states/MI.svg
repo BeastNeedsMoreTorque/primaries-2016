@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="310" height="350" viewBox="0 0 310 350">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="26001" data-name="Alcona County" d="M2561,1809l10,25 0,26 1,10 9,12 -6,31 -8,20 1,21 3,15 -4,14 -83,4 -36,0 -83,4 -4,-89 -2,-86 53,-1 69,-4Z"/>
     <path data-fips-int="26005" data-name="Allegan County" d="M1691,2878l88,-1 0,49 2,60 0,65 -82,2 -42,0 -43,1 -104,0 10,-34 5,-41 3,-11 -1,-25 4,-10 4,-25 -1,-29 3,0 147,0Z"/>

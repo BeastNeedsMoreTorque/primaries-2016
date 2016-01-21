@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="343" viewBox="0 0 350 343">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="12001" data-name="Alachua County" d="M2330,646l13,21 24,1 3,5 19,11 19,-3 11,3 10,-2 5,5 20,0 7,23 10,5 6,3 10,13 1,15 3,1 -2,23 1,100 0,15 -14,6 -3,4 -3,-9 -6,5 -8,-3 -8,6 -20,1 -6,-5 0,-16 8,2 -9,-12 -83,1 -39,0 0,4 -26,-1 -1,-29 -43,2 0,-15 -2,-108 -1,-24 8,1 9,-16 6,3 10,-12 -4,-5 7,-4 6,-16 9,-1 4,-6 20,0 6,6 15,-2Z"/>
     <path data-fips-int="12003" data-name="Baker County" d="M2486,425l1,44 0,43 1,22 -40,1 -94,2 0,1 -43,1 0,-74 -1,-51 0,-50 -1,-48 105,7 -8,5 -3,10 5,13 12,12 -2,37 6,17 10,10 24,-5 14,5Z"/>

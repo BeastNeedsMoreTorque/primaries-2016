@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="300" height="350" viewBox="0 0 300 350">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="6001" data-name="Alameda County" d="M627,1582l-1,6 -25,-11 -1,-6 15,3ZM813,1570l-3,96 16,7 7,14 -60,-1 -48,-2 -17,10 -6,-5 -11,2 -18,-2 -2,-12 -14,-2 0,-9 -9,-19 -3,-29 -11,-16 -3,4 -12,-16 14,1 -6,-9 -5,-7 -22,-5 10,-10 -4,-24 13,-2 20,24 1,6 13,6 25,3 13,13 -4,5 14,11Z"/>
     <path data-fips-int="6003" data-name="Alpine County" d="M1357,1266l-9,16 -2,19 7,6 2,14 12,18 -8,23 0,11 -13,2 3,11 -7,5 -1,8 -17,-13 -2,-18 -13,0 -12,5 -22,15 -38,-28 -15,-3 0,-22 1,-67 36,-30 17,-26 0,-12 -6,-12Z"/>

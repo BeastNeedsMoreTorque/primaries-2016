@@ -18,6 +18,10 @@
       fill: rgba(255, 255, 255, 0.2);
       pointer-events: none; // so it doesn't cause mouseleave
     }
+
+    &.no-results-yet {
+      fill: url(#pattern-no-results);
+    }
   }
 
   g.cities {

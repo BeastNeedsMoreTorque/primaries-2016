@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="230" viewBox="0 0 350 230">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="19001" data-name="Adair County" d="M1297,1469l0,103 -2,61 0,76 -119,-1 -121,-3 3,-118 0,-61 1,-60 80,1Z"/>
     <path data-fips-int="19003" data-name="Adams County" d="M1055,1705l121,3 -2,123 -1,55 -122,-1 -33,-2 -84,-1 0,-50 2,-60 1,-69Z"/>
