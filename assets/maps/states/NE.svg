@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="163" viewBox="0 0 350 163">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="31001" data-name="Adams County" d="M2267,1233l2,0 0,57 2,76 0,41 -169,2 -1,-82 -1,-87 0,-5Z"/>
     <path data-fips-int="31003" data-name="Antelope County" d="M2422,534l2,87 -88,2 -83,2 -2,-87 -2,0 -2,-95 0,-80 171,-3 2,76Z"/>
@@ -97,11 +103,11 @@
     <path data-fips-int="31185" data-name="York County" d="M2609,1051l1,66 4,108 -173,5 -1,0 -1,-77 -1,-29 -2,-68Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="314.4" cy="92.7"/>
+    <circle r="3" cx="314.4" cy="92.7"/>
     <text x="314.4" y="92.7">Omaha</text>
-    <circle r="1" cx="287.8" cy="116.7"/>
+    <circle r="3" cx="287.8" cy="116.7"/>
     <text x="287.8" y="116.7">Lincoln</text>
-    <circle r="1" cx="316.4" cy="98.7"/>
+    <circle r="3" cx="316.4" cy="98.7"/>
     <text x="316.4" y="98.7">Bellevue</text>
   </g>
 </svg>

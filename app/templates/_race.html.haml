@@ -1,10 +1,11 @@
 .race{id: "#{state.code}-#{party.id}", 'data-party-id': party.id, 'data-state-code': state.code}
-  %h3= state.name + " " + party.name
-  .party-state-map!= map_svg("states/#{state.code}")
   - race = database.races.find_by_party_and_state(party, state)
-  - text = race_text(race)
-  - if text
-    %p.text= text
+  - if race
+    %h3= "#{race.state_name} #{race.party_adjective} #{race.race_type}"
+  - else
+    %h3= "#{state.name} #{party.name}"
+  %p.text= race_text(race) # may be null, but we still print it so two <p>s will line up on desktop
+  .party-state-map!= map_svg("states/#{state.code}")
   - if !race
     %p= "#{state.name} #{party.name} won't pledge any delegates to a 2016 presidential nominee."
   - elsif !race.ap_id
@@ -51,4 +52,4 @@
           %time{datetime: format_datetime(race.last_updated)}
         - if race.poll_last_updated
           %p.poll-last-updated.no-precincts-reporting!= "Polling averages based on latest Iowa polls compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> and were lasted updated at <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
-          %p.poll-last-updated.some-precincts-reporting!= "Check <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> to see how who lead the race before the Iowa caucus."
+          %p.poll-last-updated.some-precincts-reporting!= "Check <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> to see how who led the race before the Iowa caucus."

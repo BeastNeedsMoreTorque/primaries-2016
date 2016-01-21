@@ -17,7 +17,7 @@ States and parties are case-sensitive
 
 
 hed: Presidential Primaries
-body: See which candidates are leading the pack for their party’s nomination, find key election dates and watch live-updating election results.
+body: See which candidates are leading the pack for their party’s nomination, find election dates and watch live updates on election nights.
 
 
 :end
@@ -102,7 +102,9 @@ id: 1187
 
 date: 2016-02-01
 title: Iowa Caucuses
-body: Iowa residents will be the first in the nation to cast their ballot for a candidate seeking the Republican or Democratic presidential nomination. Check here before the race begins to see who is favored to win. Tune in on election night for live updates to find out who is winning.
+body: Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls. Tune in on election night for live results.
+
+
 
 
 :end
@@ -110,7 +112,7 @@ body: Iowa residents will be the first in the nation to cast their ballot for a 
 
 date: 2016-02-09
 title: New Hampshire Primaries
-body: Check here before the race begins to see who is favored to win. Tune in on election night for live updates to find out who is winning.
+body: Only eight days after the first contests in Iowa, New Hampshire voters will head to the polls to make their presidential selections. Check here to see which candidates are leading, and tune in on election night for live results.
 :end
 
 
@@ -119,13 +121,13 @@ body: Check here before the race begins to see who is favored to win. Tune in on
 
 state: IA
 party: Dem
-text: 
+text: Hillary Clinton has enjoyed a lead in the Iowa caucus polls, but Sen. Bernie Sanders has steadily closed that gap over the last few months. Some show Clinton with a clear lead, but others show the candidates in a close race. HuffPost Pollster’s average gives Clinton a narrow lead. Stay tuned -- this one could be a nail-biter.
 :end
 
 
 state: IA
 party: GOP
-text: 
+text: The Republican contest in Iowa has seen a few candidates surge and fall, but headed into the caucus it’s Sen. Ted Cruz who is giving Donald Trump a run for his money. Polls are waffling about which one is ahead, and HuffPost Pollster’s average has them practically tied. But don’t dismiss Sen. Marco Rubio. He’s solidly in third place according to the polls. All other candidates are averaging single digits. 
 :end
 
 

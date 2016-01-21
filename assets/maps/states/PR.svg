@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="86" viewBox="0 0 350 86">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="72001" data-name="Adjuntas Municipio" d="M1648,490l-8,30 -21,-1 -19,3 -4,-5 -14,14 -3,10 -5,2 -11,-7 -11,5 -12,-20 -12,-8 -8,2 -10,-7 -6,6 -10,1 -8,-9 0,-10 -18,-3 -9,-13 -2,-13 -6,-15 -4,-45 8,-7 -5,-6 12,-6 8,3 17,4 5,-4 0,-17 5,-8 15,-1 8,10 14,7 4,15 26,6 12,-6 6,6 11,0 10,5 17,0 2,7 13,10 -4,9 4,13 10,6 10,12 -8,13 -6,3 -1,12Z"/>
     <path data-fips-int="72003" data-name="Aguada Municipio" d="M1087,186l6,23 -2,24 -7,8 4,15 -4,6 5,16 -8,1 -11,-7 -19,8 -14,-3 -12,7 -8,-13 -9,-4 2,-6 -18,-7 -12,-8 -8,-26 -11,-8 -4,-8 16,-4 37,-18 12,-12 32,-17 3,27 10,0 16,11Z"/>
@@ -82,11 +88,11 @@
     <path data-fips-int="72127" data-name="San Juan County" d="M2419,108l-7,8 12,9 4,13 25,17 19,8 2,11 -14,8 5,16 -22,2 -9,-2 -13,13 2,10 -3,22 3,13 -2,20 -7,9 -8,7 4,10 -10,-6 -16,1 -8,7 -10,0 -5,-3 0,-21 -5,-8 1,-15 -12,-8 -1,-13 12,-8 -4,-9 2,-14 -15,-6 -7,-12 2,-17 12,2 2,-7 -6,-8 2,-7 -12,-15 1,2 20,-12 11,-2 0,-7 -14,-4 -14,-9 0,-6 21,0 -21,-6 -15,5 -8,-11 7,-2 25,5 11,-2 14,12 36,7 10,-2Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="233.6" cy="8.8"/>
+    <circle r="3" cx="233.6" cy="8.8"/>
     <text x="233.6" y="8.8">San Juan</text>
-    <circle r="1" cx="227.5" cy="17.5"/>
+    <circle r="3" cx="227.5" cy="17.5"/>
     <text x="227.5" y="17.5">Bayamón</text>
-    <circle r="1" cx="251.7" cy="19.7"/>
+    <circle r="3" cx="251.7" cy="19.7"/>
     <text x="251.7" y="19.7">Carolina</text>
   </g>
 </svg>

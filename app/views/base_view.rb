@@ -38,7 +38,7 @@ class BaseView
     datetime.new_offset(0).iso8601.sub('+00:00', '.000Z')
   end
 
-  # 2016-01-19 -> "Jan. 19"
+  # 2016-01-19 -> "Jan 19"
   def format_date(date)
     "#{Months[date.month - 1]} #{date.day}"
   end
@@ -97,6 +97,8 @@ class BaseView
   def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
 
   def map_svg(path)
+    return '' if %w(states/AS states/DA).include?(path)
+
     # a .svg file includes a DOCTYPE, but we're including it inline so we don't
     # want it.
     header_length = 137

@@ -12,7 +12,7 @@ require_relative '../collections/race_days'
 # The Database contains every Collection we use -- e.g., `candidates`, `states`
 # -- plus the rendering date.
 class Database
-  LastDate = Date.parse('2016-02-09') # because we haven't coded+tested everything yet
+  LastDate = Date.parse('2016-03-01') # because we haven't coded+tested everything yet
 
   # Order these collections correctly: when each is built it will be sorted,
   # and if it depends on other collections that aren't initialized yet, the

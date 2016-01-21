@@ -4,6 +4,10 @@ body {
 	@include body-copy;
 }
 
+h1, h2, h3, h4{
+  @include header-copy;
+}
+
 .primary-mobile-ad {
 	@include mobile-ad-base;
 }

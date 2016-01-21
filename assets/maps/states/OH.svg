@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="293" height="350" viewBox="0 0 293 350">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#666666"/>
+    </pattern>
+  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="39001" data-name="Adams County" d="M1086,2895l1,33 0,192 -1,5 0,105 -11,16 -14,0 -9,-9 -3,-15 -5,-10 -25,-16 -28,-7 -25,-3 -11,-4 -16,-15 -21,-9 -29,9 -2,4 -29,3 -10,6 -5,10 -3,19 -7,9 -11,3 -24,-11 1,-37 10,-123 4,-40 5,-66 5,-56 40,2 61,-13 87,-16 47,2 4,11 13,9Z"/>
     <path data-fips-int="39003" data-name="Allen County" d="M708,1368l0,46 -3,102 -39,0 -106,0 0,-13 -73,-1 0,-24 -111,-1 2,-111 36,0 1,-36 47,0 26,2 74,-1 1,-37 73,2 0,-13 72,1Z"/>
@@ -93,11 +99,11 @@
     <path data-fips-int="39143" data-name="Sandusky County" d="M1232,836l6,4 14,-2 12,12 1,9 15,-18 6,-2 17,25 14,4 16,-9 34,0 2,34 2,84 1,29 -195,-1 -43,3 -46,-1 -12,-1 -71,0 4,-142 1,-66 47,-1 1,38 118,0Z"/>
   </g>
   <g class="cities">
-    <circle r="1" cx="126.8" cy="209.8"/>
+    <circle r="3" cx="126.8" cy="209.8"/>
     <text x="126.8" y="209.8">Columbus</text>
-    <circle r="1" cx="209.6" cy="79.8"/>
+    <circle r="3" cx="209.6" cy="79.8"/>
     <text x="209.6" y="79.8">Cleveland</text>
-    <circle r="1" cx="26.4" cy="280.0"/>
+    <circle r="3" cx="26.4" cy="280.0"/>
     <text x="26.4" y="280.0">Cincinnati</text>
   </g>
 </svg>
