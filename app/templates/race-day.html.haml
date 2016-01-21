@@ -3,9 +3,6 @@
   %h1= hed
   %h3.date-hed= race_date
 
-  %p.intro-date Published Monday, Jan. TK, 9:00 AM EDT
-  %p.intro-date Last updated Monday, Jan. TK, 10:00 AM EDT
-
   - if body
     %p.intro-copy= body
 
@@ -19,6 +16,10 @@
               != render(partial: 'race', locals: { party: party, state: state })
 
   != render(partial: 'race-day-nav')
+
+  %div.footnotes.footer
+    %p Sources: The Associated Press, Huffpost Pollster
+    %p Page Published Monday, Jan. TK, 9:00 AM EDT and last updated Monday, Jan. TK, 10:00 AM EDT
 
 %script{src: asset_path('stats.js')}
 %script{src: asset_path('main.js')}
