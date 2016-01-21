@@ -150,40 +150,47 @@ topojsonize = (features) ->
       population: +p.POP_2010 # cities only
 
   topology = topojson.topology(features, options)
-  topojson.simplify(topology, options)
   topojson.clockwise(topology, options)
+  topojson.simplify(topology, options)
   topojson.filter(topology, options)
   topology
 
 compress_svg_path = (path) ->
-  # First, round to one decimal, so we fit in viewBox.
-  path = path
-    .replace(/\.(\d)\d+/g, (__, one_decimal) -> one_decimal)
+  # First, round to one decimal and multiply by 10
+  path = path.replace(/\.(\d)\d+/g, (__, one_decimal) -> one_decimal)
 
   # Now, convert absolute coordinates to relative ones.
-  rings = path[0..-2].split(/Z/g) # Each ring ends with "Z"
+  throw 'Unexpected character in path' if /[^MLZ,\.0-9]/.test(path)
 
-  ret = []
+  rings = path.split(/Z/g).filter((s) -> s.length > 0) # Each ring ends with "Z"
 
-  for ring in rings
-    point_strings = ring[1..-1].split('L') # Each ring starts with "M"
+  compressed_rings = rings.map (ring) ->
+    throw 'Ring did not start with "M"' if ring[0] != 'M'
+
+    point_strings = ring.slice(1).split(/L/g) # "1,2" pairs
+
     parse_point_string = (s) -> s.split(',').map((x) -> +x)
 
     point = parse_point_string(point_strings.shift())
-    ret.push("M#{point[0]},#{point[1]}")
+
+    commands = [ "M#{point[0]},#{point[1]}" ]
 
     next_instr = 'l'
     for point_string in point_strings
       point2 = parse_point_string(point_string)
-      ret.push("#{next_instr}#{point2[0] - point[0]},#{point2[1] - point[1]}")
+
+      continue if point[0] == point2[0] && point[1] == point2[1]
+
+      commands.push("#{next_instr}#{point2[0] - point[0]},#{point2[1] - point[1]}")
+
       point = point2
       next_instr = ' ' # Makes output easier to read
 
-    ret.push('Z')
+    commands.push('Z')
 
-  ret
-    .filter((s) -> s != 'l0,0' && s != ' 0,0')
-    .join('')
+    commands.join('')
+
+  compressed_rings.join('')
 
 render_state = (state_code, features, callback) ->
   output_filename = "./output/#{state_code}.svg"
