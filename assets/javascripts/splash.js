@@ -30,6 +30,31 @@ $(function() {
     updateCountdown();
     var timeinterval = setInterval(updateCountdown, 1000);
   }
-  //initClock('countdown', iowa_starts);
+  function fillSvg(data){
+    document.getElementsByTagName("svg");
+    var countiesReporting = 0;
+    var totalPrecincts = 0;
+    var precinctsReporting = 0;
+    $(".counties").children().each(function(ele){
+      fips = this.getAttribute("data-fips-int");
+      obj = data[fips];
+      totalPrecincts += obj["n_precincts_total"];
+      precinctsReporting += obj["total_n_precincts_reporting"]
+      if(obj["total_n_precincts_reporting"] > 0){
+        countiesReporting++; 
+        $(this).addClass("has-results");
+      }
+    });
+    $("#counties-val").text(countiesReporting);
+    $("#precincts-val").text(((precinctsReporting/totalPrecincts)*100).toFixed(0) + "%")
+  }
+
   new pym.Child();
+  $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {
+    fillSvg(json);
+  })
+  .fail(function() { console.warn('Failed to load ' + json_url, this); })
+  //.always(function() { window.setTimeout(poll_results, interval_ms); });
+
+
 });

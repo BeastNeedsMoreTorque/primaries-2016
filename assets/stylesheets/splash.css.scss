@@ -84,6 +84,9 @@ h1, h2, h3, h4{
 		    stroke: white;
 		    stroke-width: 10; // divided by 10
 		    fill: #eee;
+		    &.has-results {
+		    	fill: #999;
+		    }
 		  }
 		  text, circle {
 		  	opacity: 0;

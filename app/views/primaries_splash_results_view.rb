@@ -16,34 +16,30 @@ class PrimariesSplashResultsView < BaseView
 
   def build_json
     JSON.dump(
-      #parties: parties_csv,
-      races: races_csv,
-      county_party: county_party_csv
+      county_party_objects
     )
   end
 
   protected
 
-  def county_party_csv
-    header = ["fips_int,party_id,n_precincts_reporting,n_precincts_total,last_updated"]
+  def county_party_objects
     data = []
-    parties.each do |party|
+    fips = {}
+    parties.each{|party|
       race = races.find_by_party_and_state(party, cur_state)
-      str = race.county_parties.map{ |cp| "#{cp.fips_int},#{cp.party_id},#{cp.n_precincts_reporting},#{cp.n_precincts_total},#{cp.last_updated}" }.join("\n")
-      data.push(str)
-    end
-    header + data
-  end
-
-  def races_csv
-    header = ["id,party,state_code,race_type,n_precincts_reporting,n_precincts_total"]
-    data = []
-    parties.each do |party|
-      rd = races.find_by_party_and_state(party, cur_state)
-      str = "#{rd.race_day_id},#{rd.party_id},#{rd.state_code},#{rd.race_type},#{rd.n_precincts_reporting},#{rd.n_precincts_total}"
-      data.push(str)
-    end
-    header + data
+      subkeyGOP = "GOP,#{race.state_code},#{race.race_type}"
+      subkeyDem = "Dem,#{race.state_code},#{race.race_type}"
+      subkeyThis = "#{race.party_id},#{race.state_code},#{race.race_type}"
+      race.county_parties.each{|cp|
+        key = cp.fips_int.to_s
+        obj = (fips.keys.include? key) ? fips[key] : {"n_precincts_total" => 0, subkeyDem => 0, subkeyGOP => 0, "total_n_precincts_reporting" => 0}
+        obj[subkeyThis] += cp.n_precincts_reporting
+        obj["total_n_precincts_reporting"] += cp.n_precincts_reporting
+        obj["n_precincts_total"] += cp.n_precincts_total
+        fips[key] = obj
+      }
+    }
+    fips
   end
 
   def self.generate_all(database)
