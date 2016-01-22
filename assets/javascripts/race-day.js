@@ -56,40 +56,66 @@ function position_cities_correctly() {
     }
 
     function trial_rectangles(x, y, width, height) {
-      var margin = 5; // px between dot and text
-      var x_height = height / 4; // roughly?
+      var margin_x = 6; // px between dot and text
+      var margin_y = 4; // px between dot and text
+
+      var x_height = Math.round(height / 4); // roughly?
+      var y_above = Math.round(y - height - margin_y);
+      var y_below = Math.round(y + margin_y - height / 5); // bump it up a bit
+      var y_mid = Math.round(y - height / 2 - height / 10); // bump it up a bit
+      var x_left = Math.round(x - width - margin_x);
+      var x_right = Math.round(x + margin_x);
+      var x_mid = Math.round(x - width / 2);
+
       return [
-        { position: 'above', x: (x - width / 2), y: y - margin, width: width, height: height },
-        { position: 'right', x: x + margin, y: y + x_height, width: width, height: height },
-        { position: 'left', x: x - width - margin, y: y + x_height, width: width, height: height },
-        { position: 'below', x: (x - width / 2), y: (y + height + margin), width: width, height: height },
-        { position: 'above-right', x: x + margin, y: y - margin, width: width, height: height },
-        { position: 'above-left', x: x - width - margin, y: y - margin, width: width, height: height },
-        { position: 'below-right', x: x + margin, y: y + height + margin, width: width, height: height },
-        { position: 'below-left', x: x - width - margin, y: y + height + margin, width: width, height: height }
+        [ 'above', x_mid, y_above ],
+        [ 'right', x_right, y_mid ],
+        [ 'left', x_left, y_mid ],
+        [ 'below', x_mid, y_below ],
+        [ 'above-right', x_right, y_above ],
+        [ 'above-left', x_left, y_above ],
+        [ 'below-right', x_right, y_below ],
+        [ 'below-left', x_left, y_below ]
       ];
     }
 
-    $texts.each(function() {
-      var text = this;
-      var x = +text.getAttribute('x');
-      var y = +text.getAttribute('y');
-      var rect = text.getBBox();
-      var potential_rects = trial_rectangles(x, y, rect.width, rect.height);
+    $texts.get()
+      // Sort from north to south. Otherwise, in a situation like this:
+      //
+      // +---------------+
+      // |               |
+      // |          2    |
+      // |             1 |
+      // |               |
+      // |               |
+      // |               |
+      // +---------------+
+      //
+      // ... city #1's label would go above-left, and city #2's label would
+      // overlap no matter what.
+      //
+      // (See Kansas: Topeka and Overland Park.)
+      .sort(function(text1, text2) { return +text1.getAttribute('y') - text2.getAttribute('y'); })
+      .forEach(function(text) {
+        var x = +text.getAttribute('x');
+        var y = +text.getAttribute('y');
+        var rect = text.getBBox();
+        var potential_rects = trial_rectangles(x, y, rect.width, rect.height);
 
-      for (var i = 0; i < potential_rects.length; i++) {
-        var r = potential_rects[i];
-        if (rect_fits(r)) {
-          rects.push(r);
-          text.setAttribute('x', r.x);
-          text.setAttribute('y', r.y);
-          text.setAttribute('class', r.position);
-          return;
+        for (var i = 0; i < potential_rects.length; i++) {
+          var r = potential_rects[i];
+          var rect2 = { x: r[1], y: r[2], width: rect.width, height: rect.height };
+          if (rect_fits(rect2)) {
+            rects.push(rect2);
+            text.setAttribute('x', rect2.x);
+            text.setAttribute('y', rect2.y);
+            text.setAttribute('class', r[0]);
+            return;
+          }
         }
-      }
 
-      console.warn('Could not position text', text);
-    });
+        console.warn('Could not position text', text);
+      });
 
     // Turn each <text> into a <text class="background"> and <text class="foreground">.
     var cities = $texts[0].parentNode;
