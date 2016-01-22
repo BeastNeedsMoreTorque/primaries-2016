@@ -3,17 +3,18 @@
   %table{'data-party-id': party.id}
     %thead
       %tr
-        %th{colspan: "1"}
+        %th{colspan: "2"}
           Candidate
-        %th.pollster{colspan: "2"}
-          National Polling Average
+        %th.pollster
+          .long-table-heading National Polling Average
     %tbody
       - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
       - for candidate in party.candidates.sort_by(&:poll_percent).reverse
-        %tr.rep-candidate{class: n_unellipsized <= 0 ? 'ellipsized' : ''}
-          %td.cd-img
+        %tr{class: n_unellipsized <= 0 ? 'ellipsized' : ''}
+          %td.candidate-image
             %img{src: image_path("#{candidate.slug}.png"), alt: ''}
-          %td.cd-name= candidate.full_name
+          %td.candidate
+            = candidate.full_name
           %td.pollster
             - if candidate.poll_sparkline && !candidate.poll_sparkline.empty?
               .sparkline!= candidate.poll_sparkline.to_svg

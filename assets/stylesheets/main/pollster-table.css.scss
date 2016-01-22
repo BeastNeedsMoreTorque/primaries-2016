@@ -6,8 +6,66 @@
   flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
 
+  .t-pollster {
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+
+    width: 100%;
+
+    @media (min-width: 40rem) {
+      width: 50%;
+
+      &:first-child {
+        padding-right: 20px;
+      }
+      &:last-child {
+        padding-left: 20px;
+      }
+    }
+  }
+
   table {
     @include ellipsized-table;
+    border-collapse: collapse;
+  }
+  td, th {
+    padding: 2px;
+    border-bottom: 1px solid #ccc;
+  }
+  .pollster{
+    text-align: right;
+    font-weight: bold;
+  }
+  th {
+    text-align: left;
+    border-bottom: 1px solid #999;
+  }
+
+  th.pollster {
+    position: relative;
+
+    .long-table-heading {
+      position: absolute;
+      top: 2px;
+      right: 0;
+    }
+  }
+
+  td, th {
+    white-space: nowrap;
+  }
+
+  td.candidate-image {
+    img {
+      height: 30px;
+      vertical-align: middle;
+      padding: 2px;
+    }
+  }
+
+  td.candidate {
+    width: 100%;
   }
 
   table[data-party-id=Dem] .sparkline path {
