@@ -173,10 +173,11 @@ $splash-ele-bg: #eee;
     text-align: center;
 
     button {
+      box-sizing: border-box;
       margin: 0;
-      padding: .5rem 1rem;
-      height: 1rem;
-      line-height: 1rem;
+      padding: .25em 1rem;
+      height: 2rem;
+      line-height: 1.5rem;
       border: none;
       font: inherit;
       background: none;
