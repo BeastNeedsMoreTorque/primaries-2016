@@ -5,7 +5,6 @@ require 'uri'
 
 require_relative './http_cache'
 require_relative './http_client'
-require_relative './logger'
 require_relative './paths'
 
 # Requests data from HTTP APIs: Pollster and AP.
@@ -46,8 +45,14 @@ module ApiSources
   end
 
   def self.poll_pollster_primaries
-    poll_or_fetch(:pollster_primaries, 'Dem')
-    poll_or_fetch(:pollster_primaries, 'GOP')
+    for party_id in %w(Dem GOP)
+      string = poll_or_fetch(:pollster_primaries, party_id)
+      json = parse_json(string)
+      for chart_json in json
+        slug = chart_json[:slug]
+        poll_or_fetch(:pollster_primary, slug)
+      end
+    end
   end
 
   # Election results for the given date.
@@ -80,6 +85,12 @@ module ApiSources
   # Pollster primaries polling results per state, including 'US' state.
   def self.GET_pollster_primaries(party_id)
     string = get_cached_or_fetch(:pollster_primaries, party_id)
+    parse_json(string)
+  end
+
+  # Pollster JSON for a single poll
+  def self.GET_pollster_primary(slug)
+    string = get_cached_or_fetch(:pollster_primary, slug)
     parse_json(string)
   end
 

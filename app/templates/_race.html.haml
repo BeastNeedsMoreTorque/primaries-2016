@@ -26,6 +26,7 @@
             %th.pollster Polling Average 
         %tbody
           - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
+          - sparkline_max = race.candidate_states.map(&:poll_sparkline).compact.map(&:max).compact.max
           - race.candidate_states.each do |candidate_state|
             - candidate = candidate_state.candidate
             %tr{'data-candidate-id': candidate.id, 'class': n_unellipsized <= 0 ? 'ellipsized' : ''}
@@ -34,7 +35,10 @@
               %td.candidate= candidate.name
               %td.n-votes= format_int(candidate_state.n_votes)
               %td.n-delegates= format_int(candidate_state.n_delegates)
-              %td.pollster= candidate_state.poll_percent ? "#{candidate_state.poll_percent}%" : ""
+              %td.pollster
+                - if sparkline_max && candidate_state.poll_sparkline
+                  .sparkline!= candidate_state.poll_sparkline.to_svg(sparkline_max * 1.05)
+                %span.percent= candidate_state.poll_percent ? "#{candidate_state.poll_percent}%" : ""
             - n_unellipsized -= 1
       -# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
       .ellipsize-table-prompt

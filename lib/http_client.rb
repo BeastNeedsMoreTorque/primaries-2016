@@ -9,7 +9,7 @@ class HttpClient
     def get(url, maybe_etag)
       uri = URI(url)
 
-      $logger.debug("GET #{uri}")
+      $logger.info("GET #{uri}")
 
       req = Net::HTTP::Get.new(uri)
       req['If-None-Match'] = maybe_etag if maybe_etag
@@ -40,6 +40,9 @@ class HttpClient
     when :pollster_primaries
       throw ArgumentError.new('param must be "Dem" or "GOP"') if ![ 'Dem', 'GOP' ].include?(maybe_param)
       get_json!("http://elections.huffingtonpost.com/pollster/api/charts?topic=2016-president-#{maybe_param.downcase}-primary", maybe_etag)
+    when :pollster_primary
+      throw ArgumentError.new('param must be a slug-in-slug-format') if maybe_param.nil?
+      get_json!("http://elections.huffingtonpost.com/pollster/api/charts/#{maybe_param}.json", maybe_etag)
     when :election_day
       throw ArgumentError.new('param must be a date in YYYY-MM-DD format') if maybe_param.nil?
       get_json!("https://api.ap.org/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)

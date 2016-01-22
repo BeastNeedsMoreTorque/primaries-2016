@@ -66,6 +66,15 @@ body.race-day {
         }
       }
     }
+
+    .sparkline {
+      display: inline-block;
+    }
+
+    .percent {
+      display: inline-block;
+      width: 3em;
+    }
   }
 
   h2, h3 {
@@ -138,15 +147,35 @@ body.race-day {
     }
   }
 
-  .race[data-party-id=Dem] tr.highlight-on-map td {
-    color: white;
-    background: $strongDem;
-    font-weight: bold;
+  .race[data-party-id=Dem] {
+    .sparkline path {
+      stroke: $strongDem;
+    }
+
+    tr.highlight-on-map td {
+      color: white;
+      background: $strongDem;
+      font-weight: bold;
+
+      .sparkline path {
+        stroke: white;
+      }
+    }
   }
 
-  .race[data-party-id=GOP] tr.highlight-on-map td {
-    color: white;
-    background: $strongGOP;
-    font-weight: bold;
+  .race[data-party-id=GOP] {
+    .sparkline path {
+      stroke: $strongGOP;
+    }
+
+    tr.highlight-on-map td {
+      color: white;
+      background: $strongGOP;
+      font-weight: bold;
+
+      .sparkline path {
+        stroke: white;
+      }
+    }
   }
 }
