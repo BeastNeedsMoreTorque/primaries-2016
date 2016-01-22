@@ -26,6 +26,7 @@ h1, h2, h3, h4{
 
 .primary-splash-banner {
   @include desktop-splash-base;
+  max-width: 945px;
 }
 
 .header {
@@ -148,7 +149,7 @@ h1, h2, h3, h4{
 	@include vertical-center-column-flex;
 
 	.candidate {
-		width: 130px;
+		width: 105px;
 		background: #fff;
 		margin: 3px;
 		margin-right: 5px;
