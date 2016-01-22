@@ -68,13 +68,13 @@
   var comscoreID = window.setInterval(checkComscore, 1000);
 
   function checkOmni(){
-    if(s_265 !== undefined){
+    if(typeof s_265 !== 'undefined'){
       runOmni();
       clearInterval(omniID)
     }
   }
   function checkComscore(){
-    if(s_265 !== undefined){
+    if(typeof COMSCORE !== 'undefined'){
       runComscore();
       clearInterval(comscoreID)
     }
