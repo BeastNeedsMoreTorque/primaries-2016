@@ -18,6 +18,10 @@ class Sparkline
     @values[index] = float
   end
 
+  def empty?
+    @values.compact.empty?
+  end
+
   def min
     @values.compact.min
   end
@@ -32,7 +36,7 @@ class Sparkline
     [ [ 0, min - 1 ].max, [ 100, max + 1 ].min ]
   end
 
-  def to_svg(max)
+  def to_svg
     [
       "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 180 60\">",
       "  <path d=\"#{to_svg_path}\">",
@@ -45,7 +49,6 @@ class Sparkline
     # y(value) = 60 - (value - y_min) * y_factor
     y_min = range[0]
     y_factor = 60.to_f / (range[1] - range[0])
-    puts [ range, y_factor ].inspect
 
     parts = []
 

@@ -10,6 +10,19 @@
     @include ellipsized-table;
   }
 
+  table[data-party-id=Dem] .sparkline path {
+    stroke: $strongDem;
+  }
+
+  table[data-party-id=GOP] .sparkline path {
+    stroke: $strongGOP;
+  }
+
+  .sparkline + .percent {
+    display: inline-block;
+    width: 3em;
+  }
+
   .party-hed {
     text-align: center;
     font-size: 1.3rem;
