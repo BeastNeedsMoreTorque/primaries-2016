@@ -28,6 +28,14 @@ body.race-day {
       border-bottom: 1px solid black;
     }
 
+    .cd-img {
+      img {
+        height: 30px;
+        vertical-align: middle;
+        padding: 2px;
+      }
+    }
+
     .pollster{
       text-align: right;
       padding-right: 0;
