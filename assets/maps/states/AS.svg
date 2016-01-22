@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="288" height="350" viewBox="0 0 288 350">
+  <defs>
+    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#ddd"/>
+      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
+    </pattern>
+  </defs>
+  <g class="counties" transform="scale(0.1)">
+    <path data-fips-int="60020" data-name="Manu'a" d="M1563,3006l89,3 25,30 -6,79 -41,23 -24,-7 -25,12 -36,-8 -39,-47 -10,-33 -28,15 -28,-9 -44,2 -39,-38 0,-42 19,-21 37,-12 29,5 56,7 22,54Z"/>
+    <path data-fips-int="60050" data-name="Western Samoa" d="M395,3083l4,5 51,41 64,72 -67,41 -48,-18 -26,-27 -37,-10 -21,-38 35,-50Z"/>
+    <path data-fips-int="60040" data-name="Swains Island" d="M72,134l3,-17 39,-30 68,12 9,45 -19,43 -38,5 -55,-19Z"/>
+    <path data-fips-int="60010" data-name="Eastern Samoa" d="M521,3098l62,-60 -6,66 18,-8 34,30 2,38 -59,-1 -44,21 -14,17 -64,-72 -51,-41 -4,-5 47,-9 37,-31 15,51Z"/>
+    <path data-fips-int="60030" data-name="Rose Island" d="M2696,3350l13,-33 48,-21 30,13 18,45 -23,55 -40,3 -30,-12Z"/>
+  </g>
+  <g class="cities">
+    <circle r="3" cx="162.7" cy="305.8"/>
+    <text x="162.7" y="305.8">Fitiuta</text>
+    <circle r="3" cx="48.3" cy="311.1"/>
+    <text x="48.3" y="311.1">Pago Pago</text>
+    <circle r="3" cx="12.2" cy="14.1"/>
+    <text x="12.2" y="14.1">Taulaga</text>
+  </g>
+</svg>
