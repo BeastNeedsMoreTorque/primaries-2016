@@ -15,11 +15,11 @@
 
               != render(partial: 'race', locals: { party: party, state: state })
 
-  != render(partial: 'race-day-nav')
-
   %div.footnotes.footer
     %p Sources: The Associated Press, Huffpost Pollster
     %p Page Published Monday, Jan. TK, 9:00 AM EDT and last updated Monday, Jan. TK, 10:00 AM EDT
+
+!= render(partial: 'race-day-nav')
 
 %script{src: asset_path('stats.js')}
 %script{src: asset_path('main.js')}

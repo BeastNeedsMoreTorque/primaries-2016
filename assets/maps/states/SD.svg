@@ -44,7 +44,7 @@
     <path data-fips-int="46069" data-name="Hyde County" d="M2028,718l110,-2 2,209 6,4 2,206 -118,2 -37,-14 -1,-197 -5,0 0,-208Z"/>
     <path data-fips-int="46071" data-name="Jackson County" d="M1394,1255l-1,91 -32,0 -40,36 -3,233 -381,-7 2,-52 -12,-1 0,-133 55,-4 2,-144 6,-25Z"/>
     <path data-fips-int="46073" data-name="Jerauld County" d="M2404,1130l155,-3 6,154 -204,5 -52,0 -1,-155Z"/>
-    <path data-fips-int="46075" data-name="Jones County" d="M1692,1153l0,192 12,0 0,77 -15,-13 -42,9 -36,-9 -17,-18 -37,33 -8,-7 -10,7 -8,-11 -2,-2 0,-2 0,2 -3,0 0,-2 0,2 -37,-16 -26,-33 -30,-9 -40,-7 1,-91 7,0 2,-103Z"/>
+    <path data-fips-int="46075" data-name="Jones County" d="M1692,1153l0,192 12,0 0,77 -15,-13 -42,9 -36,-9 -17,-18 -37,33 -8,-7 -10,7 -8,-11 -2,-2 -3,0 -37,-16 -26,-33 -30,-9 -40,-7 1,-91 7,0 2,-103Z"/>
     <path data-fips-int="46077" data-name="Kingsbury County" d="M2911,910l157,-6 6,208 -103,4 -204,6 -2,0 -5,-208Z"/>
     <path data-fips-int="46079" data-name="Lake County" d="M3074,1112l102,-4 10,206 -103,5 -103,2 -9,-205Z"/>
     <path data-fips-int="46081" data-name="Lawrence County" d="M336,865l-11,207 51,2 -1,69 -260,-12 14,-256 33,-4 3,1 63,-12Z"/>
@@ -54,7 +54,7 @@
     <path data-fips-int="46089" data-name="McPherson County" d="M2374,93l3,207 -409,4 -3,0 -2,-208Z"/>
     <path data-fips-int="46091" data-name="Marshall County" d="M2995,78l8,224 -60,2 -2,-17 -253,8 -5,-207Z"/>
     <path data-fips-int="46093" data-name="Meade County" d="M1007,627l-7,310 0,3 -1,1 -45,37 -40,10 -9,-13 -38,12 5,24 -30,52 0,39 -18,34 5,22 -454,-15 1,-69 -51,-2 11,-207 257,9 11,-258Z"/>
-    <path data-fips-int="46095" data-name="Mellette County" d="M1433,1353l30,9 26,33 37,16 0,-2 0,2 3,0 0,-2 0,2 2,2 8,11 10,-7 8,7 37,-33 17,18 36,9 42,-9 15,13 46,2 0,140 9,52 -441,-1 3,-233 40,-36 32,0Z"/>
+    <path data-fips-int="46095" data-name="Mellette County" d="M1433,1353l30,9 26,33 37,16 3,0 2,2 8,11 10,-7 8,7 37,-33 17,18 36,9 42,-9 15,13 46,2 0,140 9,52 -441,-1 3,-233 40,-36 32,0Z"/>
     <path data-fips-int="46097" data-name="Miner County" d="M2971,1116l9,205 -104,4 -104,3 -5,-206Z"/>
     <path data-fips-int="46099" data-name="Minnehaha County" d="M3372,1306l10,207 -63,2 -142,7 -83,3 -5,1 -6,-207 103,-5Z"/>
     <path data-fips-int="46101" data-name="Moody County" d="M3372,1306l-186,8 -10,-206 186,-9Z"/>

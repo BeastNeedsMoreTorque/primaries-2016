@@ -28,6 +28,9 @@ Set the environment variable `LOG_LEVEL=debug` to see more log data.
 
 Set the environment variable `DEBUG_ASSETS=true` to skip minimizing assets.
 
+We haven't finalized all our pages. If you set the environment variable
+`LAST_DATE=YYYY-MM-DD` you can make sure the race you care about is rendered.
+
 Another useful command is `AP_API_KEY=abcdgef RPROF=true script/build`, which
 will dump profiling data to `profile.html`.
 

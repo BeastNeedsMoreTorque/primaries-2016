@@ -2,6 +2,7 @@ d3 = require('d3')
 fs = require('fs')
 get = require('simple-get')
 tar = require('tar-fs')
+unzip = require('unzip')
 zlib = require('zlib')
 shapefile = require('shapefile')
 topojson = require('topojson')
@@ -20,6 +21,107 @@ DataFiles =
     basename: 'countyp010g'
     url: 'http://dds.cr.usgs.gov/pub/data/nationalatlas/countyp010g.shp_nt00934.tar.gz'
     shp_size: 48737664
+  AS:
+    basename: 'tl_2015_60_cousub'
+    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_60_cousub.zip'
+    shp_size: 37256
+  GU:
+    basename: 'tl_2015_66_cousub'
+    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_66_cousub.zip'
+    shp_size: 709728
+  MP:
+    basename: 'tl_2015_69_cousub'
+    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_69_cousub.zip'
+    shp_size: 1345544
+
+# These cities didn't come from any one source. Adam Hooper compiled them from
+# Google searches.
+TerritoryCities =
+  # American Samoa looks like this:
+  #
+  #    .
+  #
+  #
+  #
+  #
+  #
+  #    *         ...
+  #
+  # ... since it's mostly empty (ocean), it looks best if we draw one city per
+  # land mass.
+  AS: [
+    {
+      # http://www.geonames.org/AS/largest-cities-in-american-samoa.html
+      name: 'Pago Pago'
+      latitude: -14.278
+      longitude: -170.702
+      population: 11500
+    }
+    {
+      # https://en.wikipedia.org/wiki/Taulaga -- it's the only village on the island
+      name: 'Taulaga'
+      latitude: -11.055
+      longitude: -171.088
+      population: 35
+    }
+    {
+      # https://en.wikipedia.org/wiki/Fitiuta,_American_Samoa -- it has an airport
+      name: 'Fitiuta'
+      latitude: -14.222222
+      longitude: -169.423611
+      population: 358
+    }
+  ]
+  # http://www.geonames.org/GU/largest-cities-in-guam.html
+  GU: [
+    {
+      name: 'Dededo'
+      latitude: 13.518
+      longitude: 144.839
+    }
+    {
+      name: 'Yigo'
+      latitude: 13.536
+      longitude: 144.889
+    }
+    {
+      name: 'Tamuning-Tumon-Harmon'
+      latitude: 13.488
+      longitude: 144.781
+    }
+  ]
+  # http://www.geonames.org/MP/largest-cities-in-northern-mariana-islands.html
+  MP: [
+    {
+      name: 'Saipan'
+      latitude: 15.212
+      longitude: 145.754
+    }
+    {
+      name: 'San Jose'
+      latitude: 14.968
+      longitude: 145.62
+    }
+    {
+      name: 'Carolinas Heights'
+      latitude: 14.967
+      longitude: 145.649
+    }
+  ]
+
+TerritoryFipsCodeNames =
+  # AS: http://www.nws.noaa.gov/mirs/public/prods/maps/map_images/state-maps/cnty_fips/pacific_region/samoa_cnty.pdf
+  60040: 'Swains Island'
+  60050: 'Western Samoa'
+  60010: 'Eastern Samoa'
+  60020: "Manu'a"
+  60030: 'Rose Island'
+  # GU, NM: http://www.nws.noaa.gov/mirs/public/prods/maps/cnty_fips_pr_guam.htm
+  66010: 'Guam'
+  69085: 'Northern Islands'
+  69120: 'Tinian'
+  69110: 'Saipan'
+  69100: 'Rota'
 
 is_data_downloaded = (key, callback) ->
   data_file = DataFiles[key]
@@ -46,9 +148,12 @@ download_data = (key, callback) ->
   get url, (err, res) ->
     throw err if err
 
-    res
-      .pipe(zlib.createGunzip())
-      .pipe(tar.extract('./input'))
+    deflated = if /\.zip$/.test(url)
+      res.pipe(unzip.Extract(path: './input'))
+    else
+      res.pipe(zlib.createGunzip()).pipe(tar.extract('./input'))
+
+    deflated
       .on('error', (err) -> throw err)
       .on('finish', -> callback())
 
@@ -71,6 +176,25 @@ load_features = (key, callback) ->
       throw err if err
       callback(null, feature_collection.features)
 
+# Calls callback with a mapping from DataFiles key to Array of GeoJSON features
+load_all_features = (callback) ->
+  ret = {} # key -> feature_collection.features
+
+  to_load = Object.keys(DataFiles)
+
+  step = ->
+    if to_load.length == 0
+      callback(null, ret)
+    else
+      key = to_load.pop()
+      load_features key, (err, features) ->
+        return callback(err) if err
+
+        ret[key] = features
+        process.nextTick(step)
+
+  step()
+
 features_by_state = {} # { state_code -> { cities: [...], counties: [...] } }
 
 organize_features = (key, features) ->
@@ -80,6 +204,53 @@ organize_features = (key, features) ->
     if state_code not of features_by_state
       features_by_state[state_code] = { cities: [], counties: [] }
     features_by_state[state_code][key].push(feature)
+
+organize_territory_features = (state_code, features) ->
+  # Our geo-data for territories (*not* countyp10g) is by county, but counties
+  # aren't FIPS codes here. We'll group all the counties by FIPS code and make
+  # one big name for them.
+  console.log("Organizing #{state_code} features...")
+
+  features_by_state[state_code] = { cities: [], counties: [] }
+
+  fips_string_to_out_feature = {}
+
+  for in_feature in features
+    fips_string = in_feature.properties.GEOID[0 ... 5]
+
+    out_feature = fips_string_to_out_feature[fips_string]
+    if !out_feature
+      out_feature = fips_string_to_out_feature[fips_string] =
+        type: 'Feature'
+        properties:
+          STATE: state_code
+          ADMIN_FIPS: fips_string
+          NAME: TerritoryFipsCodeNames[fips_string]
+        geometry:
+          type: 'MultiPolygon'
+          coordinates: []
+      features_by_state[state_code].counties.push(out_feature)
+
+    if in_feature.geometry.type == 'MultiPolygon'
+      out_feature.geometry.coordinates.splice(Infinity, in_feature.geometry.coordinates)
+    else if in_feature.geometry.type == 'Polygon'
+      out_feature.geometry.coordinates.push(in_feature.geometry.coordinates)
+    else
+      throw "Unhandled geometry type: #{in_feature.geometry.type}"
+
+  out_cities = features_by_state[state_code].cities
+  for city in TerritoryCities[state_code]
+    out_cities.push
+      type: 'Feature'
+      properties:
+        NAME: city.name
+        FEATURE: 'Civil'
+        POP_2010: 1 # doesn't matter
+      geometry:
+        type: 'Point'
+        coordinates: [ city.longitude, city.latitude ]
+
+  undefined
 
 calculate_projection_width_height = (features) ->
   feature_collection = { type: 'FeatureCollection', features: features.counties }
@@ -148,8 +319,16 @@ topojsonize = (features) ->
 
   topology = topojson.topology(features, options)
   topojson.clockwise(topology, options)
+
+  geometries = topology.objects.counties.geometries
+  topology.objects.counties.geometries = for geometry in geometries
+    geometry2 = topojson.mergeArcs(topology, [geometry])
+    geometry2.properties = geometry.properties
+    geometry2
+
   topojson.simplify(topology, options)
   topojson.filter(topology, options)
+  topojson.prune(topology, options)
   topology
 
 compress_svg_path = (path) ->
@@ -189,6 +368,11 @@ compress_svg_path = (path) ->
 
   compressed_rings.join('')
 
+distance2 = (p1, p2) ->
+  dx = p2[0] - p1[0]
+  dy = p2[1] - p1[1]
+  dx * dx + dy * dy
+
 render_state = (state_code, features, callback) ->
   output_filename = "./output/#{state_code}.svg"
 
@@ -225,22 +409,29 @@ render_state = (state_code, features, callback) ->
     data.push("    <path data-fips-int=\"#{+geometry.properties.fips_string}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
   data.push('  </g>')
 
-  data.push('  <g class="cities">')
-  cities = (topojson.feature(topology, geometry) for geometry in topology.objects.cities.geometries)
-    .sort (a, b) ->
-      # Prefer "Civil" to "Populated Place". Some states (e.g., VI) don't have
-      # any cities, so we can't filter.
-      p1 = a.properties
-      p2 = b.properties
-      ((p1 == 'Civil' && -1 || 0) - (p2 == 'Civil' && -1 || 0)) || p2.population - p1.population || p1.name.localeCompare(p2.name)
-    .slice(0, 3)
-  for city in cities
-    p = city.geometry.coordinates
-    x = p[0].toFixed(1)
-    y = p[1].toFixed(1)
-    data.push("    <circle r=\"3\" cx=\"#{x}\" cy=\"#{y}\"/>")
-    data.push("    <text x=\"#{x}\" y=\"#{y}\">#{city.properties.name}</text>")
-  data.push('  </g>')
+  if topology.objects.cities.geometries
+    data.push('  <g class="cities">')
+    rendered_cities = [] # Track all dots we rendered; ensure we don't render them too close to one another
+    cities = (topojson.feature(topology, geometry) for geometry in topology.objects.cities.geometries)
+      .sort (a, b) ->
+        # Prefer "Civil" to "Populated Place". Some states (e.g., VI) don't have
+        # any cities, so we can't filter.
+        p1 = a.properties
+        p2 = b.properties
+        ((p1 == 'Civil' && -1 || 0) - (p2 == 'Civil' && -1 || 0)) || p2.population - p1.population || p1.name.localeCompare(p2.name)
+    for city in cities
+      p = city.geometry.coordinates
+
+      continue if rendered_cities.find((p2) -> distance2(p, p2) < 25 * 25)
+
+      x = p[0].toFixed(1)
+      y = p[1].toFixed(1)
+      data.push("    <circle r=\"3\" cx=\"#{x}\" cy=\"#{y}\"/>")
+      data.push("    <text x=\"#{x}\" y=\"#{y}\">#{city.properties.name}</text>")
+
+      rendered_cities.push(p)
+      break if rendered_cities.length == 3
+    data.push('  </g>')
 
   data.push('</svg>')
 
@@ -250,24 +441,26 @@ render_state = (state_code, features, callback) ->
 render_all_states = (callback) ->
   pending_states = Object.keys(features_by_state).sort()
 
-  step = (next) ->
+  step = ->
     if pending_states.length > 0
       state_code = pending_states.shift()
       render_state state_code, features_by_state[state_code], (err) ->
         throw err if err
-        process.nextTick(-> step(next))
+        process.nextTick(step)
     else
-      next(null)
+      callback(null)
 
-  step(callback)
+  step()
 
-load_features 'cities', (err, city_features) ->
+load_all_features (err, key_to_features) ->
   throw err if err
-  organize_features('cities', city_features)
-  load_features 'counties', (err, county_features) ->
-    throw err if err
-    organize_features('counties', county_features)
 
-    render_all_states (err) ->
-      throw err if err
-      console.log('Done! Now try `cp output/*.svg ../assets/maps/states/`')
+  organize_features('cities', key_to_features.cities)
+  organize_features('counties', key_to_features.counties)
+
+  [ 'AS', 'GU', 'MP' ].forEach (key) ->
+    organize_territory_features(key, key_to_features[key])
+
+  render_all_states (err) ->
+    throw err if err
+    console.log('Done! Now try `cp output/*.svg ../assets/maps/states/`')

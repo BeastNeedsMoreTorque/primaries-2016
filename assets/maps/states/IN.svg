@@ -29,7 +29,7 @@
     <path data-fips-int="18037" data-name="Dubois County" d="M990,2792l1,109 0,110 1,12 -75,0 1,36 -148,0 -38,0 0,-25 3,-234 6,12 44,-10 35,16 13,-10 29,9 27,-25Z"/>
     <path data-fips-int="18039" data-name="Elkhart County" d="M1632,95l6,197 1,71 -92,3 -161,0 0,-38 -3,-233Z"/>
     <path data-fips-int="18041" data-name="Fayette County" d="M2048,1794l3,158 -169,3 -6,-220 52,-1 24,0 0,61Z"/>
-    <path data-fips-int="18043" data-name="Floyd County" d="M1439,2880l18,13 103,-2 31,45 -15,24 -4,28 -22,7 -13,43 -35,41 0,2 0,-2 -38,-8 1,-58 -51,-58 0,-75Z"/>
+    <path data-fips-int="18043" data-name="Floyd County" d="M1439,2880l18,13 103,-2 31,45 -15,24 -4,28 -22,7 -13,43 -35,41 -38,-8 1,-58 -51,-58 0,-75Z"/>
     <path data-fips-int="18045" data-name="Fountain County" d="M734,1256l-2,127 0,218 -211,-2 -8,-63 12,-25 7,-57 -20,-35 14,-23 45,-17 71,-76 66,-25Z"/>
     <path data-fips-int="18047" data-name="Franklin County" d="M2051,1952l141,0 0,181 -158,2 -100,0 -49,33 -2,-153 -1,-60Z"/>
     <path data-fips-int="18049" data-name="Fulton County" d="M1375,586l1,72 37,0 0,36 45,-2 0,37 -139,3 0,72 -189,0 1,-218Z"/>

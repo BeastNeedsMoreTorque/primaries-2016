@@ -8,16 +8,13 @@
   .party-state-map!= map_svg("states/#{state.code}")
   - if !race
     %p= "#{state.name} #{party.name} won't pledge any delegates to a 2016 presidential nominee."
-  - elsif !race.ap_id
-    - if race.race_day == race_day
-      %p= "Come back #{race_day.date.strftime('%B %-d')} for live results"
-    - else
-      %p
-        This race will happen on
-        %a{href: "/2016/primaries/#{race.race_day.id}"}= race.race_day.date.strftime('%B %-d')
+  - elsif race.race_day != race_day
+    %p
+      This race will happen on
+      %a{href: "/2016/primaries/#{race.race_day.id}"}= race.race_day.date.strftime('%B %-d')
   - else
     - is_this_page_date = race.race_day == race_day
-    %div{class: "race-inner #{is_this_page_date ? 'race-this-page-date' : 'race-another-date'} #{race.n_precincts_reporting > 0 ? 'some-precincts-reporting' : 'no-precincts-reporting'}"}
+    %div{class: "race-inner #{is_this_page_date ? 'race-this-page-date' : 'race-another-date'} #{(race.n_precincts_reporting && race.n_precincts_reporting > 0) ? 'some-precincts-reporting' : 'no-precincts-reporting'}"}
       - if !is_this_page_date
         %p= "This race happened on #{race.race_day.date.strftime('%B %-d')}"
       %table.race
@@ -47,9 +44,10 @@
           of
           %span.n-total= race.n_precincts_total
           precincts reporting
-        %p.last-updated
-          Last updated:
-          %time{datetime: format_datetime(race.last_updated)}
+        - if race.last_updated
+          %p.last-updated
+            Last updated:
+            %time{datetime: format_datetime(race.last_updated)}
         - if race.poll_last_updated
           %p.poll-last-updated.no-precincts-reporting!= "Polling averages based on latest Iowa polls compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> and were lasted updated at <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
           %p.poll-last-updated.some-precincts-reporting!= "Check <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> to see how who led the race before the Iowa caucus."
