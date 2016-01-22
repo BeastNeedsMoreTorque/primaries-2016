@@ -107,7 +107,7 @@
     <text x="314.5" y="92.7">Omaha</text>
     <circle r="3" cx="287.9" cy="116.7"/>
     <text x="287.9" y="116.7">Lincoln</text>
-    <circle r="3" cx="316.5" cy="98.7"/>
-    <text x="316.5" y="98.7">Bellevue</text>
+    <circle r="3" cx="224.3" cy="112.0"/>
+    <text x="224.3" y="112.0">Grand Island</text>
   </g>
 </svg>

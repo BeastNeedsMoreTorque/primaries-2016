@@ -74,9 +74,9 @@
   <g class="cities">
     <circle r="3" cx="251.6" cy="246.7"/>
     <text x="251.6" y="246.7">New York</text>
-    <circle r="3" cx="253.1" cy="252.9"/>
-    <text x="253.1" y="252.9">Brooklyn</text>
-    <circle r="3" cx="259.4" cy="247.2"/>
-    <text x="259.4" y="247.2">Queens</text>
+    <circle r="3" cx="47.5" cy="125.8"/>
+    <text x="47.5" y="125.8">Buffalo</text>
+    <circle r="3" cx="99.7" cy="112.1"/>
+    <text x="99.7" y="112.1">Rochester</text>
   </g>
 </svg>

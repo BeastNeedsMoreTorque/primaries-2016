@@ -36,9 +36,9 @@
   <g class="cities">
     <circle r="3" cx="223.0" cy="48.3"/>
     <text x="223.0" y="48.3">Baltimore</text>
-    <circle r="3" cx="206.0" cy="53.2"/>
-    <text x="206.0" y="53.2">Columbia</text>
     <circle r="3" cx="173.9" cy="59.7"/>
     <text x="173.9" y="59.7">Germantown</text>
+    <circle r="3" cx="192.2" cy="77.2"/>
+    <text x="192.2" y="77.2">Silver Spring</text>
   </g>
 </svg>

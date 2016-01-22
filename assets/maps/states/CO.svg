@@ -78,7 +78,7 @@
     <text x="200.5" y="84.3">Denver</text>
     <circle r="3" cx="208.3" cy="138.2"/>
     <text x="208.3" y="138.2">Colorado Springs</text>
-    <circle r="3" cx="207.5" cy="84.9"/>
-    <text x="207.5" y="84.9">Aurora</text>
+    <circle r="3" cx="195.7" cy="34.1"/>
+    <text x="195.7" y="34.1">Fort Collins</text>
   </g>
 </svg>

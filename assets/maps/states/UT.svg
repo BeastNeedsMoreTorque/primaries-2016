@@ -41,9 +41,9 @@
   <g class="cities">
     <circle r="3" cx="122.3" cy="92.1"/>
     <text x="122.3" y="92.1">Salt Lake City</text>
-    <circle r="3" cx="116.8" cy="96.6"/>
-    <text x="116.8" y="96.6">West Valley City</text>
     <circle r="3" cx="133.9" cy="127.0"/>
     <text x="133.9" y="127.0">Provo</text>
+    <circle r="3" cx="118.2" cy="61.5"/>
+    <text x="118.2" y="61.5">Ogden</text>
   </g>
 </svg>

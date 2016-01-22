@@ -53,7 +53,7 @@
     <text x="108.7" y="95.8">Seattle</text>
     <circle r="3" cx="314.6" cy="89.9"/>
     <text x="314.6" y="89.9">Spokane</text>
-    <circle r="3" cx="103.6" cy="117.7"/>
-    <text x="103.6" y="117.7">Tacoma</text>
+    <circle r="3" cx="92.1" cy="218.1"/>
+    <text x="92.1" y="218.1">Vancouver</text>
   </g>
 </svg>

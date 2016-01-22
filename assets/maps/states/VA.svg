@@ -124,9 +124,9 @@
   <g class="cities">
     <circle r="3" cx="314.6" cy="131.1"/>
     <text x="314.6" y="131.1">Virginia Beach</text>
-    <circle r="3" cx="302.5" cy="131.9"/>
-    <text x="302.5" y="131.9">Norfolk</text>
-    <circle r="3" cx="303.0" cy="133.2"/>
-    <text x="303.0" y="133.2">Chesapeake</text>
+    <circle r="3" cx="268.2" cy="31.5"/>
+    <text x="268.2" y="31.5">Arlington</text>
+    <circle r="3" cx="255.1" cy="98.1"/>
+    <text x="255.1" y="98.1">Richmond</text>
   </g>
 </svg>

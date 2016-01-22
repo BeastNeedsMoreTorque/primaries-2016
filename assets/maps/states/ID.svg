@@ -56,9 +56,9 @@
   <g class="cities">
     <circle r="3" cx="40.0" cy="263.9"/>
     <text x="40.0" y="263.9">Boise</text>
-    <circle r="3" cx="39.1" cy="264.6"/>
-    <text x="39.1" y="264.6">Boise City</text>
-    <circle r="3" cx="27.1" cy="265.2"/>
-    <text x="27.1" y="265.2">Nampa</text>
+    <circle r="3" cx="182.5" cy="269.6"/>
+    <text x="182.5" y="269.6">Idaho Falls</text>
+    <circle r="3" cx="169.1" cy="299.2"/>
+    <text x="169.1" y="299.2">Pocatello</text>
   </g>
 </svg>

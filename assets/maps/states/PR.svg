@@ -90,9 +90,9 @@
   <g class="cities">
     <circle r="3" cx="233.6" cy="8.8"/>
     <text x="233.6" y="8.8">San Juan</text>
-    <circle r="3" cx="227.5" cy="17.5"/>
-    <text x="227.5" y="17.5">Bayamón</text>
-    <circle r="3" cx="251.6" cy="19.7"/>
-    <text x="251.6" y="19.7">Carolina</text>
+    <circle r="3" cx="171.8" cy="67.3"/>
+    <text x="171.8" y="67.3">Ponce</text>
+    <circle r="3" cx="240.6" cy="38.6"/>
+    <text x="240.6" y="38.6">Caguas</text>
   </g>
 </svg>

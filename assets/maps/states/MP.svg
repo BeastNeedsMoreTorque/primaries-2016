@@ -17,7 +17,5 @@
     <text x="150.0" y="107.2">Carolinas Heights</text>
     <circle r="3" cx="175.4" cy="45.5"/>
     <text x="175.4" y="45.5">Saipan</text>
-    <circle r="3" cx="142.9" cy="106.9"/>
-    <text x="142.9" y="106.9">San Jose</text>
   </g>
 </svg>

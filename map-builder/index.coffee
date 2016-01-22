@@ -368,6 +368,11 @@ compress_svg_path = (path) ->
 
   compressed_rings.join('')
 
+distance2 = (p1, p2) ->
+  dx = p2[0] - p1[0]
+  dy = p2[1] - p1[1]
+  dx * dx + dy * dy
+
 render_state = (state_code, features, callback) ->
   output_filename = "./output/#{state_code}.svg"
 
@@ -406,6 +411,7 @@ render_state = (state_code, features, callback) ->
 
   if topology.objects.cities.geometries
     data.push('  <g class="cities">')
+    rendered_cities = [] # Track all dots we rendered; ensure we don't render them too close to one another
     cities = (topojson.feature(topology, geometry) for geometry in topology.objects.cities.geometries)
       .sort (a, b) ->
         # Prefer "Civil" to "Populated Place". Some states (e.g., VI) don't have
@@ -413,13 +419,18 @@ render_state = (state_code, features, callback) ->
         p1 = a.properties
         p2 = b.properties
         ((p1 == 'Civil' && -1 || 0) - (p2 == 'Civil' && -1 || 0)) || p2.population - p1.population || p1.name.localeCompare(p2.name)
-      .slice(0, 3)
     for city in cities
       p = city.geometry.coordinates
+
+      continue if rendered_cities.find((p2) -> distance2(p, p2) < 25 * 25)
+
       x = p[0].toFixed(1)
       y = p[1].toFixed(1)
       data.push("    <circle r=\"3\" cx=\"#{x}\" cy=\"#{y}\"/>")
       data.push("    <text x=\"#{x}\" y=\"#{y}\">#{city.properties.name}</text>")
+
+      rendered_cities.push(p)
+      break if rendered_cities.length == 3
     data.push('  </g>')
 
   data.push('</svg>')

@@ -26,9 +26,9 @@
   <g class="cities">
     <circle r="3" cx="29.7" cy="87.1"/>
     <text x="29.7" y="87.1">Burlington</text>
-    <circle r="3" cx="33.9" cy="88.4"/>
-    <text x="33.9" y="88.4">South Burlington</text>
     <circle r="3" cx="53.7" cy="212.8"/>
     <text x="53.7" y="212.8">Rutland</text>
+    <circle r="3" cx="29.1" cy="319.0"/>
+    <text x="29.1" y="319.0">Bennington</text>
   </g>
 </svg>

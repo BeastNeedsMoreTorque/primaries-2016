@@ -47,7 +47,7 @@
     <text x="129.2" y="122.9">Albuquerque</text>
     <circle r="3" cx="121.9" cy="285.0"/>
     <text x="121.9" y="285.0">Las Cruces</text>
-    <circle r="3" cx="128.6" cy="114.0"/>
-    <text x="128.6" y="114.0">Rio Rancho</text>
+    <circle r="3" cx="163.3" cy="87.6"/>
+    <text x="163.3" y="87.6">Santa Fe</text>
   </g>
 </svg>

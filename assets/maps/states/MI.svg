@@ -97,7 +97,7 @@
     <text x="270.9" y="307.5">Detroit</text>
     <circle r="3" cx="173.3" cy="278.0"/>
     <text x="173.3" y="278.0">Grand Rapids</text>
-    <circle r="3" cx="272.1" cy="299.0"/>
-    <text x="272.1" y="299.0">Warren</text>
+    <circle r="3" cx="214.5" cy="289.0"/>
+    <text x="214.5" y="289.0">Lansing</text>
   </g>
 </svg>

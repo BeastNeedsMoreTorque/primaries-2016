@@ -99,9 +99,9 @@
   <g class="cities">
     <circle r="3" cx="155.0" cy="257.8"/>
     <text x="155.0" y="257.8">Minneapolis</text>
-    <circle r="3" cx="161.8" cy="259.7"/>
-    <text x="161.8" y="259.7">Saint Paul</text>
     <circle r="3" cx="187.3" cy="311.6"/>
     <text x="187.3" y="311.6">Rochester</text>
+    <circle r="3" cx="199.7" cy="155.8"/>
+    <text x="199.7" y="155.8">Duluth</text>
   </g>
 </svg>

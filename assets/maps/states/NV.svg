@@ -29,9 +29,9 @@
   <g class="cities">
     <circle r="3" cx="188.0" cy="286.0"/>
     <text x="188.0" y="286.0">Las Vegas</text>
-    <circle r="3" cx="194.2" cy="292.3"/>
-    <text x="194.2" y="292.3">Henderson</text>
     <circle r="3" cx="13.7" cy="125.8"/>
     <text x="13.7" y="125.8">Reno</text>
+    <circle r="3" cx="155.6" cy="285.0"/>
+    <text x="155.6" y="285.0">Pahrump</text>
   </g>
 </svg>

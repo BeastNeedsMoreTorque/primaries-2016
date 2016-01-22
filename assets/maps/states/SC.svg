@@ -60,7 +60,7 @@
     <text x="168.4" y="110.0">Columbia</text>
     <circle r="3" cx="246.1" cy="212.2"/>
     <text x="246.1" y="212.2">Charleston</text>
-    <circle r="3" cx="242.9" cy="205.7"/>
-    <text x="242.9" y="205.7">North Charleston</text>
+    <circle r="3" cx="169.1" cy="32.5"/>
+    <text x="169.1" y="32.5">Rock Hill</text>
   </g>
 </svg>
