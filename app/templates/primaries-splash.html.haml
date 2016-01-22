@@ -1,7 +1,7 @@
 !!! 5
 - dem_list = ['Clinton', 'Sanders', "O'Malley"]
 - gop_list = ["Trump", "Christie", "Bush", "Cruz", "Paul", "Rubio", "Carson", "Huckabee", "Kasich", "Fiorina", "Santorum", "Gilmore"]
-- preview = !true
+- preview = true
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
@@ -26,7 +26,7 @@
           -if preview
             %h3= "POLLS CLOSE IN"
           -else
-            %h5= "POLLS CLOSED FOR"
+            %h3= "POLLS CLOSED FOR"
           %table
             %tr#countdown
               %td.hours= "01"
@@ -37,14 +37,19 @@
               %td= "MIN"
               %td= "SEC"
         %div.map-container
-          %span.counties-reporting
-            %span#counties-val
-            COUNTIES REPORTING
           %div.map
             != map_svg("states/IA")
-          %span.footnote
-            %span#precincts-val
-            OF PRECINCTS REPORTING
+          %div.legend
+            %div.container
+              %div.finished
+              %div
+                %span#counties-val
+                COUNTIES REPORTING
+            %div.container
+              %div.unfinished
+              %div
+                %span#unreported-counties
+                COUNITES NOT FULLY REPORTING
       %div.parties-container
         -parties.each do |party|
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"

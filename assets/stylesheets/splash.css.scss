@@ -1,10 +1,8 @@
 @import '_variables';
 
-$splash-height: 235px;
-$splash-width: 977px;
 $splash-ele-bg: #eee;
 
-$map-countdown-width: 200px;
+$map-countdown-width: 220px;
 $map-countdown-padding: 10px;
 
 $party-container-height: 110px;
@@ -43,7 +41,6 @@ h1, h2, h3, h4{
 
 .countdown-map-container {
 	width: $map-countdown-width;
-	//height: $splash-height;
 	border-right: 1px solid black;
 	padding: $map-countdown-padding;
 	h3,h5 {
@@ -67,7 +64,7 @@ h1, h2, h3, h4{
 			}
 		}
 		tr:first-child {
-			font-size: 36px;
+			font-size: 30px;
 		}
 	}	
 }
@@ -79,7 +76,8 @@ h1, h2, h3, h4{
 	.map {
 		svg {
 			width: $map-countdown-width;
-			height: $map-countdown-width * .48;
+			height: $map-countdown-width * .44;
+			margin-left: -17px;
 		  g.counties path {
 		    stroke: white;
 		    stroke-width: 10; // divided by 10
@@ -95,6 +93,26 @@ h1, h2, h3, h4{
 	}
 	img {
 		width: 100%;
+	}
+	.legend {
+		font-size: 10px;
+		.container {
+			display: inline-flex;
+			-webkit-display: inline-flex;
+			text-align: left;
+			width: 100%;
+		}
+		.unfinished, .finished {
+			width: 10px;
+			height: 10px;
+			margin-right: 3px;
+		}
+		.finished {
+			background-color: #999;
+		}
+		.unfinished {
+			background-color: #eee;
+		}
 	}
 	span.counties-reporting {
 		font-size: 12px;
@@ -134,7 +152,8 @@ h1, h2, h3, h4{
 	}
 	width: 135px;
 	&.preview {
-		width: 110px;
+		//width: 110px;
+		width: 90px;
 		@include vertical-center-flex;
 	}
 }
