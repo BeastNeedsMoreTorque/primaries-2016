@@ -18,6 +18,7 @@ def rebuild
   command = "#{Paths.Script}/build"
   IO.popen(command, err: [ :child, :out ]) { |io|
     io.each_line do |line|
+      $stdout.write(line)
       $error_text << line
     end
   }
