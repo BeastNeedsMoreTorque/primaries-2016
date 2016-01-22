@@ -11,6 +11,7 @@ module Assets
   # To refer to `javascripts/main.js` from a template, write
   # `asset_path('main.js')`.
   SprocketsAssets = %w(
+    javascripts/ga.js
     javascripts/stats.js
     javascripts/main.js
     javascripts/splash.js
