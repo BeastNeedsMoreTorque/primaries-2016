@@ -320,24 +320,17 @@ function color_counties() {
    *         means lookup failed.
    */
   function lookup_candidate_class(party_id, fips_int, candidate_id) {
-    var counts = county_results[party_id][fips_int];
-
-    if (!counts) {
-      return '';
+    if (!county_results[party_id] || !county_results[party_id][fips_int] || !county_results[party_id][fips_int].winner_n_votes) {
+      return 'no-results-yet';
     } else {
+      var counts = county_results[party_id][fips_int];
       var n_votes = counts.candidate_id_to_n_votes[candidate_id];
-      if (typeof n_votes === 'undefined') {
-        return '';
+      if (n_votes == counts.winner_n_votes) {
+        return 'candidate-came-first';
+      } else if (n_votes == counts.runner_up_n_votes) {
+        return 'candidate-came-second';
       } else {
-        if (counts.winner_n_votes == 0) {
-          return 'no-results-yet';
-        } else if (n_votes == counts.winner_n_votes) {
-          return 'candidate-came-first';
-        } else if (n_votes == counts.runner_up_n_votes) {
-          return 'candidate-came-second';
-        } else {
-          return 'candidate-did-badly';
-        }
+        return 'candidate-did-badly';
       }
     }
   }
