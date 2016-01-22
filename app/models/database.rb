@@ -2,6 +2,7 @@ require 'date'
 require 'set'
 
 require_relative '../../lib/api_sources'
+require_relative '../../lib/sparkline'
 require_relative '../collections/parties'
 require_relative '../collections/race_days'
 
@@ -100,7 +101,7 @@ class Database
             candidates << c
             id_to_candidate[candidate_id] = c
           else
-            cs = [ candidate_id, state_code, -1, 0, n_delegates, nil ]
+            cs = [ candidate_id, state_code, -1, 0, n_delegates, nil, nil ]
             candidate_states << cs
             ids_to_candidate_state[[candidate_id, state_code]] = cs
           end
@@ -248,6 +249,8 @@ class Database
       key_to_races[key] << race
     end
 
+    chart_slugs = []
+
     for party in parties
       party_id = party[0]
 
@@ -255,6 +258,7 @@ class Database
         state_code = chart[:state]
         last_updated = DateTime.parse(chart[:last_updated])
         slug = chart[:slug]
+        chart_slugs << slug
 
         for race in (key_to_races["#{party_id}-#{state_code}"] || [])
           race[8] = slug
@@ -270,12 +274,45 @@ class Database
 
             if state_code == 'US'
               candidate[6] = poll_percent
-              candidate[7] = last_updated
+              candidate[8] = last_updated
             else
               candidate_state = key_to_candidate_state["#{candidate[0]}-#{state_code}"]
               if candidate_state
                 candidate_state[5] = poll_percent
               end
+            end
+          end
+        end
+      end
+
+      for slug in chart_slugs
+        chart_data = ApiSources.GET_pollster_primary(slug)
+        state_code = chart_data[:state]
+
+        last_day = if chart_data[:election_date]
+          [ Date.today, Date.parse(chart_data[:election_date]) ].min
+        else
+          Date.today
+        end
+
+        for estimate_points in chart_data[:estimates_by_date]
+          date = Date.parse(estimate_points[:date])
+
+          for estimate in estimate_points[:estimates]
+            last_name = estimate[:choice]
+            value = estimate[:value]
+
+            candidate = last_name_to_candidate[last_name]
+            next if !candidate
+
+            if state_code == 'US'
+              candidate[7] ||= Sparkline.new(last_day)
+              candidate[7].add_value(date, value)
+            else
+              key = "#{candidate[0]}-#{state_code}"
+              candidate_state = key_to_candidate_state[key]
+              candidate_state[6] ||= Sparkline.new(last_day)
+              candidate_state[6].add_value(date, value)
             end
           end
         end

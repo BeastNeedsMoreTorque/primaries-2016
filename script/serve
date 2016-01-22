@@ -6,6 +6,7 @@ require_relative '../lib/env'
 Bundler.require(:development)
 
 require_relative '../lib/paths'
+require_relative '../lib/logger'
 
 $error_status = nil # if nil, HTTP response is 503; if non-zero, 500; if 0, 200/404.
 $error_text = nil
@@ -59,7 +60,7 @@ class Logger
   def call(env)
     response = @app.call(env)
 
-    $stderr.write("#{env['REQUEST_METHOD']} #{env['PATH_INFO']} => #{response[0]}\n")
+    $logger.info("#{env['REQUEST_METHOD']} #{env['PATH_INFO']} => #{response[0]}")
 
     response
   end

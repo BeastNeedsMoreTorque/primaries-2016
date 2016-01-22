@@ -4,9 +4,9 @@ require 'set'
 #
 # They're saved to disk, in `base_path`.
 class HttpCache
-  ValidKeys = Set[:election_day, :election_days, :del_super, :pollster_primaries]
+  ValidKeys = Set[:election_day, :election_days, :del_super, :pollster_primaries, :pollster_primary]
   ValidKeysWithoutParam = Set[:election_days, :del_super]
-  ValidKeysWithParam = Set[:election_day, :pollster_primaries]
+  ValidKeysWithParam = Set[:election_day, :pollster_primaries, :pollster_primary]
 
   def initialize(base_path)
     @base_path = base_path
@@ -43,7 +43,7 @@ class HttpCache
 
   def args_to_filename(key, maybe_param)
     if !ValidKeys.include?(key)
-      raise ArgumentError.new("Invalid key #{key}. Must be one of #{ValidKeys}")
+      raise ArgumentError.new("Invalid key #{key}. Must be one of #{ValidKeys.to_a.join(' ')}")
     elsif ValidKeysWithoutParam.include?(key) && !maybe_param.nil?
       raise ArgumentError.new("Key #{key} requires a YYYY-MM-DD param, but you passed nil")
     elsif ValidKeysWithParam.include?(key) && maybe_param.nil?
