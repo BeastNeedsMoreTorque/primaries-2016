@@ -26,16 +26,6 @@
 
   g.cities {
     pointer-events: none;
-
-    text.background {
-      fill: none;
-      stroke: white;
-      stroke-width: 3px;
-    }
-
-    text.foreground {
-      fill: black;
-    }
   }
 
   circle {
@@ -51,7 +41,17 @@
     font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
     font-size: 14px;
 
-    &.above, &.left, &.right, &.below {
+    // JavaScript doesn't know where the text's baseline is, and that's the `y`
+    // coordinate by default. Make (x,y) point to the lower-left of the text.
+    dominant-baseline: text-before-edge;
+
+    &.background {
+      fill: none;
+      stroke: white;
+      stroke-width: 3px;
+    }
+
+    &.foreground {
       fill: #333;
     }
   }

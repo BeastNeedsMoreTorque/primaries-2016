@@ -19,7 +19,7 @@
     <text x="141.2" y="83.1">Providence</text>
     <circle r="3" cx="140.3" cy="130.3"/>
     <text x="140.3" y="130.3">Warwick</text>
-    <circle r="3" cx="134.3" cy="99.9"/>
-    <text x="134.3" y="99.9">Cranston</text>
+    <circle r="3" cx="112.3" cy="14.9"/>
+    <text x="112.3" y="14.9">Woonsocket</text>
   </g>
 </svg>
