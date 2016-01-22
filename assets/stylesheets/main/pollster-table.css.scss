@@ -76,6 +76,10 @@
     stroke: $strongGOP;
   }
 
+  .sparkline {
+    vertical-align: middle;
+  }
+
   .sparkline + .percent {
     display: inline-block;
     width: 3em;

@@ -49,6 +49,17 @@ body.race-day {
     .n-votes, .n-delegates {
       text-align: right;
     }
+
+    .sparkline {
+      display: inline-block;
+      height: 1.2rem;
+      vertical-align: middle;
+    }
+
+    .percent {
+      display: inline-block;
+      width: 3em;
+    }
   }
 
   ul.parties, ul.party-state {
@@ -73,15 +84,6 @@ body.race-day {
           padding-left: 20px;
         }
       }
-    }
-
-    .sparkline {
-      display: inline-block;
-    }
-
-    .percent {
-      display: inline-block;
-      width: 3em;
     }
   }
 
