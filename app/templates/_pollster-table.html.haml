@@ -20,4 +20,7 @@
             %span.percent= "#{candidate.poll_percent}%"
         - n_unellipsized -= 1
   .metadata.footnotes
-    %p.pollster-note Polling average based on latest national polls aggregated by HuffPost Pollster.
+    %p.pollster-note
+      Source:
+      %a{href: "//elections.huffingtonpost.com/pollster/2016-national-#{{ 'GOP' => 'gop', 'Dem' => 'democratic' }[party.id]}-primary"}
+        HuffPost Pollster
