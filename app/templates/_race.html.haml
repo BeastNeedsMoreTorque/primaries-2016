@@ -52,5 +52,5 @@
             Last updated:
             %time{datetime: format_datetime(race.last_updated)}
         - if race.poll_last_updated
-          %p.poll-last-updated.no-precincts-reporting!= "Polling averages based on latest Iowa polls compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> and were lasted updated at <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
+          %p.poll-last-updated.no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
           %p.poll-last-updated.some-precincts-reporting!= "Check <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> to see how who led the race before the Iowa caucus."
