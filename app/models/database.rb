@@ -236,8 +236,12 @@ class Database
   # Writes Candidate.poll_percent, Candidate.poll_updated_at,
   # CandidateState.poll_percent, Race.poll_last_updated.
   def self.add_pollster_estimates(parties, candidates, candidate_states, races)
+    # Pollster reports "choice: 'Rand Paul'" and "choice: 'Santorum'", so we
+    # need to index by both last name and full name.
     last_name_to_candidate = {}
+    full_name_to_candidate = {}
     candidates.each { |c| last_name_to_candidate[c[3]] = c }
+    candidates.each { |c| full_name_to_candidate[c[2]] = c }
 
     key_to_candidate_state = {}
     candidate_states.each { |cs| key_to_candidate_state["#{cs[0]}-#{cs[1]}"] = cs }
@@ -299,10 +303,10 @@ class Database
           date = Date.parse(estimate_points[:date])
 
           for estimate in estimate_points[:estimates]
-            last_name = estimate[:choice]
+            choice = estimate[:choice]
             value = estimate[:value]
 
-            candidate = last_name_to_candidate[last_name]
+            candidate = last_name_to_candidate[choice] || full_name_to_candidate[choice]
             next if !candidate
 
             if state_code == 'US'
