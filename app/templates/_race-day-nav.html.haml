@@ -1,21 +1,17 @@
 .race-day-nav
   - if previous_race_day
     .previous
-      - if previous_race_day.enabled?
-        %a.previous-inner{href: "/2016/primaries/#{previous_race_day.id}"}
-          %p.label Previous race
-          %p.date « #{previous_race_day.date.strftime('%B %-d')}
-      - else
-        %span.disabled.previous-inner
-          « #{previous_race_day.date.strftime('%B %-d')}
+      %a.previous-inner{href: "/2016/primaries/#{previous_race_day.id}"}
+        %span.label Previous race
+        %span.date « #{previous_race_day.date.strftime('%B %-d')}
   %a.calendar{href: '/2016/primaries#state-race-days-by-date'} See full calendar
   - if next_race_day
     .next
       - if next_race_day.enabled?
         %a.next-inner{href: "/2016/primaries/#{next_race_day.id}"}
-          %p.label Next race
-          %p.date #{next_race_day.date.strftime('%B %-d')} »
+          %span.label Next race
+          %span.date #{next_race_day.date.strftime('%B %-d')} »
       - else
-        %span.disabled.next-inner{href: "/2016/primaries/#{next_race_day.id}"}
-          %p.label Next race
-          %p.date #{next_race_day.date.strftime('%B %-d')} »
+        %span.disabled.next-inner
+          %span.label Next race
+          %span.date #{next_race_day.date.strftime('%B %-d')} »

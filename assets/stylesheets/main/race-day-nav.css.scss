@@ -38,6 +38,7 @@
     }
   }
   .label {
+    display: block;
     font-size: 0.9em;
     margin: 0;
     @media (max-width: 600px) {
@@ -45,6 +46,7 @@
     }
   }
   .date {
+    display: block;
     font-size: 1.4em;
     margin: 0;
     @media (max-width: 600px) {
