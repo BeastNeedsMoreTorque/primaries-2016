@@ -28,6 +28,7 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def disabled?; !race_day || race_day.disabled?; end
   def enabled?; race_day && race_day.enabled?; end
   def n_delegates; state.n_delegates(party_id); end
+  def live?; date == database.today; end
 
   def candidate_states
     @candidate_states ||= database.candidate_states.find_all_by_party_id_and_state_code(party_id, state_code).sort || []

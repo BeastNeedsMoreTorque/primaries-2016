@@ -1,6 +1,7 @@
 .race{id: "#{state.code}-#{party.id}", 'data-party-id': party.id, 'data-state-code': state.code}
   - race = database.races.find_by_party_and_state(party, state)
-  %p.live-banner Live results
+  - if race.live?
+    %p.live-banner Live results
   - if race
     %h3.race-name= "#{race.state_name} #{race.party_adjective} #{race.race_type}"
   - else
