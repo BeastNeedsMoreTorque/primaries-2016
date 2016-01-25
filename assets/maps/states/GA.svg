@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="300" height="350" viewBox="0 0 300 350">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="13001" data-name="Appling County" d="M2082,2299l0,-1 67,18 39,43 -22,3 -27,35 3,217 -33,-15 -26,-27 -8,-18 -42,-20 -25,-27 -105,-63 0,-90 54,0 -2,-93 36,18 54,-1Z"/>
     <path data-fips-int="13003" data-name="Atkinson County" d="M1839,2693l0,65 -43,-5 -1,42 18,28 -183,0 -47,0 5,-55 -12,-50 -26,-16 -24,-48 108,1 3,12 75,1 11,25Z"/>

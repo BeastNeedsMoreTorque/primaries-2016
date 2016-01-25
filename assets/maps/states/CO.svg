@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="254" viewBox="0 0 350 254">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="8001" data-name="Adams County" d="M2585,679l4,157 -298,6 -241,1 26,-21 44,3 -12,-32 63,-3 8,-44 -59,1 0,31 -27,3 0,27 -52,8 -68,-3 0,-74 17,-4 0,-36 25,-11 369,-5Z"/>
     <path data-fips-int="8003" data-name="Alamosa County" d="M1790,2026l-21,91 8,11 -121,132 -142,0 0,-27 3,-206Z"/>

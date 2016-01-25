@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="216" viewBox="0 0 350 216">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="25003" data-name="Berkshire County" d="M549,233l-1,48 63,-2 2,17 -42,24 37,8 5,31 -24,106 5,19 -41,200 -50,-12 0,74 35,28 23,-6 -2,77 -33,134 -33,-6 8,38 -11,29 16,68 -299,-17 -112,-3 -8,-47 120,-410 80,-267 40,-140Z"/>
     <path data-fips-int="25005" data-name="Bristol County" d="M2417,1269l19,62 -59,63 22,21 -12,25 99,-16 16,42 17,-3 40,143 0,19 -20,-2 20,43 -10,17 -12,-52 -32,0 -18,-16 22,58 -22,-27 -10,41 -16,-5 21,56 -25,17 -21,-15 -5,37 -49,13 -13,-16 -7,-59 -15,-9 9,48 -9,15 -34,-39 16,53 -26,7 -9,-100 -11,-34 8,-66 -60,-19 57,-78 11,-46 -31,61 -20,20 -45,-4 -34,-49 -56,-32 -23,-56 6,-95 -40,7 0,-114 15,-1 265,-139 28,165 33,26Z"/>

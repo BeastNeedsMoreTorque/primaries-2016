@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="218" viewBox="0 0 350 218">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="46003" data-name="Aurora County" d="M2569,1332l6,209 -166,4 -38,1 -4,-199 -6,-61 204,-5Z"/>
     <path data-fips-int="46005" data-name="Beadle County" d="M2705,864l50,-1 5,51 5,208 -206,5 -155,3 -7,-261Z"/>

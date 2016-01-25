@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="269" viewBox="0 0 350 269">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="56001" data-name="Albany County" d="M2803,1706l7,216 2,0 8,175 -2,97 5,229 7,186 -434,9 -62,0 -5,-249 120,-3 -12,-505 -1,-148 241,-3 -9,33 -18,0 9,51 104,2 15,-90Z"/>
     <path data-fips-int="56003" data-name="Big Horn County" d="M1589,101l12,8 10,76 20,34 -9,13 40,24 0,18 33,30 24,-13 45,25 28,33 32,7 6,23 33,36 -1,28 45,9 5,60 20,15 0,99 -291,0 -345,-3 -8,-17 2,-205 -10,0 1,-209 -10,-14 0,-79Z"/>

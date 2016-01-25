@@ -258,7 +258,7 @@ function color_counties() {
     }
   }
 
-  function refresh_svg_classes(svg, table, party_id) {
+  function refresh_svg_classes(svg, table, party_id, no_results_pattern_id) {
     var $candidate_tr = $(table).find('tbody tr.highlight-on-map');
     if ($candidate_tr.length == 0) {
       $candidate_tr = $(table).find('tbody tr:first');
@@ -271,10 +271,61 @@ function color_counties() {
       var fips_int = this.getAttribute('data-fips-int');
       var class_name = lookup_candidate_class(party_id, fips_int, candidate_id);
       this.setAttribute('class', class_name);
+      if (class_name == 'no-results-yet') {
+        this.setAttribute('style', 'fill: url(#' + no_results_pattern_id + ')');
+      } else {
+        this.setAttribute('style', '');
+      }
     });
   }
 
-  function monitor_svg(svg, table, party_id) {
+  /**
+   * Adds a <pattern> to the svg, with the given ID.
+   *
+   * The pattern, when set through `style: fill(#[pattern_id])`, will indicate
+   * that there are no results yet for the given county.
+   *
+   * Why not put the <pattern> in the SVG? Because the same <svg> goes twice
+   * into a single race-day <html>, and it needs an `id` attribute. We can't use
+   * the same `id` attribute in two places.
+   *
+   * Why not put the `style` in CSS? Because it needs to use a fragment
+   * identifier (that's the `#` part of
+   * `fill: url(#Dem-IA-pattern-no-results)`). Firefox would (correctly) look
+   * for `#Dem-IA-pattern-no-results` in the CSS file, which makes no sense.
+   */
+  function add_no_results_yet_pattern_to_svg(svg, pattern_id) {
+    var ns = 'http://www.w3.org/2000/svg';
+
+    var defs = document.createElementNS(ns, 'defs');
+
+    var pattern = document.createElementNS(ns, 'pattern');
+    pattern.setAttribute('id', pattern_id);
+    pattern.setAttributeNS(null, 'width', '50');
+    pattern.setAttributeNS(null, 'height', '50');
+    pattern.setAttributeNS(null, 'patternUnits', 'userSpaceOnUse');
+
+    var rect = document.createElementNS(ns, 'rect');
+    rect.setAttributeNS(null, 'width', '50');
+    rect.setAttributeNS(null, 'height', '50');
+    rect.setAttributeNS(null, 'fill', '#ddd');
+
+    var path = document.createElementNS(ns, 'path');
+    path.setAttributeNS(null, 'd', 'M-5,5L5,-5M-5,55L55,-5M45,55L55,45');
+    path.setAttributeNS(null, 'stroke-width', '10');
+    path.setAttributeNS(null, 'stroke', '#fff');
+
+    pattern.appendChild(rect);
+    pattern.appendChild(path);
+    defs.appendChild(pattern);
+    svg.insertBefore(defs, svg.firstChild);
+  }
+
+  function monitor_svg(svg, table, party_id, state_code) {
+    var pattern_id = party_id + '-' + state_code + '-pattern-no-results';
+
+    add_no_results_yet_pattern_to_svg(svg);
+
     on_database_change.push(function() {
       refresh_svg_classes(svg, table, party_id);
     });
@@ -285,7 +336,7 @@ function color_counties() {
 
       $table.find('tr.highlight-on-map').removeClass('highlight-on-map');
       $tr.addClass('highlight-on-map');
-      refresh_svg_classes(svg, table, party_id);
+      refresh_svg_classes(svg, table, party_id, pattern_id);
     });
   }
 
@@ -293,8 +344,9 @@ function color_counties() {
     var $race = $(this).closest('.race');
     var $table = $race.find('table');
     var party_id = $race.attr('data-party-id');
+    var state_code = $race.attr('data-state-code');
 
-    monitor_svg(this, $table[0], party_id);
+    monitor_svg(this, $table[0], party_id, state_code);
   });
 }
 

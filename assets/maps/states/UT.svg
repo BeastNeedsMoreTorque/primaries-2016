@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="279" height="350" viewBox="0 0 279 350">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="49001" data-name="Beaver County" d="M894,2367l-2,42 1,7 1,21 40,45 13,-11 39,58 -24,51 12,19 -47,50 -17,1 -350,-5 -85,-3 -384,-10 8,-280 285,5 66,4 235,1 98,5Z"/>
     <path data-fips-int="49003" data-name="Box Elder County" d="M1090,100l23,50 32,37 13,60 -12,55 17,23 17,83 31,-5 20,45 -19,3 15,29 -44,3 4,36 -32,20 -103,-1 -130,171 -154,48 -181,-1 -439,-10 13,-431 6,-228 347,8 164,0Z"/>

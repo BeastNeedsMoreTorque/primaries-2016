@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="282" viewBox="0 0 350 282">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="45001" data-name="Abbeville County" d="M847,749l-61,58 15,17 1,37 37,38 8,58 -13,39 -47,44 -88,2 -20,-18 -35,7 -43,48 -30,-43 -23,-55 -25,-12 -20,-54 253,-191 45,-36Z"/>
     <path data-fips-int="45003" data-name="Aiken County" d="M1559,1381l18,9 -129,136 -272,243 -66,-42 13,-11 -23,-44 -27,-5 -20,-27 4,-96 -30,-14 -27,-42 255,-234 56,-52 45,57 33,11 32,55 33,2 62,27Z"/>

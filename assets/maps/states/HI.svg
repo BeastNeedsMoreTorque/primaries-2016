@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="229" viewBox="0 0 350 229">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="15001" data-name="Hawaii County" d="M2765,1344l73,32 0,10 75,43 37,5 89,32 77,36 86,65 37,43 -3,78 53,-2 15,29 0,35 68,56 38,14 -6,30 -42,43 -66,53 -42,15 -37,26 -40,12 -63,-3 -33,34 -42,18 -26,27 -27,5 -30,41 0,18 -50,72 -26,19 -22,-32 -53,-32 -52,-17 -23,-50 20,-144 -23,-92 -20,-6 -10,-65 -15,-34 -23,-8 -14,-81 43,-47 34,-9 20,-45 35,-31 6,-30 -45,-68 -5,-65Z"/>
     <path data-fips-int="15005" data-name="Kalawao County" d="M2110,761l-2,4 0,23 -23,-22 -27,-10 -2,0 -5,-5 30,-17Z"/>

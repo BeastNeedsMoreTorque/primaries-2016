@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="86" viewBox="0 0 350 86">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="47001" data-name="Anderson County" d="M2520,218l24,39 -29,28 -24,26 9,18 -19,18 -32,4 -28,40 -29,-66 -41,-42 3,-11 5,-1 20,-25 28,-2 24,20 5,-32 60,6Z"/>
     <path data-fips-int="47003" data-name="Bedford County" d="M1557,501l40,30 20,-13 30,4 17,6 -7,104 -56,30 -7,14 -40,-17 -28,-5 -22,-34 5,-69 -3,-3 6,-47Z"/>

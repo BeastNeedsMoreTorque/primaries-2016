@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="229" height="350" viewBox="0 0 229 350">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="23001" data-name="Androscoggin County" d="M611,2567l-16,92 0,19 -45,52 -45,-35 -61,-66 -26,39 -21,-3 -41,-33 5,-32 74,-96 6,0 34,-115 -3,-58 18,-13 59,-20 14,76 -17,10 30,55 -1,68 43,20Z"/>
     <path data-fips-int="23003" data-name="Aroostook County" d="M1770,1408l-126,31 -192,52 -9,-5 2,-271 -6,-73 -1,-255 -133,0 0,-7 -64,-1 -1,-132 -313,0 -147,-1 -155,-2 13,-86 16,-27 381,-544 82,18 15,19 -11,25 6,98 70,50 50,-29 59,-21 36,1 18,-33 58,-8 45,8 6,-53 43,-2 65,27 36,38 66,57 37,66 46,27 3,206 12,447 2,183 17,20 -29,35 28,35 -24,15Z"/>

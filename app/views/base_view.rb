@@ -96,13 +96,15 @@ class BaseView
   def image_path(path); Assets.image_path(path); end
   def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
 
+  # Returns inline <svg> data from the given `path`
   def map_svg(path)
     return '' if %w(states/DA).include?(path)
 
     # a .svg file includes a DOCTYPE, but we're including it inline so we don't
     # want it.
     header_length = 137
-    File.read("#{Paths.Assets}/maps/#{path}.svg")[header_length .. -1]
+    @map_svg ||= {}
+    @map_svg[path] ||= File.read("#{Paths.Assets}/maps/#{path}.svg")[header_length .. -1]
   end
 
   def template_name

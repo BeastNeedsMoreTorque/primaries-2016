@@ -30,6 +30,24 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def n_delegates; state.n_delegates(party_id); end
   def live?; date == database.today; end
 
+  # Whether a race is 'upcoming', 'live' or 'past'
+  #
+  # Note: a race can be `live` even when it happened the day before, if poll
+  # results are trickling in slowly.
+  def status
+    if n_precincts_reporting > 0
+      if n_precincts_reporting < n_precincts_total
+        'live'
+      else
+        'past'
+      end
+    else
+      # TODO handle the case in which the polls have closed but no precincts are
+      # reporting yet
+      'upcoming'
+    end
+  end
+
   def candidate_states
     @candidate_states ||= database.candidate_states.find_all_by_party_id_and_state_code(party_id, state_code).sort || []
   end

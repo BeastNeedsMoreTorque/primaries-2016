@@ -1,5 +1,5 @@
-.race{id: "#{state.code}-#{party.id}", 'data-party-id': party.id, 'data-state-code': state.code}
-  - race = database.races.find_by_party_and_state(party, state)
+- race = database.races.find_by_party_and_state(party, state)
+.race{id: "#{state.code}-#{party.id}", 'data-party-id': party.id, 'data-state-code': state.code, class: "status-#{race && race.status || 'upcoming'}"}
   - if race.live?
     %p.live-banner Live results
   - if race

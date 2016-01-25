@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="185" viewBox="0 0 350 185">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="24001" data-name="Allegany County" d="M944,64l1,0 -1,0 18,14 -12,68 -31,5 3,18 -40,-13 22,36 -49,6 29,36 -30,22 -77,0 -18,-16 -47,2 -51,-29 -5,-21 -32,-20 30,-9 -48,-13 -60,100 -50,41 -16,38 -54,-37 -23,-3 106,-232Z"/>
     <path data-fips-int="24005" data-name="Baltimore County" d="M2258,67l3,103 43,86 45,16 47,46 20,63 -25,12 41,8 4,33 -30,-4 6,31 -28,-7 2,68 -25,-6 -2,-29 -36,-24 33,65 23,16 -61,23 11,-60 -28,31 -10,-9 -2,-126 -134,1 1,91 68,38 -58,24 -73,-51 2,-46 -47,-3 -20,-30 -7,-30 0,-1 4,-3 6,-5 -13,-38 78,-281Z"/>

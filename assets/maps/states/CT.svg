@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="255" viewBox="0 0 350 255">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="9003" data-name="Hartford County" d="M2178,105l28,199 -35,5 -8,201 36,-7 -16,115 53,-8 18,146 30,176 32,22 35,72 -2,66 -12,26 -84,15 -67,-144 -213,32 5,-16 -148,29 0,53 -66,28 1,31 -85,13 -31,43 -12,-37 -36,7 8,52 -42,-9 -21,-34 -112,15 22,-127 -8,-72 -77,9 -55,-362 115,-18 20,-77 -23,-7 -5,-25 23,-94 42,-3 49,-174 -242,13 36,-165 331,6 -6,88 84,-10 27,-62 -8,-14 113,-2 138,14 1,13 44,0 15,-12Z"/>
     <path data-fips-int="9005" data-name="Litchfield County" d="M1331,94l-36,165 242,-13 -49,174 -42,3 -23,94 5,25 23,7 -20,77 -115,18 55,362 -37,26 -28,3 5,29 -30,-2 -38,18 2,41 -44,6 -16,37 -90,29 -35,1 15,98 -81,12 -79,-10 -123,19 -10,43 29,38 -27,0 -87,-54 0,-20 -25,-29 -86,51 -5,-72 -17,-57 -69,-206 21,-23 -16,-32 -40,-12 54,-762 5,-114 107,0 632,28Z"/>

@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="293" height="350" viewBox="0 0 293 350">
-  <defs>
-    <pattern id="pattern-no-results" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="#ddd"/>
-      <path d="M-5,5L5,-5M-5,55L55,-5M45,55L55,45" stroke-width="10" stroke="#ffffff"/>
-    </pattern>
-  </defs>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="39001" data-name="Adams County" d="M1086,2895l0,334 -15,20 -51,-53 -64,-15 -51,-22 -57,20 -12,38 -38,-6 6,-97 19,-226 39,2 149,-30 46,3Z"/>
     <path data-fips-int="39003" data-name="Allen County" d="M708,1368l-2,146 -146,0 0,-12 -74,0 2,-24 -113,0 1,-112 38,2 0,-37 148,0 1,-38 72,2 0,-12 74,2Z"/>
