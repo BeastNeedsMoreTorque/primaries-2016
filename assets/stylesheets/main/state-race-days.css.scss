@@ -57,10 +57,6 @@
   table {
     border-collapse: collapse;
     margin: 0 auto;
-
-    @media (max-width: 400px) { // Changing this? Look at all.css.scss too
-      margin: 0 -10px;
-    }
   }
 
   .flipper>* {
@@ -126,7 +122,7 @@
         color: inherit;
         background: #efefef;
         border: 1px solid #666;
-        color: #666;
+        color: $muted;
         &:first-child {
           border-right: 1px solid #666;
         }
@@ -142,6 +138,7 @@
     margin: 2rem 0 1rem;
     -webkit-perspective: 1000rem;
     perspective: 1000rem;
+    overflow: hidden; // Otherwise the backface can push the page beyond the footer
 
     .flipper {
       transition: 0.5s;

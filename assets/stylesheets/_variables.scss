@@ -1,4 +1,4 @@
-$muted: #ccc;
+$muted: #666;
 $tableBorderColor: #eee;
 
 $strongDem: #5c6b95;
@@ -116,19 +116,13 @@ $blue: #0E61E5;
 }
 
 @mixin footnotes {
-	.footnotes {
-	  color: #666;
-	  font-size: 12px;
-	  line-height: 13px;
-	  p {
-	    margin-top: 2px;
-	    margin-bottom: 2px;
-	  }
-	  &.footer {
-	    margin-top: 10px;
-	    margin-bottom: 10px;
-	  }
-	}
+  color: $muted;
+  font-size: .75rem;
+  line-height: .85rem;
+
+  p {
+    margin: .5rem 0;
+  }
 }
 
 @mixin countdown-table {
@@ -165,6 +159,7 @@ $blue: #0E61E5;
 		}
 	}
 }
+
 @mixin ellipsized-table {
   tr.ellipsized {
     display: none;

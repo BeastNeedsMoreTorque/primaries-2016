@@ -4,7 +4,8 @@
       %a.previous-inner{href: "/2016/primaries/#{previous_race_day.id}"}
         %span.label Previous race
         %span.date « #{previous_race_day.date.strftime('%B %-d')}
-  %a.calendar{href: '/2016/primaries#state-race-days-by-date'} See full calendar
+  .calendar
+    %a{href: '/2016/primaries#state-race-days-by-date'} See full calendar
   - if next_race_day
     .next
       - if next_race_day.enabled?

@@ -1,3 +1,5 @@
+@import '../_variables';
+
 body.all-primaries {
   h3.section-hed {
     font-size: 1.8em;
@@ -5,61 +7,67 @@ body.all-primaries {
     clear: both;
     padding-top: 30px;
   }
-}
 
-.teaser {
-  display: block;
-  width: 100%;
-  padding: 10px 0;
-  margin: 40px 0;
-  box-sizing: border-box;
-  position: relative;
-  text-decoration: none;
-  color: #000;
-  * {
+  h1, h2, h3, p.dek, p.intro-date, p.pollster-note, .footer p {
+    padding: 0 10px;
+  }
+
+  .teaser {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    margin: 40px 0;
     box-sizing: border-box;
-  }
-  span {
-    padding: 10px;
-  }
-  .label {
-    background: #666;
-    color: #fff;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-  .detail {
-    font-style: italic;
-  }
-  .callout {
-    font-weight: bold;
-  }
-  @media (max-width: 549px) {
-    .label {
-      display: block;
-      text-align: center;
-      width: 100%;
+    position: relative;
+    text-decoration: none;
+    color: #000;
+    * {
+      box-sizing: border-box;
     }
-    .teaser-inner {
-      display: block;
-      width: 100%;
-      background: #f8f8f8;
-      overflow: auto;
-      padding: 0;
+    span {
+      padding: 10px;
+    }
+    .label {
+      background: $muted;
+      color: #fff;
+      text-transform: uppercase;
+      font-weight: bold;
     }
     .detail {
-      float: left;
+      font-style: italic;
     }
     .callout {
-      float: right;
+      font-weight: bold;
     }
-  }
-  @media (min-width: 550px) {
-    background: #f8f8f8;
-    .callout {
-      position: absolute;
-      right: 0;
-      top: 0;
+
+    @media (max-width: 549px) {
+      .label {
+        display: block;
+        text-align: center;
+        width: 100%;
+      }
+      .teaser-inner {
+        display: block;
+        width: 100%;
+        background: #f8f8f8;
+        overflow: auto;
+        padding: 0;
+      }
+      .detail {
+        float: left;
+      }
+      .callout {
+        float: right;
+      }
+    }
+
+    @media (min-width: 550px) {
+      background: #f8f8f8;
+      .callout {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
     }
   }
 }

@@ -1,13 +1,20 @@
 @import '../_variables';
 
 body.race-day {
+  h1, h2, h3, p.intro-copy, p.text, .metadata p, .footnotes p {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .race {
+  div.race {
+    margin-bottom: 2rem;
+
     .live-banner {
       background: $red;
       text-align: center;
@@ -37,7 +44,7 @@ body.race-day {
 
     td, th {
       white-space: nowrap;
-      padding: 5px;
+      padding: 5px 10px;
     }
 
     td {
@@ -46,28 +53,30 @@ body.race-day {
     }
 
     th {
-      text-align: left;
       border-bottom: 1px solid black;
     }
 
-    .cd-img {
+    .pollster {
+      text-align: right;
+    }
+
+    .candidate {
+      text-align: left;
+      width: 100%;
+
       img {
         height: 30px;
         vertical-align: middle;
-        padding: 2px;
+        padding-right: .4rem;
       }
+
+      padding-right: 0; // goes with .n-delegates padding-left: 0;
     }
 
-    .pollster{
-      text-align: right;
-      padding-right: 0;
+    .n-delegates {
+      padding-left: 0; // Every pixel counts. This column's data is thin, so we're sure this won't be ugly
     }
-    .candidate {
-      width: 100%;
-    }
-    .candidate, .cd-img {
-      padding-left: 0;
-    }
+
     .n-votes, .n-delegates {
       text-align: right;
     }
@@ -114,7 +123,7 @@ body.race-day {
   }
 
   li.state {
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
   }
 
   .party-state-map {
