@@ -1,9 +1,10 @@
 .race{id: "#{state.code}-#{party.id}", 'data-party-id': party.id, 'data-state-code': state.code}
   - race = database.races.find_by_party_and_state(party, state)
+  %p.live-banner Live results
   - if race
-    %h3= "#{race.state_name} #{race.party_adjective} #{race.race_type}"
+    %h3.race-name= "#{race.state_name} #{race.party_adjective} #{race.race_type}"
   - else
-    %h3= "#{state.name} #{party.name}"
+    %h3.race-name= "#{state.name} #{party.name}"
   %p.text= race_text(race) # may be null, but we still print it so two <p>s will line up on desktop
   .party-state-map!= map_svg("states/#{state.code}")
   - if !race

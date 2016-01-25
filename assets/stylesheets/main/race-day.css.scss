@@ -7,6 +7,22 @@ body.race-day {
     padding: 0;
   }
 
+  .race {
+    .live-banner {
+      background: $red;
+      text-align: center;
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+      width: 150px;
+      margin: 15px auto 5px;
+      padding: 5px 0;
+    }
+    .race-name {
+      margin: 5px 0 15px;
+    }
+  }
+
   table.race {
     @include ellipsized-table;
 
