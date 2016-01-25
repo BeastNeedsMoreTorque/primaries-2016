@@ -34,6 +34,7 @@ function add_tooltips() {
   // One $tooltip for all <svg>s
   var $tooltip = $('<div class="race-tooltip">' +
     '<div class="tooltip-contents">' +
+      '<a class="close">×</a>' +
       '<h4></h4>' +
       '<table>' +
         '<thead>' +
@@ -47,10 +48,11 @@ function add_tooltips() {
       '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="last-updated">Last updated <time></time></p></div></div>');
   var svg_hover_path = null;
 
-  function update_tooltip(county_name, candidates, n_reporting, n_total, last_updated) {
+  function update_tooltip(county_name, candidates, n_reporting, n_total, last_updated, is_from_touch) {
     $tooltip.find('h4').text(county_name);
     $tooltip.find('span.n-reporting').text(format_int(n_reporting));
     $tooltip.find('span.n-total').text(format_int(n_total));
+    $tooltip.toggleClass('opened-from-touch', is_from_touch);
     if (last_updated) {
       $tooltip.find('.last-updated time').attr('datetime', last_updated.toISOString()).render_datetime();
     }
@@ -102,7 +104,7 @@ function add_tooltips() {
     $tooltip.remove();
   }
 
-  function show_tooltip_for_svg_path(svg_path) {
+  function show_tooltip_for_svg_path(svg_path, is_from_touch) {
     var county_name = svg_path.getAttribute('data-name');
     var fips_int = +svg_path.getAttribute('data-fips-int');
     var party_id = $(svg_path).closest('[data-party-id]').attr('data-party-id');
@@ -130,7 +132,7 @@ function add_tooltips() {
       var n_total = +match_arr[1];
       var last_updated = new Date(match_arr[2]);
 
-      update_tooltip(county_name, candidates, n_reporting, n_total, last_updated);
+      update_tooltip(county_name, candidates, n_reporting, n_total, last_updated, is_from_touch);
       position_tooltip_near_svg_path(svg_path);
     } else {
       console.warn('Could not find data for tooltip');
@@ -152,21 +154,30 @@ function add_tooltips() {
     svg_hover_path = null;
   }
 
-  function on_mouseenter() {
+  var mouseenter_was_touch = false;
+
+  function on_touchend() {
+    mouseenter_was_touch = true;
+  }
+
+  function on_mouseenter(ev) {
     var svg_path = this;
     add_hover_path(svg_path);
-    show_tooltip_for_svg_path(svg_path);
+    show_tooltip_for_svg_path(svg_path, mouseenter_was_touch);
+    mouseenter_was_touch = false; // reset
   }
 
   function on_mouseleave() {
     remove_hover_path();
-    remove_tooltip();
+    remove_tooltip(); // before the user can even click the button :)
+    mouseenter_was_touch = false; // reset
   }
 
 
   function add_tooltip(svg) {
     $(svg)
       .on('mouseenter', 'g.counties path', on_mouseenter)
+      .on('touchend', 'g.counties path', on_touchend)
       .on('mouseleave', 'g.counties path', on_mouseleave);
   }
 
