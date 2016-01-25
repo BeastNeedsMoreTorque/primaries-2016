@@ -175,6 +175,7 @@ function add_tooltips() {
 
 function color_counties() {
   var county_results = null; // party_id -> fips_int -> { candidate_id_to_n_votes, winner_n_votes, runner_up_n_votes }
+  var races_with_results = {}; // "#{party_id}-#{state_code}" -> null
 
   /**
    * Builds an Object mapping candidate_id to party_id, from
@@ -232,6 +233,22 @@ function color_counties() {
   }
   on_database_change.push(refresh_county_results);
 
+  function refresh_races_with_results() {
+    races_with_results = {};
+
+    var regex = new RegExp('^(\\w+),(\\w+),(\\d+)', 'gm');
+    var match;
+    while ((match = regex.exec(database.race_csv)) !== null) {
+      if (match[3] != '0') {
+        var party_id = match[1];
+        var state_code = match[2];
+        var key = party_id + '-' + state_code;
+        races_with_results[key] = null;
+      }
+    }
+  }
+  on_database_change.push(refresh_races_with_results);
+
   /**
    * Returns a className for an svg <path>, from county_results.
    *
@@ -258,7 +275,16 @@ function color_counties() {
     }
   }
 
-  function refresh_svg_classes(svg, table, party_id, no_results_pattern_id) {
+  /**
+   * Returns a Boolean indicating whether any precincts are reporting, from
+   * `races_with_results`.
+   */
+  function race_has_results(party_id, state_code) {
+    var key = party_id + '-' + state_code;
+    return races_with_results.hasOwnProperty(key);
+  }
+
+  function refresh_svg_classes(svg, table, party_id, state_code, no_results_pattern_id) {
     var $candidate_tr = $(table).find('tbody tr.highlight-on-map');
     if ($candidate_tr.length == 0) {
       $candidate_tr = $(table).find('tbody tr:first');
@@ -327,16 +353,20 @@ function color_counties() {
     add_no_results_yet_pattern_to_svg(svg);
 
     on_database_change.push(function() {
-      refresh_svg_classes(svg, table, party_id);
+      if (race_has_results(party_id, state_code)) {
+        refresh_svg_classes(svg, table, party_id, state_code, pattern_id);
+      }
     });
 
     var $table = $(table);
     $table.on('click', 'tbody tr', function(ev) {
       var $tr = $(ev.currentTarget);
 
-      $table.find('tr.highlight-on-map').removeClass('highlight-on-map');
-      $tr.addClass('highlight-on-map');
-      refresh_svg_classes(svg, table, party_id, pattern_id);
+      if (race_has_results(party_id, state_code)) {
+        $table.find('tr.highlight-on-map').removeClass('highlight-on-map');
+        $tr.addClass('highlight-on-map');
+        refresh_svg_classes(svg, table, party_id, state_code, pattern_id);
+      }
     });
   }
 
