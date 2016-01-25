@@ -19,12 +19,14 @@
   fbObj = {
     method: "feed",
     link: document.URL,
-    picture: "",
+    picture: ("og:image" in metaObjs ? metaObjs["og:image"] : ""),
     name: metaObjs["og:title"],
     description: metaObjs["og:description"]
   };
 
-  function postToFacebook(fbObj) {
+  console.log(fbObj)
+
+  function postToFacebook() {
     FB.ui(fbObj);
   }
 
