@@ -70,7 +70,19 @@
   }
 
   .n-delegates .integer {
-    display: none;
+    //display: none;
+  }
+
+  .n-delegates {
+    padding-right: 0;
+  }
+
+  .delegate-counts {
+    color: #999;
+    font-size: 11px;
+    text-align: right;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .dots {

@@ -1,5 +1,6 @@
 ;(function() {
   //CMS entry
+  //http://www.huffingtonpost.com/entry/2016-primaries-dashboard_us_569582cfe4b05b3245daf7f4?gdqp8pvi
   //https://us.edit.huffpost.net/cms/entry/569582cfe4b05b3245daf7f4
   bN_cfg = {
     h: location.hostname,
