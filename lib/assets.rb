@@ -52,37 +52,64 @@ module Assets
     self.build_static_assets
   end
 
-  # asset_path('main.css') -> '/2016/stylesheets/main-abcdef.css'
+  # asset_path('main.css') -> '//asset_host/2016/stylesheets/main-abcdef.css'
   def self.asset_path(path)
     @asset_paths ||= {}
     @asset_paths[path] ||= begin
-      path =~ /(.*)\.(css|js)$/
-
-      raise "invalid path #{path}" if !$0
-      dir = case $2
-        when 'css' then 'stylesheets'
-        when 'js' then 'javascripts'
-        else raise "invalid asset extension #{$2}"
-      end
+      dir = dir_for_path(path)
 
       path_without_digest = "#{Paths.Dist}/2016/#{dir}/#{path}"
       digest = asset_digest_hex(path_without_digest)
 
-      "/2016/#{dir}/#{$1}-#{digest}.#{$2}"
+      arr = path.split(/\./, 2)
+
+      "#{asset_host}/2016/#{dir}/#{arr[0]}-#{digest}.#{arr[1]}"
     end
   end
 
+  # static_asset_path('pym.min.js') -> '//asset_host/2016/javascripts/pym.min.js'
+  def self.static_asset_path(path)
+    @static_asset_paths ||= {}
+    @static_asset_paths[path] ||= begin
+      dir = dir_for_path(path)
+      "#{asset_host}/2016/#{dir}/#{path}"
+    end
+  end
+
+  # image_path('clinton.png') -> '//asset_host/2016/images/clinton-abcdef.png'
   def self.image_path(name)
     @image_paths ||= {}
     @image_paths[name] ||= begin
       basename, extension = name.split(/\./)
       path_without_digest = "#{Paths.Assets}/images/#{name}"
       digest = asset_digest_hex(path_without_digest)
-      "/2016/images/#{basename}-#{digest}.#{extension}"
+      "#{asset_host}/2016/images/#{basename}-#{digest}.#{extension}"
     end
   end
 
   private
+
+  # dir_for_path('foo.css') -> 'stylesheets'
+  # dir_for_path('foo.js') -> 'javascripts'
+  # dir_for_path('blah.txt') -> RuntimeError
+  def self.dir_for_path(path)
+    path =~ /(.*)\.(css|js)$/
+
+    raise "invalid path #{path}" if !$0
+    case $2
+      when 'css' then 'stylesheets'
+      when 'js' then 'javascripts'
+      else raise "invalid asset extension #{$2}"
+    end
+  end
+
+  def self.asset_host
+    @asset_host = if ENV['ASSET_HOST']
+      "//#{ENV['ASSET_HOST']}"
+    else
+      ''
+    end
+  end
 
   def self.asset_digest_hex(absolute_path)
     Digest::SHA1.file(absolute_path).hexdigest

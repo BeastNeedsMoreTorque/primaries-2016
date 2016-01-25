@@ -21,26 +21,27 @@ This is a static website, stored in the `dist/` directory. Run `script/serve` to
 serve it at [http://localhost:3000/2016](http://localhost:3000/2016). (You can
 still run `script/update-primaries` periodically while this is running.)
 
-Set the environment variable `AP_TEST=true` to incorporate test data from the
-Associated Press.
-
-Set the environment variable `LOG_LEVEL=debug` to see more log data.
-
-Set the environment variable `DEBUG_ASSETS=true` to skip minimizing assets.
-
-We haven't finalized all our pages. If you set the environment variable
-`LAST_DATE=YYYY-MM-DD` you can make sure the race you care about is rendered.
-
-Another useful command is `AP_API_KEY=abcdgef RPROF=true script/build`, which
-will dump profiling data to `profile.html`.
-
-Oh yeah, and `script/update-copy` will update our static copy. We edit that at
-https://docs.google.com/document/d/1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w/edit.
-
 Finally, if you run `rspec` directly you'll run automated tests. You must
 have `script/serve` running in another console (to serve the files). This will
 overwrite all HTML files once per test. Run `script/build` again to revert to
 the results AP gives.
+
+# Configuration
+
+To set an option, use an environment variable.
+([12factor.net rationale](http://12factor.net/config)). Every command may read
+some of these variables.
+
+| Variable | What it does |
+| -------- | ------------ |
+| `AP_API_KEY=...` | API key from the Associated Press |
+| `AP_TEST=true` | Adds `?test=true` to AP API requests |
+| `AWS_ACCESS_KEY`, etc | [Authenticates](http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/set-up-ec2-cli-linux.html) `script/upload` with Amazon Web Services |
+| `LOG_LEVEL=debug` | Produces more output |
+| `DEBUG_ASSETS=true` | Disables JS/CSS minimization |
+| `ASSET_HOST=assets.mydomain.com` | Prefixes asset URLs with `"//assets.mydomain.com"` |
+| `LAST_DATE=YYYY-MM-DD` | Makes scripts produce race-day pages up until the given date (inclusive), and disables the rest |
+| `RPROF=true` | Makes `script/build` use [ruby-prof](https://github.com/ruby-prof/ruby-prof) to dump wall-time profiling data to `./profile.html` |
 
 # Production
 
