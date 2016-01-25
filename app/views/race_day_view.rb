@@ -18,6 +18,8 @@ class RaceDayView < BaseView
   def hed; race_day_copy ? race_day_copy['title'] : nil; end
   def race_date; "#{race_day.date.strftime('%B %-d, %Y')}"; end
   def body; race_day_copy ? race_day_copy['body'] : nil; end
+  def pubbed_dt; race_day_copy ? race_day_copy['pubbed'] : nil; end
+  def updated_dt; race_day_copy ? race_day_copy['updated'] : nil; end
 
   # The race day prior to the one we're focused on
   def previous_race_day
