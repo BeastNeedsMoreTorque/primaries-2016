@@ -9,10 +9,12 @@ set :linked_dirs, fetch(:linked_dirs, []).push('tmp', 'cache')
 
 desc 'Set new AP API key'
 task :reset_env do
+  ask(:s3_bucket, 'S3 bucket hosting the website')
   ask(:ap_api_key, 'Associated Press Elections API key')
   ask(:asset_host, 'Asset host, like `assets1.huffingtonpost.com` (may be empty)')
   on roles(:all) do |host|
     execute "echo AP_API_KEY='#{fetch(:ap_api_key)}' > #{shared_path}/env"
+    execute "echo S3_BUCKET='#{fetch(:s3_bucket)}' >> #{shared_path}/env"
     execute "echo ASSET_HOST='#{fetch(:asset_host)}' >> #{shared_path}/env"
     execute "echo AWS_REGION=us-east-1 >> #{shared_path}/env"
 

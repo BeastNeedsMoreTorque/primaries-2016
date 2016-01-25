@@ -37,6 +37,7 @@ some of these variables.
 | `AP_API_KEY=...` | API key from the Associated Press |
 | `AP_TEST=true` | Adds `?test=true` to AP API requests |
 | `AWS_ACCESS_KEY`, etc | [Authenticates](http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/set-up-ec2-cli-linux.html) `script/upload` with Amazon Web Services |
+| `S3_BUCKET` | Where to upload files with `script/upload` |
 | `LOG_LEVEL=debug` | Produces more output |
 | `DEBUG_ASSETS=true` | Disables JS/CSS minimization |
 | `ASSET_HOST=assets.mydomain.com` | Prefixes asset URLs with `"//assets.mydomain.com"` |
