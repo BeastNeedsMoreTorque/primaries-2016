@@ -20,6 +20,7 @@ require 'date'
 require_relative '../lib/env'
 require_relative '../lib/paths'
 require_relative '../lib/api_sources'
+require_relative '../lib/with_airbrake'
 require_relative '../app/models/database'
 require_relative '../config/schedule'
 
@@ -109,9 +110,9 @@ class Server
   # `config/schedule.rb`.
   def wait_and_handle_command_or_run_scheduled_tasks
     if IO.select([ @command_reader ], nil, nil, TimeoutInS)
-      handle_command
+      WithAirbrake.run { handle_command }
     else
-      run_scheduled_tasks
+      WithAirbrake.run { run_scheduled_tasks }
     end
   end
 

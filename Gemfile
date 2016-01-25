@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'airbrake-ruby', require: false
 gem 'archieml'
 gem 'aws-sdk'
 gem 'oj'

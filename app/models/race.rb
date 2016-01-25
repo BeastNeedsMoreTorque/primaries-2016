@@ -35,7 +35,7 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   # Note: a race can be `live` even when it happened the day before, if poll
   # results are trickling in slowly.
   def status
-    if n_precincts_reporting > 0
+    if !n_precincts_reporting.nil? && n_precincts_reporting > 0
       if n_precincts_reporting < n_precincts_total
         'live'
       else
