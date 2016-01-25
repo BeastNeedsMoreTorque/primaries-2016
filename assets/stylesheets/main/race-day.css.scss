@@ -135,26 +135,47 @@ body.race-day {
     box-sizing: border-box;
     width: 100%;
     max-width: 16rem;
+    border: 1px solid #ccc;
     box-shadow: 0 0 10px #ccc;
-    padding: 1rem;
+    padding: 0;
     background: white;
+
+    a.close {
+      display: none; // except when this is opened via touch
+      position: absolute;
+      top: 0;
+      right: 0;
+      line-height: 1;
+      padding: .5rem 1rem;
+    }
     h4 {
-      margin: 0 0 6px 0;
-      font-size: 1.3em;
+      font-size: 1;
+      line-height: 1;
+      margin: 0;
+      padding: .5rem 1rem;
+      border-bottom: 1px solid #ccc;
+      background: #eee;
     }
     table {
-      width: 100%;
-      margin: 0 0 10px 0;
+      box-sizing: border-box;
+      margin: .5rem 1rem;
       padding: 0;
       border-collapse: collapse;
     }
-    tr {
-      border-bottom: 1px dotted #ccc;
-      &:last-child {
-        border-bottom: none;
-      }
+    th {
+      border-bottom: 1px solid #ccc;
+    }
+    td {
+      border-top: 1px dotted #ccc;
+    }
+    p.precincts {
+      margin: 0 1rem;
+    }
+    p.last-updated {
+      margin: .25rem 1rem 1rem;
     }
     .candidate {
+      width: 100%;
       padding-right: 5px;
     }
     .n-votes {
@@ -166,6 +187,10 @@ body.race-day {
       font-size: 0.8em;
       color: #999;
     }
+  }
+
+  .race-tooltip.opened-from-touch a.close {
+    display: block;
   }
 
   .no-precincts-reporting {
