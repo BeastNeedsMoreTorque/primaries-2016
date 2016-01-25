@@ -57,12 +57,14 @@ function add_tooltips() {
 
     var $tbody = $tooltip.find('tbody').empty();
 
-    candidates.forEach(function(candidate) {
-      $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td></tr>');
-      $tr.find('.candidate').text(candidate.name);
-      $tr.find('.n-votes').text(format_int(candidate.n_votes));
-      $tbody.append($tr);
-    });
+    candidates
+      .sort(function(a, b) { return b.n_votes - a.n_votes || a.name.localeCompare(b.name); })
+      .forEach(function(candidate) {
+        $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td></tr>');
+        $tr.find('.candidate').text(candidate.name);
+        $tr.find('.n-votes').text(format_int(candidate.n_votes));
+        $tbody.append($tr);
+      });
   }
 
   function position_tooltip_near_svg_path(svg_path) {

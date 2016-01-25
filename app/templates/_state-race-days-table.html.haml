@@ -23,11 +23,11 @@
               - when 'party'
                 = race.party_name[0]
               - when 'n-delegates'
-                %span{'class': "dots dots-#{race.party_id.downcase}"}
-                  -# That's a zero-width space (zwsp) between each dot, so they can wrap
-                  = "\u200b•" * race.n_delegates
-        %td.delegate-counts
-          %span.integer= format_int(race.n_delegates)
+                .n-delegates-inner
+                  %span{'class': "dots dots-#{race.party_id.downcase}"}
+                    -# That's a zero-width space (zwsp) between each dot, so they can wrap
+                    = "\u200b•" * race.n_delegates
+                  %span.n-delegates-int= format_int(race.n_delegates)
         %td{'class': "#{race.enabled? ? 'enabled-button' : 'disabled-button'}"}
           %div.results-button
             %span.results-button-desktop See results
