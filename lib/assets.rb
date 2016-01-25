@@ -104,7 +104,7 @@ module Assets
   end
 
   def self.asset_host
-    @asset_host = if ENV['ASSET_HOST']
+    @asset_host = if ENV['ASSET_HOST'] && !ENV['ASSET_HOST'].empty?
       "//#{ENV['ASSET_HOST']}"
     else
       ''
