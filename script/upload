@@ -8,7 +8,10 @@ require 'pstore'
 
 require_relative '../lib/paths'
 
-S3Bucket = ENV['S3_BUCKET'] || raise 'You must set the `S3_BUCKET` environment variable'
+S3Bucket = ENV['S3_BUCKET']
+if S3Bucket.nil? || S3Bucket.empty?
+  raise 'You must set the `S3_BUCKET` environment variable'
+end
 MaxAge = 365 * 86400 # 1yr
 ShortAge = 5
 
