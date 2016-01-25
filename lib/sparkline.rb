@@ -39,7 +39,7 @@ class Sparkline
   def to_svg
     [
       "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 180 60\">",
-      "  <path d=\"#{to_svg_path}\">",
+      "  <path d=\"#{to_svg_path}\"/>",
       "</svg>"
     ].join
   end
