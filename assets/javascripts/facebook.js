@@ -24,8 +24,6 @@
     description: metaObjs["og:description"]
   };
 
-  console.log(fbObj)
-
   function postToFacebook() {
     FB.ui(fbObj);
   }
