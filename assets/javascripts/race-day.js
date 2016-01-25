@@ -533,7 +533,7 @@ $(function() {
     $('time').render_datetime();
 
     // Changing n_trs? Change _race.html.haml as well, or page will scroll while loading
-    $('table.race').ellipsize_table(5, 'ellipsized', '<button>Show more…</button>', '<button>Show fewer…</button>');
+    $('table.race').ellipsize_table(5, 'ellipsized', '<button>Show more &#9662;</button>', '<button>Show fewer &#9652;</button>');
 
     wait_for_font_then('Source Sans Pro', function() {
       fix_text_heights();

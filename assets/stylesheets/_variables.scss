@@ -17,6 +17,7 @@ $twitterBlue: #c0deed ;
 $splash-ele-bg: #eee;
 
 $red: #E82C0C;
+$blue: #0E61E5;
 
 @mixin vertical-center-flex {
 	display: -webkit-inline-flex;
@@ -183,7 +184,11 @@ $red: #E82C0C;
       font: inherit;
       background: none;
       cursor: pointer;
-      color: blue;
+      color: #999;
+      border: 1px solid #ccc;
+      border-top: none;
+      text-transform: uppercase;
+      font-size: 0.8em;
     }
   }
 }
