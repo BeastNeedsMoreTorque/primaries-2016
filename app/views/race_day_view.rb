@@ -21,6 +21,16 @@ class RaceDayView < BaseView
   def pubbed_dt; race_day_copy ? race_day_copy['pubbed'] : nil; end
   def updated_dt; race_day_copy ? race_day_copy['updated'] : nil; end
 
+  def meta
+    @meta ||= {
+      page_title: "HuffPost 2016 Election Coverage: #{hed}",
+      page_description: "#{body}",
+      author: "HuffPostPolitics",
+      author_twitter: "HuffPostPol",
+      social_image_url: "#{social_img}"
+    }
+  end
+
   # The race day prior to the one we're focused on
   def previous_race_day
     database.race_days

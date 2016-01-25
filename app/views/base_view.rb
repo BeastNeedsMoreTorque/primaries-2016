@@ -16,8 +16,6 @@ class BaseView
   def last_date; database.last_date; end
   def copy; database.copy; end
 
-  def page_title; '2016 Election Coverage'; end
-
   def layout; nil; end
 
   # e.g., for AllPrimariesView, "all-primaries"
@@ -45,7 +43,11 @@ class BaseView
 
   def meta
     @meta ||= {
-      page_description: 'Huffington Post coverage of the 2016 Presidential Primaries and Election',
+      page_title: "HuffPost 2016 Election Coverage: Presidential Primaries",
+      page_description: "See which candidates are leading the pack for their party’s nomination, find election dates and watch live updates on election nights at The Huffington Post",
+      author: "HuffPostPolitics",
+      author_twitter: "HuffPostPol",
+      social_image_url: "http://e.huffpost.com/datadot/images/huffpostdata-logo-5aa7b459e55d8d7a91d1250d3fa28954.png"
     }
   end
 
