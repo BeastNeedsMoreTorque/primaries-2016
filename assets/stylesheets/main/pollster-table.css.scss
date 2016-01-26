@@ -29,16 +29,22 @@
     @include ellipsized-table;
     border-collapse: collapse;
   }
+
   td, th {
-    padding: 2px;
+    padding: 2px 10px;
     border-bottom: 1px solid #ccc;
   }
-  .pollster{
+
+  .candidate {
+    text-align: left;
+  }
+
+  .pollster {
     text-align: right;
     font-weight: bold;
   }
+
   th {
-    text-align: left;
     border-bottom: 1px solid #999;
   }
 
@@ -47,8 +53,9 @@
 
     .long-table-heading {
       position: absolute;
+      // Copy from <th>'s padding
       top: 2px;
-      right: 0;
+      right: 10px;
     }
   }
 
@@ -56,16 +63,14 @@
     white-space: nowrap;
   }
 
-  td.candidate-image {
+  td.candidate {
+    width: 100%;
+
     img {
       height: 30px;
       vertical-align: middle;
-      padding: 2px;
+      padding-right: .4em;
     }
-  }
-
-  td.candidate {
-    width: 100%;
   }
 
   table[data-party-id=Dem] .sparkline path {

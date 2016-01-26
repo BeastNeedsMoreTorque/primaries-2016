@@ -43,6 +43,7 @@ some of these variables.
 | `ASSET_HOST=assets.mydomain.com` | Prefixes asset URLs with `"//assets.mydomain.com"` |
 | `LAST_DATE=YYYY-MM-DD` | Makes scripts produce race-day pages up until the given date (inclusive), and disables the rest |
 | `RPROF=true` | Makes `script/build` use [ruby-prof](https://github.com/ruby-prof/ruby-prof) to dump wall-time profiling data to `./profile.html` |
+| `AIRBRAKE_PROJECT_KEY=...`, `AIRBRAKE_PROJECT_ID=...` | When both are set, makes `script/production-server` send notifications to Airbrake |
 
 # Production
 

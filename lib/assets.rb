@@ -16,6 +16,7 @@ module Assets
     javascripts/main.js
     javascripts/splash.js
     javascripts/primary-right-rail.js
+    javascripts/facebook.js
     stylesheets/main.css
     stylesheets/splash.css
     stylesheets/primaries-right-rail.css
@@ -104,7 +105,7 @@ module Assets
   end
 
   def self.asset_host
-    @asset_host = if ENV['ASSET_HOST']
+    @asset_host = if ENV['ASSET_HOST'] && !ENV['ASSET_HOST'].empty?
       "//#{ENV['ASSET_HOST']}"
     else
       ''

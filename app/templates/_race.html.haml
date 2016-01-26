@@ -26,7 +26,7 @@
       %table.race
         %thead
           %tr
-            %th.candidate{colspan: "2"} Candidate
+            %th.candidate Candidate
             %th.n-votes Votes
             %th.n-delegates Delegates
             %th.pollster Polling Average 
@@ -35,9 +35,9 @@
           - race.candidate_states.each do |candidate_state|
             - candidate = candidate_state.candidate
             %tr{'data-candidate-id': candidate.id, 'class': n_unellipsized <= 0 ? 'ellipsized' : ''}
-              %td.cd-img
+              %td.candidate
                 %img{src: image_path("#{candidate.slug}.png"), alt: ''}
-              %td.candidate= candidate.name
+                = candidate.name
               %td.n-votes= format_int(candidate_state.n_votes)
               %td.n-delegates= format_int(candidate_state.n_delegates)
               %td.pollster
@@ -46,7 +46,8 @@
                 %span.percent= candidate_state.poll_percent ? "#{candidate_state.poll_percent}%" : ""
             - n_unellipsized -= 1
       -# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
-      .ellipsize-table-prompt
+      - if n_unellipsized < 0
+        .ellipsize-table-prompt
       .metadata.footnotes
         %p.precincts-reporting
           %span.n-reporting= race.n_precincts_reporting
@@ -59,4 +60,4 @@
             %time{datetime: format_datetime(race.last_updated)}
         - if race.poll_last_updated
           %p.poll-last-updated.no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
-          %p.poll-last-updated.some-precincts-reporting!= "Check <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> to see how who led the race before the Iowa caucus."
+          %p.poll-last-updated.some-precincts-reporting!= "Visit <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> for survey results from before the race."

@@ -23,7 +23,9 @@ h1, h2, h3, h4{
     padding: 5px;
   }
   @include rail-link-out;
-  @include footnotes;
+  .footnotes {
+    @include footnotes;
+  }
   span.dem-del-available{
     //color: #5c6b95;
   }

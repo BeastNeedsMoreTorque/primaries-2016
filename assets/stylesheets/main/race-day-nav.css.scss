@@ -1,66 +1,73 @@
 @import '../_variables';
 
 .race-day-nav {
+  margin-top: 1rem;
   position: relative;
-  height: 80px;
   width: 100%;
   background: #f8f8f8;
   text-align: center;
   text-transform: uppercase;
-  @media (max-width: 600px) {
-    height: 55px;
+
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+
+  .previous {
+    text-align: left;
   }
+
+  .next {
+    text-align: right;
+  }
+
+  .calendar {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .previous, .next, .calendar {
+    width: 33%; // will grow
+    flex: 1 0 auto;
+    -webkit-flex: 1 0 auto;
+  }
+
+  @media(max-width: 600px) {
+    .previous, .next {
+      width: 50%;
+    }
+
+    .calendar {
+      display: none;
+    }
+  }
+
   a {
-    color: #666;
-    display: inline-block;
+    display: block;
+    color: $muted;
     text-decoration: none;
-    height: 80px;
-    margin: 0;
-    padding: 0 1rem;
     &:hover {
       background: $strongDem;
       color: #fff;
     }
-    @media (max-width: 600px) {
-      height: 55px;
-    }
   }
-  .calendar {
-    position: absolute;
-    left: 50%;
-    width: 180px;
-    margin-left: -90px;
-    padding-top: 30px;
-    height: 80px;
-    box-sizing: border-box;
-    @media (max-width: 600px) {
-      display: none;
-    }
-  }
+
   .label {
     display: block;
     font-size: 0.9em;
-    margin: 0;
     @media (max-width: 600px) {
       font-size: 0.8em;
     }
   }
+
   .date {
     display: block;
     font-size: 1.4em;
-    margin: 0;
     @media (max-width: 600px) {
       font-size: 1em;
     }
   }
-  .previous {
-    position: absolute;
-    left: 0;
-  }
-  .next {
-    position: absolute;
-    right: 0;
-  }
+
   .previous-inner {
     box-sizing: border-box;
     padding: 18px 24px 18px 24px;
@@ -75,8 +82,16 @@
       padding: 10px 8px 10px 14px;
     }
   }
+
+  .calendar a {
+    padding: 18px;
+    @media(max-width: 600px) {
+      padding: 10px;
+    }
+  }
+
   span.disabled {
-    display: inline-block;
-    color: $muted;
+    display: block;
+    color: #ccc;
   }
 }

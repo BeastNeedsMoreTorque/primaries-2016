@@ -1,7 +1,7 @@
 //= require './vendor/jquery-2.2.0.js'
 
 $(function() {
-  var iowa_polls_close = new Date('2/2/2016 1:00:00 AM UTC');
+  var iowa_polls_close = new Date('2/2/2016 3:00:00 AM UTC');
   function timeTill(end) {
     var timeDifference = Date.parse(end) - Date.parse(new Date());
 

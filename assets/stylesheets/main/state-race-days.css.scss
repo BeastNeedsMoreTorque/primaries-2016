@@ -12,11 +12,20 @@
     }
   }
 
+  @media(max-width: 600px) {
+    table {
+      font-size: .85rem;
+    }
+  }
+
   td {
     border-top: 1px solid $tableBorderColor;
     vertical-align: middle;
     padding: .4rem;
-    &.party, &.date {
+    &.state {
+      padding-right: 0;
+    }
+    &.date {
       white-space: nowrap;
     }
     &.party {
@@ -25,10 +34,18 @@
     &.repeated * {
       visibility: hidden;
     }
-    &.n-delegates {
-      vertical-align: middle;
-    }
   }
+
+  .state-race-days-by-date td.state {
+    // td.state comes before td.party, which is very thin
+    padding-right: 0;
+  }
+
+  .state-race-days-by-state td.date {
+    // td.date comes before td.party, which is very thin
+    padding-right: 0;
+  }
+
   .disabled-button {
     visibility: hidden;
   }
@@ -57,10 +74,6 @@
   table {
     border-collapse: collapse;
     margin: 0 auto;
-
-    @media (max-width: 400px) { // Changing this? Look at all.css.scss too
-      margin: 0 -10px;
-    }
   }
 
   .flipper>* {
@@ -69,20 +82,24 @@
     width: 100%;
   }
 
-  .n-delegates .integer {
-    //display: none;
-  }
-
   .n-delegates {
     padding-right: 0;
   }
 
-  .delegate-counts {
+  .n-delegates-inner {
+    -webkit-display: flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+
+  .n-delegates-int {
+    display: block;
     color: #999;
     font-size: 11px;
-    text-align: right;
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 2px;
   }
 
   .dots {
@@ -126,7 +143,7 @@
         color: inherit;
         background: #efefef;
         border: 1px solid #666;
-        color: #666;
+        color: $muted;
         &:first-child {
           border-right: 1px solid #666;
         }
@@ -142,6 +159,7 @@
     margin: 2rem 0 1rem;
     -webkit-perspective: 1000rem;
     perspective: 1000rem;
+    overflow: hidden; // Otherwise the backface can push the page beyond the footer
 
     .flipper {
       transition: 0.5s;
