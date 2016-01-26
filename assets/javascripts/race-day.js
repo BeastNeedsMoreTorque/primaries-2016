@@ -187,7 +187,7 @@ function add_tooltips() {
 }
 
 function color_counties() {
-  var county_results = null; // party_id -> fips_int -> { candidate_id_to_n_votes, winner_n_votes, runner_up_n_votes }
+  var county_results = null; // party_id -> fips_int -> { candidate_id_to_n_votes, winner_n_votes }
   var races_with_results = {}; // "#{party_id}-#{state_code}" -> null
 
   /**
@@ -229,18 +229,14 @@ function color_counties() {
       if (!counts) {
         counts = county_results[party_id][fips_int] = {
           candidate_id_to_n_votes: {},
-          winner_n_votes: 0,
-          runner_up_n_votes: 0
+          winner_n_votes: 0
         };
       }
 
       counts.candidate_id_to_n_votes[candidate_id] = n_votes;
 
       if (n_votes > counts.winner_n_votes) {
-        counts.runner_up_n_votes = counts.winner_n_votes;
         counts.winner_n_votes = n_votes;
-      } else if (n_votes > counts.runner_up_n_votes) {
-        counts.runner_up_n_votes = n_votes;
       }
     }
   }
@@ -268,9 +264,7 @@ function color_counties() {
    * @param party_id String party ID.
    * @param fips_int String county ID.
    * @param candidate_id String candidate ID.
-   * @return One of 'candidate-came-first', 'candidate-came-second',
-   *         'candidate-did-badly', 'no-results-yet'. Or the empty String, which
-   *         means lookup failed.
+   * @return One of 'candidate-leads', 'candidate-trails', 'no-results-yet'.
    */
   function lookup_candidate_class(party_id, fips_int, candidate_id) {
     if (!county_results[party_id] || !county_results[party_id][fips_int] || !county_results[party_id][fips_int].winner_n_votes) {
@@ -279,11 +273,9 @@ function color_counties() {
       var counts = county_results[party_id][fips_int];
       var n_votes = counts.candidate_id_to_n_votes[candidate_id];
       if (n_votes == counts.winner_n_votes) {
-        return 'candidate-came-first';
-      } else if (n_votes == counts.runner_up_n_votes) {
-        return 'candidate-came-second';
+        return 'candidate-leads';
       } else {
-        return 'candidate-did-badly';
+        return 'candidate-trails';
       }
     }
   }
@@ -295,6 +287,16 @@ function color_counties() {
   function race_has_results(party_id, state_code) {
     var key = party_id + '-' + state_code;
     return races_with_results.hasOwnProperty(key);
+  }
+
+  function refresh_svg_legend(svg, table) {
+    var $legend = $(svg.nextElementSibling);
+    var candidate_name = $('tbody tr.highlight-on-map td.candidate', table).text();
+
+    $legend.toggleClass('has-no-results', $('path.no-results-yet', svg).length > 0);
+    $legend.toggleClass('has-candidate-leads', !!candidate_name && $('path.candidate-leads', svg).length > 0);
+    $legend.toggleClass('has-candidate-trails', !!candidate_name && $('path.candidate-trails', svg).length > 0);
+    $legend.find('.candidate-name').text(candidate_name || '');
   }
 
   function refresh_svg_classes(svg, table, party_id, state_code, no_results_pattern_id) {
@@ -339,7 +341,7 @@ function color_counties() {
     var defs = document.createElementNS(ns, 'defs');
 
     var pattern = document.createElementNS(ns, 'pattern');
-    pattern.setAttribute('id', pattern_id);
+    pattern.setAttributeNS(null, 'id', pattern_id);
     pattern.setAttributeNS(null, 'width', '50');
     pattern.setAttributeNS(null, 'height', '50');
     pattern.setAttributeNS(null, 'patternUnits', 'userSpaceOnUse');
@@ -363,11 +365,12 @@ function color_counties() {
   function monitor_svg(svg, table, party_id, state_code) {
     var pattern_id = party_id + '-' + state_code + '-pattern-no-results';
 
-    add_no_results_yet_pattern_to_svg(svg);
+    add_no_results_yet_pattern_to_svg(svg, pattern_id);
 
     on_database_change.push(function() {
       if (race_has_results(party_id, state_code)) {
         refresh_svg_classes(svg, table, party_id, state_code, pattern_id);
+        refresh_svg_legend(svg, table);
       }
     });
 
@@ -379,6 +382,7 @@ function color_counties() {
         $table.find('tr.highlight-on-map').removeClass('highlight-on-map');
         $tr.addClass('highlight-on-map');
         refresh_svg_classes(svg, table, party_id, state_code, pattern_id);
+        refresh_svg_legend(svg, table);
       }
     });
   }

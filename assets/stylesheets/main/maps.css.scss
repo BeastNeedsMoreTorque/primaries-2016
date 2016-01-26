@@ -54,15 +54,11 @@
 }
 
 .race[data-party-id=Dem] svg g.counties {
-  path.candidate-came-first {
+  path.candidate-leads {
     fill: $strongDem;
   }
 
-  path.candidate-came-second {
-    fill: $undecided;
-  }
-
-  path.candidate-did-badly {
+  path.candidate-trails {
     fill: $undecided;
   }
 }
