@@ -20,12 +20,13 @@ class HttpClient
     end
   end
 
-  attr_reader(:ap_api_key, :is_test)
+  attr_reader(:ap_api_key, :is_test, :is_zero)
 
-  def initialize(http_interface, ap_api_key, is_test)
+  def initialize(http_interface, ap_api_key, is_test, is_zero)
     @http_interface = http_interface
     @ap_api_key = ap_api_key
     @is_test = is_test
+    @is_zero = is_zero
   end
 
   # Fetches a String document from the server and its String etag.
@@ -45,7 +46,7 @@ class HttpClient
       get_json!("http://elections.huffingtonpost.com/pollster/api/charts/#{maybe_param}.json", maybe_etag)
     when :election_day
       throw ArgumentError.new('param must be a date in YYYY-MM-DD format') if maybe_param.nil?
-      get_json!("https://api.ap.org/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)
+      get_json!("https://api.ap.org/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{ap_api_key}#{is_test_query_param}#{is_zero_query_param}", maybe_etag)
     when :election_days
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
       get_json!("https://api.ap.org/v2/elections?format=json&apikey=#{ap_api_key}", maybe_etag)
@@ -61,6 +62,7 @@ class HttpClient
         # matches we want to avoid making the second request completely.
         report_id = Oj.load(r1[:data])['reports'][0]['id']
         r2 = get_json!("#{report_id}?format=json&apikey=#{ap_api_key}", nil) # no ETag, no "test" parameter
+
         { data: r2[:data], etag: r1[:etag] }
       end
     else
@@ -93,5 +95,9 @@ class HttpClient
 
   def is_test_query_param
     is_test ? '&test=true' : ''
+  end
+
+  def is_zero_query_param
+    is_zero ? '&setZeroCounts=true' : ''
   end
 end

@@ -9,21 +9,29 @@ set :linked_dirs, fetch(:linked_dirs, []).push('tmp', 'cache')
 
 desc 'Set new AP API key'
 task :reset_env do
+  on roles(:all) do |host|
+    execute "echo Existing environment: && cat #{shared_path}/env"
+  end
+
   ask(:s3_bucket, nil)
   ask(:ap_api_key, nil)
   ask(:asset_host, nil)
+
   on roles(:all) do |host|
     execute "echo AP_API_KEY='#{fetch(:ap_api_key)}' > #{shared_path}/env"
     execute "echo S3_BUCKET='#{fetch(:s3_bucket)}' >> #{shared_path}/env"
     execute "echo ASSET_HOST='#{fetch(:asset_host)}' >> #{shared_path}/env"
     execute "echo AWS_REGION=us-east-1 >> #{shared_path}/env"
 
-
     # FIXME remove AP_TEST. We use it because AP gives bad candidate data
     # prior to 2016-01-31, but we want to render pages before that date. But
     # AP_TEST=true doesn't actually solve that problem. Really, we need to
     # maintain our own list of candidates somewhere.
     execute "echo AP_TEST=true >> #{shared_path}/env"
+
+    # FIXME remove AP_ZERO. We use it because AP gives bad candidate data
+    # prior to 2016-01-31, but we want to render pages before that date.
+    execute "echo AP_ZERO=true >> #{shared_path}/env"
   end
 end
 
