@@ -105,12 +105,21 @@ h2 {
 
 .social-buttons {
   margin: 30px 0;
+  a {
+    text-decoration: none;
+  }
   .btn-social {
+    display: inline-block;
     width: 180px;
     font-family: "Source Sans Pro", Arial, Helvetica, sans-serif;
     font-size: 13px;
     color: #fff;
     cursor: pointer;
+    text-align: center;
+    padding: 8px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     @media (max-width: 399px) {
       margin: 0 10px;
     }
