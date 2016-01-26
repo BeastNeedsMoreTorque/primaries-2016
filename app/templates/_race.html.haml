@@ -1,15 +1,15 @@
 - race = database.races.find_by_party_and_state(party, state)
-.race{id: "#{state.code}-#{party.id}", 'data-party-id': party.id, 'data-state-code': state.code, class: "status-#{race && race.status || 'upcoming'}"}
-  - if !race.nil? && race.live?
+.race{id: "#{state.code}-#{party.id}", 'data-party-id': party.id, 'data-state-code': state.code, class: (race && race.when_race_happens || 'future')}
+  - if !race.nil? && race.present?
     %p.live-banner Live results
   - if race
     %h3.race-name= "#{race.state_name} #{race.party_adjective} #{race.race_type}"
   - else
     %h3.race-name= "#{state.name} #{party.name}"
   - if race
-    - if race.status == 'past'
+    - if race.past?
       %p.timing-note All precincts reporting
-    - if race.status == 'upcoming'
+    - if race.future?
       %p.timing-note= "Come back on #{race.date.strftime('%B %-d')} for results"
   %p.text= race_text(race) # may be null, but we still print it so two <p>s will line up on desktop
   .party-state-map
