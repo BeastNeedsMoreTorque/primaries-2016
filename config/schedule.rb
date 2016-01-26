@@ -11,8 +11,8 @@
 # This is a bit hack-y: we're communicating with the production server via git
 # commits. At this phase of development, it seems right.
 module ServerSchedule
-  TimeoutInS = 3600 # once per hour -- nothing's happening
+  TimeoutInS = 3600 # once per hour -- nothing's happening, except Pollster
   RefreshDelegates = true
-  RefreshPrimariesRaceDays = [ '2016-02-01' ]
+  RefreshPrimariesRaceDays = [ '2016-02-01', '2016-02-09' ]
   RefreshPollsterPrimaries = true
 end

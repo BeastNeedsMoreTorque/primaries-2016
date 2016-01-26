@@ -24,9 +24,13 @@ module ApiSources
     !!ENV['AP_TEST']
   end
 
+  def self.is_zero
+    !!ENV['AP_ZERO']
+  end
+
   public
 
-  @server = HttpClient.new(HttpClient::HttpInterface.new, ApiSources.api_key, ApiSources.is_test)
+  @server = HttpClient.new(HttpClient::HttpInterface.new, ApiSources.api_key, ApiSources.is_test, ApiSources.is_zero)
   @cache = HttpCache.new(Paths.Cache)
 
   def self.wipe_all
@@ -79,6 +83,9 @@ module ApiSources
   def self.GET_del_super
     string = get_cached_or_fetch(:del_super, nil)
     obj = parse_json(string)
+
+    set_del_super_numbers_to_zero(obj) if is_zero
+
     obj[:delSuper]
   end
 
@@ -95,6 +102,25 @@ module ApiSources
   end
 
   private
+
+  # Recursively mutates a Hash, changing all nested :dTot and :sdTot to 0.
+  #
+  # Rationale: AP provides wrong official data and wrong test data before the
+  # first race. And its Numbers are of the wrong type: they're Strings when
+  # they should be Numbers. Except candidate IDs, which should be Strings.
+  def self.set_del_super_numbers_to_zero(hash)
+    hash.each do |k,v|
+      if v.is_a?(Hash)
+        set_del_super_numbers_to_zero(v)
+      elsif v.is_a?(Array)
+        v.map { |w| set_del_super_numbers_to_zero(w) }
+      elsif k == :dTot
+        hash[k] = '0'
+      elsif k == :sdTot
+        hash[k] = '0'
+      end
+    end
+  end
 
   # Polls @server for the latest version of this key using @cache etag, or
   # fetches on cache miss. Saves the return value to @cache.
