@@ -63,6 +63,7 @@ namespace :deploy do
     end
   end
 
+  desc 'Restart the server (and upload pages ASAP), without a git checkout'
   after :finished, :start_or_restart do
     on roles(:all) do |host|
       execute("#{deploy_to}/current/script/run-production-command exit || true")
