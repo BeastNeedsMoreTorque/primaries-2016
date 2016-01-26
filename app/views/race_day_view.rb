@@ -19,6 +19,7 @@ class RaceDayView < BaseView
   def race_date; "#{race_day.date.strftime('%B %-d, %Y')}"; end
   def body; race_day_copy ? race_day_copy['body'] : nil; end
   def social_img; race_day_copy ? race_day_copy['social_img'] : nil; end
+  def twitter; race_day_copy ? race_day_copy['twitter'] : nil; end
   def pubbed_dt; race_day_copy ? race_day_copy['pubbed'] : nil; end
   def updated_dt; race_day_copy ? race_day_copy['updated'] : nil; end
 
@@ -28,7 +29,8 @@ class RaceDayView < BaseView
       page_description: "#{body}",
       author: "HuffPostPolitics",
       author_twitter: "HuffPostPol",
-      social_image_url: "#{social_img}"
+      social_image_url: "#{social_img}",
+      twitter_desc: "#{twitter}"
     }
   end
 

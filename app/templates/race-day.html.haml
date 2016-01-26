@@ -4,10 +4,11 @@
   %h3.date-hed= race_date
 
   .social-buttons
-    %button.btn-social.btn-facebook
-      %img{src: image_path('facebook.svg')}
-      Share on Facebook
-    %a{target:'blank'}
+    %a.facebook-share{'target': '_blank'}
+      %button.btn-social.btn-facebook
+        %img{src: image_path('facebook.svg')}
+        Share on Facebook
+    %a.twitter-share{'target': '_blank'}
       %button.btn-social.btn-twitter
         %img{src: image_path('twitter.svg')}
         Share on Twitter
@@ -36,4 +37,4 @@
 
 %script{src: asset_path('stats.js')}
 %script{src: asset_path('main.js')}
-%script{src: asset_path('facebook.js')}
+%script{src: asset_path('social.js')}
