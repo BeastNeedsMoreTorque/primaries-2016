@@ -5,7 +5,8 @@
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=46744042133";
+  //js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=46744042133";
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
   fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 
@@ -29,6 +30,7 @@
 	facebookButtons = document.getElementsByClassName("facebook-share");
 	Array.prototype.forEach.call(facebookButtons, function(ele){
 		var url = "https://www.facebook.com/dialog/share?app_id=46744042133&display=popup&href="+encodedUrl+"&redirect_uri=" + encodedUrl;
+		//var url = "https://www.facebook.com/dialog/share?display=popup&href="+encodedUrl+"&redirect_uri=" + encodedUrl;
 		ele.href = url;
 	});
 	twitterButtons = document.getElementsByClassName("twitter-share");
