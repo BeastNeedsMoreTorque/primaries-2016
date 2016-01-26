@@ -4,6 +4,10 @@ body {
   @include body-copy;
 }
 
+a {
+  color: $blue;
+}
+
 .branding {
   width: 282px;
   margin: auto;
