@@ -15,27 +15,4 @@
   	val = metas[i].getAttribute("content")
   	metaObjs[key] = val;
 	}
-
-  fbObj = {
-    method: "feed",
-    link: document.URL,
-    picture: ("og:image" in metaObjs ? metaObjs["og:image"] : ""),
-    name: metaObjs["og:title"],
-    description: metaObjs["og:description"]
-  };
-
-  function postToFacebook() {
-    FB.ui(fbObj);
-  }
-
-  $(".btn-facebook").click(function(e){
-    e.preventDefault();
-    postToFacebook();
-    return false;
-  });
-  $(".fa-facebook").click(function(e){
-    e.preventDefault();
-    postToFacebook();
-    return false;
-  });
 })();

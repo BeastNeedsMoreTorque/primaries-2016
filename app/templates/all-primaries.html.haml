@@ -5,10 +5,11 @@
   %p.intro-date Published Wednesday, Jan. 27, 10:00 AM EDT
 
   .social-buttons
-    %button.btn-social.btn-facebook
-      %img{src: image_path('facebook.svg')}
-      Share on Facebook
-    %a{target:'blank'}
+    %a.facebook-share{'target': '_blank'}
+      %button.btn-social.btn-facebook
+        %img{src: image_path('facebook.svg')}
+        Share on Facebook
+    %a.twitter-share{'target': 'blank'}
       %button.btn-social.btn-twitter
         %img{src: image_path('twitter.svg')}
         Share on Twitter
@@ -28,10 +29,10 @@
   != render(partial: 'state-race-days')
 
   %div.footnotes.footer
-    %p Sources: The Associated Press, Huffpost Pollster
+    %p Sources: The Associated Press, HuffPost Pollster
     %p By Adam Hooper, Hilary Fung, Shane Shifflett, Nicky Forster and Alissa Scheller
 
 %script{src: asset_path('ga.js')}
 %script{src: asset_path('stats.js')}
 %script{src: asset_path('main.js')}
-%script{src: asset_path('facebook.js')}
+%script{src: asset_path('social.js')}

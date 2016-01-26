@@ -14,7 +14,7 @@ var database = {
 var on_database_change = []; // Array of zero-argument callbacks
 
 /**
- * Returns a list of { id, name, n_votes } from a <table class="race">.
+ * Returns a list of { id, name, n_votes } from a <table class="candidates">.
  */
 function extract_candidate_list($party_state_table) {
   var ret = [];
@@ -110,7 +110,7 @@ function add_tooltips() {
     var party_id = $(svg_path).closest('[data-party-id]').attr('data-party-id');
     var state_code = $(svg_path).closest('[data-state-code]').attr('data-state-code');
 
-    var candidates = extract_candidate_list($(svg_path).closest('.party-state').find('table.race'));
+    var candidates = extract_candidate_list($(svg_path).closest('.party-state').find('table.candidates'));
     var candidates_regex = candidates.map(function(c) { return c.id; }).join('|');
 
     var id_to_candidate = {};
@@ -431,12 +431,24 @@ function poll_results() {
     $('.race[data-party-id][data-state-code]').each(function() {
       var party_id = this.getAttribute('data-party-id');
       var state_code = this.getAttribute('data-state-code');
-      els[party_id + '-' + state_code] = {
+      var these_els = els[party_id + '-' + state_code] = {
         inner: $('.race-inner', this),
         n_reporting: $('.metadata .n-reporting', this),
         n_total: $('.metadata .n-total', this),
         last_updated: $('.metadata .last-updated time', this.parentNode)
       };
+
+      var race_status;
+      if (these_els.n_reporting.text() == '0') {
+        race_status = 'future';
+      } else if (these_els.n_reporting.text() == these_els.n_total.text()) {
+        race_status = 'past';
+      } else {
+        race_status = 'present';
+      }
+      $(this)
+        .removeClass('past present future')
+        .addClass(race_status);
     });
   }
 
@@ -550,7 +562,7 @@ $(function() {
     $('time').render_datetime();
 
     // Changing n_trs? Change _race.html.haml as well, or page will scroll while loading
-    $('table.race').ellipsize_table(5, 'ellipsized', '<button>Show more &#9662;</button>', '<button>Show fewer &#9652;</button>');
+    $('table.candidates').ellipsize_table(5, 'ellipsized', '<button>Show more &#9662;</button>', '<button>Show fewer &#9652;</button>');
 
     wait_for_font_then('Source Sans Pro', function() {
       fix_text_heights();

@@ -1,0 +1,62 @@
+@import '../../_variables';
+
+body.race-day table.candidates {
+  @include ellipsized-table;
+
+  border-collapse: collapse;
+  width: 100%;
+
+  td, th {
+    white-space: nowrap;
+    padding: 5px 10px;
+  }
+
+  td {
+    border-bottom: 1px solid #ccc;
+  }
+
+  th {
+    border-bottom: 1px solid black;
+  }
+
+  .pollster {
+    text-align: right;
+  }
+
+  .candidate {
+    text-align: left;
+    width: 100%;
+
+    img {
+      height: 30px;
+      vertical-align: middle;
+      padding-right: .4rem;
+    }
+
+    padding-right: 0; // goes with .n-delegates padding-left: 0;
+  }
+
+  .n-delegates {
+    padding-left: 0; // Every pixel counts. This column's data is thin, so we're sure this won't be ugly
+  }
+
+  .n-votes, .n-delegates {
+    text-align: right;
+  }
+
+  .sparkline {
+    display: inline-block;
+    height: 1.2rem;
+    vertical-align: middle;
+  }
+
+  .percent {
+    display: inline-block;
+    width: 3em;
+  }
+}
+
+body.race-day .race.present table.candidates td,
+body.race-day .race.past table.candidates td {
+  cursor: pointer;
+}

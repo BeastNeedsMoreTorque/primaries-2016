@@ -61,6 +61,10 @@ class Database
     @copy = copy
   end
 
+  def inspect
+    "#<Database>"
+  end
+
   # The "production" Database: today's date, AP's data
   #
   # If AP_TEST=true, we use AP's test data.

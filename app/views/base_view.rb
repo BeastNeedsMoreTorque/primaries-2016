@@ -41,16 +41,6 @@ class BaseView
     "#{Months[date.month - 1]} #{date.day}"
   end
 
-  def meta
-    @meta ||= {
-      page_title: "HuffPost 2016 Election Coverage: Presidential Primaries",
-      page_description: "See which candidates are leading the pack for their party’s nomination, find election dates and watch live updates on election nights at The Huffington Post",
-      author: "HuffPostPolitics",
-      author_twitter: "HuffPostPol",
-      social_image_url: "http://e.huffpost.com/datadot/images/huffpostdata-logo-5aa7b459e55d8d7a91d1250d3fa28954.png"
-    }
-  end
-
   def render_state_race_days_by_date
     render(partial: 'state-race-days-table', locals: {
       columns: [
@@ -84,7 +74,9 @@ class BaseView
   def render(options)
     locals = options[:locals] || {}
     if options[:partial]
-      template = BaseView.load_template("_#{options[:partial]}")
+      parts = options[:partial].split('/')
+      parts[-1] = "_#{parts[-1]}"
+      template = BaseView.load_template(parts.join('/'))
       template.render(self, locals)
     elsif options[:layout]
       raise "You tried to render a layout without a block" if !block_given?

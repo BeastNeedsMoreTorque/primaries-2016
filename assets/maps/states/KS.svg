@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="181" viewBox="0 0 350 181">
+  <path class="state" transform="scale(0.1)" d="M3370,584l7,171 5,195 7,197 8,205 7,187 8,190 -205,8 -201,7 -196,5 -251,6 -280,3 -292,5 -245,0 -293,-1 -243,-4 -244,-5 -245,-4 -193,-4 -219,-6 -218,-6 8,-223 9,-196 11,-293 9,-244 10,-244 8,-243 10,-244 274,10 288,9 241,5 238,5 240,2 242,1 247,0 241,-2 241,-3 245,-5 192,-4 193,-5 60,32 4,22 26,12 47,2 5,-17 38,7 -5,20 28,25 -25,18 34,5 -22,21 -27,-5 0,29 -33,36 2,19 -25,12 31,56 34,26 40,21 -12,37 37,34 -4,18 25,10 14,15 36,-7 35,21 -7,56Z"/>
   <g class="counties" transform="scale(0.1)">
     <path data-fips-int="20001" data-name="Allen County" d="M3186,1155l1,171 -194,6 -2,-171Z"/>
     <path data-fips-int="20003" data-name="Anderson County" d="M3184,957l2,198 -195,6 -1,-198Z"/>
