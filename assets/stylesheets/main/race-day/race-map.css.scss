@@ -1,10 +1,16 @@
-@import '../_variables';
+@import '../../_variables';
 
 .party-state-map {
   svg {
     display: block;
     margin: 0 auto;
     max-width: 100%;
+  }
+
+  path.state {
+    stroke: #ddd;
+    stroke-width: 10; // divided by 10
+    fill: #fff;
   }
 
   g.counties path {
@@ -75,4 +81,13 @@
   path.candidate-did-badly {
     fill: $undecided;
   }
+}
+
+.race.future .party-state-map g.counties {
+  display: none;
+}
+
+.race.present .party-state-map path.state,
+.race.past .party-state-map path.state {
+  display: none;
 }

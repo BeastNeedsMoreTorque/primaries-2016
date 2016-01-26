@@ -394,6 +394,10 @@ render_state = (state_code, features, callback) ->
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"#{width}\" height=\"#{height}\" viewBox=\"0 0 #{width} #{height}\">"
   ]
 
+  d = path(topojson.mesh(topology, topology.objects.counties, (a, b) -> a == b))
+  d = compress_svg_path(d)
+  data.push('  <path class="state" transform="scale(0.1)" d="' + d + '"/>')
+
   data.push('  <g class="counties" transform="scale(0.1)">')
   for geometry in topology.objects.counties.geometries
     # Minnesota has a weird FIPS code, 27000, for Lake Superior

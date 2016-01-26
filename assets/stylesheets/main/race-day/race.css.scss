@@ -1,0 +1,140 @@
+@import '../../_variables';
+
+body.race-day .race {
+  margin-bottom: 2rem;
+
+  h2, h3 {
+    text-align: center;
+  }
+
+  .race-status {
+    text-align: center;
+
+    .status-past, .status-present, .status-future {
+      display: none;
+      padding: .5rem 1rem;
+      margin: .5rem auto;
+    }
+
+    .status-past, .status-future {
+      font-style: italic;
+    }
+
+    .status-present {
+      background: $red;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+  }
+
+  // Show the current status
+  &.past .race-status .status-past,
+  &.present .race-status .status-present,
+  &.future .race-status .status-future { display: inline-block; }
+
+  .race-name {
+    margin: 5px 0 15px;
+  }
+
+  .party-state-map {
+    position: relative;
+  }
+
+  .race-tooltip {
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 16rem;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px #ccc;
+    padding: 0;
+    background: white;
+
+    a.close {
+      display: none; // except when this is opened via touch
+      position: absolute;
+      top: 0;
+      right: 0;
+      line-height: 1;
+      padding: .5rem 1rem;
+    }
+    h4 {
+      font-size: 1;
+      line-height: 1;
+      margin: 0;
+      padding: .5rem 1rem;
+      border-bottom: 1px solid #ccc;
+      background: #eee;
+    }
+    table {
+      box-sizing: border-box;
+      margin: .5rem 1rem;
+      padding: 0;
+      border-collapse: collapse;
+    }
+    th {
+      border-bottom: 1px solid #ccc;
+    }
+    td {
+      border-top: 1px dotted #ccc;
+    }
+    p.precincts {
+      margin: 0 1rem;
+    }
+    p.last-updated {
+      margin: .25rem 1rem 1rem;
+    }
+    .candidate {
+      width: 100%;
+      padding-right: 5px;
+    }
+    .n-votes {
+      text-align: right;
+      padding-left: 5px;
+    }
+    .precincts, .last-updated {
+      margin: 0;
+      font-size: 0.8em;
+      color: #999;
+    }
+  }
+
+  .race-tooltip.opened-from-touch a.close {
+    display: block;
+  }
+
+  &[data-party-id=Dem] {
+    .sparkline path {
+      stroke: $strongDem;
+    }
+
+    tr.highlight-on-map td {
+      color: white;
+      background: $strongDem;
+      font-weight: bold;
+
+      .sparkline path {
+        stroke: white;
+        stroke-width: 6;
+      }
+    }
+  }
+
+  &[data-party-id=GOP] {
+    .sparkline path {
+      stroke: $strongGOP;
+    }
+
+    tr.highlight-on-map td {
+      color: white;
+      background: $strongGOP;
+      font-weight: bold;
+
+      .sparkline path {
+        stroke: white;
+        stroke-width: 5;
+      }
+    }
+  }
+}

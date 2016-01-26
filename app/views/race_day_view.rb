@@ -48,8 +48,6 @@ class RaceDayView < BaseView
       .first
   end
 
-  def race_day_states; race_day.states.sort_by(&:name); end
-
   def race_day_copy
     @race_day_copy ||= copy
       .fetch('primaries', {})
