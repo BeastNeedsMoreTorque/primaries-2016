@@ -2,7 +2,6 @@
 
 $(function() {
   $('a[href="#state-race-days-by-date"]').click(function(ev) {
-    console.log(ev);
     ev.preventDefault();
     switch_to('date');
   });
