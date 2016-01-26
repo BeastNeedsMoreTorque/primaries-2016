@@ -11,6 +11,8 @@ class AllPrimariesView < BaseView
   def social_img; ""; end #use asset path
   def page_desc; "See which candidates are leading the pack for their party’s nomination, find election dates and watch live updates on election nights at The Huffington Post"; end
   def page_title; "HuffPost 2016 Election Coverage: Presidential Primaries"; end
+  def updated_dt; nil; end
+  def pubbed_dt; nil; end
 
   def dem_candidates; database.candidates.select{ |cd| cd.party_id == 'Dem'}; end
   def gop_candidates; database.candidates.select{ |cd| cd.party_id == 'GOP'}; end

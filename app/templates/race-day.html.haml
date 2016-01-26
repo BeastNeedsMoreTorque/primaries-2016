@@ -23,14 +23,6 @@
               - else
                 != render(partial: 'race-day/no-races', locals: { state: state, party: party })
 
-  %div.footnotes.footer
-    %p Sources: The Associated Press, Huffpost Pollster
-    -if updated_dt
-      %p= "Page published #{pubbed_dt} and last updated #{updated_dt}."
-    -else
-      %p= "Page published #{pubbed_dt}."
-    %p By Adam Hooper, Hilary Fung, Shane Shifflett, Nicky Forster and Alissa Scheller
-
 != render(partial: 'race-day/race-day-nav')
 
 %script{src: asset_path('stats.js')}

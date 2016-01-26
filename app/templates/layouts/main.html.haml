@@ -35,8 +35,18 @@
     != main
 
     %footer
-      :plain
-        &copy; 2016 TheHuffingtonPost.com, Inc. |
-        <a href="http://privacy.aol.com">Privacy</a> |
-        <span class="hpdatalink"><a href="http://data.huffingtonpost.com">HuffPost Data</a></span> |
-        Part of <strong>HPMG News</strong>
+      %p Sources: The Associated Press, HuffPost Pollster
+      %p By Adam Hooper, Hilary Fung, Shane Shifflett, Nicky Forster and Alissa Scheller
+
+      -if pubbed_dt
+        -if updated_dt
+          %p= "Page published #{pubbed_dt} and last updated #{updated_dt}"
+        -else
+          %p= "Page published #{pubbed_dt}"
+
+      %p
+        :plain
+          &copy; 2016 TheHuffingtonPost.com, Inc. &bull;
+          <a href="http://privacy.aol.com">Privacy</a> &bull;
+          <span class="hpdatalink"><a href="http://data.huffingtonpost.com">HuffPost Data</a></span> &bull;
+          Part of <strong>HPMG News</strong>
