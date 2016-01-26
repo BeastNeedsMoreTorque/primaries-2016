@@ -431,12 +431,24 @@ function poll_results() {
     $('.race[data-party-id][data-state-code]').each(function() {
       var party_id = this.getAttribute('data-party-id');
       var state_code = this.getAttribute('data-state-code');
-      els[party_id + '-' + state_code] = {
+      var these_els = els[party_id + '-' + state_code] = {
         inner: $('.race-inner', this),
         n_reporting: $('.metadata .n-reporting', this),
         n_total: $('.metadata .n-total', this),
         last_updated: $('.metadata .last-updated time', this.parentNode)
       };
+
+      var race_status;
+      if (these_els.n_reporting.text() == '0') {
+        race_status = 'future';
+      } else if (these_els.n_reporting.text() == these_els.n_total.text()) {
+        race_status = 'past';
+      } else {
+        race_status = 'present';
+      }
+      $(this)
+        .removeClass('past present future')
+        .addClass(race_status);
     });
   }
 

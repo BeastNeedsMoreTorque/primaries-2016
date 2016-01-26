@@ -13,7 +13,6 @@ body.race-day table.candidates {
 
   td {
     border-bottom: 1px solid #ccc;
-    cursor: pointer;
   }
 
   th {
@@ -55,4 +54,9 @@ body.race-day table.candidates {
     display: inline-block;
     width: 3em;
   }
+}
+
+body.race-day .race.present table.candidates td,
+body.race-day .race.past table.candidates td {
+  cursor: pointer;
 }
