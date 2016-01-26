@@ -84,7 +84,9 @@ class BaseView
   def render(options)
     locals = options[:locals] || {}
     if options[:partial]
-      template = BaseView.load_template("_#{options[:partial]}")
+      parts = options[:partial].split('/')
+      parts[-1] = "_#{parts[-1]}"
+      template = BaseView.load_template(parts.join('/'))
       template.render(self, locals)
     elsif options[:layout]
       raise "You tried to render a layout without a block" if !block_given?
