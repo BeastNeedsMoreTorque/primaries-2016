@@ -3,15 +3,7 @@
   %h1= hed
   %h3.date-hed= race_date
 
-  .social-buttons
-    %a.facebook-share{'target': '_blank'}
-      %span.btn-social.btn-facebook
-        %img{src: image_path('facebook.svg')}
-        Share on Facebook
-    %a.twitter-share{'target': '_blank'}
-      %span.btn-social.btn-twitter
-        %img{src: image_path('twitter.svg')}
-        Share on Twitter
+  != render(partial: 'share-buttons')
 
   - if body
     %p.intro-copy= body

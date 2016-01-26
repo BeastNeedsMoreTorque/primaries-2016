@@ -4,15 +4,7 @@
   %p.dek= body
   %p.intro-date Published Wednesday, Jan. 27, 10:00 AM EDT
 
-  .social-buttons
-    %a.facebook-share{'target': '_blank'}
-      %button.btn-social.btn-facebook
-        %img{src: image_path('facebook.svg')}
-        Share on Facebook
-    %a.twitter-share{'target': 'blank'}
-      %button.btn-social.btn-twitter
-        %img{src: image_path('twitter.svg')}
-        Share on Twitter
+  != render(partial: 'share-buttons')
 
   %a.teaser{href: '/2016/primaries/2016-02-01'}
     %span.label Coming Soon
