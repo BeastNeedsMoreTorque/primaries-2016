@@ -40,7 +40,7 @@ RaceDays::HardCodedData = {
   '2016-05-07': { Dem: [ :GU ] },
   '2016-05-10': { Dem: [ :WV ], GOP: [ :NE, :WV ] }, # AP says Dem has NE, but it's an "advisory" race
   '2016-05-17': { Dem: [ :KY, :OR ], GOP: [ :OR ] },
-  '2016-05-24': { Dem: [ :WA ], GOP: [ :WA ] },
+  '2016-05-24': { GOP: [ :WA ] }, # AP says Dem has WA, but it's 2016-03-26. WSJ and NYT agree
   '2016-06-04': { Dem: [ :VI ] },
   '2016-06-05': { Dem: [ :PR ] },
   '2016-06-07': { Dem: [ :CA, :MT, :NJ, :NM, :ND, :SD ], GOP: [ :CA, :MT, :NJ, :NM, :SD ] },
