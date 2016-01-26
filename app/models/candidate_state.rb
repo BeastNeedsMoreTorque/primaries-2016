@@ -18,7 +18,12 @@ CandidateState = Struct.new(:database, :candidate_id, :state_code, :ballot_order
       if c2 != 0
         c2
       else
-        ballot_order - rhs.ballot_order
+        c3 = (rhs.poll_percent || 0) - (poll_percent || 0)
+        if c3 != 0
+          c3
+        else
+          ballot_order - rhs.ballot_order
+        end
       end
     end
   end
