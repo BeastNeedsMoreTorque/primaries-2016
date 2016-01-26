@@ -1,6 +1,6 @@
 .race-day-nav
-  - if previous_race_day
-    .previous
+  .previous
+    - if previous_race_day
       %a.previous-inner{href: "/2016/primaries/#{previous_race_day.id}"}
         %span.label Previous race
         %span.date « #{previous_race_day.date.strftime('%B %-d')}
