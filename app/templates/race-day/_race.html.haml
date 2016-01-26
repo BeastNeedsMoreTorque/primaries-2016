@@ -1,4 +1,4 @@
-.race{id: "#{race.state_code}-#{race.party_id}", 'data-party-id': race.party_id, 'data-state-code': race.state_code, class: race.when_race_happens}
+.race{id: "#{race.state_code}-#{race.party_id}", 'data-party-id': race.party_id, 'data-state-code': race.state_code, class: "#{race.when_race_happens} #{race.has_delegate_counts && 'has-delegate-counts' || ''}"}
   %h3.race-name= "#{race.state_name} #{race.party_adjective} #{race.race_type}"
   .n-delegates
     %span.dots{class: "dots-#{race.party_id}"}= "\u200b•" * race.n_delegates

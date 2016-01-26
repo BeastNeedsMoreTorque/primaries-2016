@@ -29,6 +29,12 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def enabled?; race_day && race_day.enabled?; end
   def n_delegates; state.n_delegates(party_id); end
 
+  # Returns true iff at least one candidate has a delegate -- pledged or
+  # unpledged.
+  def has_delegate_counts
+    candidate_states.map(&:n_delegates).reduce(0, :+) != 0
+  end
+
   # Determines whether a race is 'future', 'present' or 'past'.
   #
   # These times are relative to the _user_'s clock. In other words, if a race

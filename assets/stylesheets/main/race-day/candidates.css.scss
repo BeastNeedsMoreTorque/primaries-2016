@@ -56,6 +56,8 @@ body.race-day table.candidates {
   }
 }
 
+body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates { display: none; }
+
 body.race-day .race.present table.candidates td,
 body.race-day .race.past table.candidates td {
   cursor: pointer;
