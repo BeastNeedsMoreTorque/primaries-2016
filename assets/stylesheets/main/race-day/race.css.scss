@@ -7,6 +7,18 @@ body.race-day .race {
     text-align: center;
   }
 
+  .n-delegates {
+    text-align: center;
+    .dots-Dem { color: $strongDem; }
+    .dots-GOP { color: $strongGOP; }
+
+    .n-delegates-int {
+      display: block;
+      color: $muted;
+      font-size: .8rem;
+    }
+  }
+
   .race-status {
     text-align: center;
 
