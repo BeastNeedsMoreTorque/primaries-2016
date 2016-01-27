@@ -32,7 +32,7 @@
             %td.pollster
               - if candidate_state.poll_sparkline && !candidate_state.poll_sparkline.empty?
                 .sparkline!= candidate_state.poll_sparkline.to_svg
-              %span.percent= candidate_state.poll_percent ? "#{candidate_state.poll_percent}%" : ""
+              %span.percent= format_percent_or_nil(candidate_state.poll_percent)
           - n_unellipsized -= 1
     -# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
     - if n_unellipsized < 0

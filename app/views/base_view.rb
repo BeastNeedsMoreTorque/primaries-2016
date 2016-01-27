@@ -36,6 +36,15 @@ class BaseView
     datetime.new_offset(0).iso8601.sub('+00:00', '.000Z')
   end
 
+  # nil -> "N/A"; 32.4 -> "32.4%"
+  def format_percent_or_nil(percent_or_nil)
+    if percent_or_nil.nil?
+      'N/A'
+    else
+      "#{percent_or_nil}%"
+    end
+  end
+
   # 2016-01-19 -> "Jan 19"
   def format_date(date)
     "#{Months[date.month - 1]} #{date.day}"
