@@ -2,9 +2,6 @@
 
 $splash-ele-bg: #eee;
 
-$map-countdown-width: 220px;
-$map-countdown-padding: 10px;
-
 $party-container-height: 110px;
 
 body {
@@ -39,82 +36,51 @@ h1, h2, h3, h4{
 	}
 }
 
-.countdown-map-container {
-	width: $map-countdown-width;
+.map-container {
+  width: 13rem;
+  padding: 0 .75rem;
 	border-right: 1px solid black;
-	padding: $map-countdown-padding;
+	text-align: center;
+
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center;
+
 	h3,h5 {
 		margin: 0;
 		text-align: center;
 	}
-}
 
-.countdown-container {
-	table {
-		background-color: $splash-ele-bg;
-		margin: 0 auto;
-    border-collapse: collapse;
-    border-spacing: 0;
-		tr {
-			font-weight: bold;
-			text-align: center;
-			td {
-				padding: 3px;
-				border: 1px solid #999;
-			}
-		}
-		tr:first-child {
-			font-size: 30px;
-		}
-	}	
-}
-
-.map-container {
-	margin-top: 10px;
-	width: 100%;
-	text-align: center;
 	.map {
 		svg {
 			width: 100%;
 		  height: 100%;
+
+      path.state { display: none; }
+
 		  g.counties path {
 		    stroke: white;
-		    stroke-width: 10; // divided by 10
+		    stroke-width: 15; // divided by 10, then squished
 		    fill: #eee;
 		    &.has-results {
 		    	fill: #999;
 		    }
 		  }
-  text {
-    // JavaScript will position this text correctly; only JavaScript can
-    // measure the width, because only JavaScript has the font.
-    fill: none;
-    font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
-    pointer-events: none;
-    font-size: 23px;
 
-    // JavaScript doesn't know where the text's baseline is, and that's the `y`
-    // coordinate by default. Make (x,y) point to the lower-left of the text.
-    dominant-baseline: text-before-edge;
-
-    &.background {
-      fill: none;
-      stroke: white;
-      stroke-width: 3px;
-    }
-
-    &.foreground {
-      fill: #333;
-    }
-  }
-
-
-
+      text {
+        @include svg-city-label();
+        font-size: 23px; // the image is squished quite small; bump the font.
+      }
 		}
 	}
+
 	img {
 		width: 100%;
 	}
+
 	.legend {
 		font-size: 10px;
 		.container {

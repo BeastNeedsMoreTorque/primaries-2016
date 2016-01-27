@@ -37,25 +37,8 @@
   }
 
   text {
-    // JavaScript will position this text correctly; only JavaScript can
-    // measure the width, because only JavaScript has the font.
-    fill: none;
-    font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
+    @include svg-city-label();
     font-size: 14px;
-
-    // JavaScript doesn't know where the text's baseline is, and that's the `y`
-    // coordinate by default. Make (x,y) point to the lower-left of the text.
-    dominant-baseline: text-before-edge;
-
-    &.background {
-      fill: none;
-      stroke: white;
-      stroke-width: 3px;
-    }
-
-    &.foreground {
-      fill: #333;
-    }
   }
 }
 

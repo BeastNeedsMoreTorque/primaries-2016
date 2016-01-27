@@ -2,43 +2,9 @@
 //= require './wait_for_font_then.js'
 //= require './position_svg_cities.js'
 $(function() {
-  var iowa_polls_close = new Date('2/2/2016 3:00:00 AM UTC');
-  function timeTill(end) {
-    var timeDifference = Date.parse(end) - Date.parse(new Date());
-    if(timeDifference < 0){
-      $(".countdown-container h3").text("POLLS CLOSED FOR")
-      timeDifference = timeDifference;
-    } else {
-      $(".countdown-container h3").text("POLLS CLOSE IN")
-    }
+  new pym.Child();
 
-    return {
-      'total': timeDifference,
-      'hours': Math.floor((timeDifference / (1000 * 60 * 60)) % 24),
-      'minutes': Math.floor((timeDifference / 1000 / 60) % 60),
-      'seconds': Math.floor((timeDifference / 1000) % 60)
-    };
-  }
-  function initClock(id, starttime){
-    var countdown = document.getElementById(id);
-    var hSpan = countdown.querySelector('.hours');
-    var mSpan = countdown.querySelector('.minutes');
-    var sSpan = countdown.querySelector('.seconds');
-    function updateCountdown() {
-      var time = timeTill(starttime);
-      hSpan.innerHTML = ('0' + time.hours).slice(-2)
-      mSpan.innerHTML = ('0' + time.minutes).slice(-2);
-      sSpan.innerHTML = ('0' + time.seconds).slice(-2);
-
-      if(time.total <= 0) {
-        clearInterval(timeinterval);
-      }
-    }
-    updateCountdown();
-    var timeinterval = setInterval(updateCountdown, 1000);
-  }
   function fillSvg(data){
-    document.getElementsByTagName("svg");
     var countiesReporting = 0;
     var totalPrecincts = 0;
     var precinctsReporting = 0;
@@ -53,19 +19,18 @@ $(function() {
         $(this).addClass("has-results");
       }
     });
-    precinctsPct = ((precinctsReporting/totalPrecincts)*100).toFixed(0) + "%";
+    var precinctsPct = ((precinctsReporting/totalPrecincts)*100).toFixed(0) + "%";
     $("#unreported-counties").text(totalCounties - countiesReporting)
     $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " OF PRECINCTS)</span>");
   }
-  new pym.Child();
-  wait_for_font_then("Source Sans Pro",function(){
+
+  wait_for_font_then("Source Sans Pro", function(){
     $("svg").position_svg_cities();
+
+    $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
+      fillSvg(json);
+    })
+      .fail(function() { console.warn('Failed to load', this); })
+      //.always(function() { window.setTimeout(poll_results, interval_ms); });
   });
-  $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
-    fillSvg(json);
-  })
-  .fail(function() { console.warn('Failed to load', this); })
-  //.always(function() { window.setTimeout(poll_results, interval_ms); });
-
-
 });

@@ -41,8 +41,8 @@ function position_svg_cities() {
 
     return [
       [ 'above', x_mid, y_above ],
-      [ 'right', x_right, y_mid ],
       [ 'left', x_left, y_mid ],
+      [ 'right', x_right, y_mid ],
       [ 'below', x_mid, y_below ],
       [ 'above-right', x_right, y_above ],
       [ 'above-left', x_left, y_above ],

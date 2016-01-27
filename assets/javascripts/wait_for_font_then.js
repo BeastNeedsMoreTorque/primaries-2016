@@ -22,8 +22,10 @@ function wait_for_font_then(font_name, callback) {
   $span2.remove();
 
   if (loaded) {
+    console.log('loaded');
     callback();
   } else {
+    console.log('wait');
     window.setTimeout(function() { wait_for_font_then(font_name, callback); }, 50);
   }
 }
