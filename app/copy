@@ -28,39 +28,49 @@ twitter: Check out HuffPost's 2016 primaries dashboard to find dates and watch l
 
 
 hed: Why vote counts and delegate counts don’t always match
-body:
-If you’re reading this, you’re probably wondering why a candidate got lots of votes and few delegates (or the other way around).
+body_markdown:
+In the primaries, each contender aims for the most _delegates_, not the most _votes_.
 
 
-It’s complicated.
+A _delegate_ is a person who will attend the Democratic or Republican National Convention in July. Each delegate will vote for a presidential candidate.
 
 
-First let’s be clear about what a delegate _is_. A delegate is a person who will attend the Democratic National Convention or Republican National Convention. Both conventions are in July 2016. Each delegate will vote for a presidential candidate.
+### Who becomes a delegate?
 
 
-Who becomes a delegate?
+When you vote in a primary or caucus, you’re helping to select a _pledged_ delegate. Pledged delegates have promised to vote for a specific candidate in the convention.
 
 
-Each party in each state chooses _pledged_ and _unpledged_ delegates.
+The rules that translate votes into delegates vary by party and state.
 
 
-If you vote in a primary or caucus, you’re helping to select a _pledged_ delegate. Votes are treated differently by each party in each state. Some are simple: Republican delegates in Florida will all be pledged to the candidate who gets the most votes. Others are indirect: Democratic caucus-goers in Iowa will decide (by standing in the right place) who will attend the county conventions; those people vote for representatives in the district conventions; _those_ representatives choose _some_ delegates, and they also choose representatives to the state-level convention to choose the rest.
+Some rules are simple: Republican delegates in Florida will all be pledged to the candidate who gets the most votes.
 
 
-s are chosen by voters. Each pledges to vote for a particular presidential candidate at the convention.
+Other rules are indirect: Democratic caucus-goers in Iowa select people to attend county conventions; county conventions select people to attend district conventions; district conventions select people to attend the state convention; and the _state_ convention selects pledged delegates. (Okay, that wasn’t confusing enough: the district conventions select some pledged delegates, too.) The process takes four and a half months.
 
 
-Voting rules for pledged delegates vary by state. 
+In short: pledged delegate counts usually relate to vote counts, more or less.
 
 
-_Unpledged_ delegates (so-called “super-delegates”) are usually party leaders and elected officials who get an automatic ticket to the convention. They will vote for the presidential candidate _they_ choose, regardless of how the party voted in their state.
+Then there are _unpledged_ delegates (so-called “super-delegates”). They’re usually party leaders and elected officials. They will vote for the presidential candidate _they_ choose, regardless of the outcomes of their states’ primaries.
 
 
+### What delegate counts does Huffington Post report?
 
 
+We report estimates from the Associated Press.
 
 
-Nationally, Democrats and Republicans set a few rules. They tell each state how many delegates.
+We count _pledged_ delegates when a party reports them. But if a vote has happened and the party hasn’t given any official results yet, we may report a prediction based on the vote result and party rules.
+
+
+We count _unpledged_ delegates when they declare, on the record, that they will vote for a candidate.
+
+
+We report the sum.
+
+
 :end
 
 
@@ -175,7 +185,7 @@ text: Hillary Clinton has enjoyed a lead in the Iowa caucus polls, but Bernie Sa
 
 state: IA
 party: GOP
-text: The Republican contest in Iowa has seen a few candidates surge and fall, but headed into the caucus it’s Ted Cruz who is giving Donald Trump a run for his money. Polls are waffling about which one is ahead, and HuffPost Pollster’s average has them practically tied. But don’t dismiss Marco Rubio. He’s solidly in third place, according to the polls. All other candidates are averaging single digits. 
+text: The Republican contest in Iowa has seen a few candidates surge and fall, but headed into the caucus it’s Ted Cruz who is giving Donald Trump a run for his money. Trump is ahead in the HuffPost Pollster average, but the race is still tight.. But don’t dismiss Marco Rubio. He’s solidly in third place, according to the polls. All other candidates are averaging single digits. 
 :end
 
 
