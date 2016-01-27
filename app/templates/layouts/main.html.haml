@@ -14,7 +14,11 @@
     %meta{property: 'og:type', content: 'article'}
     %meta{property: 'og:site_name', content: 'The Huffington Post'}
     %meta{property: 'og:url', content: "http://elections.huffingtonpost.com/#{output_path[0 .. -5]}"}
-    %meta{property: 'og:image', content: "http:#{meta[:social_image_url]}"}
+
+    - if meta[:social_image_url] =~ /^https?:\/\//
+      %meta{property: 'og:image', content: meta[:social_image_url]}
+    - else
+      / og:image omitted because meta[:social_image_url] is a relative URL
 
     %meta{property: 'article:publisher', content: 'HuffingtonPost'}
     %meta{property: 'article:author', content: meta[:author]}

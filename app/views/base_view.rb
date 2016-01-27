@@ -99,6 +99,23 @@ class BaseView
   def image_path(path); Assets.image_path(path); end
   def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
 
+  # Tries to return an absolute path to the image -- that is, with the protocol.
+  #
+  # Falls back to image_path(path).
+  #
+  # Logic:
+  #
+  # * If ASSET_HOST is set, return an absolute path, with protocol `http`
+  # * Otherwise, return image_path(path)
+  def absolute_image_path_if_possible(path)
+    url = image_path(path)
+    if url[0, 2] == '//'
+      "http:#{url}"
+    else
+      url
+    end
+  end
+
   # Returns inline <svg> data from the given `path`
   def map_svg(path)
     return '' if %w(states/DA).include?(path)

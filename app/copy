@@ -29,6 +29,8 @@ twitter: Check out HuffPost's 2016 primaries dashboard to find dates and watch l
 
 hed: Why vote counts and delegate counts don’t always match
 body_markdown:
+
+
 In the primaries, each contender aims for the most _delegates_, not the most _votes_.
 
 
@@ -44,13 +46,13 @@ When you vote in a primary or caucus, you’re helping to select a _pledged_ del
 The rules that translate votes into delegates vary by party and state.
 
 
-Some rules are simple: Republican delegates in Florida will all be pledged to the candidate who gets the most votes.
+Some rules are simple: All of Republican delegates in Florida will be pledged to the candidate who gets the most votes.
 
 
-Other rules are indirect: Democratic caucus-goers in Iowa select people to attend county conventions; county conventions select people to attend district conventions; district conventions select people to attend the state convention; and the _state_ convention selects pledged delegates. (Okay, that wasn’t confusing enough: the district conventions select some pledged delegates, too.) The process takes four and a half months.
+Other rules are indirect: Democratic caucus-goers in Iowa select people to attend county conventions; county conventions select people to attend district conventions; district conventions select people to attend the state convention; and the _state_ convention selects pledged delegates. (Okay, if that wasn’t confusing enough: The district conventions select some pledged delegates, too.) The process takes four and a half months.
 
 
-In short: pledged delegate counts usually relate to vote counts, more or less.
+In short: the pledged delegate allocation doesn’t always mirror the vote count..
 
 
 Then there are _unpledged_ delegates (so-called “super-delegates”). They’re usually party leaders and elected officials. They will vote for the presidential candidate _they_ choose, regardless of the outcomes of their states’ primaries.
@@ -68,7 +70,7 @@ We count _pledged_ delegates when a party reports them. But if a vote has happen
 We count _unpledged_ delegates when they declare, on the record, that they will vote for a candidate.
 
 
-We report the sum.
+We report the sum of the pledged and unpledged delegates in the totals at the top of the page.
 
 
 :end
@@ -159,7 +161,6 @@ id: 45650
 date: 2016-02-01
 title: Iowa Caucuses
 pubbed: Tuesday, Jan. 26, 6:30 PM EST
-social_img: http://e.huffpost.com/datadot/images/huffpostdata-logo-5aa7b459e55d8d7a91d1250d3fa28954.png
 body: Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls. Tune in on election night for live results.
 twitter: Check back on Feb. 1 for live election results results in Iowa
 :end
@@ -168,7 +169,6 @@ twitter: Check back on Feb. 1 for live election results results in Iowa
 date: 2016-02-09
 title: New Hampshire Primaries
 pubbed: Tuesday, Jan. 26, 6:30 PM EST
-social_img: http://e.huffpost.com/datadot/images/huffpostdata-logo-5aa7b459e55d8d7a91d1250d3fa28954.png
 body: Only eight days after the first contest in Iowa, New Hampshire voters will head to the polls to cast their ballots. Check here to see which candidates are leading, and tune in on election night for live results.
 twitter: Check back on Feb. 9 for live election results in New Hampshire
 :end

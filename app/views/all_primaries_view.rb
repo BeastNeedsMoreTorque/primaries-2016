@@ -8,7 +8,7 @@ class AllPrimariesView < BaseView
   def body; copy['primaries']['landing-page']['body']; end
 
   def tweet; "Check out HuffPost's 2016 primaries dashboard to find dates and watch live updates on election nights"; end 
-  def social_img; image_path('share.png'); end
+  def social_img; absolute_image_path_if_possible('share.png'); end
   def page_desc; "See which candidates are leading the pack for their party’s nomination, find election dates and watch live updates on election nights at The Huffington Post"; end
   def page_title; "HuffPost 2016 Election Coverage: Presidential Primaries"; end
   def updated_dt; nil; end
