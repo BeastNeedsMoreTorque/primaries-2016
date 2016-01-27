@@ -13,6 +13,6 @@
 module ServerSchedule
   TimeoutInS = 30 # election going on!
   RefreshDelegates = true
-  RefreshPrimariesRaceDays = [ '2016-02-09' ]
+  RefreshPrimariesRaceDays = [ '2016-02-01' ]
   RefreshPollsterPrimaries = true
 end
