@@ -11,8 +11,8 @@
 # This is a bit hack-y: we're communicating with the production server via git
 # commits. At this phase of development, it seems right.
 module ServerSchedule
-  TimeoutInS = 30 # election going on!
+  TimeoutInS = 3600 # Once a day
   RefreshDelegates = true
-  RefreshPrimariesRaceDays = [ '2016-02-01' ]
+  RefreshPrimariesRaceDays = []
   RefreshPollsterPrimaries = true
 end
