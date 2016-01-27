@@ -2,8 +2,6 @@
 //= require './wait_for_font_then.js'
 //= require './position_svg_cities.js'
 $(function() {
-  new pym.Child();
-
   function fillSvg(data){
     var countiesReporting = 0;
     var totalPrecincts = 0;

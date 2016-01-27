@@ -16,7 +16,6 @@ module Assets
     javascripts/main.js
     javascripts/splash.js
     javascripts/primary-right-rail.js
-    javascripts/social.js
     stylesheets/main.css
     stylesheets/splash.css
     stylesheets/primaries-right-rail.css

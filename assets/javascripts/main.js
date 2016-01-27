@@ -3,3 +3,7 @@
 //= require './state-race-days.js'
 //= require './race-day.js'
 //= require './all-primaries.js'
+//
+//= require './social.js'
+//= require './ga.js'
+//= require './stats.js'

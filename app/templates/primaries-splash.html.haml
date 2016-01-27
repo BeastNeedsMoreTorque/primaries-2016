@@ -79,6 +79,7 @@
                         %td= format_int(cd_state.n_votes)
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
-  %script{src: asset_path('splash.js')}
-  %script{src: asset_path('ga.js')}
-
+  %script
+    new pym.Child();
+  %script{src: asset_path('splash.js'), async: true}
+  %script{src: asset_path('ga.js'), async: true}
