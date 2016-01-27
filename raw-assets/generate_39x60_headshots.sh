@@ -18,9 +18,10 @@ for path in $(ls $IN_DIR/*.png); do
   set -x
   convert "$IN_DIR/$basename" \
     -bordercolor transparent -border 5 \
-    \( +clone -channel A -blur 10x5 -level 0,30% +channel +level-colors white \) \
+    \( +clone -channel A -blur 7x7 -level 0,10% +channel +level-colors white \) \
     -compose DstOver -composite \
     -thumbnail 48x72 \
+    -define png:include-chunk=none \
     "$OUT_DIR/$basename"
   set +x
 done
