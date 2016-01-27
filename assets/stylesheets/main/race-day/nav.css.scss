@@ -24,6 +24,7 @@
   .calendar {
     text-align: center;
     vertical-align: middle;
+    height: 80px;
   }
 
   .previous, .next, .calendar {
@@ -36,7 +37,6 @@
     .previous, .next {
       width: 50%;
     }
-
     .calendar {
       display: none;
     }
@@ -84,7 +84,7 @@
   }
 
   .calendar a {
-    padding: 18px;
+    padding: 30px 18px;
     @media(max-width: 600px) {
       padding: 10px;
     }
