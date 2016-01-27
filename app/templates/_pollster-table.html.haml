@@ -8,7 +8,7 @@
           .long-table-heading National Polling Average
     %tbody
       - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
-      - for candidate in party.candidates.sort_by(&:poll_percent).reverse
+      - for candidate in party.candidates.sort_by{|c| -(c.poll_percent or 0)}
         %tr{class: n_unellipsized <= 0 ? 'ellipsized' : ''}
           %td.candidate
             %img{src: image_path("#{candidate.slug}.png"), alt: ''}

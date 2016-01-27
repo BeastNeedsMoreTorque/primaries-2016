@@ -11,8 +11,8 @@
 # This is a bit hack-y: we're communicating with the production server via git
 # commits. At this phase of development, it seems right.
 module ServerSchedule
-  TimeoutInS = 3600 # once per hour -- nothing's happening, except Pollster
+  TimeoutInS = 30 # election going on!
   RefreshDelegates = true
-  RefreshPrimariesRaceDays = [ '2016-02-01', '2016-02-09' ]
+  RefreshPrimariesRaceDays = [ '2016-02-01' ]
   RefreshPollsterPrimaries = true
 end

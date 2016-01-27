@@ -167,7 +167,7 @@ class Database
               seen_county_ids.add(county_id)
             end
 
-            county_parties << [ county_id, party_id, n_precincts_reporting, n_precincts_reporting, last_updated ]
+            county_parties << [ county_id, party_id, n_precincts_reporting, n_precincts_total, last_updated ]
 
             for candidate_hash in reporting_unit[:candidates]
               candidate_id = candidate_hash[:polID]

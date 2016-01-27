@@ -1,7 +1,5 @@
 !!! 5
-- dem_list = ['Clinton', 'Sanders', "O'Malley"]
-- gop_list = ["Trump", "Christie", "Bush", "Cruz", "Paul", "Rubio", "Carson", "Huckabee", "Kasich", "Fiorina", "Santorum", "Gilmore"]
-- preview = true
+- preview = !true
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
@@ -43,13 +41,12 @@
             %div.container
               %div.finished
               %div
-                %span#counties-val
-                COUNTIES REPORTING
+                %span#counties-val= "COUNTIES REPORTING"
             %div.container
               %div.unfinished
               %div
                 %span#unreported-counties
-                COUNITES NOT FULLY REPORTING
+                COUNTIES NOT FULLY REPORTING
       %div.parties-container
         -parties.each do |party|
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
@@ -88,7 +85,7 @@
               - race.candidate_states.each_with_index do |cd_state, idx|
                 - cd = cd_state.candidate
                 - highlight_class = ((cd.name == leading_republican.name or cd.name == leading_democrat.name) and !preview) ? "leader" : ""
-                - if (party_abbrev == 'gop' and gop_list.include? cd.name) or (party_abbrev == 'dem' and dem_list.include? cd.name)
+                - if (party_abbrev == 'gop' ) or (party_abbrev == 'dem')
                   %div.candidate{'data-candidate-id': cd.id}
                     %table{class: "#{highlight_class}"}
                       %tr

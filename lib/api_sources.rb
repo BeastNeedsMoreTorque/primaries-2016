@@ -127,8 +127,8 @@ module ApiSources
   def self.poll_or_fetch(key, arg)
     existing = @cache.get(key, arg)
     etag = existing ? existing[:etag] : nil
-    result = @server.get(key, arg, etag)
-    if result[:etag] != etag
+    result = @server.get(key, arg, etag) # nil if etag matches
+    if !result.nil? && result[:etag] != etag
       @cache.save(key, arg, result[:data], result[:etag])
       result[:data]
     else

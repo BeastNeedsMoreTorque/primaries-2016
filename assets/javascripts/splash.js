@@ -4,12 +4,11 @@ $(function() {
   var iowa_polls_close = new Date('2/2/2016 3:00:00 AM UTC');
   function timeTill(end) {
     var timeDifference = Date.parse(end) - Date.parse(new Date());
-
-    if(timeDifference > 0){
+    if(timeDifference < 0){
       $(".countdown-container h3").text("POLLS CLOSED FOR")
+      timeDifference = timeDifference;
     } else {
       $(".countdown-container h3").text("POLLS CLOSE IN")
-      timeDifference = -timeDifference;
     }
 
     return {
@@ -26,7 +25,7 @@ $(function() {
     var sSpan = countdown.querySelector('.seconds');
     function updateCountdown() {
       var time = timeTill(starttime);
-      hSpan.innerHTML = time.hours;
+      hSpan.innerHTML = ('0' + time.hours).slice(-2)
       mSpan.innerHTML = ('0' + time.minutes).slice(-2);
       sSpan.innerHTML = ('0' + time.seconds).slice(-2);
 
@@ -53,9 +52,11 @@ $(function() {
         $(this).addClass("has-results");
       }
     });
+    precinctsPct = ((precinctsReporting/totalPrecincts)*100).toFixed(0) + "%";
+    console.log(precinctsPct, precinctsReporting, totalPrecincts)
     $("#unreported-counties").text(totalCounties - countiesReporting)
-    $("#counties-val").text(countiesReporting);
-    //$("#precincts-val").text(((precinctsReporting/totalPrecincts)*100).toFixed(0) + "%")
+    $("#counties-val").text(countiesReporting + " COUNTIES REPORTING (" + precinctsPct + " PRECINCTS)");
+    $("#precincts-val").text()
   }
   initClock("countdown", iowa_polls_close);
   new pym.Child();
