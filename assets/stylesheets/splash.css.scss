@@ -76,8 +76,8 @@ h1, h2, h3, h4{
 	.map {
 		svg {
 			width: $map-countdown-width;
-			height: $map-countdown-width * .44;
-			margin-left: -17px;
+			height: $map-countdown-width * .5;
+			margin-left: -23px;
 		  g.counties path {
 		    stroke: white;
 		    stroke-width: 10; // divided by 10
@@ -86,8 +86,9 @@ h1, h2, h3, h4{
 		    	fill: #999;
 		    }
 		  }
-		  text, circle {
-		  	opacity: 0;
+		  g.cities {
+		    //pointer-events: none;
+		    font-size: 25px;
 		  }
 		}
 	}

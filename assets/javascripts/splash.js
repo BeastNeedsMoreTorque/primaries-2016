@@ -42,24 +42,29 @@ $(function() {
     var totalPrecincts = 0;
     var precinctsReporting = 0;
     var totalCounties = $(".counties").children().length;
-    $(".counties").children().each(function(ele){
+    $("svg .counties").children().each(function(ele){
       fips = this.getAttribute("data-fips-int");
       obj = data[fips];
       totalPrecincts += obj["n_precincts_total"];
-      precinctsReporting += obj["total_n_precincts_reporting"]
-      if(obj["total_n_precincts_reporting"] == obj["n_precincts_total"]){
+      precinctsReporting += obj["total_n_precincts_reporting"];
+      if(obj["total_n_precincts_reporting"] == obj["n_precincts_total"] && obj["total_n_precincts_reporting"] != 0){
         countiesReporting++; 
         $(this).addClass("has-results");
       }
     });
     precinctsPct = ((precinctsReporting/totalPrecincts)*100).toFixed(0) + "%";
-    console.log(precinctsPct, precinctsReporting, totalPrecincts)
     $("#unreported-counties").text(totalCounties - countiesReporting)
-    $("#counties-val").text(countiesReporting + " COUNTIES REPORTING (" + precinctsPct + " PRECINCTS)");
-    $("#precincts-val").text()
+    $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " OF PRECINCTS)</span>");
   }
-  initClock("countdown", iowa_polls_close);
+  function adjustCities(){
+    $("svg .cities text").each(function(ele){
+      $(this).attr("dx", "-"+($(this).width() / 2)+"px");
+      $(this).attr("dy", "-5px");
+    });
+  }
+  //initClock("countdown", iowa_polls_close);
   new pym.Child();
+  adjustCities();
   $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {
     fillSvg(json);
   })

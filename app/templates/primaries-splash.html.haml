@@ -1,5 +1,5 @@
 !!! 5
-- preview = !true
+- preview = true
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
@@ -20,33 +20,20 @@
         %div.arrow-right
     %div.flex-container
       %div.countdown-map-container
-        %div.countdown-container
-          -if preview
-            %h3= "POLLS CLOSE IN"
-          -else
-            %h3= "POLLS CLOSED FOR"
-          %table
-            %tr#countdown
-              %td.hours= "01"
-              %td.minutes= "27"
-              %td.seconds= "06"
-            %tr
-              %td= "HR"
-              %td= "MIN"
-              %td= "SEC"
         %div.map-container
+          %h3 COUNTIES REPORTING
           %div.map
             != map_svg('states/IA')
           %div.legend
             %div.container
               %div.finished
               %div
-                %span#counties-val= "COUNTIES REPORTING"
+                %span#counties-val= "FINISHED"
             %div.container
               %div.unfinished
               %div
                 %span#unreported-counties
-                COUNTIES NOT FULLY REPORTING
+                NOT FINISHED
       %div.parties-container
         -parties.each do |party|
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
