@@ -24,6 +24,46 @@ twitter: Check out HuffPost's 2016 primaries dashboard to find dates and watch l
 :end
 
 
+{primaries.delegates-explainer}
+
+
+hed: Why vote counts and delegate counts don’t always match
+body:
+If you’re reading this, you’re probably wondering why a candidate got lots of votes and few delegates (or the other way around).
+
+
+It’s complicated.
+
+
+First let’s be clear about what a delegate _is_. A delegate is a person who will attend the Democratic National Convention or Republican National Convention. Both conventions are in July 2016. Each delegate will vote for a presidential candidate.
+
+
+Who becomes a delegate?
+
+
+Each party in each state chooses _pledged_ and _unpledged_ delegates.
+
+
+If you vote in a primary or caucus, you’re helping to select a _pledged_ delegate. Votes are treated differently by each party in each state. Some are simple: Republican delegates in Florida will all be pledged to the candidate who gets the most votes. Others are indirect: Democratic caucus-goers in Iowa will decide (by standing in the right place) who will attend the county conventions; those people vote for representatives in the district conventions; _those_ representatives choose _some_ delegates, and they also choose representatives to the state-level convention to choose the rest.
+
+
+s are chosen by voters. Each pledges to vote for a particular presidential candidate at the convention.
+
+
+Voting rules for pledged delegates vary by state. 
+
+
+_Unpledged_ delegates (so-called “super-delegates”) are usually party leaders and elected officials who get an automatic ticket to the convention. They will vote for the presidential candidate _they_ choose, regardless of how the party voted in their state.
+
+
+
+
+
+
+Nationally, Democrats and Republicans set a few rules. They tell each state how many delegates.
+:end
+
+
 [candidates]
 
 
@@ -98,12 +138,17 @@ id: 60339
 name: Mike Huckabee
 party: GOP
 id: 1187
+
+
+name: Jim Gilmore
+party: GOP
+id: 45650
 [primaries.race-days]
 
 
 date: 2016-02-01
 title: Iowa Caucuses
-pubbed: Tuesday, Jan. 26, 6:30 PM EDT
+pubbed: Tuesday, Jan. 26, 6:30 PM EST
 social_img: http://e.huffpost.com/datadot/images/huffpostdata-logo-5aa7b459e55d8d7a91d1250d3fa28954.png
 body: Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls. Tune in on election night for live results.
 twitter: Check back on Feb. 1 for live election results results in Iowa
@@ -112,9 +157,9 @@ twitter: Check back on Feb. 1 for live election results results in Iowa
 
 date: 2016-02-09
 title: New Hampshire Primaries
-pubbed: Tuesday, Jan. 26, 6:30 PM EDT
+pubbed: Tuesday, Jan. 26, 6:30 PM EST
 social_img: http://e.huffpost.com/datadot/images/huffpostdata-logo-5aa7b459e55d8d7a91d1250d3fa28954.png
-body: Only eight days after the first contest in Iowa, New Hampshire voters will head to the polls to cast their ballot. Check here to see which candidates are leading, and tune in on election night for live results.
+body: Only eight days after the first contest in Iowa, New Hampshire voters will head to the polls to cast their ballots. Check here to see which candidates are leading, and tune in on election night for live results.
 twitter: Check back on Feb. 9 for live election results in New Hampshire
 :end
 
