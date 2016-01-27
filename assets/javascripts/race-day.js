@@ -154,33 +154,42 @@ function add_tooltips() {
     svg_hover_path = null;
   }
 
-  var mouseenter_was_touch = false;
+  var last_touchend_date = null;
 
   function on_touchend() {
-    mouseenter_was_touch = true;
+    last_touchend_date = new Date();
   }
 
   function on_mouseenter(ev) {
     var svg_path = this;
     add_hover_path(svg_path);
-    show_tooltip_for_svg_path(svg_path, mouseenter_was_touch);
-    mouseenter_was_touch = false; // reset
+
+    /*
+     * mouseenter also happens when the user touches something. That's good: we
+     * want to show the tooltip in that case. We need to add a close button, or
+     * the user won't know how to remove the tooltip.
+     *
+     * We don't *actually* need to detect that this specific mouseenter was
+     * from touch -- that's hard. Instead, we detect a superset: show the close
+     * button if the user has touched something in the past second.
+     */
+    var user_uses_touch = !!last_touchend_date && new Date() - last_touchend_date < 1000;
+
+    show_tooltip_for_svg_path(svg_path, user_uses_touch);
   }
 
   function on_mouseleave() {
     remove_hover_path();
     remove_tooltip(); // before the user can even click the button :)
-    mouseenter_was_touch = false; // reset
   }
-
 
   function add_tooltip(svg) {
     $(svg)
       .on('mouseenter', 'g.counties path', on_mouseenter)
-      .on('touchend', 'g.counties path', on_touchend)
       .on('mouseleave', 'g.counties path', on_mouseleave);
   }
 
+  $(document).on('touchend', on_touchend);
   $('.party-state-map svg').each(function() {
     add_tooltip(this);
   });

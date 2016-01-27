@@ -1,6 +1,4 @@
 !!! 5
-- dem_list = ['Clinton', 'Sanders', "O'Malley"]
-- gop_list = ["Trump", "Christie", "Bush", "Cruz", "Paul", "Rubio", "Carson", "Huckabee", "Kasich", "Fiorina", "Santorum", "Gilmore"]
 - preview = !true
 %html{lang: 'en'}
   %meta{charset: 'utf-8'}
@@ -14,7 +12,7 @@
         %h4= "HAPPENING TODAY: Iowa Caucus"
       -else
         %h4= "HAPPENING NOW: Iowa Caucus"
-    %div.countdown-container
+    %div#countdown
       -if preview
         %span.lbl= "POLLS CLOSE IN:"
       -else
@@ -53,7 +51,6 @@
   %div.tease-link
     %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "View The Latest Results"
 
-  %sciript{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
+  %script{src: '/2016/javascripts/pym.min.js'}
   %script{src: asset_path('splash.js')}
   %script{src: asset_path('ga.js')}
-

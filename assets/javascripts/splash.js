@@ -6,10 +6,10 @@ $(function() {
     var timeDifference = Date.parse(end) - Date.parse(new Date());
 
     if(timeDifference > 0){
-      $(".countdown-container h3").text("POLLS CLOSE IN")
-    }else {
       $(".countdown-container h3").text("POLLS CLOSED FOR")
-      timeDifference = Date.parse(new Date()) - Date.parse(end);
+    } else {
+      $(".countdown-container h3").text("POLLS CLOSE IN")
+      timeDifference = -timeDifference;
     }
 
     return {
@@ -62,7 +62,7 @@ $(function() {
   $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {
     fillSvg(json);
   })
-  .fail(function() { console.warn('Failed to load ' + json_url, this); })
+  .fail(function() { console.warn('Failed to load', this); })
   //.always(function() { window.setTimeout(poll_results, interval_ms); });
 
 
