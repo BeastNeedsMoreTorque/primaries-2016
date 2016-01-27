@@ -1,5 +1,6 @@
 //= require './vendor/jquery-2.2.0.js'
-
+//= require './wait_for_font_then.js'
+//= require './position_svg_cities.js'
 $(function() {
   var iowa_polls_close = new Date('2/2/2016 3:00:00 AM UTC');
   function timeTill(end) {
@@ -42,25 +43,25 @@ $(function() {
     var totalPrecincts = 0;
     var precinctsReporting = 0;
     var totalCounties = $(".counties").children().length;
-    $(".counties").children().each(function(ele){
+    $("svg .counties").children().each(function(ele){
       fips = this.getAttribute("data-fips-int");
       obj = data[fips];
       totalPrecincts += obj["n_precincts_total"];
-      precinctsReporting += obj["total_n_precincts_reporting"]
-      if(obj["total_n_precincts_reporting"] == obj["n_precincts_total"]){
+      precinctsReporting += obj["total_n_precincts_reporting"];
+      if(obj["total_n_precincts_reporting"] == obj["n_precincts_total"] && obj["total_n_precincts_reporting"] != 0){
         countiesReporting++; 
         $(this).addClass("has-results");
       }
     });
     precinctsPct = ((precinctsReporting/totalPrecincts)*100).toFixed(0) + "%";
-    console.log(precinctsPct, precinctsReporting, totalPrecincts)
     $("#unreported-counties").text(totalCounties - countiesReporting)
-    $("#counties-val").text(countiesReporting + " COUNTIES REPORTING (" + precinctsPct + " PRECINCTS)");
-    $("#precincts-val").text()
+    $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " OF PRECINCTS)</span>");
   }
-  initClock("countdown", iowa_polls_close);
   new pym.Child();
-  $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {
+  wait_for_font_then("Source Sans Pro",function(){
+    $("svg").position_svg_cities();
+  });
+  $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
     fillSvg(json);
   })
   .fail(function() { console.warn('Failed to load', this); })

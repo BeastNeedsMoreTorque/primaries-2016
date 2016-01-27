@@ -75,9 +75,8 @@ h1, h2, h3, h4{
 	text-align: center;
 	.map {
 		svg {
-			width: $map-countdown-width;
-			height: $map-countdown-width * .44;
-			margin-left: -17px;
+			width: 100%;
+		  height: 100%;
 		  g.counties path {
 		    stroke: white;
 		    stroke-width: 10; // divided by 10
@@ -86,9 +85,31 @@ h1, h2, h3, h4{
 		    	fill: #999;
 		    }
 		  }
-		  text, circle {
-		  	opacity: 0;
-		  }
+  text {
+    // JavaScript will position this text correctly; only JavaScript can
+    // measure the width, because only JavaScript has the font.
+    fill: none;
+    font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
+    pointer-events: none;
+    font-size: 23px;
+
+    // JavaScript doesn't know where the text's baseline is, and that's the `y`
+    // coordinate by default. Make (x,y) point to the lower-left of the text.
+    dominant-baseline: text-before-edge;
+
+    &.background {
+      fill: none;
+      stroke: white;
+      stroke-width: 3px;
+    }
+
+    &.foreground {
+      fill: #333;
+    }
+  }
+
+
+
 		}
 	}
 	img {
@@ -171,7 +192,7 @@ h1, h2, h3, h4{
 	@include vertical-center-column-flex;
 
 	.candidate {
-		width: 105px;
+		width: 115px;
 		background: #fff;
 		margin: 3px;
 		margin-right: 5px;
