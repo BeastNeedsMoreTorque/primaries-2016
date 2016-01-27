@@ -1,0 +1,61 @@
+@mixin social-button($background) {
+  background: $background;
+  border: 1px solid darken($background, 10%);
+  box-shadow: inset 0px -2px 3px darken($background, 10%);
+  &:hover {
+    background: lighten($background, 5%);
+    box-shadow: inset 0px -2px 3px darken($background, 5%);
+  }
+}
+
+.social-buttons {
+  margin: 30px 0;
+  text-align: center;
+
+  a {
+    text-decoration: none;
+  }
+
+  .btn-social {
+    display: inline-block;
+    width: 13rem;
+    font-size: .9rem;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    padding: .5rem;
+    margin: .25rem;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    text-transform: none;
+
+    &::before {
+      display: inline-block;
+      content: '​'; // zero-width space
+      height: 1.05rem;
+      width: 1.05rem;
+      margin-right: .2rem;
+      vertical-align: top;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  .btn-twitter {
+    @include social-button(#55acee);
+
+    &::before {
+      background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.3 19.719"><path fill="#FFFFFF" d="M24.243,2.349c-0.892,0.396-1.851,0.663-2.856,0.783c1.026-0.616,1.815-1.59,2.187-2.751c-0.961,0.57-2.025,0.984-3.158,1.207c-0.907-0.967-2.199-1.57-3.63-1.57c-2.747,0-4.974,2.226-4.974,4.973c0,0.39,0.044,0.77,0.129,1.133C7.807,5.917,4.142,3.937,1.689,0.927c-0.428,0.735-0.674,1.588-0.674,2.5c0,1.726,0.878,3.248,2.213,4.141c-0.815-0.026-1.582-0.25-2.253-0.622c0,0.021,0,0.042,0,0.062c0,2.41,1.714,4.42,3.989,4.878C4.546,12,4.107,12.061,3.653,12.061c-0.32,0-0.632-0.031-0.936-0.09c0.633,1.977,2.47,3.414,4.646,3.454c-1.702,1.334-3.847,2.129-6.177,2.129c-0.401,0-0.797-0.023-1.187-0.069c2.201,1.411,4.815,2.234,7.625,2.234c9.148,0,14.151-7.578,14.151-14.151c0-0.216-0.005-0.431-0.015-0.644C22.733,4.222,23.577,3.346,24.243,2.349z"/></svg>');
+    }
+  }
+
+  .btn-facebook {
+    @include social-button(#3b5998);
+
+    &::before {
+      background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path fill="#FFFFFF" d="M112,0H16C7.2,0,0,7.2,0,16v96c0,8.8,7.2,16,16,16h52.877V78.188h-17.78V60.425h17.784V44.029c0-16.537,9.764-26.279,24.514-26.279c7.068,0,12.834,0.756,14.605,0.991v18.573l-11.874-0.005c-8.022,0-9.522,3.979-9.522,9.572v13.544h20.557l-2.904,17.763H86.604V128H112c8.8,0,16-7.2,16-16V16C128,7.2,120.8,0,112,0z"/></svg>');
+    }
+  }
+}
