@@ -49,11 +49,12 @@
                   %tr.candidate{'data-candidate-id': cd.id}
                     %td.img
                       %img.cd-img{src: image_path("#{cd.slug}.png"), alt: ''}
-                    %td{class: "cd-name #{cd.party_id.downcase}"}= cd.full_name
-                    - if preview 
-                      %td{class: "pollster"}= "#{cd_state.poll_percent}%"
-                    -else 
-                      %td{class: "pollster"}= format_int(cd_state.n_votes) 
+                    %td.cd-name{class: cd.party_id.downcase}= cd.full_name
+                    %td.pollster
+                      - if preview
+                        = format_percent_or_nil(cd_state.poll_percent)
+                      - else
+                        = format_int(cd_state.n_votes)
           - if preview
             %div.footnotes
               %p Polling average based on latest Iowa polls aggregated by HuffPost Pollster.
