@@ -5,26 +5,27 @@
     %meta{charset: 'utf-8'}
     %title= meta[:page_title]
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    %meta{name: 'author', content: meta[:author]}
     %meta{name: 'description', content: meta[:page_description]}
+
+    - if ENV['FACEBOOK_APP_ID']
+      %meta{property: 'fb:app_id', content: ENV['FACEBOOK_APP_ID']}
+    %meta{property: 'og:description', content: meta[:page_description]}
     %meta{property: 'og:type', content: 'article'}
     %meta{property: 'og:site_name', content: 'The Huffington Post'}
     %meta{property: 'og:url', content: "http://elections.huffingtonpost.com/#{output_path[0 .. -5]}"}
-    %meta{property: 'og:description', content: meta[:page_description]}
-    %meta{property: 'og:title', content: meta[:page_title]}
-    - if meta[:twitter_desc]
-      %meta{property: 'og:twitter:desc', content: meta[:twitter_desc]}
-    - if meta[:social_image_url]
-      %meta{property: 'twitter:card', content: 'summary_large_image'}
-      %meta{property: 'og:image', content: "http:#{meta[:social_image_url]}"}
-    %meta{property: 'article:publisher', content: 'HuffingtonPost'}
-    - if meta[:author]
-      %meta{name: 'author', content: meta[:author]}
-      %meta{property: 'article:author', content: meta[:author]}
-    - if meta[:author_twitter]
-      %meta{property: 'twitter:creator', content: meta[:author_twitter]}
-    //%meta{property: 'fb:app_id', content: '46744042133'}
+    %meta{property: 'og:image', content: "http:#{meta[:social_image_url]}"}
 
-    %link{rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic'}
+    %meta{property: 'article:publisher', content: 'HuffingtonPost'}
+    %meta{property: 'article:author', content: meta[:author]}
+
+    %meta{property: 'twitter:card', content: 'summary_large_image'}
+    %meta{property: 'twitter:creator', content: meta[:author_twitter]}
+
+    -# For our own benefit:
+    %meta{property: 'suggested-tweet', content: meta[:twitter_desc]}
+
+    %link{rel: 'stylesheet', href: '//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic'}
     %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
     - for stylesheet in (stylesheets || [])
       %link{rel: 'stylesheet', href: stylesheet}

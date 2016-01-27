@@ -18,25 +18,27 @@
   fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'twitter-sdk'));
 
-	var metas = document.getElementsByTagName('meta'); 
-	var metaObjs = {};
-  for (i=0; i<metas.length; i++) {
-  	key = metas[i].getAttribute("property");
-  	val = metas[i].getAttribute("content")
-  	metaObjs[key] = val;
-	}
+  var meta = {};
+  var metas = document.getElementsByTagName('meta'); 
+  for (i=0; i < metas.length; i++) {
+    var key = metas[i].getAttribute("property") || metas[i].getAttribute("name");
+    var val = metas[i].getAttribute("content");
+    meta[key] = val;
+  }
 
-	encodedUrl = encodeURIComponent(window.location.href)
-	facebookButtons = document.getElementsByClassName("facebook-share");
-	Array.prototype.forEach.call(facebookButtons, function(ele){
-		var url = "https://www.facebook.com/dialog/share?app_id=46744042133&display=popup&href="+encodedUrl+"&redirect_uri=" + encodedUrl;
-		//var url = "https://www.facebook.com/dialog/share?display=popup&href="+encodedUrl+"&redirect_uri=" + encodedUrl;
-		ele.href = url;
-	});
-	twitterButtons = document.getElementsByClassName("twitter-share");
-  Array.prototype.forEach.call(twitterButtons, function(ele){
-    var url = "https://twitter.com/intent/tweet?text="+encodeURIComponent(metaObjs["og:twitter:desc"])+"&url="+encodedUrl;
-    ele.href = url;
+  var encodedUrl = encodeURIComponent(window.location.href);
+
+  if (meta['fb:app_id']) {
+    Array.prototype.forEach.call(document.getElementsByClassName('facebook-share'), function(el) {
+      var url = 'https://www.facebook.com/dialog/share?app_id=' + meta['fb:app_id']
+        + '&display=popup&href=' + encodedUrl
+        + '&redirect_uri=' + encodedUrl;
+      el.setAttribute('href', url);
+    });
+  }
+
+  Array.prototype.forEach.call(document.getElementsByClassName('twitter-share'), function(el) {
+    var url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(meta['suggested-tweet']) + '&url=' + encodedUrl;
+    el.setAttribute('href', url);
   });
-
 })();

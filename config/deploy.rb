@@ -16,11 +16,13 @@ task :reset_env do
   ask(:s3_bucket, nil)
   ask(:ap_api_key, nil)
   ask(:asset_host, nil)
+  ask(:facebook_app_id, nil)
 
   on roles(:all) do |host|
     execute "echo AP_API_KEY='#{fetch(:ap_api_key)}' > #{shared_path}/env"
     execute "echo S3_BUCKET='#{fetch(:s3_bucket)}' >> #{shared_path}/env"
     execute "echo ASSET_HOST='#{fetch(:asset_host)}' >> #{shared_path}/env"
+    execute "echo FACEBOOK_APP_ID='#{fetch(:facebook_app_id)}' >> #{shared_path}/env"
     execute "echo AWS_REGION=us-east-1 >> #{shared_path}/env"
 
     # FIXME remove AP_TEST. We use it because AP gives bad candidate data
