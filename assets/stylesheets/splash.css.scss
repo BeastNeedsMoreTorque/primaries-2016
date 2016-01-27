@@ -87,7 +87,7 @@ h1, h2, h3, h4{
 		    }
 		  }
 		  g.cities {
-		    //pointer-events: none;
+		    pointer-events: none;
 		    font-size: 25px;
 		  }
 		}
@@ -172,7 +172,7 @@ h1, h2, h3, h4{
 	@include vertical-center-column-flex;
 
 	.candidate {
-		width: 105px;
+		width: 115px;
 		background: #fff;
 		margin: 3px;
 		margin-right: 5px;
