@@ -65,7 +65,7 @@ $(function() {
   //initClock("countdown", iowa_polls_close);
   new pym.Child();
   adjustCities();
-  $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {
+  $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
     fillSvg(json);
   })
   .fail(function() { console.warn('Failed to load', this); })
