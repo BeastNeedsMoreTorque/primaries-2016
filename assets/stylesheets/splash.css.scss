@@ -91,7 +91,7 @@ h1, h2, h3, h4{
     fill: none;
     font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
     pointer-events: none;
-    font-size: 24px;
+    font-size: 23px;
 
     // JavaScript doesn't know where the text's baseline is, and that's the `y`
     // coordinate by default. Make (x,y) point to the lower-left of the text.
