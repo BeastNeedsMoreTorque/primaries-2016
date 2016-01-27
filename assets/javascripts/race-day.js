@@ -190,6 +190,17 @@ function add_tooltips() {
   }
 
   $(document).on('touchend', on_touchend);
+
+  /*
+   * On Android, you can't click the "close" button on the tooltip: you'll
+   * trigger 'mouseleave' first on the path that it represents, which will
+   * close it.
+   *
+   * On iPhone, the 'mouseleave' doesn't happen. So we need to wire up the
+   * button, because users can actually click it.
+   */
+  $(document).on('click', '.race-tooltip a.close', on_mouseleave);
+
   $('.party-state-map svg').each(function() {
     add_tooltip(this);
   });
