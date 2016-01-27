@@ -1,5 +1,5 @@
 //= require './vendor/jquery-2.2.0.js'
-
+//= require './position_svg_cities.js'
 $(function() {
   var iowa_polls_close = new Date('2/2/2016 3:00:00 AM UTC');
   function timeTill(end) {
@@ -56,15 +56,8 @@ $(function() {
     $("#unreported-counties").text(totalCounties - countiesReporting)
     $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " OF PRECINCTS)</span>");
   }
-  function adjustCities(){
-    $("svg .cities text").each(function(ele){
-      $(this).attr("dx", "-"+($(this).width() / 2)+"px");
-      $(this).attr("dy", "-5px");
-    });
-  }
-  //initClock("countdown", iowa_polls_close);
   new pym.Child();
-  adjustCities();
+  $("svg").position_svg_cities();
   $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
     fillSvg(json);
   })
