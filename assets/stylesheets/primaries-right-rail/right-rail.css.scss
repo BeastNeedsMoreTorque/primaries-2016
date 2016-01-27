@@ -1,205 +1,71 @@
 @import '../_variables';
+
 body{
   @include body-copy;
 }
+
 h1, h2, h3, h4{
   @include header-copy;
+  margin: 0;
 }
-.primary-right-rail{
-  width: 300px;
-  div.rail-banner{
-    position:relative;
+
+.primary-right-rail {
+  cursor: pointer; // JS makes the whole thing a link
+
+  max-width: 300px;
+  margin: 0 auto;
+
+  div.rail-banner {
     background-color: black;
-    padding: 5px;
     color: white;
     font-weight: bold;
-    h3 {
-      margin: 0;
-    }
-    div.banner-title {
-      //display: inline-block;
-      //font-size: 18px;
-    }
     padding: 5px;
   }
-  @include rail-link-out;
+
+  .tease-link { @include tease-link(); }
+
   .footnotes {
     @include footnotes;
   }
-  span.dem-del-available{
-    //color: #5c6b95;
-  }
-  span.gop-del-available{
-    //color: #bc5c5c;
-  }
+
   div.race-name{
     margin-top: 15px;
     font-weight: bold;
     font-size: 18px;
     display: inline-block;
   }
+
   div.container {
-    background-color: #ffffff;
-    padding-left: 10px;
-    padding-right: 10px;
-    //border: 1px solid #bdbdbd;
+    .race-name.gop { color: $strongGOP; }
+    .race-name.dem { color: $strongDem; }
+  }
 
-    .race-name.gop {color: $strongGOP;}
-    .race-name.dem {color: $strongDem;}
+  p {
+    margin: 20px 10px;
+  }
 
-    span.last-updated,
-    span.last-updated-prefix{
-      font-size: 12px;
-    }
-    .party-container{
-      position: relative;
-      margin-top: 30px;
-      h3 {
-        margin-bottom: 0;
-      }
-      a.race-day-link{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        text-decoration: none;
-        z-index: 10;
-        opacity: 0;
-      }
-    }
-    li.live-state-name.Democrats{
-      color: #5c6b95;
-    }
-    li.live-state-name.Republicans{
-      color: #bc5c5c;
-    }
-    a.upcoming-link{
-      text-decoration: none;
-      width: 100%;
-      display: inline-block;
-      .upcoming-dem {
-        color: #5c6b95;
-      }
-      .upcoming-gop {
-        color: #bc5c5c;
-      }
-    }
-    a.happened-link{
-      width: 100%;
-      display: inline-block;
-      .happened-dem {
-        color: #384da0;
-      }
-      .happened-gop {
-        color: #ca3d28;
-      }
-    }
-    .party-division{
-      border: 1px solid gray;
-    }
-    .delegate-chart{
-      position: relative;
-      min-width: 275px;
-      .candidate-container{
-        margin-top: 5px;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-flex-flow: row nowrap;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        align-content: center;
-        border: 1px solid #bdbdbd;
-        background-color: #f1f1f1;
-        height: 60px;
-        min-width: 275px;
-        .small-partition{
-          position: relative;
-          width: 15%;
-          &.img{
-            height: 60px;
-          }
-          &.count{
-            display: -ms-flexbox;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-flex-flow: row nowrap;
-            flex-wrap: nowrap;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            align-content: center;
-            height: 60px;
-            border-left: 1px solid #bdbdbd;
-          }
-        }
-        .large-partition{
-          width: 40%;
-        }
-        .cd-img{
-          position: absolute;
-          top: 0px;
-          left: -10px;
-          height: 100%;
-        }
-        .n-delegates-bar{
-          height: 10px;
-          &.dem{
-            background-color: #384da0;
-          }
-          &.gop{
-            background-color: #ca3d28;
-          }
-        }
-      }
-    }
-    table.t-pollster {
-      border-collapse: collapse;
-      border-spacing: 0 5px;
-      min-width: 275px;
-      tr {
-        display: table-row;
-        height: 40px;
-        border-bottom: 1px solid #bdbdbd;
-      }
-      td {
-        padding: 5px;
-        &.img{
-          position: relative;
-          img{
-            height: 40px; //same as table row
-            position: absolute;
-            left: 0px;
-            bottom: 0px;
-          }
-        }
-        &.cd-name{
-          width: 100%;
-          text-align: left;
-          &.dem{
-            //color: #384da0;
-          }
-          &.gop{
-            //color: #ca3d28;
-          }
-        }
-        &.pollster{
-          font-weight: bold;
-          text-align: right;
-        }
-      }
-      th {
-        border-bottom: 1px solid black;
-        &.img{
-          text-align: left;
-        }
-        &.pollster{
-          text-align: right;
-        }
-      }
+  .party-container {
+    margin-top: 30px;
+
+    h3, p {
+      margin: 10px;
     }
   }
+
+  table.t-pollster {
+    @include pollster-table(); // 10px left/right padding on cells
+
+    .n-votes {
+      text-align: right;
+    }
+  }
+
+  .sparkline {
+    display: inline-block;
+    height: 1.2rem;
+    vertical-align: middle;
+  }
+
+  &.future table.t-pollster .n-votes { display: none; }
+  &.present table.t-pollster .pollster { display: none; }
 }

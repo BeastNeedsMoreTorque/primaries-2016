@@ -1,13 +1,14 @@
 !!! 5
-- preview = !true
+- preview = true
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
     %title Huffington Post 2016 Primaries Results
     %link{rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic'}
     %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
     %link{rel: 'stylesheet', href: asset_path('primaries-right-rail.css')}
-  %body.primary-right-rail
+  %body.primary-right-rail{class: (preview ? 'future' : 'present'), 'data-race-day-href': "/2016/primaries/#{next_race_day.id}"}
     %div.rail-banner
       %div
         - if preview
@@ -17,50 +18,48 @@
     %div.container
       - if preview
         %p= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
-        %div.tease-link.clearfix
+        %p.tease-link
           %a{target: '_blank', href: "/2016/primaries"} See the election calendar
-          %div.arrow-right
+          %span.arrow-right
       - else
         %p= "Results from the first presidential caucuses are coming in."
-        %div.tease-link.clearfix
+        %p.tease-link
           %a{target: '_blank', href: "/2016/primaries"} See live-updating results 
-          %div.arrow-right
+          %span.arrow-right
       - parties.each do |party|
         - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
-        %div.party-container
-          %a.race-day-link{target: '_blank', href: "/2016/primaries/#{next_race_day.id}"}
+        .party-container
           - del_key = "n_#{party.id.downcase}_delegates"
           %h3{'class': "race-name #{party_abbrev}"}= "#{party.adjective} Caucus"
-          %span Delegates Up For Grabs:
-          %span{class: "#{party.id.downcase}-del-available"}= state_iowa[del_key]
-          - race = sort_iowa_data(party, state_iowa)
-          %table.t-pollster
+          %p{class: "#{party.id.downcase}-del-available"}
+            Delegates Up For Grabs:
+            = state_iowa[del_key]
+          %table.t-pollster{'data-party-id': party.id}
             %thead
               %tr
-                %th.img Candidate
-                - if preview
-                  %th.pollster{:colspan => 2} Polling Average
-                - else
-                  %th.pollster{:colspan => 2} Votes
+                %th.candidate Candidate
+                %th.pollster
+                  .long-table-heading Polling Average
+                %th.n-votes Votes
             %tbody
-              - race.each do |cd_state|
-                - cd = cd_state.candidate
-                - if cd_state.poll_percent
-                  %tr.candidate{'data-candidate-id': cd.id}
-                    %td.img
-                      %img.cd-img{src: image_path("#{cd.slug}.png"), alt: ''}
-                    %td.cd-name{class: cd.party_id.downcase}= cd.full_name
-                    %td.pollster
-                      - if preview
-                        = format_percent_or_nil(cd_state.poll_percent)
-                      - else
-                        = format_int(cd_state.n_votes)
-          - if preview
-            %div.footnotes
-              %p Polling average based on latest Iowa polls aggregated by HuffPost Pollster.
+              - race = sort_iowa_data(party, state_iowa)
+              - race.each do |candidate_state|
+                - candidate = candidate_state.candidate
+                %tr{'data-candidate-id': candidate.id}
+                  %td.candidate
+                    %img{src: image_path("#{candidate.slug}.png"), alt: ''}
+                    = candidate.full_name
+                  %td.pollster
+                    - if candidate_state.poll_sparkline && !candidate_state.poll_sparkline.empty?
+                      .sparkline!= candidate_state.poll_sparkline.to_svg
+                    %span.percent= format_percent_or_nil(candidate_state.poll_percent)
+                  %td.n-votes= format_int(candidate_state.n_votes)
+          %div.footnotes.footnotes-for-pollster
+            %p!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
     var pymChild = new pym.Child();
+  %script{src: asset_path('primary-right-rail.js')}
   %script{src: asset_path('ga.js')}
 

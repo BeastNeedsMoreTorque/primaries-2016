@@ -74,33 +74,103 @@ $blue: #0E61E5;
 }
 
 @mixin rail-link-out {
+  .tease-link { @include tease-link(); }
+}
+
+@mixin tease-link {
 	$arrow-fill: #e41a1c;
-	.tease-link {
-		display: flex;
-		display: -webkit-flex;
-	 	align-items: center;
-		-webkit-align-items: center;
-		a {
-			padding: 3px 10px 3px 10px;
-			text-decoration: none;
-			color: white;
-			text-align: center;
-			background: $arrow-fill;
-		}
-		.arrow-right{
-			border-top: 13px solid transparent;
-			border-bottom: 13px solid transparent;
-			border-left: 13px solid $arrow-fill;
-		}
-		&:hover {
-			.arrow-right {
-				border-left: 13px solid lighten($arrow-fill, 20%);
-			}
-			a {
-				background-color: lighten($arrow-fill, 20%);
-			}
-		}
-	}
+
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+
+  a {
+    padding: 3px 10px 3px 10px;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+    background: $arrow-fill;
+  }
+
+  .arrow-right{
+    border-top: 13px solid transparent;
+    border-bottom: 13px solid transparent;
+    border-left: 13px solid $arrow-fill;
+  }
+
+  &:hover {
+    .arrow-right {
+      border-left: 13px solid lighten($arrow-fill, 20%);
+    }
+    a {
+      background-color: lighten($arrow-fill, 20%);
+    }
+  }
+}
+
+@mixin pollster-table {
+  border-collapse: collapse;
+
+  td, th {
+    padding: 2px 10px;
+    border-bottom: 1px solid #ccc;
+    white-space: nowrap;
+  }
+
+  .candidate {
+    text-align: left;
+  }
+
+  .pollster {
+    text-align: right;
+    font-weight: bold;
+  }
+
+  th {
+    border-bottom: 1px solid #999;
+  }
+
+  th.pollster {
+    position: relative;
+
+    .long-table-heading {
+      position: absolute;
+      // Copy from <th>'s padding
+      top: 2px;
+      right: 10px;
+    }
+  }
+
+  td.candidate {
+    width: 100%;
+
+    img {
+      margin-top: -2px;
+      margin-bottom: -2px;
+      width: 24px;
+      height: 36px;
+      vertical-align: middle;
+      padding-right: .4em;
+    }
+  }
+
+  &[data-party-id=Dem] .sparkline path {
+    stroke: $strongDem;
+  }
+
+  &[data-party-id=GOP] .sparkline path {
+    stroke: $strongGOP;
+  }
+
+  .sparkline {
+    vertical-align: middle;
+  }
+
+  .sparkline + .percent {
+    display: inline-block;
+    width: 3em;
+  }
 }
 
 @mixin splash-base {
