@@ -18,6 +18,9 @@
               .sparkline!= candidate.poll_sparkline.to_svg
             %span.percent= format_percent_or_nil(candidate.poll_percent)
         - n_unellipsized -= 1
+  -# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
+  - if n_unellipsized < 0
+    .ellipsize-table-prompt
   .metadata.footnotes
     %p.pollster-note
       Source:

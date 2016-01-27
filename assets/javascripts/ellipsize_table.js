@@ -30,13 +30,13 @@ function ellipsize_table(table, n_trs, hidden_class, show_html, hide_html) {
   function hide() {
     hidden = true;
     $hidden_trs.addClass(hidden_class);
-    $container.empty().append(show_html);
+    $container.html(show_html);
   }
 
   function show() {
     hidden = false;
     $hidden_trs.removeClass(hidden_class);
-    $container.empty().append(hide_html);
+    $container.html(hide_html);
   }
 
   hide();
