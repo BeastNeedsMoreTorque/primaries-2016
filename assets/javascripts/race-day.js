@@ -510,15 +510,16 @@ function poll_results() {
       var n_total = +arr[3];
       var has_delegate_counts = arr[4] == 'true';
       var last_updated = new Date(arr[5]);
+      var when_race_happens = arr[6]; // 'past', 'present' or 'future'
       if (isNaN(last_updated.getFullYear())) last_updated = null;
 
       var key = party_id + '-' + state_code;
 
       var elems = els_by_party_id_and_state_code[key];
       if (elems) {
+        elems.race.removeClass('past present future');
+        elems.race.addClass(when_race_happens);
         elems.race.toggleClass('has-delegate-counts', has_delegate_counts);
-        elems.inner.removeClass('no-precincts-reporting some-precincts-reporting');
-        elems.inner.addClass(n_reporting ? 'some-precincts-reporting' : 'no-precincts-reporting');
         elems.n_reporting.text(format_int(n_reporting));
         elems.n_total.text(format_int(n_total));
         if (last_updated) {

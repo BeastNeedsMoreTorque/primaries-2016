@@ -65,3 +65,14 @@ body.race-day .race.present table.candidates td,
 body.race-day .race.past table.candidates td {
   cursor: pointer;
 }
+
+body.race-day .race.future {
+  .n-votes { display: none; }
+  .poll-last-updated.some-precincts-reporting { display: none; }
+}
+
+body.race-day .race.past,
+body.race-day .race.present {
+  .pollster { display: none; }
+  .poll-last-updated.no-precincts-reporting { display: none; }
+}
