@@ -5,7 +5,7 @@ describe 'The by-State list of dates on the primaries page', type: :feature do
       render_from_database(database)
 
       visit('/2016/primaries')
-      page.first('a', text: 'February 1').click
+      page.first('a', text: 'Feb 1').click
       expect(page).to have_current_path('/2016/primaries/2016-02-01')
     end
 
@@ -14,8 +14,8 @@ describe 'The by-State list of dates on the primaries page', type: :feature do
       render_from_database(database)
 
       visit('/2016/primaries')
-      expect(page.first('a', text: 'February 20')).to be_nil # Feb. 20
-      expect(page.first('span', text: 'February 20')).not_to be_nil
+      expect(page.first('a', text: 'Feb 20')).to be_nil # Feb. 20
+      expect(page.first('span', text: 'Feb 20')).not_to be_nil
     end
   end
 end

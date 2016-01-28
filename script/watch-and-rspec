@@ -1,9 +1,16 @@
 #!/usr/bin/env ruby
 
+ENV['DIST_PATH'] = 'tmp/dist-path'
+require_relative '../lib/paths'
+
 require_relative '../lib/env'
 Bundler.require(:development)
+require_relative '../lib/assets'
 
 def rspec
+  FileUtils.rm_rf(Paths.Dist)
+  FileUtils.mkdir_p(Paths.Dist)
+  Assets.build
   system('rspec')
 end
 
@@ -11,6 +18,31 @@ listener = Listen.to('app', 'lib', 'assets', 'spec', 'script', only: /(^copy)|(\
   rspec
 end
 
-rspec
+app = Rack::Builder.new(quiet: true) do
+  dir = Paths.Dist
+
+  no_cache = { 'Cache-Control' => 'no-cache' }
+  use(Rack::Static, urls: { '/2016' => '2016.html' }, root: dir, header_rules: [[ :all, no_cache ]])
+  use(Rack::TryStatic, root: dir, urls: [ '/2016/primaries' ], try: [ '.html' ], header_rules: [[ :all, no_cache ]])
+  use(Rack::Static,
+      urls: [ '/2016' ],
+      root: dir,
+      header_rules: [
+        [ :all, { 'Cache-Control' => 'public, max-age=31536000', 'Expires' => (Time.now + 86400 * 365).utc.rfc2822 }],
+        [ %w(css), { 'Content-Type' => 'text/css; charset=utf-8' } ],
+        [ %w(js), { 'Content-Type' => 'application/javascript; charset=utf-8' } ],
+        [ %w(json), { 'Content-Type' => 'application/json' } ]
+      ]
+  )
+
+  run lambda { |env| [ 404, { 'Content-Type' => 'text/html; charset=utf-8' }, [ 'Not Found' ]] }
+end
+
 listener.start
-sleep
+
+thr = Thread.new { Rack::Server.start(app: app, Port: 3001, environment: 'none', AccessLog: [])  }
+sleep 1 # Wait for Rack to start up
+
+rspec
+
+thr.join # Wait for Ctrl+C

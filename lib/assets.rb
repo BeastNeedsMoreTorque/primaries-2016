@@ -44,7 +44,7 @@ module Assets
     stylesheets/proxima-nova-condensed.css
   )
 
-  def self.build(database)
+  def self.build
     $logger.info("Building assets...")
 
     self.build_sprockets_assets
