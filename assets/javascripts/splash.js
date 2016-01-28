@@ -29,17 +29,17 @@ $(function() {
     });  
   }
 
+  function getData(){
+    $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
+      fillSvg(json["counties"]);
+      updateCandidates(json["candidates"]);
+    })
+    .fail(function() { console.warn('Failed to load', this); })
+    .always(function() { window.setTimeout(getData, 30000); });
+  }
+
   wait_for_font_then("Source Sans Pro", function(){
     $("svg").position_svg_cities();
-    function getData(){
-      $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
-        fillSvg(json["counties"]);
-        updateCandidates(json["candidates"]);
-      })
-      .fail(function() { console.warn('Failed to load', this); })
-        //.always(function() { window.setTimeout(poll_results, interval_ms); });
-    }
     getData();
-    var id = setInterval(getData, 30000);
   });
 });
