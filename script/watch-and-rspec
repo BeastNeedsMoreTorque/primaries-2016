@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/env'
+Bundler.require(:development)
+
+def rspec
+  system('rspec')
+end
+
+listener = Listen.to('app', 'lib', 'assets', 'spec', 'script', only: /(^copy)|(\.(csv|rb|js|json|png|css|sass|scss|haml|svg))$/) do |modified, added, removed|
+  rspec
+end
+
+rspec
+listener.start
+sleep
