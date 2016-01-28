@@ -4,6 +4,7 @@ gem 'airbrake-ruby', require: false
 gem 'archieml'
 gem 'aws-sdk'
 gem 'oj'
+gem 'redcarpet' # for rendering Markdown in Google Docs
 gem 'sprockets'
 gem 'uglifier'
 gem 'hamlit' # Faster version of Haml

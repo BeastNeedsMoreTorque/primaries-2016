@@ -17,8 +17,9 @@ States and parties are case-sensitive
 
 
 hed: Presidential Primaries
+pubbed_dt: Tuesday, Jan. 26, 6:30 PM EST
 body: See which candidates are leading the pack for their party’s nomination, find election dates and watch live updates on election nights.
-twitter: Check out HuffPost's 2016 primaries dashboard to find dates and watch live updates on election nights 
+twitter: Check out HuffPost's 2016 elections dashboard for live updates on primary nights 
 
 
 :end
@@ -27,7 +28,8 @@ twitter: Check out HuffPost's 2016 primaries dashboard to find dates and watch l
 {primaries.delegates-explainer}
 
 
-hed: Why vote counts and delegate counts don’t always match
+hed: Why Vote Counts And Delegate Counts Don’t Always Match
+pubbed_dt: THursday, Jan. 28, 11:04 AM EST
 body_markdown:
 
 
@@ -37,7 +39,7 @@ In the primaries, each contender aims for the most _delegates_, not the most _vo
 A _delegate_ is a person who will attend the Democratic or Republican National Convention in July. Each delegate will vote for a presidential candidate.
 
 
-### Who becomes a delegate?
+### How are delegates chosen?
 
 
 When you vote in a primary or caucus, you’re helping to select a _pledged_ delegate. Pledged delegates have promised to vote for a specific candidate in the convention.
@@ -46,28 +48,27 @@ When you vote in a primary or caucus, you’re helping to select a _pledged_ del
 The rules that translate votes into delegates vary by party and state.
 
 
-Some rules are simple: All of Republican delegates in Florida will be pledged to the candidate who gets the most votes.
+Some rules are simple: All Republican delegates in Florida will be pledged to the candidate who gets the most votes.
 
 
-Other rules are indirect: Democratic caucus-goers in Iowa select people to attend county conventions; county conventions select people to attend district conventions; district conventions select people to attend the state convention; and the _state_ convention selects pledged delegates. (Okay, if that wasn’t confusing enough: The district conventions select some pledged delegates, too.) The process takes four and a half months.
+Other rules are indirect: Democratic caucus-goers in Iowa select people to attend county conventions; county conventions select people to attend district conventions; district conventions select people to attend the state convention; and the _state_ convention selects pledged delegates. (OK, if that wasn’t confusing enough: The district conventions select some pledged delegates, too.) The process takes four and a half months.
 
 
-In short: the pledged delegate allocation doesn’t always mirror the vote count..
+In short: The pledged delegate allocation doesn’t always mirror the vote count.
 
 
-Then there are _unpledged_ delegates (so-called “super-delegates”). They’re usually party leaders and elected officials. They will vote for the presidential candidate _they_ choose, regardless of the outcomes of their states’ primaries.
+Then there are _unpledged_ delegates (so-called “super-delegates”). They’re usually party leaders and elected officials. They will vote for the presidential candidate _they_ choose, regardless of the outcome of their state’s primary or caucus.
 
 
-### What delegate counts does Huffington Post report?
+### Which delegate counts does The Huffington Post report?
 
 
 We report estimates from the Associated Press.
 
 
-We count _pledged_ delegates when a party reports them. But if a vote has happened and the party hasn’t given any official results yet, we may report a prediction based on the vote result and party rules.
+The AP counts _pledged_ delegates when a party reports them. If there’s a vote tally and the party hasn’t published its list of pledged delegates, the AP may make a prediction.
 
-
-We count _unpledged_ delegates when they declare, on the record, that they will vote for a candidate.
+The AP counts _unpledged_ delegates when they declare, on the record, that they will vote for a candidate.
 
 
 We report the sum of the pledged and unpledged delegates in the totals at the top of the page.
@@ -162,7 +163,7 @@ date: 2016-02-01
 title: Iowa Caucuses
 pubbed: Tuesday, Jan. 26, 6:30 PM EST
 body: Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls. Tune in on election night for live results.
-twitter: Check back on Feb. 1 for live election results results in Iowa
+twitter: Check back on Feb. 1 for live Iowa caucus updates
 :end
 
 
@@ -179,7 +180,7 @@ twitter: Check back on Feb. 9 for live election results in New Hampshire
 
 state: IA
 party: Dem
-text: Hillary Clinton has enjoyed a lead in the Iowa caucus polls, but Bernie Sanders has steadily closed that gap over the last few months. Some show Clinton with a clear lead, but others show the candidates in a close race. HuffPost Pollster’s average gives Clinton a narrow lead. Stay tuned -- this one could be a nail-biter.
+text: Hillary Clinton has enjoyed a lead in the Iowa caucus polls, but Bernie Sanders has steadily closed the gap over the last few months. Some show Clinton with a clear lead, but others show the candidates in a tight race. HuffPost Pollster’s average gives Clinton a narrow lead. Stay tuned -- this one could be a nail-biter.
 :end
 
 

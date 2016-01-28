@@ -12,10 +12,16 @@ body.race-day .race {
     .dots-Dem { color: $strongDem; }
     .dots-GOP { color: $strongGOP; }
 
-    .n-delegates-int {
+    .dots {
       display: block;
-      color: $muted;
+    }
+
+    .n-delegates-int, a {
       font-size: .8rem;
+    }
+
+    .n-delegates-int {
+      color: $muted;
     }
   }
 

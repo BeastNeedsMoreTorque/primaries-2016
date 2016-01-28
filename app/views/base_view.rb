@@ -18,6 +18,12 @@ class BaseView
 
   def layout; nil; end
 
+  # Turns Markdown into HTML
+  def render_markdown(markdown_string)
+    @@markdown ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML.new())
+    @@markdown.render(markdown_string)
+  end
+
   # e.g., for AllPrimariesView, "all-primaries"
   def body_class
     self.class.name.gsub(/([A-Z])/){ "-#{$1.downcase}" }[1..-6]
