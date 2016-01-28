@@ -2,7 +2,7 @@
 
 $splash-ele-bg: #eee;
 
-$party-container-height: 110px;
+$party-container-height: 105px;
 
 body {
 	@include body-copy;
@@ -30,6 +30,7 @@ body {
 
 .map-container {
   width: 14rem;
+  height: 230px;
   padding: 0 .75rem;
 	text-align: center;
 
@@ -126,10 +127,10 @@ body {
 	justify-content: center;
 
   &.gop {
-	  background-color: $red;
+	  background-color: $widgetRed;
   }
   &.dem {
-	  background-color: $blue;
+	  background-color: $widgetBlue;
   }
 }
 
@@ -196,12 +197,12 @@ body {
 	@include left-column-flex;
 
 	&.dem {
-		background-color: lighten($blue, 30%);
+		background-color: $widgetLightBlue;
 		.frontrunner-lbl { color: $strongDem; }
 		table.leader {background: $weakDem;}
 	}
 	&.gop {
-		background-color: lighten($red, 30%);
+		background-color: $widgetLightRed; 
 		.frontrunner-lbl { color: $strongGOP; }
 		table.leader {background: $weakGOP;}
 	}
