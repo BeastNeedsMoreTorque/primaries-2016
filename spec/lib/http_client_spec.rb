@@ -5,7 +5,7 @@ require_relative '../../lib/http_client'
 describe 'HttpClient' do
   before(:each) do
     @server = instance_double('HttpClient::HttpInterface')
-    @subject = HttpClient.new(@server, 'abcdef', false)
+    @subject = HttpClient.new(@server, 'abcdef', false, false)
 
     def expect_GET(path, maybe_etag, response, body)
       allow(response).to receive(:body).and_return(body)
