@@ -8,9 +8,7 @@ body {
 	@include body-copy;
 }
 
-h1, h2, h3, h4{
-  @include header-copy;
-}
+
 
 .flex-container {
 	display: flex;
@@ -22,6 +20,12 @@ h1, h2, h3, h4{
 .primary-splash-banner {
   @include desktop-splash-base;
   max-width: 945px;
+}
+
+.live-results-btn {
+	margin-top: 10px;
+  width: 10rem;
+  padding: 0 .75rem;
 }
 
 .map-container {
@@ -107,28 +111,38 @@ h1, h2, h3, h4{
   -webkit-flex-direction: column;
 }
 
+
+.candidate-row-container {
+	width: 150px;
+	padding: 10px;
+	display: flex;
+	flex-flow: column;
+	display: -webkit-flex;
+  -webkit-flex-direction: column;
+ 	align-items: center;
+	-webkit-align-items: center;
+	height: 100%;
+	-webkit-justify-content: center;
+	justify-content: center;
+
+  &.gop {
+	  background-color: $red;
+  }
+  &.dem {
+	  background-color: $blue;
+  }
+}
+
 .leading-candidate-img {
-	@include vertical-center-flex;
-	img {
-		width: 72px;
-	}
-	margin-left: -10px;
+
 }
 
 .leading-candidate-delegates {
 	font-weight: bold;
 	padding: 10px;
-	border-right: 1px solid #999;
-	height: 100%;
-	p {
-		margin-top: 0;
-		margin-bottom: 5px;
-	}
-	width: 135px;
-	&.preview {
-		//width: 110px;
-		width: 90px;
-		@include vertical-center-flex;
+	span {
+		color: #fff;
+		display: block;
 	}
 }
 
@@ -143,7 +157,7 @@ h1, h2, h3, h4{
 .candidate-position-listing {
 	height: 100%;
 	@include vertical-center-column-flex;
-
+	padding-left: 10px;
 	.candidate {
 		width: 115px;
 		background: #fff;
@@ -172,19 +186,22 @@ h1, h2, h3, h4{
 }
 
 .party-container {
-	background-color: $splash-ele-bg;
-	border: 1px solid black;
-	margin-left: 20px;
-	margin-top: 15px;
 	height: $party-container-height;
+	&:first-child {
+		margin-top: 5px;
+	}
+	margin-left: 20px;
+	margin-bottom: 15px;
 
 	@include left-column-flex;
 
 	&.dem {
+		background-color: lighten($blue, 30%);
 		.frontrunner-lbl { color: $strongDem; }
 		table.leader {background: $weakDem;}
 	}
 	&.gop {
+		background-color: lighten($red, 30%);
 		.frontrunner-lbl { color: $strongGOP; }
 		table.leader {background: $weakGOP;}
 	}
