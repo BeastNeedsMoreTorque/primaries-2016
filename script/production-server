@@ -80,9 +80,9 @@ class Server
     FileUtils.rm_rf(Paths.Dist)
 
     $logger.info("Generating")
-    database = Database.load
-    Assets.build(database)
+    Assets.build
 
+    database = Database.load
     for view in @views
       view.generate_all(database)
     end

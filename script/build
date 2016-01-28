@@ -19,7 +19,7 @@ database = Database.load
 
 FileUtils.rm_rf(Paths.Dist)
 
-Assets.build(database) # HTML pages depend on asset paths, which include hashes of contents
+Assets.build # HTML pages depend on asset paths, which include hashes of contents
 
 $logger.info('Building views...')
 
