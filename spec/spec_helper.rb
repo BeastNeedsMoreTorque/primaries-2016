@@ -29,7 +29,7 @@ end
 
 require_relative '../app/models/database'
 
-def mock_database(collections, date_string, last_date_string)
+def mock_database(collections, date_string, last_date_string, override_copy={})
   date = Date.parse(date_string)
   last_date = Date.parse(last_date_string)
 
@@ -38,13 +38,15 @@ def mock_database(collections, date_string, last_date_string)
     [ 'GOP', 'Republicans', 'Republican', '2000', '1000' ]
   ]
   collections[:candidates] ||= [
-    [ '1', 'Dem', 'Hillary Clinton', 'Clinton', 50, 10, 30.1, nil, DateTime.parse('2016-01-14T19:37:00.000Z') ],
-    [ '2', 'GOP', 'Marco Rubio', 'Rubio', 100, 20, 20.1, nil, DateTime.parse('2016-01-14T19:37:00.000Z') ]
+    [ '1', 'Dem', 'Hillary Clinton', 'Clinton', 50, 10, 30.1, nil, DateTime.parse('2016-01-14T19:37:00.000Z'), nil ],
+    [ '2', 'GOP', 'Marco Rubio', 'Rubio', 100, 20, 20.1, nil, DateTime.parse('2016-01-14T19:37:00.000Z'), nil ]
   ]
   collections[:races] ||= []
   Database.stub_races_ap_isnt_reporting_yet(collections[:races])
 
-  Database.new(collections, date, last_date, Database.production_copy)
+  copy = Database.production_copy(override_copy)
+
+  Database.new(collections, date, last_date, copy)
 end
 
 def render_from_database(database)
