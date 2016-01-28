@@ -17,7 +17,4 @@ $(function() {
     }
   });
 
-  $(document).on('click', function(ev) {
-    window.location = $('body').attr('data-race-day-href');
-  });
 });
