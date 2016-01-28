@@ -13,6 +13,11 @@ Valid Parties:
 
 
 States and parties are case-sensitive
+
+
+Dates come in two formats:
+* pubbed_dt and updated_dt look like “Tuesday, Jan. 26, 6:30 PM EST” and are shown on the page as-is.
+* dropped out looks like YYYY-MM-DD and indicates the last race day we should show for a candidate
 {primaries.landing-page}
 
 
@@ -29,7 +34,7 @@ twitter: Check out HuffPost's 2016 elections dashboard for live updates on prima
 
 
 hed: Why Vote Counts And Delegate Counts Don’t Always Match
-pubbed_dt: THursday, Jan. 28, 11:04 AM EST
+pubbed_dt: Thursday, Jan. 28, 11:04 AM EST
 body_markdown:
 
 
