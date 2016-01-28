@@ -19,6 +19,9 @@ $splash-ele-bg: #eee;
 $red: #E82C0C;
 $blue: #0E61E5;
 
+$widgetRed: #B72727;
+$widgetBlue: #1559D1;
+
 @mixin vertical-center-flex {
 	display: -webkit-inline-flex;
   display: inline-flex;
@@ -78,34 +81,19 @@ $blue: #0E61E5;
 }
 
 @mixin tease-link {
-	$arrow-fill: #e41a1c;
 
   display: -webkit-flex;
   display: flex;
   -webkit-align-items: center;
   align-items: center;
-
+  border: 1px solid #cdcdcd;
+  border-radius: 5px;
   a {
-    padding: 3px 10px 3px 10px;
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
     text-decoration: none;
-    color: white;
     text-align: center;
-    background: $arrow-fill;
-  }
-
-  .arrow-right{
-    border-top: 13px solid transparent;
-    border-bottom: 13px solid transparent;
-    border-left: 13px solid $arrow-fill;
-  }
-
-  &:hover {
-    .arrow-right {
-      border-left: 13px solid lighten($arrow-fill, 20%);
-    }
-    a {
-      background-color: lighten($arrow-fill, 20%);
-    }
   }
 }
 
@@ -174,6 +162,11 @@ $blue: #0E61E5;
 }
 
 @mixin splash-base {
+
+  font-family: Helvetica, Arial, sans-serif;
+  a {
+    color: #2e7061;
+  }
 
   h1, h2, h3, h4{
     @include header-copy;
