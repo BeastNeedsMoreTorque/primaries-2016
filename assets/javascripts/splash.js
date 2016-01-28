@@ -1,4 +1,5 @@
 //= require './vendor/jquery-2.2.0.js'
+//= require './format_int.js'
 //= require './wait_for_font_then.js'
 //= require './position_svg_cities.js'
 $(function() {
@@ -22,13 +23,23 @@ $(function() {
     $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " OF PRECINCTS)</span>");
   }
 
+  function updateCandidates(data){
+    data.forEach(function(item){
+      $(".candidate[data-candidate-id='"+item[0]+"'] td:last-child").text(format_int(item[1]));
+    });  
+  }
+
+  function getData(){
+    $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
+      fillSvg(json["counties"]);
+      updateCandidates(json["candidates"]);
+    })
+    .fail(function() { console.warn('Failed to load', this); })
+    .always(function() { window.setTimeout(getData, 30000); });
+  }
+
   wait_for_font_then("Source Sans Pro", function(){
     $("svg").position_svg_cities();
-
-    $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
-      fillSvg(json);
-    })
-      .fail(function() { console.warn('Failed to load', this); })
-      //.always(function() { window.setTimeout(poll_results, interval_ms); });
+    getData();
   });
 });

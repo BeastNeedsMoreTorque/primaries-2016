@@ -22,10 +22,8 @@ body {
   max-width: 945px;
 }
 
-.live-results-btn {
-	margin-top: 10px;
-  width: 10rem;
-  padding: 0 .75rem;
+.tease-link {
+  margin-top: 10px;
 }
 
 .map-container {
@@ -144,6 +142,11 @@ body {
 	span {
 		color: #fff;
 		display: block;
+		&:last-child {
+			font-size: 12px;
+			font-weight: normal;
+			text-align: center;
+		}
 	}
 }
 

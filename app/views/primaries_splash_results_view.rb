@@ -16,14 +16,26 @@ class PrimariesSplashResultsView < BaseView
 
   def build_json
     JSON.dump(
-      county_party_objects
+      counties: county_party_objects,
+      candidates: candidate_objects
     )
   end
 
   protected
 
-  def county_party_objects
+  def candidate_objects
     data = []
+    #data.push(["candidate_id", "votes"])
+    parties.each{|party|
+      race = races.find_by_party_and_state(party, cur_state)
+      race.candidate_states.each{|cd|
+        data.push([cd.candidate_id, cd.n_votes])
+      }
+    }
+    data
+  end
+
+  def county_party_objects
     fips = {}
     parties.each{|party|
       race = races.find_by_party_and_state(party, cur_state)

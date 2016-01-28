@@ -33,7 +33,8 @@
             %div
               %span#unreported-counties
               NOT FINISHED
-        %a.live-results-btn{target: '_blank', href: "/2016/primaries"}= "See Live Results"
+        %div.tease-link
+          %a{target: '_blank', href: "/2016/primaries"}= "See Live Results"
       %div.parties-container
         -parties.each do |party|
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
@@ -63,6 +64,7 @@
                     %div.frontrunner-lbl
                       %span="DEMOCRATIC"
                       %span="CANDIDATES"
+                      %span="Total Votes"
               -else
                 %div.candidate-row-container.gop
                   %div.leading-candidate-img.preview
@@ -71,6 +73,7 @@
                     %div.frontrunner-lbl
                       %span="REPUBLICAN"
                       %span="CANDIDATES"
+                      %span="Total Votes"
             %div.candidate-position-listing
               - race.candidate_states.each_with_index do |cd_state, idx|
                 - cd = cd_state.candidate
@@ -86,4 +89,4 @@
   %script
     new pym.Child();
   %script{src: asset_path('splash.js'), async: true}
-  %script{src: asset_path('ga.js'), async: true}
+  %script{src: asset_path('ga.js')}
