@@ -70,7 +70,6 @@ module ApiSources
     string = get_cached_or_fetch(:election_days, nil)
     obj = parse_json(string)
     obj[:elections]
-      .select { |e| !!e[:testResults] == is_test }
       .map { |e| e[:electionDate] }
       .select { |d| d > '2016-00-00' && d < '2016-07-00' } # http://customersupport.ap.org/doc/eln/2016_Election_Calendar.pdf
       .map { |d| GET_primaries_election_day(d) }
