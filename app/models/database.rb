@@ -68,8 +68,9 @@ class Database
   # The "production" Database: today's date, AP's data
   #
   # If AP_TEST=true, we use AP's test data.
-  def self.load
-    copy = production_copy
+  def self.load(options={})
+    override_copy = options[:override_copy] || {}
+    copy = production_copy(override_copy)
 
     candidates = []
     candidate_counties = []
@@ -82,6 +83,11 @@ class Database
     id_to_candidate = {}
     seen_county_ids = Set.new([])
     ids_to_candidate_state = {}
+
+    id_to_candidate_full_name = {}
+    for copy_candidate in copy['candidates']
+      id_to_candidate_full_name[copy_candidate['id']] = copy_candidate['name']
+    end
 
     # Fill CandidateState (no ballot_order or n_votes) and Candidate (no name)
     for del in ApiSources.GET_del_super[:del]
@@ -101,7 +107,8 @@ class Database
           n_unpledged_delegates = del_candidate[:sdTot].to_i
 
           if state_code == 'US'
-            c = [ candidate_id, party_id, nil, last_name, n_delegates, n_unpledged_delegates, nil, nil ]
+            full_name = id_to_candidate_full_name[candidate_id]
+            c = [ candidate_id, party_id, full_name, last_name, n_delegates, n_unpledged_delegates, nil, nil, nil ]
             candidates << c
             id_to_candidate[candidate_id] = c
           else
@@ -145,12 +152,6 @@ class Database
 
               candidate_state = ids_to_candidate_state[[candidate_id, state_code]]
 
-              if !candidate[2] # name
-                first_name = candidate_hash[:first]
-                last_name = candidate_hash[:last]
-                candidate[2] ||= "#{first_name} #{last_name}".strip
-              end
-
               if !candidate_state
                 raise "Missing candidate-state pair #{candidate.id}-#{state_code}"
               end
@@ -187,6 +188,7 @@ class Database
     end
 
     fix_invalid_ap_candidate_data(copy, candidates, candidate_states, candidate_counties)
+    drop_out_candidates_from_copy(copy, candidates, races, candidate_states, candidate_counties)
     stub_races_ap_isnt_reporting_yet(races)
     add_pollster_estimates(parties, candidates, candidate_states, races)
 
@@ -212,6 +214,75 @@ class Database
     candidates.select! { |arr| candidate_ids.include?(arr[0]) }
     candidate_states.select! { |arr| candidate_ids.include?(arr[0]) }
     candidate_counties.select! { |arr| candidate_ids.include?(arr[1]) }
+  end
+
+  # Adds :dropped_out_date to candidates from the copy. Nixes candidate_states
+  # and candidate_counties that we should never show.
+  def self.drop_out_candidates_from_copy(copy, candidates, races, candidate_states, candidate_counties)
+    full_name_to_candidate = {}
+    candidate_id_to_party_id = {}
+    for candidate in candidates
+      candidate_id_to_party_id[candidate[0]] = candidate[1]
+      full_name_to_candidate[candidate[2]] = candidate
+    end
+
+    candidate_id_to_last_race_day_id = {} # id -> "YYYY-MM-DD"
+
+    for candidate_copy in copy['candidates']
+      next if !candidate_copy['dropped out']
+
+      date = Date.parse(candidate_copy['dropped out'])
+      if date > Date.parse('2016-07-01') || date < Date.parse('2016-01-01')
+        throw "The drop-out date of #{date} for #{candidate_copy['name']} is clearly a mistake in the copy. Aborting."
+      end
+
+      candidate = full_name_to_candidate[candidate_copy['name']]
+      if !candidate
+        throw "The candidate named #{candidate_copy['name']} does not exist and is thus a mistake in the copy. Aborting."
+      end
+
+      candidate[9] = date
+      candidate_id_to_last_race_day_id[candidate[0]] = date.to_s
+    end
+
+    party_id_state_code_to_first_race_day_id = {}
+    for race in races
+      key = "#{race[2]}-#{race[3]}"
+      race_day_id = race[1]
+      if !party_id_state_code_to_first_race_day_id[key] || party_id_state_code_to_first_race_day_id[key] > race_day_id
+        party_id_state_code_to_first_race_day_id[key] = race_day_id
+      end
+    end
+
+    candidate_states.select! do |candidate_state|
+      candidate_id = candidate_state[0]
+      drop_out_date = candidate_id_to_last_race_day_id[candidate_id]
+
+      if !drop_out_date
+        true
+      else
+        state_code = candidate_state[1]
+        party_id = candidate_id_to_party_id[candidate_id]
+        key = "#{party_id}-#{state_code}"
+        race_day_id = party_id_state_code_to_first_race_day_id[key]
+        !race_day_id || race_day_id <= drop_out_date
+      end
+    end
+
+    #candidate_counties.select! do |candidate_county|
+    #  candidate_id = candidate_state[0]
+    #  drop_out_date = candidate_id_to_last_race_day_id[candidate_id]
+
+    #  if !drop_out_date
+    #    true
+    #  else
+    #    state_code = candidate_state[1]
+    #    party_id = candidate_id_to_party_id[candidate_id]
+    #    key = "#{party_id}-#{state_code}"
+    #    race_day_id = party_id_state_code_to_first_race_day_id[key]
+    #    race_day_id <= drop_out_date
+    #  end
+    #end
   end
 
   # Adds more races to the passed Array of races.
@@ -319,8 +390,10 @@ class Database
             else
               key = "#{candidate[0]}-#{state_code}"
               candidate_state = key_to_candidate_state[key]
-              candidate_state[6] ||= Sparkline.new(last_day)
-              candidate_state[6].add_value(date, value)
+              if candidate_state # *Our* candidate may have dropped out before Pollster noticed
+                candidate_state[6] ||= Sparkline.new(last_day)
+                candidate_state[6].add_value(date, value)
+              end
             end
           end
         end
@@ -330,10 +403,34 @@ class Database
     nil
   end
 
-  def self.production_copy
+  def self.production_copy(override_copy={})
     @production_copy ||= begin
       text = IO.read(Paths.Copy)
       Archieml.load(text)
     end
+
+    self.override_copy(@production_copy, override_copy)
+  end
+
+  private
+
+  def self.override_copy(copy, overrides)
+    copy = Marshal.load(Marshal.dump(copy)) # deep clone
+    overrides.each do |key_with_dots, value|
+      keys = key_with_dots.to_s.split('.')
+      last_key = keys.pop
+      copy_subhash = copy
+      for key in keys
+        k, v = key.split(/=/)
+        if v
+          copy_subhash = copy_subhash.find { |h| h[k] == v }
+        else
+          copy_subhash = copy_subhash[k]
+        end
+        throw "Invalid key in overrides: `#{key_with_dots}`. An example of a valid key is `landing-page.hed` or `candidates.name=Hillary Clinton.dropped out`." if !copy_subhash
+      end
+      copy_subhash[last_key] = value
+    end
+    copy
   end
 end

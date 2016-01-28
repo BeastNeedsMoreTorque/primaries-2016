@@ -174,15 +174,50 @@ $blue: #0E61E5;
 }
 
 @mixin splash-base {
+
+  h1, h2, h3, h4{
+    @include header-copy;
+  }
+
 	.header {
-		background-color: black;
-		color: white;
 		h1, h5, h4 {
 			display: inline;
 			margin: 0;
 		}
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    .hed {
+      //width: 100%;
+    } 
+    .line {
+      height: 5px;
+      background: black;
+      flex-grow: 1;
+    }
+
+    h1 {
+      padding: 5px;
+    }
+
 	}
-	@include rail-link-out;
+
+  .live-results-btn {
+    margin-top: 3px;
+    padding: 15px;
+    text-align: center;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    &:hover {
+      cursor: pointer;
+      background: #eee;
+    }
+  }
+
+	//@include rail-link-out;
 }
 
 @mixin footnotes {
@@ -195,40 +230,6 @@ $blue: #0E61E5;
   }
 }
 
-@mixin countdown-table {
-	div#countdown {
-		width: 100%;
-		display: inline-block;
-		margin: auto;
-		text-align: right;
-		font-size:16px;
-		div {
-			display: inline-block;
-			text-align: center;
-		}
-		span {
-			text-align: center;
-			display: block;
-		}
-		table{
-			width: 100%;
-			border-collapse: collapse;
-			th{
-				background-color: #f1f1f1;
-				height: 30px;
-				text-align: center;
-				font-size: 18px;
-				border: 1px solid #bdbdbd;
-			}
-			td{
-				background-color: #f1f1f1;
-				text-align: center;
-				font-size: 12px;
-				border: 1px solid #bdbdbd;
-			}
-		}
-	}
-}
 
 @mixin ellipsized-table {
   tr.ellipsized {
@@ -267,7 +268,7 @@ $blue: #0E61E5;
 }
 
 @mixin right-rail-base {
-	@include rail-link-out;
+  @include splash-base;
 }
 
 @mixin svg-city-label {

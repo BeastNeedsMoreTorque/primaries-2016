@@ -11,13 +11,13 @@
 %body
   %div.primary-splash-banner
     %div.header
-      -if preview
-        %h1= "HAPPENING TODAY: Iowa Caucus"
-      -else
-        %h1= "HAPPENING NOW: Iowa Caucus"
-      %div.tease-link.clearfix
-        %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See live-updating results"
-        %div.arrow-right
+      %div.line
+      %div.hed
+        -if preview
+          %h1= "HAPPENING TODAY: Iowa Caucus"
+        -else
+          %h1= "HAPPENING NOW: Iowa Caucus"
+      %div.line
     %div.flex-container
       %div.map-container
         %h3 COUNTIES REPORTING
@@ -33,6 +33,8 @@
             %div
               %span#unreported-counties
               NOT FINISHED
+        %div.live-results-btn
+          See Live Results
       %div.parties-container
         -parties.each do |party|
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"

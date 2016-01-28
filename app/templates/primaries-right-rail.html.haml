@@ -9,12 +9,14 @@
     %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
     %link{rel: 'stylesheet', href: asset_path('primaries-right-rail.css')}
   %body.primary-right-rail{class: (preview ? 'future' : 'present'), 'data-race-day-href': "/2016/primaries/#{next_race_day.id}"}
-    %div.rail-banner
-      %div
-        - if preview
-          %h3.status COMING SOON: Iowa Caucus
-        - else 
-          %h3.status HAPPENING NOW: Iowa Caucus
+    %div.header
+      %div.line
+      %div.hed
+        -if preview
+          %h3= "HAPPENING TODAY: Iowa Caucus"
+        -else
+          %h3= "HAPPENING NOW: Iowa Caucus"
+      %div.line
     %div.container
       - if preview
         %p= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
