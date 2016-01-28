@@ -11,7 +11,6 @@ h1, h2, h3, h4{
 
 .primary-right-rail {
   @include right-rail-base;
-  cursor: pointer; // JS makes the whole thing a link
 
   max-width: 300px;
   margin: 0 auto;

@@ -3,7 +3,7 @@
   .n-delegates
     %span.dots{class: "dots-#{race.party_id}"}= "\u200b•" * race.n_delegates
     %span.n-delegates-int= "#{format_int(race.n_delegates)} delegates."
-    %a{href: '/2016/primaries/about-delegates'} how we allocate delegates
+    %a{href: '/2016/primaries/about-delegates'} How they're allocated.
   %p.text= race_text(race) # may be null, but we still print it so two <p>s will line up on desktop
   .race-status
     %p.status-past All precincts reporting
