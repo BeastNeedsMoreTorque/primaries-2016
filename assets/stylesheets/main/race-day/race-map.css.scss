@@ -49,8 +49,8 @@
   max-width: 16rem;
   border: 1px solid #ccc;
   box-shadow: 0 0 10px #ccc;
-  padding: 0;
   background: white;
+  z-index: 1; // the table.candidates includes positioned <img> tags
 
   a.close {
     display: none; // except when this is opened via touch

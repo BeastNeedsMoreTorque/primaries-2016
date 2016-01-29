@@ -91,7 +91,7 @@ body.race-day table.candidates {
 
 body.race-day .race {
   .n-delegates-inner {
-    -webkit-display: flex;
+    display: -webkit-flex;
     display: flex;
     -webkit-justify-content: flex-start;
     justify-content: flex-start;
@@ -124,11 +124,11 @@ body.race-day .race {
     margin-top: .5rem;
     text-align: center;
     font-size: .8rem;
-  }
 
-  p {
-    margin: 0 10px;
-    color: $muted;
+    p {
+      margin: 0 10px;
+      color: $muted;
+    }
   }
 }
 
