@@ -453,7 +453,6 @@ function poll_results() {
       var state_code = this.getAttribute('data-state-code');
       var these_els = els[party_id + '-' + state_code] = {
         race: $(this),
-        inner: $('.race-inner', this),
         n_reporting: $('.metadata .n-reporting', this),
         n_total: $('.metadata .n-total', this),
         last_updated: $('.metadata .last-updated time', this.parentNode)

@@ -1,0 +1,25 @@
+%table.candidates
+  %thead
+    %tr
+      %th.candidate Candidate
+      %th.n-votes Votes
+      %th.n-delegates Delegates
+      %th.pollster Polling Average 
+  %tbody
+    - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
+    - race.candidate_states.each do |candidate_state|
+      - candidate = candidate_state.candidate
+      %tr{'data-candidate-id': candidate.id, 'class': n_unellipsized <= 0 ? 'ellipsized' : ''}
+        %td.candidate
+          %img{src: image_path("#{candidate.slug}.png"), alt: ''}
+          = candidate.name
+        %td.n-votes= format_int(candidate_state.n_votes)
+        %td.n-delegates= format_int(candidate_state.n_delegates)
+        %td.pollster
+          - if candidate_state.poll_sparkline && !candidate_state.poll_sparkline.empty?
+            .sparkline!= candidate_state.poll_sparkline.to_svg
+          %span.percent= format_percent_or_nil(candidate_state.poll_percent)
+      - n_unellipsized -= 1
+-# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
+- if n_unellipsized < 0
+  .ellipsize-table-prompt

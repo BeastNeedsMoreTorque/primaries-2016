@@ -12,42 +12,5 @@
   .party-state-map
     != map_svg("states/#{race.state_code}")
     != render(partial: 'race-day/race-map-legend', locals: { party: race.party })
-  .race-inner
-    %table.candidates
-      %thead
-        %tr
-          %th.candidate Candidate
-          %th.n-votes Votes
-          %th.n-delegates Delegates
-          %th.pollster Polling Average 
-      %tbody
-        - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
-        - race.candidate_states.each do |candidate_state|
-          - candidate = candidate_state.candidate
-          %tr{'data-candidate-id': candidate.id, 'class': n_unellipsized <= 0 ? 'ellipsized' : ''}
-            %td.candidate
-              %img{src: image_path("#{candidate.slug}.png"), alt: ''}
-              = candidate.name
-            %td.n-votes= format_int(candidate_state.n_votes)
-            %td.n-delegates= format_int(candidate_state.n_delegates)
-            %td.pollster
-              - if candidate_state.poll_sparkline && !candidate_state.poll_sparkline.empty?
-                .sparkline!= candidate_state.poll_sparkline.to_svg
-              %span.percent= format_percent_or_nil(candidate_state.poll_percent)
-          - n_unellipsized -= 1
-    -# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
-    - if n_unellipsized < 0
-      .ellipsize-table-prompt
-    .metadata.footnotes
-      %p.precincts-reporting
-        %span.n-reporting= race.n_precincts_reporting
-        of
-        %span.n-total= race.n_precincts_total
-        precincts reporting
-      - if race.last_updated
-        %p.last-updated
-          Last updated:
-          %time{datetime: format_datetime(race.last_updated)}
-      - if race.poll_last_updated
-        %p.poll-last-updated.no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
-        %p.poll-last-updated.some-precincts-reporting!= "Visit <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> for survey results from before the race."
+  != render(partial: 'race-day/race-candidates', locals: { race: race })
+  != render(partial: 'race-day/race-footnotes', locals: { race: race })
