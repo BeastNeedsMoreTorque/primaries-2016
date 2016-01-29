@@ -202,11 +202,17 @@ body {
 	&.dem {
 		background-color: $widgetLightBlue;
 		.frontrunner-lbl { color: $strongDem; }
-		table.leader {background: $weakDem;}
+		table.leader {
+			background: $widgetBlue;
+			color: #fff;
+		}
 	}
 	&.gop {
 		background-color: $widgetLightRed; 
 		.frontrunner-lbl { color: $strongGOP; }
-		table.leader {background: $weakGOP;}
+		table.leader {
+			background: $widgetRed;
+			color: #fff;
+		}
 	}
 }
