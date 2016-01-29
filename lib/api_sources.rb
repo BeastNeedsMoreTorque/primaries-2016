@@ -71,7 +71,7 @@ module ApiSources
     obj = parse_json(string)
     obj[:elections]
       .map { |e| e[:electionDate] }
-      .select { |d| d > '2016-00-00' && d < '2016-07-00' } # http://customersupport.ap.org/doc/eln/2016_Election_Calendar.pdf
+      .select { |d| d > '2016-00-00' && d <= (ENV['LAST_DATE'] || '2016-07-00') } # http://customersupport.ap.org/doc/eln/2016_Election_Calendar.pdf
       .map { |d| GET_primaries_election_day(d) }
   end
 

@@ -15,7 +15,7 @@
 # will be redirected to the `run-production-command` process, which will dump
 # it on stderr.
 
-require 'date'
+require 'time'
 
 require_relative '../lib/env'
 require_relative '../lib/paths'
@@ -53,7 +53,7 @@ class Server
   end
 
   def run
-    run_scheduled_tasks
+    WithAirbrake.run { run_scheduled_tasks }
 
     loop { wait_and_handle_command_or_run_scheduled_tasks }
   end
@@ -67,8 +67,24 @@ class Server
     end
 
     if !RefreshPrimariesRaceDays.empty?
-      $logger.info("Updating race-day results for #{RefreshPrimariesRaceDays.join(', ')}")
+      $logger.info("Updating race-day results for #{RefreshPrimariesRaceDays.join(', ')} from AP")
       ignoring_ap_quota_error { ApiSources.poll_dates(RefreshPrimariesRaceDays) }
+    end
+
+    if RefreshDelegates || !RefreshPrimariesRaceDays.empty?
+      archive_path = "#{Paths.CacheArchive}/#{Time.now.utc.iso8601}.tar.gz".gsub(':', '-')
+
+      $logger.info("Saving AP data to #{archive_path}")
+      system(
+        'tar',
+        '-C', Paths.Cache,
+        '-zcf', archive_path,
+        "--exclude=pollster*",
+        "--exclude=sprockets",
+        "--exclude=templates",
+        "--exclude=*.etag",
+        '.'
+      )
     end
 
     if RefreshPollsterPrimaries
@@ -80,6 +96,7 @@ class Server
     FileUtils.rm_rf(Paths.Dist)
 
     $logger.info("Generating")
+
     Assets.build
 
     database = Database.load

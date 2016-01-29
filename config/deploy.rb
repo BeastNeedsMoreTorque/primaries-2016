@@ -5,7 +5,7 @@ set :application, 'election-2016'
 set :repo_url, 'ssh://git@github.com/huffpostdata/election-2016'
 
 set :deploy_to, '/opt/election-2016'
-set :linked_dirs, fetch(:linked_dirs, []).push('tmp', 'cache')
+set :linked_dirs, fetch(:linked_dirs, []).push('tmp', 'cache', 'cache-by-date')
 
 desc 'Set new AP API key'
 task :reset_env do
@@ -17,13 +17,19 @@ task :reset_env do
   ask(:ap_api_key, nil)
   ask(:asset_host, nil)
   ask(:facebook_app_id, nil)
+  ask(:airbrake_project_id, nil)
+  ask(:airbrake_project_key, nil)
+  ask(:last_date, '2016-07-01')
 
   on roles(:all) do |host|
     execute "echo AP_API_KEY='#{fetch(:ap_api_key)}' > #{shared_path}/env"
     execute "echo S3_BUCKET='#{fetch(:s3_bucket)}' >> #{shared_path}/env"
     execute "echo ASSET_HOST='#{fetch(:asset_host)}' >> #{shared_path}/env"
     execute "echo FACEBOOK_APP_ID='#{fetch(:facebook_app_id)}' >> #{shared_path}/env"
+    execute "echo AIRBRAKE_PROJECT_ID='#{fetch(:airbrake_project_id)}' >> #{shared_path}/env"
+    execute "echo AIRBRAKE_PROJECT_KEY='#{fetch(:airbrake_project_key)}' >> #{shared_path}/env"
     execute "echo AWS_REGION=us-east-1 >> #{shared_path}/env"
+    execute "echo LAST_DATE='#{fetch(:last_date)}' >> #{shared_path}/env"
 
     # FIXME remove AP_TEST. We use it because AP gives bad candidate data
     # prior to 2016-01-31, but we want to render pages before that date. But
