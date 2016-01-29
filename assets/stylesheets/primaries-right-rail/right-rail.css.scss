@@ -5,8 +5,10 @@ body{
 }
 
 h1, h2, h3, h4{
-  @include header-copy;
   margin: 0;
+  &.sub {
+    text-align: center;
+  }
 }
 
 .primary-right-rail {
@@ -37,6 +39,17 @@ h1, h2, h3, h4{
     color: #fff;
     padding: 8px;
     text-align: center;
+    h3 {
+      a {
+        color: #fff;
+      }
+      margin-bottom: 0 !important;
+    }
+    p {
+      margin: 0 !important;
+      font-size: 12px;
+    }
+    margin-bottom: 10px;
   }
 
   div.container {
@@ -49,7 +62,6 @@ h1, h2, h3, h4{
   }
 
   .party-container {
-    margin-top: 30px;
 
     h3, p {
       margin: 10px;

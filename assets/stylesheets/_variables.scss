@@ -178,7 +178,9 @@ $widgetLightBlue: lighten($widgetBlue, 30%);
   }
 
   h1, h2, h3, h4{
-    @include header-copy;
+    &.main-hed {
+      @include header-copy;
+    }
   }
 
 	.header {
