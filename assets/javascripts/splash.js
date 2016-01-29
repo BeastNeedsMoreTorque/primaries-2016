@@ -1,6 +1,5 @@
 //= require './vendor/jquery-2.2.0.js'
 //= require './format_int.js'
-//= require './wait_for_font_then.js'
 //= require './position_svg_cities.js'
 $(function() {
   function fillSvg(data){
@@ -44,8 +43,6 @@ $(function() {
     .always(function() { window.setTimeout(getData, 30000); });
   }
 
-  wait_for_font_then("Source Sans Pro", function(){
-    $("svg").position_svg_cities();
-    getData();
-  });
+  $("svg").position_svg_cities();
+  getData();
 });

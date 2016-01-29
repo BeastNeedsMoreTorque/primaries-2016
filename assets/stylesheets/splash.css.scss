@@ -62,6 +62,7 @@ body {
 
       text {
         @include svg-city-label();
+        @include huffpo-body-copy;
         font-size: 23px; // the image is squished quite small; bump the font.
       }
 		}
@@ -125,10 +126,10 @@ body {
 	-webkit-justify-content: center;
 	justify-content: center;
 
-  &.gop {
+  &.GOP {
 	  background-color: $widgetRed;
   }
-  &.dem {
+  &.Dem {
 	  background-color: $widgetBlue;
   }
 }
@@ -199,7 +200,7 @@ body {
 
 	@include left-column-flex;
 
-	&.dem {
+	&.Dem {
 		background-color: $widgetLightBlue;
 		.frontrunner-lbl { color: $strongDem; }
 		table.leader {
@@ -207,7 +208,7 @@ body {
 			color: #fff;
 		}
 	}
-	&.gop {
+	&.GOP {
 		background-color: $widgetLightRed; 
 		.frontrunner-lbl { color: $strongGOP; }
 		table.leader {
