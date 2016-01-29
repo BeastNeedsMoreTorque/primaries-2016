@@ -42,7 +42,6 @@ RaceDay = Struct.new(:database, :id, :races_codified) do
   # "future" if no races are reporting
   def when_race_day_happens
     tenses = races.map(&:when_race_happens)
-
     if tenses.include? "present"
       "present"
     elsif tenses.first == "past"

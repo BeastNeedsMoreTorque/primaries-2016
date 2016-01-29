@@ -66,8 +66,15 @@
 	text-align: center;
 	margin: 0 0 5px 0;
 	color: #fff;
+	font-size: 12px;
+	@include vertical-center-flex;
 	img {
-		float: left;
+		width: 20%;
+	}
+	div {
+		width: 80%;
+		text-align: center;
+		margin-left: 5px;
 	}
 	.Dem & {
 		background: $widgetBlue;
@@ -126,8 +133,4 @@
 	a {
     color: #2e7061;
 	}
-}
-
-h3.main-hed {
-	@include header-copy;
 }

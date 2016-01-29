@@ -9,8 +9,8 @@
 %body{class: "race-day-#{race_day.when_race_day_happens}"}
   %div.primary-mobile-ad
     %div.head
-      %h1.main-hed.when-future= "HAPPENING SOON: Iowa Caucus"
-      %h1.main-hed.when-present= "HAPPENING NOW: Iowa Caucus"
+      %h3.main-hed.when-future= "HAPPENING SOON: Iowa Caucus"
+      %h3.main-hed.when-present= "HAPPENING NOW: Iowa Caucus"
       %h1.main-hed.when-past= "RESULTS: Iowa Caucus"
     %div.parties-container
       -race_day.state_party_races.first[1].each do |party, race, _|
@@ -19,8 +19,9 @@
         .party-container{class: party.id}
           .frontrunner-lbl
             %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
-            %div= "#{party.adjective.upcase}"
-            %div= "FRONTRUNNER"
+            .container
+              %div= "#{party.adjective.upcase}"
+              %div= "FRONTRUNNER"
           %div.img-stats-container
             %div.leading-candidate-img
               %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
