@@ -38,14 +38,12 @@ class PrimariesSplashResultsView < BaseView
 
   def county_party_objects
     fips = {}
-    race_day.races.each do |race|
-      race.county_parties.each{|cp|
-        key = cp.fips_int.to_s
-        obj = (fips[key] ||= { "n_precincts_total" => 0, "total_n_precincts_reporting" => 0 })
-        obj["total_n_precincts_reporting"] += cp.n_precincts_reporting
-        obj["n_precincts_total"] += cp.n_precincts_total
-        fips[key] = obj
-      }
+    race_day.county_parties.each do |cp|
+      key = cp.fips_int.to_s
+      obj = (fips[key] ||= { "n_precincts_total" => 0, "total_n_precincts_reporting" => 0 })
+      obj["total_n_precincts_reporting"] += cp.n_precincts_reporting
+      obj["n_precincts_total"] += cp.n_precincts_total
+      fips[key] = obj
     end
     fips
   end
