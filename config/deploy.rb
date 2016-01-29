@@ -19,6 +19,7 @@ task :reset_env do
   ask(:facebook_app_id, nil)
   ask(:airbrake_project_id, nil)
   ask(:airbrake_project_key, nil)
+  ask(:last_date, '2016-07-01')
 
   on roles(:all) do |host|
     execute "echo AP_API_KEY='#{fetch(:ap_api_key)}' > #{shared_path}/env"
@@ -28,6 +29,7 @@ task :reset_env do
     execute "echo AIRBRAKE_PROJECT_ID='#{fetch(:airbrake_project_id)}' >> #{shared_path}/env"
     execute "echo AIRBRAKE_PROJECT_KEY='#{fetch(:airbrake_project_key)}' >> #{shared_path}/env"
     execute "echo AWS_REGION=us-east-1 >> #{shared_path}/env"
+    execute "echo LAST_DATE='#{fetch(:last_date)}' >> #{shared_path}/env"
 
     # FIXME remove AP_TEST. We use it because AP gives bad candidate data
     # prior to 2016-01-31, but we want to render pages before that date. But
