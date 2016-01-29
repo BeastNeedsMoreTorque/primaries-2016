@@ -11,12 +11,11 @@ class PrimariesRightRailView < BaseView
 
   def sort_iowa_data(party, state)
     race = races.find_by_party_and_state(party, state)
-    cd_states = race.candidate_states
-    cd_states = cd_states.select {|cd_s| cd_s.poll_percent != nil}
-    cd_states_sorted = cd_states.sort_by do |to_sort|
-      to_sort.poll_percent
+    if race.n_precincts_reporting && race.n_precincts_reporting > 0
+      race.candidate_states.sort_by { |cs| -cs.n_votes }
+    else
+      race.candidate_states.sort_by { |cs| -(cs.poll_percent || 0) }
     end
-    return cd_states_sorted.reverse
   end
 
   def following_races(date)
