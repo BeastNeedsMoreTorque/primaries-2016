@@ -7,24 +7,6 @@ body.race-day .race {
     text-align: center;
   }
 
-  .n-delegates {
-    text-align: center;
-    .dots-Dem { color: $strongDem; }
-    .dots-GOP { color: $strongGOP; }
-
-    .dots {
-      display: block;
-    }
-
-    .n-delegates-int, a {
-      font-size: .8rem;
-    }
-
-    .n-delegates-int {
-      color: $muted;
-    }
-  }
-
   .race-status {
     text-align: center;
 
@@ -67,12 +49,6 @@ body.race-day .race {
     tr.highlight-on-map td {
       color: white;
       background: $strongDem;
-      font-weight: bold;
-
-      .sparkline path {
-        stroke: white;
-        stroke-width: 6;
-      }
     }
   }
 
@@ -84,12 +60,6 @@ body.race-day .race {
     tr.highlight-on-map td {
       color: white;
       background: $strongGOP;
-      font-weight: bold;
-
-      .sparkline path {
-        stroke: white;
-        stroke-width: 5;
-      }
     }
   }
 }

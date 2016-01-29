@@ -436,7 +436,8 @@ function poll_results() {
         els[candidate_id + '-' + state_code] = {
           tr: this,
           n_votes: $('td.n-votes', this),
-          n_delegates: $('td.n-delegates', this)
+          n_delegates_dots: $('td.n-delegates .dots', this),
+          n_delegates_int: $('td.n-delegates .n-delegates-int', this)
         };
       });
     });
@@ -451,26 +452,42 @@ function poll_results() {
     $('.race[data-party-id][data-state-code]').each(function() {
       var party_id = this.getAttribute('data-party-id');
       var state_code = this.getAttribute('data-state-code');
+
+      var $ndwc = $('.n-delegates-without-candidates', this);
+
       var these_els = els[party_id + '-' + state_code] = {
         race: $(this),
-        inner: $('.race-inner', this),
         n_reporting: $('.metadata .n-reporting', this),
         n_total: $('.metadata .n-total', this),
+        n_delegates_without_candidates: {
+          dots_without_candidates: $ndwc.find('.dots .without-candidates', this),
+          dots_with_candidates: $ndwc.find('.dots .with-candidates', this),
+          int_without_candidates: $ndwc.find('.n-delegates-without-candidates-int', this),
+          int_total: $ndwc.find('.n-delegates-int', this)
+        },
         last_updated: $('.metadata .last-updated time', this.parentNode)
       };
-
-      var race_status;
-      if (these_els.n_reporting.text() == '0') {
-        race_status = 'future';
-      } else if (these_els.n_reporting.text() == these_els.n_total.text()) {
-        race_status = 'past';
-      } else {
-        race_status = 'present';
-      }
-      $(this)
-        .removeClass('past present future')
-        .addClass(race_status);
     });
+  }
+
+  function tr_order_matches_document_order(trs_in_order) {
+    // Merge sort two Arrays of <tr> elements
+    var document_trs = $('table.candidates tbody tr').get();
+
+    if (document_trs.length != trs_in_order.length) {
+      return false; // should never happen; undefined behavior if it does
+    }
+
+    for (var i = 0; i < trs_in_order.length; i++) {
+      var tr = trs_in_order[i];
+      var dtr = document_trs[i];
+
+      if (tr != dtr) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   function update_race_tables_from_database() {
@@ -490,16 +507,19 @@ function poll_results() {
       if (elems) {
         trs_in_order.push(elems.tr);
         elems.n_votes.text(format_int(n_votes));
-        elems.n_delegates.text(format_int(n_delegates));
+        elems.n_delegates_dots.text(new Array(n_delegates).fill("\u200b•").join(''));
+        elems.n_delegates_int.text(format_int(n_delegates));
       }
     });
 
-    trs_in_order.forEach(function(tr) {
-      tr.parentNode.appendChild(tr);
-    });
+    if (!tr_order_matches_document_order(trs_in_order)) {
+      trs_in_order.forEach(function(tr) {
+        tr.parentNode.appendChild(tr);
+      });
+    }
   }
 
-  function update_race_precincts_from_database() {
+  function update_races_from_database() {
     ensure_els_by_party_id_and_state_code_is_populated();
 
     database.race_csv.split('\n').slice(1).forEach(function(line) {
@@ -511,7 +531,8 @@ function poll_results() {
       var has_delegate_counts = arr[4] == 'true';
       var last_updated = new Date(arr[5]);
       var when_race_happens = arr[6]; // 'past', 'present' or 'future'
-      if (isNaN(last_updated.getFullYear())) last_updated = null;
+      var n_delegates_without_candidates = +arr[7];
+      var n_delegates = +arr[8];
 
       var key = party_id + '-' + state_code;
 
@@ -522,9 +543,14 @@ function poll_results() {
         elems.race.toggleClass('has-delegate-counts', has_delegate_counts);
         elems.n_reporting.text(format_int(n_reporting));
         elems.n_total.text(format_int(n_total));
-        if (last_updated) {
+        if (!isNaN(last_updated.getFullYear())) {
           elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();
         }
+        var dels = elems.n_delegates_without_candidates;
+        dels.dots_without_candidates.text(new Array(n_delegates_without_candidates).fill("\u200b•").join(''));
+        dels.dots_with_candidates.text(new Array(n_delegates - n_delegates_without_candidates).fill("\u200b•").join(''));
+        dels.int_without_candidates.text(format_int(n_delegates_without_candidates));
+        dels.int_total.text(format_int(n_delegates));
       }
     });
   }
@@ -535,7 +561,7 @@ function poll_results() {
   }
 
   on_database_change.push(update_race_tables_from_database);
-  on_database_change.push(update_race_precincts_from_database);
+  on_database_change.push(update_races_from_database);
 
   $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {
     handle_poll_results(json);
