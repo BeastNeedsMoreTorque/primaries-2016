@@ -86,6 +86,23 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   .tease-link { @include tease-link(); }
 }
 
+@mixin tense-conditionals {
+  .race-day-past {
+    .when-future:not(.when-past),
+    .when-present:not(.when-past) { display: none;}
+  }
+
+  .race-day-present {
+    .when-future:not(.when-present),
+    .when-past:not(.when-present) { display: none;}
+  }
+
+  .race-day-future {
+    .when-past:not(.when-future),
+    .when-present:not(.when-future) { display: none; }
+  }
+}
+
 @mixin tease-link {
 
   display: -webkit-flex;
@@ -170,9 +187,9 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   }
 }
 
-@mixin splash-base {
+@mixin widget-base {
+  @include huffpo-body-copy;
 
-  font-family: Helvetica, Arial, sans-serif;
   a {
     color: #2e7061;
   }
@@ -185,7 +202,6 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 
 	.header {
 		h1, h5, h4 {
-			display: inline;
 			margin: 0;
 		}
     width: 100%;
@@ -203,15 +219,17 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
       height: 2px;
       background: black;
       flex-grow: 1;
+      -webkit-flex-grow: 1;
     }
 
     h1 {
       padding: 5px;
     }
-
 	}
 
 	@include rail-link-out;
+
+
 
 }
 
@@ -255,15 +273,15 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 }
 
 @mixin desktop-splash-base {
-	@include splash-base;
+	@include widget-base;
 }
 
 @mixin mobile-ad-base {
-	@include splash-base;
+	@include widget-base;
 }
 
 @mixin right-rail-base {
-  @include splash-base;
+  @include widget-base;
 }
 
 @mixin svg-city-label {

@@ -6,12 +6,14 @@
     %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
     %link{rel: 'stylesheet', href: asset_path('splash.css')}
 
-%body
+%body{class: "race-day-#{race_day.when_race_day_happens}"}
   %div.primary-splash-banner
     %div.header
       %div.line
       %div.hed
-        %h1.main-hed= "HAPPENING NOW: Iowa Caucus"
+        %h1.main-hed.when-present= "HAPPENING NOW: Iowa Caucus"
+        %h1.main-hed.when-past= "RESULTS: Iowa Caucus"
+        %h1.main-hed.when-future= "HAPPENING SOON: Iowa Caucus"
       %div.line
     %div.flex-container
       %div.map-container

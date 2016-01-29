@@ -1,14 +1,9 @@
 @import '_variables';
 
+@include tense-conditionals;
 $splash-ele-bg: #eee;
 
 $party-container-height: 100px;
-
-body {
-	@include body-copy;
-}
-
-
 
 .flex-container {
 	display: flex;

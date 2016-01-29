@@ -1,7 +1,10 @@
-@import '../_variables';
+//= require ./main/sparklines
+@import '_variables';
+
+@include tense-conditionals;
 
 body{
-  @include body-copy;
+  @include right-rail-base;
 }
 
 h1, h2, h3, h4{
@@ -11,10 +14,9 @@ h1, h2, h3, h4{
   }
 }
 
-.primary-right-rail {
-  @include right-rail-base;
 
-  //max-width: 300px;
+
+.primary-right-rail {
   margin: 0 auto;
 
   p.intro {
@@ -47,7 +49,8 @@ h1, h2, h3, h4{
     font-size: 18px;
     display: inline-block;
     color: #fff;
-    padding: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     text-align: center;
     h3 {
       a {
@@ -78,10 +81,8 @@ h1, h2, h3, h4{
     display: inline-block;
     height: 1.2rem;
     vertical-align: middle;
+    width: 50px;
   }
-
-  &.future table.t-pollster .n-votes { display: none; }
-  &.present table.t-pollster .pollster { display: none; }
 
   .party-container {
     h3, p {

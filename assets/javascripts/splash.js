@@ -36,6 +36,8 @@ $(function() {
 
   function getData(){
     $.getJSON(window.location.toString().split('?')[0] + '.json', function(json) {
+      tense = json["when_race_day_happens"];
+      $("body").removeClass().addClass("race-day-" + tense);
       fillSvg(json["counties"]);
       updateCandidates(json["candidates"]);
     })

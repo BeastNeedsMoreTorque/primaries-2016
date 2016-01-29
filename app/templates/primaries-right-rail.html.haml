@@ -1,5 +1,4 @@
 !!! 5
-- preview = !true
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
@@ -7,52 +6,50 @@
     %title Huffington Post 2016 Primaries Results
     %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
     %link{rel: 'stylesheet', href: asset_path('primaries-right-rail.css')}
-  %body.primary-right-rail{class: (preview ? 'future' : 'present'), 'data-race-day-href': "/2016/primaries/#{next_race_day.id}"}
+  %body.primary-right-rail{class: "race-day-#{race_day.when_race_day_happens}"}
     %div.header
       %div.line
       %div.hed
-        -if preview
-          %h1.main-hed= "HAPPENING SOON"
-        -else
-          %h1.main-hed= "HAPPENING NOW"
+        %h1.main-hed.when-present= "HAPPENING NOW"
+        %h1.main-hed.when-past= "RESULTS"
+        %h1.main-hed.when-future= "HAPPENING SOON"
       %div.line
     %h2.main-hed.sub= "Iowa Caucus"
     %div.container
-      - if preview
-        %p.intro= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
-        %p.tease-link
-          %a{target: '_blank', href: "/2016/primaries"} See the election calendar
-      - parties.each do |party|
+      %p.intro.when-future= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
+      %p.tease-link.when-future.when-past
+        %a{target: '_blank', href: "/2016/primaries"} See The Election Calendar
+      %p.tease-link.when-present
+        %a{target: '_blank', href: "/2016/primaries/2016-02-01"} See Live Updates
+      -race_day.state_party_races.first[1].each do |party, race, _|
         - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
         .party-container
           - del_key = "n_#{party.id.downcase}_delegates"
           %div{'class': "race-name #{party_abbrev}"}
-            %h3
-              %a{target: '_blank', href: "/2016/primaries/2016-02-01\#IA-#{party.id}"}= "#{party.adjective.upcase} CAUCUS"
+            %h3= "#{party.adjective.upcase} CAUCUS"
             %p{class: "#{party.id.downcase}-del-available"}
               Delegates At Play:
-              = state_iowa[del_key]
+              = 33
           %table.t-pollster{'data-party-id': party.id}
             %thead
               %tr
                 %th.candidate Candidate
-                %th.pollster
+                %th.pollster.when-future
                   .long-table-heading Polling Average
-                %th.n-votes Votes
+                %th.n-votes.when-past.when-present Votes
             %tbody
-              - race = sort_iowa_data(party, state_iowa)
-              - race.each do |candidate_state|
-                - candidate = candidate_state.candidate
+              - race.candidate_states.sort{|a,b| a.candidate.name <=> b.candidate.name}.each_with_index do |cd_state, idx|
+                - candidate = cd_state.candidate
                 %tr{'data-candidate-id': candidate.id}
                   %td.candidate
                     %img{src: image_path("#{candidate.slug}.png"), alt: ''}
                     = candidate.full_name
-                  %td.pollster
-                    - if candidate_state.poll_sparkline && !candidate_state.poll_sparkline.empty?
-                      .sparkline!= candidate_state.poll_sparkline.to_svg
-                    %span.percent= format_percent_or_nil(candidate_state.poll_percent)
-                  %td.n-votes= format_int(candidate_state.n_votes)
-          %div.footnotes.footnotes-for-pollster
+                  %td.pollster.when-future
+                    - if cd_state.poll_sparkline && !cd_state.poll_sparkline.empty?
+                      .sparkline!= cd_state.poll_sparkline.to_svg
+                    %span.percent= format_percent_or_nil(cd_state.poll_percent)
+                  %td.n-votes.when-past.when-present= format_int(cd_state.n_votes)
+          %div.footnotes.footnotes-for-pollster.when-future
             %p!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
 
   %script{src: '/2016/javascripts/pym.min.js'}
