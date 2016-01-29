@@ -1,7 +1,7 @@
 @import '_variables';
 
 body {
-	@include body-copy;
+	font-family: Helvetica, Arial, sans-serif;
 }
 
 h1, h2, h3, h4{
@@ -10,6 +10,14 @@ h1, h2, h3, h4{
 
 .primary-mobile-ad {
 	@include mobile-ad-base;
+}
+
+#countdown {
+	text-align: center;
+}
+
+.hours, .minutes, .seconds {
+	font-weight: bold;
 }
 
 .countdown-container {
@@ -40,45 +48,60 @@ h1, h2, h3, h4{
 }
 
 .party-container {
-	background-color: $splash-ele-bg;
-	border: 1px solid #999;
 	margin: 5px;
+	&.dem {
+		background: $widgetLightBlue;
+	}
+	&.gop {
+		background: $widgetLightRed;
+	}
 }
 
 .frontrunner-lbl {
-	margin: 5px;
-	margin-bottom: 0;
+	padding: 5px 10px;
+	text-align: center;
+	margin: 0 0 5px 0;
+	color: #fff;
+	.dem & {
+		background: $widgetBlue;
+	}
+	.gop & {
+		background: $widgetRed;
+	}
 }
 
 .img-stats-container {
 	@include vertical-center-flex;
-	margin-top: -5px;
+	width: 100%;
 }
 
 .leading-candidate-img {
 	img {
 		width: 40px;
+		padding-left: 10px;
 	}
 }
 
 .leading-candidate-delegates {
-	margin-left: 8px;
-}
-
-.frontrunner-cd, .frontrunner-num {
-	font-weight: bold;
-	margin: 0;
-	&.frontrunner-num {
-		font-size: 15px;
+	margin: 4px auto 10px;
+	p {
+		margin: 0;
+		text-align: center;
 	}
 }
 
-.dem {
-	.frontrunner-cd, .frontrunner-num { color: $strongDem; }
+.frontrunner-cd {
+	font-weight: bold;
+	border-bottom: 1px solid #000;
 }
 
-.gop {
-	.frontrunner-cd, .frontrunner-num { color: $strongGOP; }
+.frontrunner-num {
+	font-weight: bold;
+	font-size: 24px;
+}
+
+.frontrunner-unit {
+	font-weight: lighter;
 }
 
 .no-results {
@@ -92,12 +115,14 @@ h1, h2, h3, h4{
 	padding: 20px;
 	margin: 5px;
 	text-align: center;
-	background-color: red;
-	&:hover {
-		background-color: lighten(red, 20%);
-	}
+	border: 1px solid #cdcdcd;
+	border-radius: 5px;
 	a {
-		text-decoration: none;
-		color: white;
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
+    text-decoration: none;
+    text-align: center;
+    color: #2e7061;
 	}
 }
