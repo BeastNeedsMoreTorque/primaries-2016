@@ -24,14 +24,20 @@ class PrimariesSplashResultsView < BaseView
   protected
 
   def candidate_objects
-    data = []
+    data = {
+      "Dem" => [],
+      "GOP" => []
+    }
     #data.push(["candidate_id", "votes"])
     parties.each{|party|
       race = races.find_by_party_and_state(party, cur_state)
       race.candidate_states.each{|cd|
-        data.push([cd.candidate_id, cd.n_votes])
+        #data.push([cd.candidate_id, cd.n_votes])
+        data[race.party_id].push([cd.candidate_id, rand(1...9999)])
       }
     }
+    data["Dem"] = data["Dem"].sort{|c| c[1]}
+    data["GOP"] = data['GOP'].sort{|c| c[1]}
     data
   end
 

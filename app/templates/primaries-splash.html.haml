@@ -75,7 +75,7 @@
                       %span="CANDIDATES"
                       %span="Total Votes"
             %div.candidate-position-listing
-              - race.candidate_states.each_with_index do |cd_state, idx|
+              - race.candidate_states.sort{|a,b| a.candidate.name <=> b.candidate.name}.each_with_index do |cd_state, idx|
                 - cd = cd_state.candidate
                 - highlight_class = ((cd.name == leading_republican.name or cd.name == leading_democrat.name) and !preview) ? "leader" : ""
                 - if (party_abbrev == 'gop' ) or (party_abbrev == 'dem')

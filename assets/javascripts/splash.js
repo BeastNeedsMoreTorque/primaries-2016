@@ -24,9 +24,13 @@ $(function() {
   }
 
   function updateCandidates(data){
-    data.forEach(function(item){
-      $(".candidate[data-candidate-id='"+item[0]+"'] td:last-child").text(format_int(item[1]));
-    });  
+    $(".candidate table").removeClass("leader");
+    for(key in data){
+      $(".candidate[data-candidate-id='"+data[key][0][0]+"'] table").addClass("leader");
+      data[key].forEach(function(item){
+        $(".candidate[data-candidate-id='"+item[0]+"'] td:last-child").text(format_int(item[1]));
+      });  
+    }
   }
 
   function getData(){
