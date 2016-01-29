@@ -53,7 +53,6 @@ class Sparkline
     parts = []
 
     last_y = nil
-    last_x = nil
 
     @values.each_with_index do |value, index|
       next if value.nil?
@@ -64,15 +63,14 @@ class Sparkline
       if last_y.nil?
         parts << "M#{x},#{y}"
       else
-        parts << "L#{x},#{last_y}"
+        parts << "H#{x}"
 
         if y != last_y
-          parts << "L#{x},#{y}"
+          parts << "V#{y}"
         end
       end
 
       last_y = y
-      last_x = x
     end
 
     parts.join
