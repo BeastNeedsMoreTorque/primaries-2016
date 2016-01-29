@@ -91,7 +91,7 @@ body.race-day table.candidates {
 
 body.race-day .race {
   .n-delegates-inner {
-    -webkit-display: flex;
+    display: -webkit-flex;
     display: flex;
     -webkit-justify-content: flex-start;
     justify-content: flex-start;

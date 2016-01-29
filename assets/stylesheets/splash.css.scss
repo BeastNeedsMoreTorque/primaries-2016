@@ -75,7 +75,7 @@ body {
 		font-size: 10px;
 		.container {
 			display: inline-flex;
-			-webkit-display: inline-flex;
+      display: -webkit-inline-flex;
 			text-align: left;
 			width: 100%;
 		}

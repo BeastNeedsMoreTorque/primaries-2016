@@ -12,26 +12,31 @@
   -webkit-justify-content: center;
   justify-content: center;
   white-space: nowrap;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 
-  .no-results, .candidate-leads, .candidate-trails {
+  &>* {
     display: none;
-    margin: .5rem .5rem 0;
+    padding: .5rem .5rem 0;
   }
 
   &.has-candidate-leads .candidate-leads,
   &.has-candidate-trails .candidate-trails,
-  &.has-no-results .no-results { display: inline-block; }
+  &.has-no-results .no-results {
+    display: -webkit-flex;
+    display: flex;
+    height: 1rem;
+  }
 
   .swatch {
     display: inline-block;
     width: 1rem;
     height: 1rem;
+    margin-right: .2rem;
     margin-bottom: -.15rem; // drop below the baseline
   }
 
   .label {
-    display: inline-block;
+    display: block;
   }
 
   .no-results .swatch {
