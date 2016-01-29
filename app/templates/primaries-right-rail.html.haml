@@ -30,7 +30,7 @@
             %h3
               %a{target: '_blank', href: "/2016/primaries/2016-02-01\#IA-#{party.id}"}= "#{party.adjective.upcase} CAUCUS"
             %p{class: "#{party.id.downcase}-del-available"}
-              Delegates Up For Grabs:
+              Delegates At Play:
               = state_iowa[del_key]
           %table.t-pollster{'data-party-id': party.id}
             %thead
@@ -38,7 +38,7 @@
                 %th.candidate Candidate
                 %th.pollster
                   .long-table-heading Polling Average
-                %th.n-votes Votes
+                %th.n-votes votes
             %tbody
               - race = sort_iowa_data(party, state_iowa)
               - race.each do |candidate_state|

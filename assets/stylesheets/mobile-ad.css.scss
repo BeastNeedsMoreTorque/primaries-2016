@@ -4,20 +4,19 @@ body {
 	font-family: Helvetica, Arial, sans-serif;
 }
 
-h1, h2, h3, h4{
-  @include header-copy;
-}
-
 .primary-mobile-ad {
 	@include mobile-ad-base;
 }
 
-#countdown {
+.head {
+	@include header-copy;
 	text-align: center;
-}
-
-.hours, .minutes, .seconds {
-	font-weight: bold;
+	h1, h3 {
+		margin: 0;
+	}
+	p {
+		margin: 0;
+	}
 }
 
 .countdown-container {
@@ -44,7 +43,6 @@ h1, h2, h3, h4{
   -webkit-align-items: center;
   -webkit-justify-content: center;
 	width: 100%;
-
 }
 
 .party-container {
@@ -112,17 +110,12 @@ h1, h2, h3, h4{
 }
 
 .tease-link {
-	padding: 20px;
+	@include tease-link();
 	margin: 5px;
-	text-align: center;
-	border: 1px solid #cdcdcd;
-	border-radius: 5px;
+
 	a {
-    font-weight: bold;
-    width: 100%;
-    padding: 10px;
-    text-decoration: none;
-    text-align: center;
     color: #2e7061;
 	}
+
+
 }
