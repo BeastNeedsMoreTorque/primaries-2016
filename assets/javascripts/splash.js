@@ -26,8 +26,10 @@ $(function() {
   function updateCandidates(data){
     $(".candidate table").removeClass("leader");
     for(key in data){
-      $(".candidate[data-candidate-id='"+data[key][0][0]+"'] table").addClass("leader");
-      data[key].forEach(function(item){
+      sorted = data[key].sort(function(a,b){return b[1] - a[1]})
+      if(sorted[0][1] !== 0)
+        $(".candidate[data-candidate-id='"+sorted[0][0]+"'] table").addClass("leader");
+      sorted.forEach(function(item){
         $(".candidate[data-candidate-id='"+item[0]+"'] td:last-child").text(format_int(item[1]));
       });  
     }
