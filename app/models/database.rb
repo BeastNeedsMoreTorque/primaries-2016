@@ -130,7 +130,7 @@ class Database
         race = [ race_id, race_day_id, party_id, nil, race_type, nil, nil, nil, nil ]
         races << race
 
-        for reporting_unit in race_hash[:reportingUnits]
+        for reporting_unit in (race_hash[:reportingUnits] || []) # Sometimes AP gives no reportingUnits
           n_precincts_reporting = reporting_unit[:precinctsReporting]
           n_precincts_total = reporting_unit[:precinctsTotal]
 
