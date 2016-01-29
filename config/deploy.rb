@@ -5,7 +5,7 @@ set :application, 'election-2016'
 set :repo_url, 'ssh://git@github.com/huffpostdata/election-2016'
 
 set :deploy_to, '/opt/election-2016'
-set :linked_dirs, fetch(:linked_dirs, []).push('tmp', 'cache')
+set :linked_dirs, fetch(:linked_dirs, []).push('tmp', 'cache', 'cache-by-date')
 
 desc 'Set new AP API key'
 task :reset_env do
