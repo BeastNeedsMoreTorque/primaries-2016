@@ -10,7 +10,7 @@ class PrimariesSplashResultsView < BaseView
 
   def race_day; @race_day ||= database.race_days.find("2016-02-01"); end
 
-  def output_path; "2016/primaries/splash.json"; end
+  def output_path; "2016/primaries/widget-results.json"; end
 
   def build_json
     JSON.dump(

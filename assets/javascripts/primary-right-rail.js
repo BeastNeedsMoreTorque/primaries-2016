@@ -1,20 +1,28 @@
 //= require './vendor/jquery-2.2.0.js'
-//= require './render_time.js'
-
+//= require './format_int.js'
 $(function() {
-  $('.last-updated').render_datetime();
-
-  $('.day-count').text(function () {
-    var now = new Date();
-    var iowa_date = new Date('01 February, 2016');
-    var time_left = Math.ceil((iowa_date - now) / 1000 / 60 / 60 / 24);
-    if (time_left > 1) {
-      return 'In ' + time_left + ' days';
-    } else if (time_left === 1) {
-      return 'In ' + time_left + ' day';
-    } else {
-      return 'Today';
+  function updateCandidates(data){
+    $(".candidate table").removeClass("leader");
+    for(key in data){
+      sorted = data[key].sort(function(a,b){return b[1] - a[1]})
+      if(sorted[0][1] !== 0)
+        $("tr[data-candidate-id='"+sorted[0][0]+"']").addClass("leader");
+      sorted.forEach(function(item){
+        $("tr[data-candidate-id='"+item[0]+"'] .n-votes").text(format_int(item[1]));
+      });  
     }
-  });
+  }
 
+  function getData(){
+    var url = window.location.protocol + "//" + window.location.host + "/2016/primaries/widget-results.json"
+    $.getJSON(url, function(json) {
+      tense = json["when_race_day_happens"];
+      $("body").removeClass().addClass("race-day-" + tense);
+      updateCandidates(json["candidates"]);
+    })
+    .fail(function() { console.warn('Failed to load', this); })
+    .always(function() { window.setTimeout(getData, 30000); });
+  }
+
+  getData();
 });
