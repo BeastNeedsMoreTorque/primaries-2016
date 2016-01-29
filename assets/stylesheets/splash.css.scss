@@ -2,7 +2,7 @@
 
 $splash-ele-bg: #eee;
 
-$party-container-height: 105px;
+$party-container-height: 100px;
 
 body {
 	@include body-copy;
@@ -112,7 +112,9 @@ body {
 
 
 .candidate-row-container {
-	width: 150px;
+	//height: $party-container-height;
+	height: 80px;
+	width: 140px;
 	padding: 10px;
 	display: flex;
 	flex-flow: column;
@@ -120,7 +122,6 @@ body {
   -webkit-flex-direction: column;
  	align-items: center;
 	-webkit-align-items: center;
-	height: 100%;
 	-webkit-justify-content: center;
 	justify-content: center;
 
@@ -138,7 +139,6 @@ body {
 
 .leading-candidate-delegates {
 	font-weight: bold;
-	padding: 10px;
 	span {
 		color: #fff;
 		display: block;
@@ -163,7 +163,7 @@ body {
 	@include vertical-center-column-flex;
 	padding-left: 10px;
 	.candidate {
-		width: 125px;
+		width: 127px;
 		background: #fff;
 		margin: 3px;
 		margin-right: 5px;
