@@ -125,10 +125,10 @@ body {
 	-webkit-justify-content: center;
 	justify-content: center;
 
-  &.gop {
+  &.GOP {
 	  background-color: $widgetRed;
   }
-  &.dem {
+  &.Dem {
 	  background-color: $widgetBlue;
   }
 }
@@ -199,12 +199,12 @@ body {
 
 	@include left-column-flex;
 
-	&.dem {
+	&.Dem {
 		background-color: $widgetLightBlue;
 		.frontrunner-lbl { color: $strongDem; }
 		table.leader {background: $weakDem;}
 	}
-	&.gop {
+	&.GOP {
 		background-color: $widgetLightRed; 
 		.frontrunner-lbl { color: $strongGOP; }
 		table.leader {background: $weakGOP;}

@@ -1,5 +1,4 @@
 !!! 5
-- preview = true
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
@@ -13,10 +12,7 @@
     %div.header
       %div.line
       %div.hed
-        -if preview
-          %h1.main-hed= "HAPPENING TODAY: Iowa Caucus"
-        -else
-          %h1.main-hed= "HAPPENING NOW: Iowa Caucus"
+        %h1.main-hed= "HAPPENING NOW: Iowa Caucus"
       %div.line
     %div.flex-container
       %div.map-container
@@ -36,54 +32,24 @@
         %div.tease-link
           %a{target: '_blank', href: "/2016/primaries/2016-02-01"}= "See Live Results"
       %div.parties-container
-        -parties.each do |party|
-          - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
-          - race = races.find_by_party_and_state(party, cur_state)
-          %div{class: "party-container #{party_abbrev} clearfix"}
-            -if not preview
-              -if party.adjective == 'Democratic'
-                %div.leading-candidate-img
-                  %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
-                %div.leading-candidate-delegates
-                  %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
-                  %p.frontrunner-cd= "#{leading_democrat.name}"
-                  %p.frontrunner-num= "#{format_int(leading_democrat.n_delegates)} delegates"
-              -else
-                %div.leading-candidate-img
-                  %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
-                %div.leading-candidate-delegates
-                  %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
-                  %p.frontrunner-cd= "#{leading_republican.name}"
-                  %p.frontrunner-num= " #{format_int(leading_republican.n_delegates)} delegates"
-            -else
-              -if party.adjective == 'Democratic'
-                %div.candidate-row-container.dem
-                  %div.leading-candidate-img.preview
-                    %img{src: image_path("democrats.svg"), alt: ''}
-                  %div.leading-candidate-delegates.left.preview
-                    %div.frontrunner-lbl
-                      %span="DEMOCRATIC"
-                      %span="CANDIDATES"
-                      %span="Total Votes"
-              -else
-                %div.candidate-row-container.gop
-                  %div.leading-candidate-img.preview
-                    %img{src: image_path("republicans.svg"), alt: ''}
-                  %div.leading-candidate-delegates.left.preview
-                    %div.frontrunner-lbl
-                      %span="REPUBLICAN"
-                      %span="CANDIDATES"
-                      %span="Total Votes"
+        -race_day.state_party_races.first[1].each do |party, race, _|
+          .party-container{class: party.id}
+            %div.candidate-row-container{class: party.id}
+              %div.leading-candidate-img
+                %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
+              %div.leading-candidate-delegates.left
+                %div.frontrunner-lbl
+                  %span= party.adjective
+                  %span CANDIDATES
+                  %span Total Votes
             %div.candidate-position-listing
               - race.candidate_states.sort{|a,b| a.candidate.name <=> b.candidate.name}.each_with_index do |cd_state, idx|
                 - cd = cd_state.candidate
-                - highlight_class = ((cd.name == leading_republican.name or cd.name == leading_democrat.name) and !preview) ? "leader" : ""
-                - if (party_abbrev == 'gop' ) or (party_abbrev == 'dem')
-                  %div.candidate{'data-candidate-id': cd.id}
-                    %table{class: "#{highlight_class}"}
-                      %tr
-                        %td= cd.name
-                        %td= format_int(cd_state.n_votes)
+                .candidate{'data-candidate-id': cd.id}
+                  %table
+                    %tr
+                      %td= cd.name
+                      %td= format_int(cd_state.n_votes)
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script
