@@ -26,7 +26,7 @@ def rebuild
   $error_status = $?
 end
 
-listener = Listen.to('app', 'lib', 'assets', 'spec', 'script', only: /(^copy)|(\.(csv|rb|js|json|png|css|sass|scss|haml|svg))$/) do |modified, added, removed|
+listener = Listen.to('app', 'lib', 'assets', 'script', only: /(^copy)|(\.(csv|rb|js|json|png|css|sass|scss|haml|svg))$/) do |modified, added, removed|
   rebuild
 end
 

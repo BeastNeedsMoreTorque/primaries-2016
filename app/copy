@@ -85,7 +85,7 @@ We report the sum of the pledged and unpledged delegates in the totals at the to
 [candidates]
 
 
-Don’t edit this list for now. We’ll add some properties later, such as the dates candidates dropped out.
+Don’t edit this list for now. We’ll add some properties later, such as the dates candidates `dropped out` (a YYYY-MM-DD value -- see the top of this document for instructions).
 
 
 name: Hillary Clinton
@@ -181,6 +181,7 @@ twitter: Check back on Feb. 9 for live election results in New Hampshire
 
 
 [primaries.races]
+Set over to true when AP flags the race as completed. Normally we mark a race “over” when 100% of precincts are reporting, but sometimes 100% don’t report and we want to stop declaring we’re doing live updates.
 
 
 state: IA

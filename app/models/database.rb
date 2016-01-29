@@ -188,7 +188,8 @@ class Database
     end
 
     fix_invalid_ap_candidate_data(copy, candidates, candidate_states, candidate_counties)
-    drop_out_candidates_from_copy(copy, candidates, races, candidate_states, candidate_counties)
+    drop_out_candidates_from_copy(copy, candidates, races, candidate_states)
+    mark_races_finished_from_copy(copy, races)
     stub_races_ap_isnt_reporting_yet(races)
     add_pollster_estimates(parties, candidates, candidate_states, races)
 
@@ -218,7 +219,7 @@ class Database
 
   # Adds :dropped_out_date to candidates from the copy. Nixes candidate_states
   # and candidate_counties that we should never show.
-  def self.drop_out_candidates_from_copy(copy, candidates, races, candidate_states, candidate_counties)
+  def self.drop_out_candidates_from_copy(copy, candidates, races, candidate_states)
     full_name_to_candidate = {}
     candidate_id_to_party_id = {}
     for candidate in candidates
@@ -268,21 +269,6 @@ class Database
         !race_day_id || race_day_id <= drop_out_date
       end
     end
-
-    #candidate_counties.select! do |candidate_county|
-    #  candidate_id = candidate_state[0]
-    #  drop_out_date = candidate_id_to_last_race_day_id[candidate_id]
-
-    #  if !drop_out_date
-    #    true
-    #  else
-    #    state_code = candidate_state[1]
-    #    party_id = candidate_id_to_party_id[candidate_id]
-    #    key = "#{party_id}-#{state_code}"
-    #    race_day_id = party_id_state_code_to_first_race_day_id[key]
-    #    race_day_id <= drop_out_date
-    #  end
-    #end
   end
 
   # Adds more races to the passed Array of races.
@@ -306,6 +292,24 @@ class Database
         end
       end
     end
+  end
+
+  def self.mark_races_finished_from_copy(copy, races)
+    called_race_keys = Set.new
+    for copy_race in copy['primaries']['races']
+      if copy_race['over'] == 'true'
+        called_race_keys << "#{copy_race['party']}-#{copy_race['state']}"
+      end
+    end
+
+    for race in races
+      race_key = "#{race[2]}-#{race[3]}"
+      if called_race_keys.include?(race_key)
+        race[10] = true
+      end
+    end
+
+    nil
   end
 
   # Writes Candidate.poll_percent, Candidate.poll_updated_at,
@@ -421,11 +425,15 @@ class Database
       last_key = keys.pop
       copy_subhash = copy
       for key in keys
-        k, v = key.split(/=/)
-        if v
-          copy_subhash = copy_subhash.find { |h| h[k] == v }
+        if key.include?('=')
+          clauses = key.split(/,/)
+          for clause in clauses
+            k, v = clause.split(/=/)
+            copy_subhash = copy_subhash.select { |o| o[k] == v }
+          end
+          copy_subhash = copy_subhash.first
         else
-          copy_subhash = copy_subhash[k]
+          copy_subhash = copy_subhash[key]
         end
         throw "Invalid key in overrides: `#{key_with_dots}`. An example of a valid key is `landing-page.hed` or `candidates.name=Hillary Clinton.dropped out`." if !copy_subhash
       end

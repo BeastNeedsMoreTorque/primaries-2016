@@ -17,19 +17,46 @@ RSpec.configure do |config|
   end
 end
 
+class AvoidRackStatic304Responses
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    env['HTTP_IF_MODIFIED_SINCE'] = nil
+    @app.call(env)
+  end
+end
+
 require 'capybara/rspec'
 Capybara.configure do |config|
   config.default_driver = :webkit
-  config.app_host = 'http://localhost:3001'
-  config.run_server = false
+
+  config.app = Rack::Builder.new(quiet: true) do
+    dir = Paths.Dist
+
+    # capybara-webkit *requires* 200 responses. 304s leave page.html empty and
+    # tests fail.
+    no_cache = { 'Cache-Control' => 'no-cache' }
+    use(AvoidRackStatic304Responses) # https://github.com/thoughtbot/capybara-webkit/issues/724
+    use(Rack::Static, urls: { '/2016' => '2016.html' }, root: dir, header_rules: [[ :all, no_cache ]])
+    use(Rack::TryStatic, root: dir, urls: [ '/2016/primaries' ], try: [ '.html' ], header_rules: [[ :all, no_cache ]])
+    use(Rack::Static, urls: [ '/2016' ], root: dir, header_rules: [[ :all, no_cache ]])
+
+    run lambda { |env|
+      $stderr.puts "Failed request: #{env}"
+      [ 404, { 'Content-Type' => 'text/html; charset=utf-8' }, [ 'Not Found' ]]
+    }
+  end
 end
 Capybara::Webkit.configure do |config|
-  config.block_unknown_urls = true
+  config.block_unknown_urls = true # nix stats/ads
+  config.skip_image_loading = true # speedup
 end
 
 require_relative '../app/models/database'
 
-def mock_database(collections, date_string, last_date_string, override_copy={})
+def mock_database(collections, date_string, last_date_string, options={})
   date = Date.parse(date_string)
   last_date = Date.parse(last_date_string)
 
@@ -42,10 +69,11 @@ def mock_database(collections, date_string, last_date_string, override_copy={})
     [ '2', 'GOP', 'Marco Rubio', 'Rubio', 100, 20, 20.1, nil, DateTime.parse('2016-01-14T19:37:00.000Z'), nil ]
   ]
   collections[:races] ||= []
+
+  copy = Database.production_copy(options[:override_copy] || {})
+
   Database.stub_races_ap_isnt_reporting_yet(collections[:races])
-
-  copy = Database.production_copy(override_copy)
-
+  Database.mark_races_finished_from_copy(copy, collections[:races])
   Database.new(collections, date, last_date, copy)
 end
 

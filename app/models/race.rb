@@ -1,5 +1,5 @@
 # Could almost be called PartyState. Gives the votes/delegates of a state.
-Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :pollster_slug, :poll_last_updated) do
+Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :pollster_slug, :poll_last_updated, :ap_says_its_over) do
   include Comparable
 
   # Sort by date, then state name, then party name
@@ -50,7 +50,9 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   # * 'present': voting has finished; results are not all in
   # * 'past': results are all in
   def when_race_happens
-    if !n_precincts_reporting.nil? && n_precincts_reporting > 0
+    if ap_says_its_over
+      'past'
+    elsif !n_precincts_reporting.nil? && n_precincts_reporting > 0
       if n_precincts_reporting < n_precincts_total
         'present'
       else
