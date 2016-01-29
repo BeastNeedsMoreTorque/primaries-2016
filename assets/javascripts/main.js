@@ -5,5 +5,4 @@
 //= require './all-primaries.js'
 //
 //= require './social.js'
-//= require './ga.js'
 //= require './stats.js'

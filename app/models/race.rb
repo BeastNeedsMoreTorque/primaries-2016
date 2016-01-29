@@ -29,10 +29,19 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def enabled?; race_day && race_day.enabled?; end
   def n_delegates; state.n_delegates(party_id); end
 
-  # Returns true iff at least one candidate has a delegate -- pledged or
-  # unpledged.
+  # Sum of candidate_states.n_delegates (pledged and unpledged alike)
+  def n_delegates_with_candidates
+    @n_delegates_with_candidates ||= candidate_states.map(&:n_delegates).reduce(0, :+)
+  end
+
+  # True iff at least one candidate has a delegate -- pledged or unpledged
   def has_delegate_counts
-    candidate_states.map(&:n_delegates).reduce(0, :+) != 0
+    n_delegates_with_candidates != 0
+  end
+
+  # Number of pledged/unpledged delegates not assigned to any candidates
+  def n_delegates_without_candidates
+    n_delegates - n_delegates_with_candidates
   end
 
   # Determines whether a race is 'future', 'present' or 'past'.

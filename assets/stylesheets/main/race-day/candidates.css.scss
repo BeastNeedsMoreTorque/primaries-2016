@@ -5,6 +5,7 @@ body.race-day table.candidates {
 
   border-collapse: collapse;
   width: 100%;
+  line-height: 1.4rem; // .n-candidates-int is smaller; keep the same line height so it (almost) lines up
 
   td, th {
     white-space: nowrap;
@@ -13,6 +14,7 @@ body.race-day table.candidates {
 
   td {
     border-bottom: 1px solid #ccc;
+    height: 2.25rem; // because that's the height of the <img>
   }
 
   th {
@@ -23,17 +25,17 @@ body.race-day table.candidates {
     text-align: right;
   }
 
-  .candidate {
+  td.candidate {
     text-align: left;
-    width: 100%;
+    position: relative;
+    padding-left: 2.5rem;
 
     img {
-      margin-top: -2px;
-      margin-bottom: -2px;
-      width: 24px;
-      height: 36px;
-      vertical-align: middle;
-      padding-right: .4rem;
+      position: absolute;
+      left: 10px; // padding of <td>
+      top: 5px; // padding of <td>
+      width: 1.5rem;
+      height: 2.25rem;
     }
 
     padding-right: 0; // goes with .n-delegates padding-left: 0;
@@ -43,7 +45,7 @@ body.race-day table.candidates {
     padding-left: 0; // Every pixel counts. This column's data is thin, so we're sure this won't be ugly
   }
 
-  .n-votes, .n-delegates {
+  .n-votes {
     text-align: right;
   }
 
@@ -56,6 +58,77 @@ body.race-day table.candidates {
   .percent {
     display: inline-block;
     width: 3em;
+  }
+
+  th.n-delegates, td.n-delegates {
+    padding-left: .75rem;
+  }
+
+  .n-delegates-int {
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+    width: 2rem; // so it's always the same
+    padding-right: .25rem;
+    text-align: right;
+  }
+
+  tr.highlight-on-map td {
+    //font-weight: bold;
+
+    .sparkline path {
+      stroke: white;
+      stroke-width: 5;
+    }
+  }
+
+  tr.highlight-on-map td.n-delegates {
+    .dots {
+      color: white;
+      font-weight: normal; // because they're dots and they'd be janky if they resized
+    }
+  }
+}
+
+body.race-day .race {
+  .n-delegates-inner {
+    -webkit-display: flex;
+    display: flex;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+
+  .n-delegates {
+    line-height: 1.4rem;
+
+    .dots-Dem .with-candidates,
+    .dots-GOP .with-candidates {
+      opacity: .35;
+    }
+
+    .dots-Dem { color: $strongDem; }
+    .dots-GOP { color: $strongGOP; }
+
+    .dots {
+      font-size: 1rem;
+      display: inline-block;
+      white-space: normal;
+      line-height: .4;
+      margin-top: -.25rem; // because line-height makes things weird
+      padding-right: .25rem;
+    }
+  }
+
+  .n-delegates-without-candidates {
+    margin-top: .5rem;
+    text-align: center;
+    font-size: .8rem;
+  }
+
+  p {
+    margin: 0 10px;
+    color: $muted;
   }
 }
 
