@@ -45,7 +45,7 @@
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
           - race = races.find_by_party_and_state(party, cur_state)
           - candidates = race.candidate_states.sort{|cd| -cd.n_votes}
-          - leader = candidates.first
+          - leader = race.candidate_states.max_by(&:n_votes)
           %div{class: "party-container #{party_abbrev} clearfix"}
             -if party.adjective == 'Democratic'
               %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
