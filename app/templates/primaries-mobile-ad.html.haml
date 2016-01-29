@@ -1,5 +1,5 @@
 !!! 5
-- preview = true
+- preview = !true
 %html{lang: 'en'}
   %meta{charset: 'utf-8'}
   %title Huffington Post 2016 Primary Results
@@ -44,8 +44,8 @@
         -parties.each do |party|
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
           - race = races.find_by_party_and_state(party, cur_state)
-          - candidates = race.candidate_states.sort{|cd| cd.n_votes}
-          - leader = candidates.first
+          - candidates = race.candidate_states.sort{|cd| -cd.n_votes}
+          - leader = race.candidate_states.max_by(&:n_votes)
           %div{class: "party-container #{party_abbrev} clearfix"}
             -if party.adjective == 'Democratic'
               %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"

@@ -1,5 +1,5 @@
 !!! 5
-- preview = true
+- preview = !true
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
@@ -19,7 +19,7 @@
     %h2.main-hed.sub= "Iowa Caucus"
     %div.container
       - if preview
-        %p= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
+        %p.intro= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
         %p.tease-link
           %a{target: '_blank', href: "/2016/primaries"} See the election calendar
       - parties.each do |party|
@@ -38,7 +38,7 @@
                 %th.candidate Candidate
                 %th.pollster
                   .long-table-heading Polling Average
-                %th.n-votes votes
+                %th.n-votes Votes
             %tbody
               - race = sort_iowa_data(party, state_iowa)
               - race.each do |candidate_state|

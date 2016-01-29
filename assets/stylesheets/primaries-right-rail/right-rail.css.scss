@@ -14,8 +14,13 @@ h1, h2, h3, h4{
 .primary-right-rail {
   @include right-rail-base;
 
-  max-width: 300px;
+  //max-width: 300px;
   margin: 0 auto;
+
+  p.intro {
+    margin-bottom: 12px;
+    margin-top: 12px;
+  }
 
   div.rail-banner {
     background-color: black;
@@ -24,7 +29,11 @@ h1, h2, h3, h4{
     padding: 5px;
   }
 
-  .tease-link { @include tease-link(); }
+  .tease-link { 
+    @include tease-link();
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 
   .footnotes {
     @include footnotes;
@@ -32,7 +41,8 @@ h1, h2, h3, h4{
 
   .race-name{
     width: 100%;
-    margin-top: 15px;
+    margin-top: 12px;
+    margin-bottom: 6px;
     font-weight: bold;
     font-size: 18px;
     display: inline-block;
@@ -49,23 +59,11 @@ h1, h2, h3, h4{
       margin: 0 !important;
       font-size: 12px;
     }
-    margin-bottom: 10px;
   }
 
   div.container {
     .race-name.gop { background: $widgetRed; }
     .race-name.dem { background: $widgetBlue; }
-  }
-
-  p {
-    margin: 20px 10px;
-  }
-
-  .party-container {
-
-    h3, p {
-      margin: 10px;
-    }
   }
 
   table.t-pollster {
@@ -84,4 +82,31 @@ h1, h2, h3, h4{
 
   &.future table.t-pollster .n-votes { display: none; }
   &.present table.t-pollster .pollster { display: none; }
+
+  .party-container {
+    h3, p {
+      margin: 10px;
+    }
+
+    table {
+      thead, th, .pollster {
+        font-weight: normal !important;
+      }
+      th {
+        padding-bottom: 6px;
+      }
+    }
+
+    table[data-party-id="Dem"] {
+      td {
+        //background-color: $widgetLightBlue;
+      }
+    }
+    table[data-party-id="GOP"] {
+      td {
+        //background-color: $widgetLightRed;
+      }
+    }
+  }
+
 }
