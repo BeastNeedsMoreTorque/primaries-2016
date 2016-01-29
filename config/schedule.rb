@@ -13,6 +13,6 @@
 module ServerSchedule
   TimeoutInS = 3600 # Once a day
   RefreshDelegates = true
-  RefreshPrimariesRaceDays = []
+  RefreshPrimariesRaceDays = ['2016-02-01']
   RefreshPollsterPrimaries = true
 end
