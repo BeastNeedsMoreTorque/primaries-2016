@@ -20,7 +20,7 @@ $(function() {
     });
     var precinctsPct = ((precinctsReporting/totalPrecincts)*100).toFixed(0) + "%";
     $("#unreported-counties").text(totalCounties - countiesReporting)
-    $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " OF PRECINCTS)</span>");
+    $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " of precincts)</span>");
   }
 
   function updateCandidates(data){
