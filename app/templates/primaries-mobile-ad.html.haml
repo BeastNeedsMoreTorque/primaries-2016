@@ -1,77 +1,41 @@
 !!! 5
-- preview = !true
 %html{lang: 'en'}
   %meta{charset: 'utf-8'}
+  %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
   %title Huffington Post 2016 Primary Results
+  %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
   %link{rel: 'stylesheet', href: asset_path('mobile-ad.css')}
 
-%body
+%body{class: "race-day-#{race_day.when_race_day_happens}"}
   %div.primary-mobile-ad
     %div.head
-      -if preview
-        %h3.main-hed= "HAPPENING FEB. 1, 2016"
-        %h3.main-hed= "Iowa Caucus"
-      -else
-        %h3.main-hed= "HAPPENING NOW: Iowa Caucus"
+      %h1.main-hed.when-future= "HAPPENING SOON: Iowa Caucus"
+      %h1.main-hed.when-present= "HAPPENING NOW: Iowa Caucus"
+      %h1.main-hed.when-past= "RESULTS: Iowa Caucus"
     %div.parties-container
-      -if preview
-        -parties.each do |party|
-          - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
-          - candidates = party.candidates.sort_by{|c| -(c.poll_percent or 0)}
-          - leader = candidates.first
-          %div{class: "party-container #{party_abbrev} clearfix"}
-            -if party.adjective == 'Democratic'
-              %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
-              %div.img-stats-container
-                %div.leading-candidate-img
-                  %img{src: image_path("#{leader.slug}.png"), alt: ''}
-                %div.leading-candidate-delegates
-                  %p.frontrunner-cd= "#{leader.name.upcase}"
-                  %p.frontrunner-num= "#{leader.poll_percent}%"
-                  %p.frontrunner-unit Polling Average 
-                  %p.source!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
-            -else
-              %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
-              %div.img-stats-container
-                %div.leading-candidate-img
-                  %img{src: image_path("#{leader.slug}.png"), alt: ''}
-                %div.leading-candidate-delegates
-                  %p.frontrunner-cd= "#{leader.name.upcase}"
-                  %p.frontrunner-num= "#{leader.poll_percent}%"
-                  %p.frontrunner-unit Polling Average
-                  %p.source!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
-      -else
-        -parties.each do |party|
-          - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
-          - race = races.find_by_party_and_state(party, cur_state)
-          - candidates = race.candidate_states.sort{|cd| -cd.n_votes}
-          - leader = race.candidate_states.max_by(&:n_votes)
-          %div{class: "party-container #{party_abbrev} clearfix"}
-            -if party.adjective == 'Democratic'
-              %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
-              %div.img-stats-container
-                %div.leading-candidate-img
-                  %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
-                %div.leading-candidate-delegates
-                  %p.frontrunner-cd= "#{leader.candidate.name.upcase}"
-                  %p.frontrunner-num= "#{format_int(leader.n_votes)}"
-                  %p.frontrunner-unit Votes 
-            -else
-              %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
-              %div.img-stats-container
-                %div.leading-candidate-img
-                  %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
-                %div.leading-candidate-delegates
-                  %p.frontrunner-cd= "#{leader.candidate.name.upcase}"
-                  %p.frontrunner-num= " #{format_int(leader.n_votes)}"
-                  %p.frontrunner-unit Votes 
+      -race_day.state_party_races.first[1].each do |party, race, _|
+        - candidates_poll = race.candidate_states.sort_by{|c| -(c.candidate.poll_percent or 0)}
+        - leader = race_day.when_race_day_happens == 'future' ? candidates_poll.first : race.candidate_states.max_by(&:n_votes)
+        .party-container{class: party.id}
+          .frontrunner-lbl
+            %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
+            %div= "#{party.adjective.upcase}"
+            %div= "FRONTRUNNER"
+          %div.img-stats-container
+            %div.leading-candidate-img
+              %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
+            %div.leading-candidate-delegates
+              %p.frontrunner-cd= "#{leader.candidate.name.upcase}"
+              %p.frontrunner-num.when-future= "#{leader.candidate.poll_percent}%"
+              %p.frontrunner-unit.when-future Polling Average 
+              %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
+              %p.frontrunner-unit.when-present.when-past Votes 
+              %p.source.when-future!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
 
-  -if preview
-    %div.tease-link
-      %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See All Candidates"
-  -else
-    %div.tease-link
-      %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See Live Results"
+  %div.tease-link.when-future
+    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See All Candidates"
+  %div.tease-link.when-present.when-past
+    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See Live Results"
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
     var pymChild = new pym.Child();

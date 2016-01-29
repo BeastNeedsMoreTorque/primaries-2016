@@ -1,8 +1,6 @@
 @import '_variables';
 
-body {
-	font-family: Helvetica, Arial, sans-serif;
-}
+@include tense-conditionals;
 
 .primary-mobile-ad {
 	@include mobile-ad-base;
@@ -54,10 +52,11 @@ body {
 
 .party-container {
 	margin: 5px;
-	&.dem {
+	width: 50%;
+	&.Dem {
 		background: $widgetLightBlue;
 	}
-	&.gop {
+	&.GOP {
 		background: $widgetLightRed;
 	}
 }
@@ -67,10 +66,13 @@ body {
 	text-align: center;
 	margin: 0 0 5px 0;
 	color: #fff;
-	.dem & {
+	img {
+		float: left;
+	}
+	.Dem & {
 		background: $widgetBlue;
 	}
-	.gop & {
+	.GOP & {
 		background: $widgetRed;
 	}
 }
@@ -118,11 +120,14 @@ body {
 
 .tease-link {
 	@include tease-link();
+	@include huffpo-body-copy;
 	margin: 5px;
 
 	a {
     color: #2e7061;
 	}
+}
 
-
+h3.main-hed {
+	@include header-copy;
 }
