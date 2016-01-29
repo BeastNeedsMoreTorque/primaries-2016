@@ -22,11 +22,11 @@ $(function() {
     $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " of precincts)</span>");
   }
 
-  function updateCandidates(data){
+  function updateCandidates(data, tense){
     $(".candidate table").removeClass("leader");
     for(key in data){
       sorted = data[key].sort(function(a,b){return b[1] - a[1]})
-      if(sorted[0][1] !== 0)
+      if(sorted[0][1] !== 0 && tense !== 'future')
         $(".candidate[data-candidate-id='"+sorted[0][0]+"'] table").addClass("leader");
       sorted.forEach(function(item){
         $(".candidate[data-candidate-id='"+item[0]+"'] td:last-child").text(format_int(item[1]));
@@ -40,7 +40,7 @@ $(function() {
       tense = json["when_race_day_happens"];
       $("body").removeClass().addClass("race-day-" + tense);
       fillSvg(json["counties"]);
-      updateCandidates(json["candidates"]);
+      updateCandidates(json["candidates"], tense);
     })
     .fail(function() { console.warn('Failed to load', this); })
     .always(function() { window.setTimeout(getData, 30000); });

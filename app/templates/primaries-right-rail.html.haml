@@ -41,7 +41,8 @@
                     .long-table-heading Polling Average
                   %th.n-votes.when-past.when-present Votes
               %tbody
-                - race.candidate_states.sort{|a,b| a.candidate.name <=> b.candidate.name}.each_with_index do |cd_state, idx|
+                - candidates = race_day.when_race_day_happens == "future" ? race.candidate_states.sort_by{|c| -(c.candidate.poll_percent or 0)} : race.candidate_states.sort_by(&:n_votes).reverse
+                - candidates.each_with_index do |cd_state, idx|
                   - candidate = cd_state.candidate
                   %tr{'data-candidate-id': candidate.id}
                     %td.candidate
