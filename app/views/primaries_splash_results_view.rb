@@ -8,16 +8,15 @@ class PrimariesSplashResultsView < BaseView
     super(database)
   end
 
-  def cur_state_code; @cur_state_code = 'IA'; end
-
-  def cur_state; @cur_state ||= database.states.find!(cur_state_code); end
+  def race_day; @race_day ||= database.race_days.find("2016-02-01"); end
 
   def output_path; "2016/primaries/splash.json"; end
 
   def build_json
     JSON.dump(
       counties: county_party_objects,
-      candidates: candidate_objects
+      candidates: candidate_objects,
+      when_race_day_happens: race_day.when_race_day_happens
     )
   end
 
@@ -28,33 +27,26 @@ class PrimariesSplashResultsView < BaseView
       "Dem" => [],
       "GOP" => []
     }
-    #data.push(["candidate_id", "votes"])
-    parties.each{|party|
-      race = races.find_by_party_and_state(party, cur_state)
+    race_day.races.each do |race|
       race.candidate_states.each{|cd|
         data[race.party_id].push([cd.candidate_id, cd.n_votes])
         #data[race.party_id].push([cd.candidate_id, rand(1...9999)])
       }
-    }
+    end
     data
   end
 
   def county_party_objects
     fips = {}
-    parties.each{|party|
-      race = races.find_by_party_and_state(party, cur_state)
-      subkeyGOP = "GOP,#{race.state_code},#{race.race_type}"
-      subkeyDem = "Dem,#{race.state_code},#{race.race_type}"
-      subkeyThis = "#{race.party_id},#{race.state_code},#{race.race_type}"
+    race_day.races.each do |race|
       race.county_parties.each{|cp|
         key = cp.fips_int.to_s
-        obj = (fips.keys.include? key) ? fips[key] : {"n_precincts_total" => 0, subkeyDem => 0, subkeyGOP => 0, "total_n_precincts_reporting" => 0}
-        obj[subkeyThis] += cp.n_precincts_reporting
+        obj = (fips[key] ||= { "n_precincts_total" => 0, "total_n_precincts_reporting" => 0 })
         obj["total_n_precincts_reporting"] += cp.n_precincts_reporting
         obj["n_precincts_total"] += cp.n_precincts_total
         fips[key] = obj
       }
-    }
+    end
     fips
   end
 
