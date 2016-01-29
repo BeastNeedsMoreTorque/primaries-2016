@@ -66,9 +66,12 @@
                   %p.frontrunner-num= " #{format_int(leader.n_votes)}"
                   %p.frontrunner-unit Votes 
 
-
-  %div.tease-link
-    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See live results"
+  -if preview
+    %div.tease-link
+      %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See All Candidates"
+  -else
+    %div.tease-link
+      %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See Live Results"
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
     var pymChild = new pym.Child();
