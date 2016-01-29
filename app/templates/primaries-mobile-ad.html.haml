@@ -68,6 +68,7 @@
 
   %div.tease-link
     %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See live results"
-
   %script{src: '/2016/javascripts/pym.min.js'}
+  %script
+    var pymChild = new pym.Child();
   %script{src: asset_path('ga.js')}
