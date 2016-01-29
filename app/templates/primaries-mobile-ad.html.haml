@@ -9,38 +9,65 @@
   %div.primary-mobile-ad
     %div.head
       -if preview
-        %h3.main-hed= "HAPPENING TODAY: Iowa Caucus"
-        %p= "No results yet"
+        %h3.main-hed= "HAPPENING FEB. 1, 2016: Iowa Caucus"
       -else
         %h3.main-hed= "HAPPENING NOW: Iowa Caucus"
     %div.parties-container
-      -parties.each do |party|
-        - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
-        - race = races.find_by_party_and_state(party, cur_state)
-        - candidates = race.candidate_states.sort{|cd| cd.n_votes}
-        - leader = candidates.first
-        %div{class: "party-container #{party_abbrev} clearfix"}
-          -if party.adjective == 'Democratic'
-            %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
-            %div.img-stats-container
-              %div.leading-candidate-img
-                %img{src: image_path("#{leading_democrat.slug}.png"), alt: ''}
-              %div.leading-candidate-delegates
-                %p.frontrunner-cd= "#{leader.candidate.name.upcase}"
-                %p.frontrunner-num= "#{format_int(leader.n_votes)}"
-                %p.frontrunner-unit Votes 
-          -else
-            %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
-            %div.img-stats-container
-              %div.leading-candidate-img
-                %img{src: image_path("#{leading_republican.slug}.png"), alt: ''}
-              %div.leading-candidate-delegates
-                %p.frontrunner-cd= "#{leader.candidate.name.upcase}"
-                %p.frontrunner-num= " #{format_int(leader.n_votes)}"
-                %p.frontrunner-unit Votes 
+      -if preview
+        -parties.each do |party|
+          - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
+          - candidates = party.candidates.sort_by{|c| -(c.poll_percent or 0)}
+          - leader = candidates.first
+          %div{class: "party-container #{party_abbrev} clearfix"}
+            -if party.adjective == 'Democratic'
+              %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
+              %div.img-stats-container
+                %div.leading-candidate-img
+                  %img{src: image_path("#{leader.slug}.png"), alt: ''}
+                %div.leading-candidate-delegates
+                  %p.frontrunner-cd= "#{leader.name.upcase}"
+                  %p.frontrunner-num= "#{leader.poll_percent}%"
+                  %p.frontrunner-unit Polling Average 
+                  %p.source!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
+            -else
+              %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
+              %div.img-stats-container
+                %div.leading-candidate-img
+                  %img{src: image_path("#{leader.slug}.png"), alt: ''}
+                %div.leading-candidate-delegates
+                  %p.frontrunner-cd= "#{leader.name.upcase}"
+                  %p.frontrunner-num= "#{leader.poll_percent}%"
+                  %p.frontrunner-unit Polling Average
+                  %p.source!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
+      -else
+        -parties.each do |party|
+          - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
+          - race = races.find_by_party_and_state(party, cur_state)
+          - candidates = race.candidate_states.sort{|cd| cd.n_votes}
+          - leader = candidates.first
+          %div{class: "party-container #{party_abbrev} clearfix"}
+            -if party.adjective == 'Democratic'
+              %p.frontrunner-lbl="DEMOCRATIC FRONTRUNNER"
+              %div.img-stats-container
+                %div.leading-candidate-img
+                  %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
+                %div.leading-candidate-delegates
+                  %p.frontrunner-cd= "#{leader.candidate.name.upcase}"
+                  %p.frontrunner-num= "#{format_int(leader.n_votes)}"
+                  %p.frontrunner-unit Votes 
+            -else
+              %p.frontrunner-lbl="REPUBLICAN FRONTRUNNER"
+              %div.img-stats-container
+                %div.leading-candidate-img
+                  %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
+                %div.leading-candidate-delegates
+                  %p.frontrunner-cd= "#{leader.candidate.name.upcase}"
+                  %p.frontrunner-num= " #{format_int(leader.n_votes)}"
+                  %p.frontrunner-unit Votes 
+
 
   %div.tease-link
-    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "View The Latest Results"
+    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See live results"
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script{src: asset_path('ga.js')}
