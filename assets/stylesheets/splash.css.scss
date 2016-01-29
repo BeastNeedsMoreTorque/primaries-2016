@@ -62,6 +62,7 @@ body {
 
       text {
         @include svg-city-label();
+        @include huffpo-body-copy;
         font-size: 23px; // the image is squished quite small; bump the font.
       }
 		}
