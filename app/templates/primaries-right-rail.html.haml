@@ -31,8 +31,8 @@
             %div{'class': "race-name #{party_abbrev}"}
               %h3= "#{party.adjective.upcase} CAUCUS"
               %p{class: "#{party.id.downcase}-del-available"}
-                Delegates At Play:
-                = 33
+                Delegates:
+                = race.n_delegates
             %table.t-pollster{'data-party-id': party.id}
               %thead
                 %tr
