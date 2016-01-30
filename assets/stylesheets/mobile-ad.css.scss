@@ -6,6 +6,11 @@
 	@include mobile-ad-base;
 }
 
+body {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+
 .head {
 	@include header-copy;
 	text-align: center;
@@ -53,12 +58,8 @@
 .party-container {
 	margin-top: 5px;
 	margin-bottom: 5px;
-	&:first-child {
-		border-right: 3px solid #fff;
-	}
-	&:last-child {
-		border-left: 3px solid #fff;
-	}
+	border-right: 3px solid #fff;
+	border-left: 3px solid #fff;
 	width: 50%;
 	&.Dem {
 		background: $widgetLightBlue;
