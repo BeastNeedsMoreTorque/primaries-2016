@@ -27,7 +27,7 @@
               %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
             %div.leading-candidate-delegates
               %p.frontrunner-cd= "#{leader.candidate.name.upcase}"
-              %p.frontrunner-num.when-future= "#{leader.candidate.poll_percent}%"
+              %p.frontrunner-num.when-future= "#{leader.poll_percent}%"
               %p.frontrunner-unit.when-future Polling Average 
               %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
               %p.frontrunner-unit.when-present.when-past Votes 
