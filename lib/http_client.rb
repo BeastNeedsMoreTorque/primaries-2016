@@ -52,19 +52,13 @@ class HttpClient
       get_json!("https://api.ap.org/v2/elections?format=json&apikey=#{ap_api_key}", maybe_etag)
     when :del_super
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
-      r1 = get_json!("https://api.ap.org/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{ap_api_key}#{is_test_query_param}", maybe_etag)
-      if r1 === nil
-        # Exact same contents as before. And AP docs say report data at any
-        # given URL remain constant, so we assume no change there
-        nil
-      else
-        # We need to cache the ETag of the first response, because if it
-        # matches we want to avoid making the second request completely.
-        report_id = Oj.load(r1[:data])['reports'][0]['id']
-        r2 = get_json!("#{report_id}?format=json&apikey=#{ap_api_key}", nil) # no ETag, no "test" parameter
+      # AP bug: ETag is always "0xfeed". Don't use ETag. Don't trust the docs.
+      r1 = get_json!("https://api.ap.org/v2/reports?type=Delegates&subtype=delsuper&format=json&apikey=#{ap_api_key}#{is_test_query_param}", nil)
 
-        { data: r2[:data], etag: r1[:etag] }
-      end
+      report_id = Oj.load(r1[:data])['reports'][0]['id']
+      r2 = get_json!("#{report_id}?format=json&apikey=#{ap_api_key}", nil) # no ETag, no "test" parameter
+
+      { data: r2[:data], etag: r1[:etag] }
     else
       throw ArgumentError.new("invalid key #{key}")
     end
