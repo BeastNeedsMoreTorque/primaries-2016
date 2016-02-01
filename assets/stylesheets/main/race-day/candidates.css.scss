@@ -130,6 +130,20 @@ body.race-day .race {
       color: $muted;
     }
   }
+
+  p.state-delegate-equivalents {
+    font-size: .8rem;
+    color: $muted;
+  }
+
+  sup {
+    color: $strongDem;
+    vertical-align: top; // "super" puts it too high; it bumps other text down
+    font-size: .7rem;
+    display: inline-block;
+    height: .9rem;
+    line-height: .9rem;
+  }
 }
 
 body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates { display: none; }

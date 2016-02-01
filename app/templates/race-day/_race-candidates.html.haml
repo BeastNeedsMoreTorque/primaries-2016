@@ -2,7 +2,12 @@
   %thead
     %tr
       %th.candidate Candidate
-      %th.n-votes Votes
+      %th.n-votes
+        - if race.n_votes_is_really_n_sdes
+          %abbr{title: 'State Delegate Equivalents'} SDEs
+          %sup> ∗
+        - else
+          Votes
       %th.n-delegates Delegates
       %th.pollster Polling Average 
   %tbody
@@ -26,6 +31,11 @@
 -# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
 - if n_unellipsized < 0
   .ellipsize-table-prompt
+
+- if race.n_votes_is_really_n_sdes
+  %p.state-delegate-equivalents.when-past.when-present
+    %sup ∗
+    The Iowa Democratic party doesn't report vote counts. It reports "State Delegate Equivalents," which is a prediction of who will attend the state-wide party convention.
 
 .n-delegates.n-delegates-without-candidates
   .dots{class: "dots-#{race.party_id}"}

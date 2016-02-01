@@ -15,6 +15,10 @@ Race = RubyImmutableStruct.new(:database, :ap_id, :race_day_id, :party_id, :stat
     @n_delegates_with_candidates = candidate_states.map(&:n_delegates).reduce(0, :+)
   end
 
+  def n_votes_is_really_n_sdes
+    party_id == 'Dem' && state_code == 'IA'
+  end
+
   # Sort by date, then state name, then party name
   def <=>(rhs)
     c1 = race_day_id.<=>(rhs.race_day_id)
