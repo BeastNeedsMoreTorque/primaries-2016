@@ -10,23 +10,34 @@
       "cobrand": "HuffPost",
       "dL_blogID": "2",
       "dL_cmsID": "hpo:569582cfe4b05b3245daf7f4",
+      "dL_author": "Shane Shifflett",
+      "dL_tags": "elections-2016",
+      "dL_crtdt": "2016-01-26 10:32:28",
     }
   }
 
   function runOmni() {
-    // Workaround so Omniture tracking code doesn't crash on pages w/ SVG
-    if (typeof SVGAnimatedString !== 'undefined') {
-      SVGAnimatedString.prototype.indexOf = function indexOf() { };
-    }
     s_265.pfxID = 'hpo';
     s_265.channel = 'us.hpmgpol';
     s_265.linkInternalFilters = 'javascript:,huffingtonpost.com';
     s_265.prop16 = 'page';
-    s_265.prop1 = 'data';
+    s_265.prop1 = 'elections';
     s_265.pageName = "" + document.title;
     s_265.prop12 = "" + document.URL.split('?')[0];
-    s_265_account ="aolhuffpostpolitics,aolsvc";
     s_265.t();
+  }
+
+  s_265_account ="aolhuffpostpolitics,aolsvc";
+
+  (function(d){
+  var s = d.createElement('script');
+  s.src = "http://o.aolcdn.com/os_merge/?file=/aol/beacon.min.js&file=/aol/omniture.min.js";
+  d.getElementsByTagName('head')[0].appendChild(s);
+  })(document);
+
+  // Workaround so Omniture tracking code doesn't crash on pages w/ SVG
+  if (typeof SVGAnimatedString !== 'undefined') {
+    SVGAnimatedString.prototype.indexOf = function indexOf() { };
   }
 
   function runComscore() {
@@ -65,7 +76,7 @@
 
     document.getElementById('nielson-tracker').appendChild(d);
   }
-  var omniID = window.setInterval(checkOmni, 1000);
+  //var omniID = window.setInterval(checkOmni, 1000);
   var comscoreID = window.setInterval(checkComscore, 1000);
 
   function checkOmni(){
