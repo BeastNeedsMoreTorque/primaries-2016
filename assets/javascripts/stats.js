@@ -76,15 +76,8 @@
 
     document.getElementById('nielson-tracker').appendChild(d);
   }
-  //var omniID = window.setInterval(checkOmni, 1000);
   var comscoreID = window.setInterval(checkComscore, 1000);
 
-  function checkOmni(){
-    if(typeof s_265 !== 'undefined'){
-      runOmni();
-      clearInterval(omniID)
-    }
-  }
   function checkComscore(){
     if(typeof COMSCORE !== 'undefined'){
       runComscore();
