@@ -77,6 +77,7 @@
     border-collapse: collapse;
   }
   th {
+    white-space: nowrap;
     border-bottom: 1px solid #ccc;
   }
   td {
@@ -100,6 +101,18 @@
     margin: 0;
     font-size: 0.8em;
     color: #999;
+  }
+
+  .n-state-delegate-equivalents { display: none; }
+  &.is-state-delegate-equivalents {
+    th.n-votes { display: none; }
+    th.n-state-delegate-equivalents { display: table-cell; }
+    p.n-state-delegate-equivalents {
+      display: block;
+      font-size: .8rem;
+      color: $muted;
+      margin: .5rem 1rem;
+    }
   }
 }
 

@@ -42,10 +42,12 @@ function add_tooltips() {
           '<tr>' +
             '<th class="candidate">Candidate</th>' +
             '<th class="n-votes">Votes</th>' +
+            '<th class="n-state-delegate-equivalents"><abbr title="State Delegate Equivalents">SDEs</abbr>×100<sup>∗</sup></th>' +
           '</tr>' +
         '</thead>' +
         '<tbody></tbody>' +
       '</table>' +
+      '<p class="n-state-delegate-equivalents"><sup>∗</sup> The Iowa Democratic Party reports State Delegate Equivalents (SDEs), not votes.</p>' +
       '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="last-updated">Last updated <time></time></p></div></div>');
   var svg_hover_path = null;
 
@@ -134,6 +136,7 @@ function add_tooltips() {
       var last_updated = new Date(match_arr[2]);
 
       update_tooltip(county_name, candidates, n_reporting, n_total, last_updated, is_from_touch);
+      $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
       position_tooltip_near_svg_path(svg_path);
     } else {
       console.warn('Could not find data for tooltip');
