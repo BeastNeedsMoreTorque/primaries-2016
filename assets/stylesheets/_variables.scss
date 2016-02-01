@@ -277,10 +277,6 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 	@include widget-base;
 }
 
-@mixin right-rail-base {
-  @include widget-base;
-}
-
 @mixin svg-city-label {
   // JavaScript will position this text correctly; only JavaScript can
   // measure the width, because only JavaScript has the font.
