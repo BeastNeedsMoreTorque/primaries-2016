@@ -1,6 +1,7 @@
 //= require ./render_time.js
 //= require ./format_int.js
 //= require ./ellipsize_table.js
+//= require ./polyfill_array_fill.js
 //
 //= require ./position_svg_cities.js
 
