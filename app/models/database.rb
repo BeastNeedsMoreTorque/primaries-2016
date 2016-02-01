@@ -19,15 +19,15 @@ class Database
   # and if it depends on other collections that aren't initialized yet, the
   # sort will crash.
   CollectionNames = %w(
+    counties
     parties
     candidates
     states
     candidate_counties
     candidate_states
-    counties
     county_parties
-    race_days
     races
+    race_days
   )
 
   attr_reader(*CollectionNames)

@@ -1,4 +1,4 @@
-State = Struct.new(:database, :fips_int, :code, :abbreviation, :name, :n_dem_delegates, :n_gop_delegates) do
+State = RubyImmutableStruct.new(:database, :fips_int, :code, :abbreviation, :name, :n_dem_delegates, :n_gop_delegates) do
   def id; code; end
 
   def to_json(*a)

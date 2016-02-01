@@ -1,10 +1,23 @@
 # Could almost be called PartyState. Gives the votes/delegates of a state.
-Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :pollster_slug, :poll_last_updated, :ap_says_its_over) do
+Race = RubyImmutableStruct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :pollster_slug, :poll_last_updated, :ap_says_its_over) do
   include Comparable
+
+  # Sum of candidate_states.n_delegates (pledged and unpledged alike)
+  attr_reader(:n_delegates_with_candidates)
+
+  attr_reader(:candidate_states, :candidate_counties, :county_parties)
+
+  def after_initialize
+    @candidate_states = database.candidate_states.find_all_by_party_id_and_state_code(party_id, state_code).sort || []
+    @candidate_counties = database.candidate_counties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
+    @county_parties = database.county_parties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
+
+    @n_delegates_with_candidates = candidate_states.map(&:n_delegates).reduce(0, :+)
+  end
 
   # Sort by date, then state name, then party name
   def <=>(rhs)
-    c1 = date.<=>(rhs.date)
+    c1 = race_day_id.<=>(rhs.race_day_id)
     if c1 != 0
       c1
     else
@@ -28,11 +41,6 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def disabled?; !race_day || race_day.disabled?; end
   def enabled?; race_day && race_day.enabled?; end
   def n_delegates; state.n_delegates(party_id); end
-
-  # Sum of candidate_states.n_delegates (pledged and unpledged alike)
-  def n_delegates_with_candidates
-    @n_delegates_with_candidates ||= candidate_states.map(&:n_delegates).reduce(0, :+)
-  end
 
   # True iff at least one candidate has a delegate -- pledged or unpledged
   def has_delegate_counts
@@ -75,16 +83,4 @@ Race = Struct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race
   def present?; when_race_happens == 'present'; end
   def past?; when_race_happens == 'past'; end
   def future?; when_race_happens == 'future'; end
-
-  def candidate_states
-    @candidate_states ||= database.candidate_states.find_all_by_party_id_and_state_code(party_id, state_code).sort || []
-  end
-
-  def candidate_counties
-    @candidate_counties ||= database.candidate_counties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
-  end
-
-  def county_parties
-    @county_parties ||= database.county_parties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
-  end
 end

@@ -5,6 +5,7 @@ gem 'archieml'
 gem 'aws-sdk'
 gem 'oj'
 gem 'redcarpet' # for rendering Markdown in Google Docs
+gem 'ruby-immutable-struct'
 gem 'sprockets'
 gem 'uglifier'
 gem 'hamlit' # Faster version of Haml
