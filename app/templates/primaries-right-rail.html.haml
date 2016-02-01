@@ -15,7 +15,8 @@
           %h1.main-hed.when-past= "RESULTS"
           %h1.main-hed.when-future= "HAPPENING SOON"
         %div.line
-      %h2.main-hed.sub= "Iowa Caucus"
+      %h2.main-hed.sub
+        %a{target: '_blank', href: '/2016/primaries/2016-02-01'} Iowa Caucus
       %div.container
         %p.intro.when-future= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
         %p.tease-link.when-future
@@ -24,7 +25,7 @@
           %a{target: '_blank', href: "/2016/primaries/2016-02-01"} See Live Updates
         %p.tease-link.when-past
           %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See Upcoming Races
-        -race_day.state_party_races.first[1].each do |party, race, _|
+        - race_day.state_party_races.first[1].each do |party, race, _|
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
           .party-container
             - del_key = "n_#{party.id.downcase}_delegates"
