@@ -25,7 +25,7 @@
     s_265.prop1 = 'data';
     s_265.pageName = "" + document.title;
     s_265.prop12 = "" + document.URL.split('?')[0];
-    s_265_account ="aolhuffpostpol,aolsvc";
+    s_265_account ="aolhuffpostpolitics,aolsvc";
     s_265.t();
   }
 
