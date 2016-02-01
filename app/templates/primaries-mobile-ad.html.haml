@@ -20,14 +20,14 @@
           .frontrunner-lbl
             %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
             .container
-              %div= "#{party.adjective.upcase}"
-              %div= "FRONTRUNNER"
+              %div= party.adjective
+              %div Frontrunner
           %div.img-stats-container
             %div.leading-candidate-img
               %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
             %div.leading-candidate-delegates
-              %p.frontrunner-cd= "#{leader.candidate.name.upcase}"
-              %p.frontrunner-num.when-future= "#{leader.poll_percent}%"
+              %p.frontrunner-cd= leader.candidate.name
+              %p.frontrunner-num.when-future= format_percent_or_nil(leader.poll_percent)
               %p.frontrunner-unit.when-future Polling Average 
               %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
               %p.frontrunner-unit.when-present.when-past Votes 
