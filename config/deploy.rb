@@ -30,16 +30,6 @@ task :reset_env do
     execute "echo AIRBRAKE_PROJECT_KEY='#{fetch(:airbrake_project_key)}' >> #{shared_path}/env"
     execute "echo AWS_REGION=us-east-1 >> #{shared_path}/env"
     execute "echo LAST_DATE='#{fetch(:last_date)}' >> #{shared_path}/env"
-
-    # FIXME remove AP_TEST. We use it because AP gives bad candidate data
-    # prior to 2016-01-31, but we want to render pages before that date. But
-    # AP_TEST=true doesn't actually solve that problem. Really, we need to
-    # maintain our own list of candidates somewhere.
-    execute "echo AP_TEST=true >> #{shared_path}/env"
-
-    # FIXME remove AP_ZERO. We use it because AP gives bad candidate data
-    # prior to 2016-01-31, but we want to render pages before that date.
-    execute "echo AP_ZERO=true >> #{shared_path}/env"
   end
 end
 
