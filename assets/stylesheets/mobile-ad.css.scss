@@ -82,12 +82,16 @@ body {
 	-moz-box-sizing: border-box;
 	@include vertical-center-flex;
 	img {
-		height: 30px;
+		width: 20%;
 	}
 	div {
 		width: 80%;
 		text-align: center;
 		margin-left: 5px;
+		font-size: 1em;
+	}
+	p {
+		margin: 0;
 	}
 	.Dem & {
 		background: $widgetBlue;

@@ -20,8 +20,8 @@
           .frontrunner-lbl
             %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
             .container
-              %div= party.adjective
-              %div Frontrunner
+              %p= party.adjective
+              %p Frontrunner
           %div.img-stats-container
             %div.leading-candidate-img
               %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
