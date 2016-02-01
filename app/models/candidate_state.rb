@@ -5,6 +5,8 @@ require_relative './state'
 CandidateState = RubyImmutableStruct.new(:database, :candidate_id, :state_code, :ballot_order, :n_votes, :n_delegates, :poll_percent, :poll_sparkline) do
   include Comparable
 
+  def id; "#{candidate_id}-#{state_code}"; end
+
   def candidate; database.candidates.find!(candidate_id); end
   def state; database.states.find!(state_code); end
   def party_id; candidate.party_id; end

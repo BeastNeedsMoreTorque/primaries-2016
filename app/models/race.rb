@@ -1,5 +1,5 @@
 # Could almost be called PartyState. Gives the votes/delegates of a state.
-Race = RubyImmutableStruct.new(:database, :ap_id, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :pollster_slug, :poll_last_updated, :ap_says_its_over) do
+Race = RubyImmutableStruct.new(:database_or_nil, :ap_id, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :pollster_slug, :poll_last_updated, :ap_says_its_over) do
   include Comparable
 
   # Sum of candidate_states.n_delegates (pledged and unpledged alike)
@@ -7,12 +7,18 @@ Race = RubyImmutableStruct.new(:database, :ap_id, :race_day_id, :party_id, :stat
 
   attr_reader(:candidate_states, :candidate_counties, :county_parties)
 
-  def after_initialize
-    @candidate_states = database.candidate_states.find_all_by_party_id_and_state_code(party_id, state_code).sort || []
-    @candidate_counties = database.candidate_counties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
-    @county_parties = database.county_parties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
+  def id; "#{race_day_id}-#{party_id}-#{state_code}"; end
 
-    @n_delegates_with_candidates = candidate_states.map(&:n_delegates).reduce(0, :+)
+  def after_initialize
+    if !database_or_nil.nil?
+      database = database_or_nil
+
+      @candidate_states = database.candidate_states.find_all_by_party_id_and_state_code(party_id, state_code).sort || []
+      @candidate_counties = database.candidate_counties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
+      @county_parties = database.county_parties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
+
+      @n_delegates_with_candidates = candidate_states.map(&:n_delegates).reduce(0, :+)
+    end
   end
 
   # Sort by date, then state name, then party name

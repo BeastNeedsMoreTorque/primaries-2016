@@ -5,6 +5,8 @@ require_relative '../../lib/api_sources'
 require_relative '../../lib/sparkline'
 require_relative '../collections/parties'
 require_relative '../collections/race_days'
+require_relative '../sources/ap_del_super_source'
+require_relative '../sources/ap_election_days_source'
 
 # All data that goes into page rendering.
 #
@@ -89,118 +91,36 @@ class Database
       id_to_candidate_full_name[copy_candidate['id']] = copy_candidate['name']
     end
 
-    # Fill CandidateState (no ballot_order or n_votes) and Candidate (no name)
-    for del in ApiSources.GET_del_super[:del]
-      party_id = del[:pId]
-      party_extra = Parties.extra_attributes_by_id.fetch(party_id.to_sym)
-
-      parties << [ party_id, party_extra[:name], party_extra[:adjective], del[:dVotes], del[:dNeed] ]
-
-      for del_state in del[:State]
-        state_code = del_state[:sId]
-        next if state_code == 'UN' # "Unassigned super delegates"
-        for del_candidate in del_state[:Cand]
-          candidate_id = del_candidate[:cId]
-          last_name = del_candidate[:cName]
-          next if candidate_id.length >= 6
-          n_delegates = del_candidate[:dTot].to_i
-          n_unpledged_delegates = del_candidate[:sdTot].to_i
-
-          if state_code == 'US'
-            full_name = id_to_candidate_full_name[candidate_id]
-            c = [ candidate_id, party_id, full_name, last_name, n_delegates, n_unpledged_delegates, nil, nil, nil ]
-            candidates << c
-            id_to_candidate[candidate_id] = c
-          else
-            cs = [ candidate_id, state_code, -1, 0, n_delegates, nil, nil ]
-            candidate_states << cs
-            ids_to_candidate_state[[candidate_id, state_code]] = cs
-          end
-        end
-      end
+    del_super = ApDelSuperSource.new(ApiSources.GET_del_super)
+    for candidate in del_super.candidates
+      full_name = id_to_candidate_full_name[candidate.id]
+      candidates << candidate.merge(name: full_name)
+      id_to_candidate[candidate.id] = candidate
+    end
+    for candidate_state in del_super.candidate_states
+      candidate_states << candidate_state
+      ids_to_candidate_state[[candidate_state.candidate_id, candidate_state.state_code]] = candidate_state
+    end
+    for party in del_super.parties
+      party_extra = Parties.extra_attributes_by_id.fetch(party.id.to_sym)
+      parties << party.merge(party_extra)
     end
 
-    for election_day in ApiSources.GET_all_primary_election_days
-      race_day_id = election_day[:electionDate]
-      for race_hash in election_day[:races]
-        race_id = race_hash[:raceID]
-        party_id = race_hash[:party]
-        race_type = race_hash[:raceType]
+    ap_election_days = ApElectionDaysSource.new(ApiSources.GET_all_primary_election_days)
 
-        # If the race is in the future, AP will put a :statePostal here.
-        # If the race is today or in the past, AP will omit this :statePostal
-        # and add one to the state :reportingUnit instead
-        state_code = race_hash[:statePostal]
-
-        # If the race is in the future, AP will have no :reportingUnits, and it
-        # will put the :lastUpdated in the main hash. If the race is today, AP
-        # will omit this :lastUpdated; we'll use the :lastUpdated on the state
-        # :reportingUnit instead.
-        last_updated = race_hash[:lastUpdated] ? DateTime.parse(race_hash[:lastUpdated]) : nil
-
-        race = [ race_id, race_day_id, party_id, state_code, race_type, nil, nil, last_updated, nil, nil, nil ]
-        races << race
-
-        for reporting_unit in (race_hash[:reportingUnits] || [])
-          n_precincts_reporting = reporting_unit[:precinctsReporting]
-          n_precincts_total = reporting_unit[:precinctsTotal]
-
-          if reporting_unit[:level] == 'state'
-            # As described above: if this reporting_unit is set, that means AP
-            # didn't give us a state_code or last_updated above, so we need to
-            # set them now.
-            state_code = reporting_unit[:statePostal]
-            last_updated = DateTime.parse(reporting_unit[:lastUpdated])
-
-            race[3] = state_code
-            race[7] = last_updated
-
-            race[5] = n_precincts_reporting
-            race[6] = n_precincts_total
-
-            for candidate_hash in reporting_unit[:candidates]
-              candidate_id = candidate_hash[:polID]
-              next if candidate_id.length >= 6
-              candidate = id_to_candidate[candidate_id]
-
-              next if !candidate
-
-              candidate_state = ids_to_candidate_state[[candidate_id, state_code]]
-
-              if !candidate_state
-                raise "Missing candidate-state pair #{candidate_id}-#{state_code}"
-              end
-
-              candidate_state[2] = candidate_hash[:ballotOrder]
-              candidate_state[3] = candidate_hash[:voteCount]
-            end
-          elsif reporting_unit[:level] == 'FIPSCode'
-            fips_code = reporting_unit[:fipsCode]
-            county_id = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
-
-            if !seen_county_ids.include?(county_id)
-              counties << [ county_id ]
-              seen_county_ids.add(county_id)
-            end
-
-            county_parties << [ county_id, party_id, n_precincts_reporting, n_precincts_total, last_updated ]
-
-            for candidate_hash in reporting_unit[:candidates]
-              candidate_id = candidate_hash[:polID]
-              candidate = id_to_candidate[candidate_id]
-
-              next if !candidate
-
-              n_votes = candidate_hash[:voteCount]
-
-              candidate_counties << [ party_id, candidate_id, county_id, n_votes ]
-            end
-          else
-            raise "Invalid reporting unit level `#{reporting_unit[:level]}'"
-          end
-        end
-      end
+    id_to_candidate_state = {}
+    for candidate_state in ap_election_days.candidate_states
+      id_to_candidate_state[candidate_state.id] = candidate_state
     end
+    candidate_states.map! { |cs| cs2 = id_to_candidate_state[cs.id]; cs2 ? cs.merge(ballot_order: cs2.ballot_order, n_votes: cs2.n_votes) : cs }
+
+    candidate_counties = ap_election_days.candidate_counties
+
+    counties = ap_election_days.counties
+
+    county_parties = ap_election_days.county_parties
+
+    races = ap_election_days.races
 
     fix_invalid_ap_candidate_data(copy, candidates, candidate_states, candidate_counties)
     drop_out_candidates_from_copy(copy, candidates, races, candidate_states)
@@ -227,9 +147,9 @@ class Database
   def self.fix_invalid_ap_candidate_data(copy, candidates, candidate_states, candidate_counties)
     candidate_ids = Set.new(copy.fetch('candidates', []).map{ |c| c['id'] })
 
-    candidates.select! { |arr| candidate_ids.include?(arr[0]) }
-    candidate_states.select! { |arr| candidate_ids.include?(arr[0]) }
-    candidate_counties.select! { |arr| candidate_ids.include?(arr[1]) }
+    candidates.select! { |c| candidate_ids.include?(c.id) }
+    candidate_states.select! { |cs| candidate_ids.include?(cs.candidate_id) }
+    candidate_counties.select! { |cc| candidate_ids.include?(cc.candidate_id) }
   end
 
   # Adds :dropped_out_date to candidates from the copy. Nixes candidate_states
@@ -238,8 +158,8 @@ class Database
     full_name_to_candidate = {}
     candidate_id_to_party_id = {}
     for candidate in candidates
-      candidate_id_to_party_id[candidate[0]] = candidate[1]
-      full_name_to_candidate[candidate[2]] = candidate
+      candidate_id_to_party_id[candidate.id] = candidate.party_id
+      full_name_to_candidate[candidate.name] = candidate
     end
 
     candidate_id_to_last_race_day_id = {} # id -> "YYYY-MM-DD"
@@ -257,27 +177,31 @@ class Database
         throw "The candidate named #{candidate_copy['name']} does not exist and is thus a mistake in the copy. Aborting."
       end
 
-      candidate[9] = date
-      candidate_id_to_last_race_day_id[candidate[0]] = date.to_s
+      candidate_id_to_last_race_day_id[candidate[0]] = date
+    end
+
+    candidates.map! do |c|
+      date = candidate_id_to_last_race_day_id[c.id]
+      date ? c.merge(dropped_out_date: Date.parse(date)) : c
     end
 
     party_id_state_code_to_first_race_day_id = {}
     for race in races
-      key = "#{race[2]}-#{race[3]}"
-      race_day_id = race[1]
+      key = "#{race.party_id}-#{race.state_code}"
+      race_day_id = race.race_day_id
       if !party_id_state_code_to_first_race_day_id[key] || party_id_state_code_to_first_race_day_id[key] > race_day_id
         party_id_state_code_to_first_race_day_id[key] = race_day_id
       end
     end
 
     candidate_states.select! do |candidate_state|
-      candidate_id = candidate_state[0]
+      candidate_id = candidate_state.candidate_id
       drop_out_date = candidate_id_to_last_race_day_id[candidate_id]
 
       if !drop_out_date
         true
       else
-        state_code = candidate_state[1]
+        state_code = candidate_state.state_code
         party_id = candidate_id_to_party_id[candidate_id]
         key = "#{party_id}-#{state_code}"
         race_day_id = party_id_state_code_to_first_race_day_id[key]
@@ -290,9 +214,7 @@ class Database
   #
   # They'll have lots of nils.
   def self.stub_races_ap_isnt_reporting_yet(races)
-    # Create unique key
-    existing_race_keys = Set.new() # "key" means race_day.id, party.id, state.code
-    races.each { |r| existing_race_keys.add(r[1...4].join(',')) }
+    existing_race_keys = races.map(&:id).to_set # race_day_id-party_id-state_code
 
     RaceDays::HardCodedData.each do |date_sym, party_races|
       race_day_id = date_sym.to_s
@@ -300,10 +222,10 @@ class Database
         party_id = party_id_sym.to_s
         state_code_syms.each do |state_code_sym|
           state_code = state_code_sym.to_s
-          key = "#{race_day_id},#{party_id},#{state_code}"
-          next if existing_race_keys.include?(key)
+          race_id = "#{race_day_id}-#{party_id}-#{state_code}"
+          next if existing_race_keys.include?(race_id)
 
-          races << [ nil, race_day_id, party_id, state_code, nil, nil, nil, nil, nil ]
+          races << Race.new(nil, nil, race_day_id, party_id, state_code)
         end
       end
     end
@@ -313,15 +235,13 @@ class Database
     called_race_keys = Set.new
     for copy_race in copy['primaries']['races']
       if copy_race['over'] == 'true'
-        called_race_keys << "#{copy_race['party']}-#{copy_race['state']}"
+        called_race_keys.add("#{copy_race['party']}-#{copy_race['state']}")
       end
     end
 
-    for race in races
-      race_key = "#{race[2]}-#{race[3]}"
-      if called_race_keys.include?(race_key)
-        race[10] = true
-      end
+    races.map! do |race|
+      race_key = "#{race.party_id}-#{race.state_code}"
+      called_race_keys.include?(race_key) ? race.merge(ap_says_its_over: true) : race
     end
 
     nil
@@ -330,54 +250,47 @@ class Database
   # Writes Candidate.poll_percent, Candidate.poll_updated_at,
   # CandidateState.poll_percent, Race.poll_last_updated.
   def self.add_pollster_estimates(parties, candidates, candidate_states, races)
-    # Pollster reports "choice: 'Rand Paul'" and "choice: 'Santorum'", so we
-    # need to index by both last name and full name.
-    last_name_to_candidate = {}
-    full_name_to_candidate = {}
-    candidates.each { |c| last_name_to_candidate[c[3]] = c }
-    candidates.each { |c| full_name_to_candidate[c[2]] = c }
-
-    key_to_candidate_state = {}
-    candidate_states.each { |cs| key_to_candidate_state["#{cs[0]}-#{cs[1]}"] = cs }
-
     key_to_races = {}
     races.each do |race|
-      key = "#{race[2]}-#{race[3]}"
+      key = "#{race.party_id}-#{race.state_code}"
       key_to_races[key] ||= []
       key_to_races[key] << race
     end
 
+    last_name_to_candidate_id = {} # but also full_name, because Pollster has a :choice => "Rand Paul"
+
+    candidates.each { |c| last_name_to_candidate_id[c.last_name] = last_name_to_candidate_id[c.name] = c.id }
+
     chart_slugs = []
 
+    race_key_to_pollster = {} # party_id-state_code -> [ slug, last_updated ]
+    candidate_state_id_to_pollster = {} # candidate_id-state_code -> [ poll_percent, sparkline ]
+    candidate_id_to_pollster = {} # candidate_id -> [ poll_percent, sparkline, last_updated ]
+
     for party in parties
-      party_id = party[0]
+      party_id = party.id
 
       for chart in ApiSources.GET_pollster_primaries(party_id)
         state_code = chart[:state]
         last_updated = DateTime.parse(chart[:last_updated])
         slug = chart[:slug]
-        chart_slugs << slug
 
-        for race in (key_to_races["#{party_id}-#{state_code}"] || [])
-          race[8] = slug
-          race[9] = last_updated
-        end
+        race_key = "#{party_id}-#{state_code}"
+        race_key_to_pollster[race_key] = [ slug, last_updated ]
+
+        chart_slugs << slug
 
         for estimate in chart[:estimates]
           last_name = estimate[:last_name]
 
-          candidate = last_name_to_candidate[last_name]
-          if candidate
+          candidate_id = last_name_to_candidate_id[last_name]
+          if candidate_id
             poll_percent = estimate[:value]
 
             if state_code == 'US'
-              candidate[6] = poll_percent
-              candidate[8] = last_updated
+              candidate_id_to_pollster[candidate_id] = [ poll_percent, nil, last_updated ]
             else
-              candidate_state = key_to_candidate_state["#{candidate[0]}-#{state_code}"]
-              if candidate_state
-                candidate_state[5] = poll_percent
-              end
+              candidate_state_id_to_pollster["#{candidate_id}-#{state_code}"] = [ poll_percent, nil ]
             end
           end
         end
@@ -400,23 +313,39 @@ class Database
             choice = estimate[:choice]
             value = estimate[:value]
 
-            candidate = last_name_to_candidate[choice] || full_name_to_candidate[choice]
-            next if !candidate
+            candidate_id = last_name_to_candidate_id[choice]
+            next if !candidate_id
 
             if state_code == 'US'
-              candidate[7] ||= Sparkline.new(last_day)
-              candidate[7].add_value(date, value)
+              pollster_candidate = candidate_id_to_pollster[candidate_id]
+              next if !pollster_candidate
+              pollster_candidate[1] ||= Sparkline.new(last_day)
+              pollster_candidate[1].add_value(date, value)
             else
-              key = "#{candidate[0]}-#{state_code}"
-              candidate_state = key_to_candidate_state[key]
-              if candidate_state # *Our* candidate may have dropped out before Pollster noticed
-                candidate_state[6] ||= Sparkline.new(last_day)
-                candidate_state[6].add_value(date, value)
-              end
+              key = "#{candidate_id}-#{state_code}"
+              candidate_state = candidate_state_id[key]
+              next if !candidate_state
+              candidate_state[1] ||= Sparkline.new(last_day)
+              candidate_state[1].add_value(date, value)
             end
           end
         end
       end
+    end
+
+    races.map! do |race|
+      pollster = race_key_to_pollster["#{race.party_id}-#{race.state_code}"]
+      pollster ? race.merge(pollster_slug: pollster[0], poll_last_updated: pollster[1]) : race
+    end
+
+    candidates.map! do |candidate|
+      pollster = candidate_id_to_pollster[candidate.id]
+      pollster ? candidate.merge(poll_percent: pollster[0], poll_sparkline: pollster[1], poll_last_update: pollster[2]) : candidate
+    end
+
+    candidate_states.map! do |candidate_state|
+      pollster = candidate_state_key_to_pollster[candidate_state.id]
+      pollster ? candidate_state.merge(poll_percent: pollster[0], poll_sparkline: pollster[1]) : candidate_state
     end
 
     nil
