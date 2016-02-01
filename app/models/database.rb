@@ -127,21 +127,36 @@ class Database
         party_id = race_hash[:party]
         race_type = race_hash[:raceType]
 
-        race = [ race_id, race_day_id, party_id, nil, race_type, nil, nil, nil, nil ]
+        # If the race is in the future, AP will put a :statePostal here.
+        # If the race is today or in the past, AP will omit this :statePostal
+        # and add one to the state :reportingUnit instead
+        state_code = race_hash[:statePostal]
+
+        # If the race is in the future, AP will have no :reportingUnits, and it
+        # will put the :lastUpdated in the main hash. If the race is today, AP
+        # will omit this :lastUpdated; we'll use the :lastUpdated on the state
+        # :reportingUnit instead.
+        last_updated = race_hash[:lastUpdated] ? DateTime.parse(race_hash[:lastUpdated]) : nil
+
+        race = [ race_id, race_day_id, party_id, state_code, race_type, nil, nil, last_updated, nil, nil, nil ]
         races << race
 
-        for reporting_unit in race_hash[:reportingUnits]
+        for reporting_unit in (race_hash[:reportingUnits] || [])
           n_precincts_reporting = reporting_unit[:precinctsReporting]
           n_precincts_total = reporting_unit[:precinctsTotal]
 
           if reporting_unit[:level] == 'state'
-            last_updated = DateTime.parse(reporting_unit[:lastUpdated])
+            # As described above: if this reporting_unit is set, that means AP
+            # didn't give us a state_code or last_updated above, so we need to
+            # set them now.
             state_code = reporting_unit[:statePostal]
+            last_updated = DateTime.parse(reporting_unit[:lastUpdated])
 
             race[3] = state_code
+            race[7] = last_updated
+
             race[5] = n_precincts_reporting
             race[6] = n_precincts_total
-            race[7] = last_updated
 
             for candidate_hash in reporting_unit[:candidates]
               candidate_id = candidate_hash[:polID]
@@ -153,7 +168,7 @@ class Database
               candidate_state = ids_to_candidate_state[[candidate_id, state_code]]
 
               if !candidate_state
-                raise "Missing candidate-state pair #{candidate.id}-#{state_code}"
+                raise "Missing candidate-state pair #{candidate_id}-#{state_code}"
               end
 
               candidate_state[2] = candidate_hash[:ballotOrder]
