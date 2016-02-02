@@ -85,7 +85,7 @@ We report the sum of the pledged and unpledged delegates in the totals at the to
 [candidates]
 
 
-Don’t edit this list for now. We’ll add some properties later, such as the dates candidates `dropped out` (a YYYY-MM-DD value -- see the top of this document for instructions).
+Don’t edit this list for now. We’ll add some properties later, such as the dates candidates `dropped-out` (a YYYY-MM-DD value -- see the top of this document for instructions).
 
 
 name: Hillary Clinton
@@ -156,6 +156,7 @@ id: 60339
 name: Mike Huckabee
 party: GOP
 id: 1187
+dropped-out: 2016-02-01
 
 
 name: Jim Gilmore
