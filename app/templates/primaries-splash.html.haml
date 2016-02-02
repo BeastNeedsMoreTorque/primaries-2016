@@ -42,16 +42,24 @@
                 %div.frontrunner-lbl
                   %span= party.adjective.upcase
                   %span CANDIDATES
-                  %span Total Votes
+                  -if party.id == 'Dem'
+                    %span.sde= "Total SDEs *"
+
+                  -else
+                    %span Total Votes
             %div.candidate-position-listing
               - race.candidate_states.sort{|a,b| a.candidate.name <=> b.candidate.name}.each_with_index do |cd_state, idx|
                 - cd = cd_state.candidate
                 .candidate{'data-candidate-id': cd.id}
                   %table
                     %tr
-                      %td= cd.name
+                      %td
+                        = cd.name
+                        - if cd_state.winner?
+                          %span.winner ✓
                       %td= format_int(cd_state.n_votes)
-
+            - if party.id == "Dem"
+              %div.sdefootnote= "*The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script
     new pym.Child();

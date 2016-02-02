@@ -40,7 +40,10 @@
                   %th.candidate Candidate
                   %th.pollster.when-future
                     .long-table-heading Polling Average
-                  %th.n-votes.when-past.when-present Votes
+                  -if party.id == "Dem"
+                    %th.n-votes.when-past.when-present SDEs *
+                  -else
+                    %th.n-votes.when-past.when-present Votes
               %tbody
                 - candidates = race_day.when_race_day_happens == "future" ? race.candidate_states.sort_by{|c| -(c.candidate.poll_percent or 0)} : race.candidate_states.sort_by(&:n_votes).reverse
                 - candidates.each_with_index do |cd_state, idx|
@@ -49,13 +52,17 @@
                     %td.candidate
                       %img{src: image_path("#{candidate.slug}.png"), alt: ''}
                       = candidate.full_name
+                      - if cd_state.winner?
+                        %span.winner ✓
                     %td.pollster.when-future
                       - if cd_state.poll_sparkline && !cd_state.poll_sparkline.empty?
                         .sparkline!= cd_state.poll_sparkline.to_svg
                       %span.percent= format_percent_or_nil(cd_state.poll_percent)
                     %td.n-votes.when-past.when-present= format_int(cd_state.n_votes)
-            %div.footnotes.footnotes-for-pollster.when-future
-              %p!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
+            %div.footnotes
+              -if party.id == 'Dem'
+                %p.sde.when-past.when-present= "*The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
+              %p.footnotes-for-pollster.when-future!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script

@@ -12,7 +12,7 @@ require_relative './source'
 # * county_parties: county_id, party_id, n_precincts_reporting, n_precincts_total, last_updated
 # * races: race_day_id, party_id, state_code, race_type, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource < Source
-  CandidateState = RubyImmutableStruct.new(:candidate_id, :state_code, :ballot_order, :n_votes) do
+  CandidateState = RubyImmutableStruct.new(:candidate_id, :state_code, :ballot_order, :n_votes, :winner) do
     attr_reader(:id)
 
     def after_initialize
@@ -92,7 +92,7 @@ class ApElectionDaysSource < Source
             candidate_id = candidate_hash[:polID]
             next if candidate_id.length >= 6 # unassigned, no preference, etc
 
-            @candidate_states << CandidateState.new(candidate_id, state_code, candidate_hash[:ballotOrder], candidate_hash[:voteCount])
+            @candidate_states << CandidateState.new(candidate_id, state_code, candidate_hash[:ballotOrder], candidate_hash[:voteCount], candidate_hash[:winner] == 'X')
           end
         elsif reporting_unit[:level] == 'FIPSCode'
           fips_code = reporting_unit[:fipsCode]

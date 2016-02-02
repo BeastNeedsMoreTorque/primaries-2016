@@ -128,7 +128,23 @@ body.race-day .race {
     p {
       margin: 0 10px;
       color: $muted;
+      line-height: 1.3em;
     }
+  }
+
+  p.state-delegate-equivalents {
+    font-size: .8rem;
+    margin: .5rem 10px 1rem;
+    color: $muted;
+  }
+
+  sup {
+    color: $strongDem;
+    vertical-align: top; // "super" puts it too high; it bumps other text down
+    font-size: .7rem;
+    display: inline-block;
+    height: .9rem;
+    line-height: .9rem;
   }
 }
 

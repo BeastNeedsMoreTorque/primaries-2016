@@ -26,12 +26,20 @@
             %div.leading-candidate-img
               %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
             %div.leading-candidate-delegates
-              %p.frontrunner-cd= leader.candidate.name
+              %p.frontrunner-cd
+                = leader.candidate.name
+                - if leader.winner?
+                  %span.winner ✓
               %p.frontrunner-num.when-future= format_percent_or_nil(leader.poll_percent)
               %p.frontrunner-unit.when-future Polling Average 
               %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
-              %p.frontrunner-unit.when-present.when-past Votes 
+              -if party.id == "Dem"
+                %p.frontrunner-unit.when-present.when-past SDEs *
+              -else
+                %p.frontrunner-unit.when-present.when-past Votes 
               %p.source.when-future!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
+
+  %p.source.sde.when-present.when-past= "*Iowa Democrats report State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
 
   %div.tease-link.when-future
     %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See All Candidates"

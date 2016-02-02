@@ -23,7 +23,8 @@ function extract_candidate_list($party_state_table) {
   $party_state_table.find('tr[data-candidate-id]').each(function() {
     ret.push({
       id: this.getAttribute('data-candidate-id'),
-      name: $('td.candidate', this).text(),
+      name: $('td.candidate span.name', this).text(),
+      highlighted: $(this).hasClass('highlight-on-map'),
       n_votes: 0 // we'll overwrite this
     });
   });
@@ -42,10 +43,12 @@ function add_tooltips() {
           '<tr>' +
             '<th class="candidate">Candidate</th>' +
             '<th class="n-votes">Votes</th>' +
+            '<th class="n-votes n-state-delegate-equivalents"><abbr title="State Delegate Equivalents">SDEs</abbr>×100<sup>∗</sup></th>' +
           '</tr>' +
         '</thead>' +
         '<tbody></tbody>' +
       '</table>' +
+      '<p class="n-state-delegate-equivalents"><sup>∗</sup> The Iowa Democratic Party reports State Delegate Equivalents (SDEs), not votes.</p>' +
       '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="last-updated">Last updated <time></time></p></div></div>');
   var svg_hover_path = null;
 
@@ -63,7 +66,8 @@ function add_tooltips() {
     candidates
       .sort(function(a, b) { return b.n_votes - a.n_votes || a.name.localeCompare(b.name); })
       .forEach(function(candidate) {
-        $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td></tr>');
+        $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td></tr>')
+          .toggleClass('highlight-on-map', candidate.highlighted);
         $tr.find('.candidate').text(candidate.name);
         $tr.find('.n-votes').text(format_int(candidate.n_votes));
         $tbody.append($tr);
@@ -134,6 +138,7 @@ function add_tooltips() {
       var last_updated = new Date(match_arr[2]);
 
       update_tooltip(county_name, candidates, n_reporting, n_total, last_updated, is_from_touch);
+      $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
       position_tooltip_near_svg_path(svg_path);
     } else {
       console.warn('Could not find data for tooltip');
@@ -312,7 +317,7 @@ function color_counties() {
 
   function refresh_svg_legend(svg, table) {
     var $legend = $(svg.nextElementSibling);
-    var candidate_name = $('tbody tr.highlight-on-map td.candidate', table).text();
+    var candidate_name = $('tbody tr.highlight-on-map td.candidate span.name', table).text();
 
     $legend.toggleClass('has-no-results', $('path.no-results-yet', svg).length > 0);
     $legend.toggleClass('has-candidate-leads', !!candidate_name && $('path.candidate-leads', svg).length > 0);

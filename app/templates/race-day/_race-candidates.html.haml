@@ -2,7 +2,12 @@
   %thead
     %tr
       %th.candidate Candidate
-      %th.n-votes Votes
+      %th.n-votes
+        - if race.n_votes_is_really_n_sdes
+          %abbr{title: 'State Delegate Equivalents'} SDEs
+          %sup> ∗
+        - else
+          Votes
       %th.n-delegates Delegates
       %th.pollster Polling Average 
   %tbody
@@ -12,7 +17,9 @@
       %tr{'data-candidate-id': candidate.id, 'class': n_unellipsized <= 0 ? 'ellipsized' : ''}
         %td.candidate
           %img{src: image_path("#{candidate.slug}.png"), alt: ''}
-          = candidate.name
+          %span.name= candidate.name
+          - if candidate_state.winner?
+            %span.winner ✓
         %td.n-votes= format_int(candidate_state.n_votes)
         %td.n-delegates
           .n-delegates-inner
@@ -27,6 +34,11 @@
 - if n_unellipsized < 0
   .ellipsize-table-prompt
 
+- if race.n_votes_is_really_n_sdes
+  %p.state-delegate-equivalents.when-past.when-present
+    %sup ∗
+    The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention.
+
 .n-delegates.n-delegates-without-candidates
   .dots{class: "dots-#{race.party_id}"}
     %span.without-candidates>= "\u200b•" * race.n_delegates_without_candidates
@@ -36,4 +48,6 @@
     of
     %span.n-delegates-int= format_int(race.n_delegates)
     delegates in play in #{race.state_name}.
+  %p HuffPost counts unpledged delegates who have publicly stated their intent to vote for a candidate.
+  %p
     %a{href: '/2016/primaries/about-delegates'} How we count delegates

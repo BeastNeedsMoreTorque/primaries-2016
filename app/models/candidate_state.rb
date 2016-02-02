@@ -2,7 +2,7 @@ require_relative './candidate'
 require_relative './state'
 
 # Delegate/vote counts for a Candidate in a State.
-CandidateState = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :state_code, :ballot_order, :n_votes, :n_delegates, :poll_percent, :poll_sparkline) do
+CandidateState = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :state_code, :ballot_order, :n_votes, :n_delegates, :poll_percent, :poll_sparkline, :ap_says_winner) do
   include Comparable
 
   def id; "#{candidate_id}-#{state_code}"; end
@@ -10,6 +10,7 @@ CandidateState = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :state
   def candidate; database_or_nil.candidates.find!(candidate_id); end
   def state; database_or_nil.states.find!(state_code); end
   def party_id; candidate.party_id; end
+  def winner?; ap_says_winner; end
 
   def <=>(rhs)
     c1 = rhs.n_delegates - n_delegates

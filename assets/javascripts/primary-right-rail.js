@@ -2,7 +2,7 @@
 //= require './format_int.js'
 $(function() {
   function updateCandidates(data, tense){
-    $(".candidate table").removeClass("leader");
+    $(".leader").removeClass("leader");
     for(key in data){
       sorted = data[key].sort(function(a,b){return b[1] - a[1]})
       if(sorted[0][1] !== 0 && tense !== 'future')

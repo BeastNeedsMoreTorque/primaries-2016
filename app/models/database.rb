@@ -182,7 +182,8 @@ class Database
           ap_candidate_state ? ap_candidate_state.n_votes : nil,
           del_super_candidate_state.n_delegates,
           pollster_candidate_state ? pollster_candidate_state.poll_percent : nil,
-          pollster_candidate_state ? pollster_candidate_state.sparkline : nil
+          pollster_candidate_state ? pollster_candidate_state.sparkline : nil,
+          ap_candidate_state ? ap_candidate_state.winner : false
         )
       end
   end

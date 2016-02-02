@@ -135,15 +135,29 @@ $party-container-height: 100px;
 
 .leading-candidate-delegates {
 	font-weight: bold;
+	position: relative;
 	span {
 		color: #fff;
 		display: block;
-		&:last-child {
+		&:last-child, &.sde {
 			font-size: 12px;
 			font-weight: normal;
 			text-align: center;
 		}
+
 	}
+}
+
+
+.sdefootnote {
+	padding: 10px;
+  width: 310px;
+  font-size: 12px;
+  color: #999;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 
 
@@ -194,6 +208,14 @@ $party-container-height: 100px;
 	margin-bottom: 15px;
 
 	@include left-column-flex;
+
+	position: relative;
+
+	.sde {
+		&:hover {
+			cursor: pointer;
+		}
+	}
 
 	&.Dem {
 		background-color: $widgetLightBlue;
