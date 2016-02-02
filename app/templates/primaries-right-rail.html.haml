@@ -11,18 +11,18 @@
       %div.header
         %div.line
         %div.hed
-          %h1.main-hed.when-present= "RESULTS"
+          %h1.main-hed.when-present= "HAPPENING NOW"
           %h1.main-hed.when-past= "RESULTS"
           %h1.main-hed.when-future= "HAPPENING SOON"
         %div.line
       %h2.main-hed.sub
-        %a{target: '_blank', href: '/2016/primaries/2016-02-01'} Iowa Caucus
+        %a{target: '_blank', href: '/2016/primaries/2016-02-09'} New Hampshire 
       %div.container
-        %p.intro.when-future= "Iowa residents will be the first in the nation to cast their ballots. Check here to see who is leading in the polls and tune in on Feb. 1 for live results."
+        %p.intro.when-future= "Anti-establishment candidates Bernie Sanders and Donald Trump are leading in New Hampshire polls. HuffPost will have live results on Feb. 9 when residents head to the polls."
         %p.tease-link.when-future
-          %a{target: '_blank', href: "/2016/primaries"} See The Election Calendar
+          %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See The Election Calendar
         %p.tease-link.when-present
-          %a{target: '_blank', href: "/2016/primaries/2016-02-01"} See Live Updates
+          %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See Live Updates
         %p.tease-link.when-past
           %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See Upcoming Races
         - race_day.state_party_races.first[1].each do |party, race, _|
@@ -40,10 +40,7 @@
                   %th.candidate Candidate
                   %th.pollster.when-future
                     .long-table-heading Polling Average
-                  -if party.id == "Dem"
-                    %th.n-votes.when-past.when-present SDEs *
-                  -else
-                    %th.n-votes.when-past.when-present Votes
+                  %th.n-votes.when-past.when-present Votes
               %tbody
                 - candidates = race_day.when_race_day_happens == "future" ? race.candidate_states.sort_by{|c| -(c.candidate.poll_percent or 0)} : race.candidate_states.sort_by(&:n_votes).reverse
                 - candidates.each_with_index do |cd_state, idx|
@@ -60,8 +57,6 @@
                       %span.percent= format_percent_or_nil(cd_state.poll_percent)
                     %td.n-votes.when-past.when-present= format_int(cd_state.n_votes)
             %div.footnotes
-              -if party.id == 'Dem'
-                %p.sde.when-past.when-present= "*The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
               %p.footnotes-for-pollster.when-future!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
 
   %script{src: '/2016/javascripts/pym.min.js'}
