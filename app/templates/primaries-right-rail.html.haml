@@ -52,6 +52,8 @@
                     %td.candidate
                       %img{src: image_path("#{candidate.slug}.png"), alt: ''}
                       = candidate.full_name
+                      - if cd_state.winner?
+                        %span.winner ✓
                     %td.pollster.when-future
                       - if cd_state.poll_sparkline && !cd_state.poll_sparkline.empty?
                         .sparkline!= cd_state.poll_sparkline.to_svg
