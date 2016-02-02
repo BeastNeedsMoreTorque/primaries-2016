@@ -24,6 +24,7 @@ function extract_candidate_list($party_state_table) {
     ret.push({
       id: this.getAttribute('data-candidate-id'),
       name: $('td.candidate', this).text(),
+      highlighted: $(this).hasClass('highlight-on-map'),
       n_votes: 0 // we'll overwrite this
     });
   });
@@ -42,7 +43,7 @@ function add_tooltips() {
           '<tr>' +
             '<th class="candidate">Candidate</th>' +
             '<th class="n-votes">Votes</th>' +
-            '<th class="n-state-delegate-equivalents"><abbr title="State Delegate Equivalents">SDEs</abbr>×100<sup>∗</sup></th>' +
+            '<th class="n-votes n-state-delegate-equivalents"><abbr title="State Delegate Equivalents">SDEs</abbr>×100<sup>∗</sup></th>' +
           '</tr>' +
         '</thead>' +
         '<tbody></tbody>' +
@@ -65,7 +66,8 @@ function add_tooltips() {
     candidates
       .sort(function(a, b) { return b.n_votes - a.n_votes || a.name.localeCompare(b.name); })
       .forEach(function(candidate) {
-        $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td></tr>');
+        $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td></tr>')
+          .toggleClass('highlight-on-map', candidate.highlighted);
         $tr.find('.candidate').text(candidate.name);
         $tr.find('.n-votes').text(format_int(candidate.n_votes));
         $tbody.append($tr);
