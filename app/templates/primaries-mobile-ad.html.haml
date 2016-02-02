@@ -41,10 +41,12 @@
 
   %p.source.sde.when-present.when-past= "*Iowa Democrats report State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
 
+  %div.tease-link.when-past
+    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See Results"
+  %div.tease-link.when-present
+    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See Live Results"
   %div.tease-link.when-future
     %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See All Candidates"
-  %div.tease-link.when-present.when-past
-    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See Live Results"
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
     var pymChild = new pym.Child();
