@@ -94,7 +94,7 @@ class Database
     del_super = ApDelSuperSource.new(ApiSources.GET_del_super)
     for candidate in del_super.candidates
       full_name = id_to_candidate_full_name[candidate.id]
-      candidates << candidate.merge(name: full_name)
+      candidates << candidate.merge(full_name: full_name)
       id_to_candidate[candidate.id] = candidate
     end
     for candidate_state in del_super.candidate_states
@@ -258,8 +258,7 @@ class Database
     end
 
     last_name_to_candidate_id = {} # but also full_name, because Pollster has a :choice => "Rand Paul"
-
-    candidates.each { |c| last_name_to_candidate_id[c.last_name] = last_name_to_candidate_id[c.name] = c.id }
+    candidates.each { |c| last_name_to_candidate_id[c.name] = last_name_to_candidate_id[c.full_name] = c.id }
 
     chart_slugs = []
 
@@ -323,7 +322,7 @@ class Database
               pollster_candidate[1].add_value(date, value)
             else
               key = "#{candidate_id}-#{state_code}"
-              candidate_state = candidate_state_id[key]
+              candidate_state = candidate_state_id_to_pollster[key]
               next if !candidate_state
               candidate_state[1] ||= Sparkline.new(last_day)
               candidate_state[1].add_value(date, value)
@@ -344,7 +343,7 @@ class Database
     end
 
     candidate_states.map! do |candidate_state|
-      pollster = candidate_state_key_to_pollster[candidate_state.id]
+      pollster = candidate_state_id_to_pollster[candidate_state.id]
       pollster ? candidate_state.merge(poll_percent: pollster[0], poll_sparkline: pollster[1]) : candidate_state
     end
 

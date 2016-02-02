@@ -1,3 +1,6 @@
+require_relative '../../app/views/race_day_view'
+require_relative '../../app/views/race_day_results_view'
+
 describe 'a Race on the Race Day dashboard', type: :feature do
   it 'should have state=past when all precincts are reporting' do
     database = mock_database(
@@ -8,7 +11,8 @@ describe 'a Race on the Race Day dashboard', type: :feature do
         'primaries.races.state=IA,party=Dem.over' => ''
       }
     )
-    render_from_database(database)
+    RaceDayView.generate_all(database)
+    RaceDayResultsView.generate_all(database)
 
     visit('/2016/primaries/2016-02-01')
     expect(page.first('#IA-Dem')['class']).to match(/\bpast\b/)
@@ -22,7 +26,8 @@ describe 'a Race on the Race Day dashboard', type: :feature do
         'primaries.races.state=IA,party=Dem.over' => ''
       }
     )
-    render_from_database(database)
+    RaceDayView.generate_all(database)
+    RaceDayResultsView.generate_all(database)
 
     visit('/2016/primaries/2016-02-01')
     expect(page.first('#IA-Dem')['class']).to match(/\bfuture\b/)
@@ -36,7 +41,8 @@ describe 'a Race on the Race Day dashboard', type: :feature do
         'primaries.races.state=IA,party=Dem.over' => ''
       }
     )
-    render_from_database(database)
+    RaceDayView.generate_all(database)
+    RaceDayResultsView.generate_all(database)
 
     visit('/2016/primaries/2016-02-01')
     expect(page.first('#IA-Dem')['class']).to match(/\bpresent\b/)
@@ -50,7 +56,8 @@ describe 'a Race on the Race Day dashboard', type: :feature do
         'primaries.races.state=IA,party=Dem.over' => 'true'
       }
     )
-    render_from_database(database)
+    RaceDayView.generate_all(database)
+    RaceDayResultsView.generate_all(database)
 
     visit('/2016/primaries/2016-02-01')
     expect(page.first('#IA-Dem')['class']).to match(/\bpast\b/)

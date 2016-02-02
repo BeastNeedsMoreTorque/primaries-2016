@@ -11,6 +11,8 @@ require_relative '../lib/env'
 require_relative '../lib/paths'
 Bundler.require(:development)
 
+require_relative '../app/models/race'
+
 RSpec.configure do |config|
   if running_rspec_through_script_serve
     config.filter_run_excluding(type: :feature)
@@ -72,8 +74,13 @@ def mock_database(collections, date_string, last_date_string, options={})
 
   copy = Database.production_copy(options[:override_copy] || {})
 
-  Database.stub_races_ap_isnt_reporting_yet(collections[:races])
-  Database.mark_races_finished_from_copy(copy, collections[:races])
+  races = collections[:races].map { |arr| Race.new(nil, *arr) }
+
+  Database.stub_races_ap_isnt_reporting_yet(races)
+  Database.mark_races_finished_from_copy(copy, races)
+
+  collections[:races] = races.map { |race| race.to_a[1..-1] }
+
   Database.new(collections, date, last_date, copy)
 end
 

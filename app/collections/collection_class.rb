@@ -33,12 +33,20 @@ module CollectionClass
 
       # Creates a Collection of all the given objects.
       #
-      # For instance: Candidate.create([[ '1', 'GOP', 'Mr. Foo', 13, 25 ], ...])
+      # For instance: Candidate.create([Candidate.new(nil, '1', 'GOP', 'Mr. Foo', 13, 25), ...])
       def self.build(database, array_of_param_arrays)
-        all = array_of_param_arrays.map { |param_array| @item_class.new(database, *param_array) }
+        all = if array_of_param_arrays.length == 0
+          []
+        elsif array_of_param_arrays.first.is_a?(Array)
+          array_of_param_arrays.map { |item| @item_class.new(database, *item) }
+        else
+          array_of_param_arrays.map { |item| item.merge(database_or_nil: database) }
+        end
+
         if @item_class.included_modules.include?(Comparable)
           all.sort!
         end
+
         self.new(all)
       end
 

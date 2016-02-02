@@ -36,11 +36,11 @@ Race = RubyImmutableStruct.new(:database_or_nil, :ap_id, :race_day_id, :party_id
     end
   end
 
-  def party; database.parties.find!(party_id); end
+  def party; database_or_nil.parties.find!(party_id); end
   def party_name; party.name; end
   def party_adjective; party.adjective; end
-  def race_day; database.race_days.find!(race_day_id); end
-  def state; database.states.find!(state_code); end
+  def race_day; database_or_nil.race_days.find!(race_day_id); end
+  def state; database_or_nil.states.find!(state_code); end
   def state_fips_int; state.fips_int; end
   def state_name; state.name; end
   def date; race_day.date; end
