@@ -23,7 +23,7 @@ function extract_candidate_list($party_state_table) {
   $party_state_table.find('tr[data-candidate-id]').each(function() {
     ret.push({
       id: this.getAttribute('data-candidate-id'),
-      name: $('td.candidate', this).text(),
+      name: $('td.candidate span.name', this).text(),
       highlighted: $(this).hasClass('highlight-on-map'),
       n_votes: 0 // we'll overwrite this
     });
@@ -317,7 +317,7 @@ function color_counties() {
 
   function refresh_svg_legend(svg, table) {
     var $legend = $(svg.nextElementSibling);
-    var candidate_name = $('tbody tr.highlight-on-map td.candidate', table).text();
+    var candidate_name = $('tbody tr.highlight-on-map td.candidate span.name', table).text();
 
     $legend.toggleClass('has-no-results', $('path.no-results-yet', svg).length > 0);
     $legend.toggleClass('has-candidate-leads', !!candidate_name && $('path.candidate-leads', svg).length > 0);
