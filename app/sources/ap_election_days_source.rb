@@ -26,7 +26,7 @@ class ApElectionDaysSource < Source
     attr_reader(:id)
 
     def after_initialize
-      @id ="#{@county_id}-#{@party_id}"
+      @id ="#{@fips_int}-#{@party_id}"
     end
   end
 
@@ -97,10 +97,10 @@ class ApElectionDaysSource < Source
         elsif reporting_unit[:level] == 'FIPSCode'
           fips_code = reporting_unit[:fipsCode]
 
-          county_id = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
-          @county_fips_ints.add(county_id)
+          fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
+          @county_fips_ints.add(fips_int)
 
-          @county_parties << CountyParty.new(county_id, party_id, n_precincts_reporting, n_precincts_total, last_updated)
+          @county_parties << CountyParty.new(fips_int, party_id, n_precincts_reporting, n_precincts_total, last_updated)
 
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
@@ -108,7 +108,7 @@ class ApElectionDaysSource < Source
 
             n_votes = candidate_hash[:voteCount]
 
-            @candidate_counties << CandidateCounty.new(party_id, candidate_id, county_id, n_votes)
+            @candidate_counties << CandidateCounty.new(candidate_id, fips_int, party_id, n_votes)
           end
         else
           raise "Invalid reporting unit level `#{reporting_unit[:level]}'"
