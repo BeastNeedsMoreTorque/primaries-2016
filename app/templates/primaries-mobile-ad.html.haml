@@ -26,7 +26,10 @@
             %div.leading-candidate-img
               %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
             %div.leading-candidate-delegates
-              %p.frontrunner-cd= leader.candidate.name
+              %p.frontrunner-cd
+                = leader.candidate.name
+                - if leader.winner?
+                  %span.winner ✓
               %p.frontrunner-num.when-future= format_percent_or_nil(leader.poll_percent)
               %p.frontrunner-unit.when-future Polling Average 
               %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
