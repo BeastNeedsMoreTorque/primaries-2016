@@ -18,4 +18,6 @@ Candidate = RubyImmutableStruct.new(:database, :id, :party_id, :full_name, :name
       end
     end
   end
+
+  def dropped_out?; !dropped_out_date.nil?; end
 end

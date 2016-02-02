@@ -245,9 +245,9 @@ class Database
     candidate_id_to_last_race_day_id = {} # id -> "YYYY-MM-DD"
 
     for candidate_copy in copy['candidates']
-      next if !candidate_copy['dropped out']
+      next if !candidate_copy['dropped-out']
 
-      date = Date.parse(candidate_copy['dropped out'])
+      date = Date.parse(candidate_copy['dropped-out'])
       if date > Date.parse('2016-07-01') || date < Date.parse('2016-01-01')
         throw "The drop-out date of #{date} for #{candidate_copy['name']} is clearly a mistake in the copy. Aborting."
       end

@@ -30,6 +30,10 @@
     @include pollster-table;
   }
 
+  tr.dropped-out td {
+    color: $muted;
+  }
+
   .party-hed {
     text-align: center;
     font-size: 1.3rem;
