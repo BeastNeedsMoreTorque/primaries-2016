@@ -7,14 +7,26 @@ require_relative '../../lib/sparkline'
 # Provides:
 #
 # * candidates: last_name, poll_percent, sparkline, poll_last_update
-# * candidate_states: last_name, state_code, poll_percent, sparkline, slug, poll_last_update
+# * candidate_states: last_name, state_code, poll_percent, sparkline
+# * party_states: party_id, state_code, slug, last_updated
 class PollsterSource < Source
   Candidate = RubyImmutableStruct.new(:last_name, :poll_percent, :sparkline, :last_updated)
-  CandidateState = RubyImmutableStruct.new(:last_name, :state_code, :poll_percent, :sparkline, :slug, :last_updated)
+  CandidateState = RubyImmutableStruct.new(:last_name, :state_code, :poll_percent, :sparkline)
+
+  PartyState = RubyImmutableStruct.new(:party_id, :state_code, :slug, :last_updated) do
+    attr_reader(:id)
+
+    def after_initialize
+      @id = "#{@party_id}-#{@state_code}"
+    end
+  end
+
+  attr_reader(:candidates, :candidate_states, :party_states)
 
   def initialize(pollster_jsons)
     @candidates = []
     @candidate_states = []
+    @party_states = []
 
     for pollster_json in pollster_jsons
       state_code = pollster_json[:state]
@@ -23,6 +35,7 @@ class PollsterSource < Source
         @candidates += parse_national_poll(pollster_json)
       else
         @candidate_states += parse_state_poll(state_code, pollster_json)
+        @party_states << parse_party_state(state_code, pollster_json)
       end
     end
   end
@@ -53,9 +66,7 @@ class PollsterSource < Source
   end
 
   def parse_state_poll(state_code, json)
-    last_updated = DateTime.parse(json[:last_updated])
     last_day = sparkline_last_day(json[:election_date])
-    slug = json[:slug]
 
     ret = []
     choice_to_sparkline = {}
@@ -67,13 +78,21 @@ class PollsterSource < Source
 
       sparkline = Sparkline.new(last_day.mjd)
 
-      ret << CandidateState.new(last_name, state_code, poll_percent, sparkline, slug, last_updated)
+      ret << CandidateState.new(last_name, state_code, poll_percent, sparkline)
       choice_to_sparkline[choice] = sparkline
     end
 
     fill_sparklines(choice_to_sparkline, json[:estimates_by_date])
 
     ret
+  end
+
+  def parse_party_state(state_code, json)
+    party_id = json[:slug] =~ /-democratic-/ ? 'Dem' : 'GOP'
+    last_updated = DateTime.parse(json[:last_updated])
+    slug = json[:slug]
+
+    PartyState.new(party_id, state_code, slug, last_updated)
   end
 
   def fill_sparklines(choice_to_sparkline, estimates_by_date)

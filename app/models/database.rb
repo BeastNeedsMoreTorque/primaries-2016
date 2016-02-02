@@ -2,19 +2,20 @@ require 'date'
 require 'set'
 
 require_relative '../../lib/api_sources'
-require_relative '../collections/race_days'
 require_relative '../models/candidate'
 require_relative '../models/candidate_county'
 require_relative '../models/candidate_state'
 require_relative '../models/county'
 require_relative '../models/county_party'
 require_relative '../models/party'
+require_relative '../models/party_state'
 require_relative '../models/race'
 require_relative '../models/race_day'
 require_relative '../sources/ap_del_super_source'
 require_relative '../sources/ap_election_days_source'
 require_relative '../sources/copy_source'
 require_relative '../sources/pollster_source'
+require_relative '../sources/sheets_source'
 
 # All data that goes into page rendering.
 #
@@ -33,6 +34,7 @@ class Database
     parties
     candidates
     states
+    party_states
     candidate_counties
     candidate_states
     county_parties
@@ -81,21 +83,29 @@ class Database
   def self.load(options={})
     override_copy = options[:override_copy] || {}
 
-    copy_source = CopySource.new(IO.read(Paths.Copy))
+    copy_source = CopySource.new(IO.read("#{Paths.StaticData}/copy.archieml"))
+    sheets_source = SheetsSource.new(
+      IO.read("#{Paths.StaticData}/candidates.tsv"),
+      IO.read("#{Paths.StaticData}/parties.tsv"),
+      IO.read("#{Paths.StaticData}/races.tsv"),
+      IO.read("#{Paths.StaticData}/race_days.tsv"),
+      IO.read("#{Paths.StaticData}/states.tsv")
+    )
     ap_del_super = ApDelSuperSource.new(ApiSources.GET_del_super)
     ap_election_days = ApElectionDaysSource.new(ApiSources.GET_all_primary_election_days)
-    pollster_source = load_pollster_source(copy_source.parties, ap_election_days.races, LastDate)
+    pollster_source = load_pollster_source(sheets_source.parties, ap_election_days.races, LastDate)
 
-    candidates = load_candidates(copy_source.candidates, ap_del_super.candidates, pollster_source.candidates)
-    candidate_counties = load_candidate_counties(copy_source.candidates, ap_election_days.candidate_counties)
-    candidate_states = load_candidate_states(copy_source.candidates, ap_election_days.candidate_states, ap_del_super.candidates, ap_del_super.candidate_states, pollster_source.candidate_states)
+    candidates = load_candidates(sheets_source.candidates, ap_del_super.candidates, pollster_source.candidates)
+    candidate_counties = load_candidate_counties(sheets_source.candidates, ap_election_days.candidate_counties)
+    candidate_states = load_candidate_states(sheets_source.candidates, ap_election_days.candidate_states, ap_del_super.candidates, ap_del_super.candidate_states, pollster_source.candidate_states)
     counties = load_counties(ap_election_days.county_fips_ints)
     county_parties = load_county_parties(ap_election_days.county_parties)
-    parties = load_parties(copy_source.parties, ap_del_super.parties)
-    races = load_races(copy_source.races, ap_election_days.races, pollster_source.candidate_states, ap_del_super.candidates)
+    parties = load_parties(sheets_source.parties, ap_del_super.parties)
+    party_states = load_party_states(sheets_source.party_states, pollster_source.party_states)
+    races = load_races(sheets_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
+    race_days = load_race_days(sheets_source.race_days, LastDate)
 
-    drop_out_candidates(copy_source.candidates, races, candidate_states) # TODO refactor so this isn't here
-    stub_races_ap_isnt_reporting_yet(races) # TODO refactor so this isn't here
+    drop_out_candidates(sheets_source.candidates, races, candidate_states) # TODO refactor so this isn't here
 
     Database.new({
       candidates: candidates,
@@ -104,7 +114,9 @@ class Database
       counties: counties,
       county_parties: county_parties,
       parties: parties,
-      races: races
+      party_states: party_states,
+      races: races,
+      race_days: race_days
     }, Date.today, LastDate, copy_source.raw_data)
   end
 
@@ -152,17 +164,16 @@ class Database
       .map! { |cc| CandidateCounty.new(nil, cc.party_id, cc.candidate_id, cc.fips_int, cc.n_votes) }
   end
 
-  def self.load_candidate_states(copy_candidates, ap_candidate_states, del_super_candidates, del_super_candidate_states, pollster_candidate_states)
-    valid_candidate_ids = Set.new(copy_candidates.map(&:id))
-
-    last_name_to_party_id = del_super_candidates.each_with_object({}) { |c, h| h[c.last_name] = c.party_id }
+  def self.load_candidate_states(sheets_candidates, ap_candidate_states, del_super_candidates, del_super_candidate_states, pollster_candidate_states)
+    valid_candidate_ids = Set.new(sheets_candidates.map(&:id))
 
     id_to_ap_candidate_state = ap_candidate_states.each_with_object({}) { |cs, h| h[cs.id] = cs }
 
+    last_name_to_candidate_id = sheets_candidates.each_with_object({}) { |c, h| h[c.last_name] = c.id }
     id_to_pollster_candidate_state = pollster_candidate_states.each_with_object({}) do |pollster_candidate_state, h|
-      party_id = last_name_to_party_id[pollster_candidate_state.last_name]
-      if party_id
-        id = "#{party_id}-#{pollster_candidate_state.state_code}"
+      candidate_id = last_name_to_candidate_id[pollster_candidate_state.last_name]
+      if candidate_id
+        id = "#{candidate_id}-#{pollster_candidate_state.state_code}"
         h[id] = pollster_candidate_state
       end
     end
@@ -223,40 +234,46 @@ class Database
     end
   end
 
-  def self.load_races(copy_races, ap_races, pollster_candidate_states, del_super_candidates)
-    last_name_to_candidate_id = del_super_candidates.each_with_object({}) { |c, h| h[c.last_name] = c.id }
-
-    key_to_pollster_info = pollster_candidate_states.each_with_object({}) do |cs, h|
-      candidate_id = last_name_to_candidate_id[cs.last_name]
-      if candidate_id
-        key = "#{candidate_id}-#{cs.state_code}"
-        if !h.include?(key)
-          h[key] = cs
-        end
+  def self.load_party_states(sheets_party_states, pollster_party_states)
+    id_to_pollster_party_state = pollster_party_states.each_with_object({}) { |ps, h| h[ps.id] = ps }
+    sheets_party_states
+      .map do |sheets_party_state|
+        pollster_party_state = id_to_pollster_party_state[sheets_party_state.id]
+        PartyState.new(
+          nil,
+          sheets_party_state.party_id,
+          sheets_party_state.state_code,
+          sheets_party_state.n_delegates,
+          pollster_party_state ? pollster_party_state.slug : nil,
+          pollster_party_state ? pollster_party_state.last_updated : nil
+        )
       end
-    end
+  end
 
-    id_to_copy_race = copy_races.each_with_object({}) { |r, h| h[r.id] = r }
+  def self.load_races(sheets_races, sheets_candidates, ap_races, pollster_candidate_states)
+    id_to_ap_race = ap_races.each_with_object({}) { |r, h| h[r.id] = r }
 
-    # TODO fill in all races, by putting then in a spreadsheet and using it as a Source
-    ap_races.map do |ap_race|
-      key = "#{ap_race.party_id}-#{ap_race.state_code}"
-      copy_race = id_to_copy_race[ap_race.id]
-      pollster_info = key_to_pollster_info[key]
+    sheets_races.map do |sheets_race|
+      ap_race = id_to_ap_race[sheets_race.id]
 
       Race.new(
         nil,
-        ap_race.race_day_id,
-        ap_race.party_id,
-        ap_race.state_code,
-        ap_race.race_type,
-        ap_race.n_precincts_reporting,
-        ap_race.n_precincts_total,
-        ap_race.last_updated,
-        pollster_info ? pollster_info.slug : nil,
-        pollster_info ? pollster_info.last_updated : nil,
-        copy_race ? copy_race.over : false
+        sheets_race.race_day_id,
+        sheets_race.party_id,
+        sheets_race.state_code,
+        sheets_race.race_type,
+        ap_race ? ap_race.n_precincts_reporting : nil,
+        ap_race ? ap_race.n_precincts_total : nil,
+        ap_race ? ap_race.last_updated : nil,
+        sheets_race.ap_says_its_over
       )
+    end
+  end
+
+  def self.load_race_days(sheets_race_days, last_date)
+    last_date_s = last_date.to_s
+    sheets_race_days.map do |race_day|
+      RaceDay.new(nil, race_day.id, race_day.title, race_day.id <= last_date_s)
     end
   end
 
@@ -270,40 +287,19 @@ class Database
       end
     end
 
-    race_key_to_first_race_day_id = races.each_with_object({}) do |race, h|
+    party_state_id_to_first_race_day_id = races.each_with_object({}) do |race, h|
       # Assume races are ordered from earliest to latest
-      h[race.party_id_and_state_code] ||= race.race_day_id
+      h[race.party_state_id] ||= race.race_day_id
     end
 
     candidate_states.select! do |candidate_state|
       candidate_id = candidate_state.candidate_id
       party_id = candidate_id_to_party_id[candidate_id]
       race_key = "#{party_id}-#{candidate_state.state_code}"
-      first_race_day_id = race_key_to_first_race_day_id[race_key]
+      first_race_day_id = party_state_id_to_first_race_day_id[race_key]
       dropped_out_date_s = candidate_id_to_dropped_out_date_s[candidate_id]
 
       first_race_day_id && (!dropped_out_date_s || dropped_out_date_s >= first_race_day_id)
-    end
-  end
-
-  # Adds more races to the passed Array of races.
-  #
-  # They'll have lots of nils.
-  def self.stub_races_ap_isnt_reporting_yet(races)
-    existing_race_ids = races.map(&:id).to_set # race_day_id-party_id-state_code
-
-    RaceDays::HardCodedData.each do |date_sym, party_races|
-      race_day_id = date_sym.to_s
-      party_races.each do |party_id_sym, state_code_syms|
-        party_id = party_id_sym.to_s
-        state_code_syms.each do |state_code_sym|
-          state_code = state_code_sym.to_s
-          race_id = "#{race_day_id}-#{party_id}-#{state_code}"
-          next if existing_race_ids.include?(race_id)
-
-          races << Race.new(nil, race_day_id, party_id, state_code)
-        end
-      end
     end
   end
 
@@ -330,40 +326,5 @@ class Database
     end
 
     PollsterSource.new(pollster_jsons)
-  end
-
-  def self.production_copy(override_copy={})
-    @production_copy ||= begin
-      text = IO.read(Paths.Copy)
-      Archieml.load(text)
-    end
-
-    self.override_copy(@production_copy, override_copy)
-  end
-
-  private
-
-  def self.override_copy(copy, overrides)
-    copy = Marshal.load(Marshal.dump(copy)) # deep clone
-    overrides.each do |key_with_dots, value|
-      keys = key_with_dots.to_s.split('.')
-      last_key = keys.pop
-      copy_subhash = copy
-      for key in keys
-        if key.include?('=')
-          clauses = key.split(/,/)
-          for clause in clauses
-            k, v = clause.split(/=/)
-            copy_subhash = copy_subhash.select { |o| o[k] == v }
-          end
-          copy_subhash = copy_subhash.first
-        else
-          copy_subhash = copy_subhash[key]
-        end
-        throw "Invalid key in overrides: `#{key_with_dots}`. An example of a valid key is `landing-page.hed` or `candidates.name=Hillary Clinton.dropped out`." if !copy_subhash
-      end
-      copy_subhash[last_key] = value
-    end
-    copy
   end
 end

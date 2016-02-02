@@ -1,22 +1,23 @@
 # Could almost be called PartyState. Gives the votes/delegates of a state.
-Race = RubyImmutableStruct.new(:database_or_nil, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :pollster_slug, :poll_last_updated, :ap_says_its_over) do
+Race = RubyImmutableStruct.new(:database_or_nil, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :ap_says_its_over) do
   include Comparable
 
   # Sum of candidate_states.n_delegates (pledged and unpledged alike)
   attr_reader(:n_delegates_with_candidates)
 
-  attr_reader(:candidate_states, :candidate_counties, :county_parties)
+  attr_reader(:candidate_states, :candidate_counties, :county_parties, :party_state)
 
   def id; "#{race_day_id}-#{party_id}-#{state_code}"; end
 
-  attr_reader(:party_id_and_state_code)
+  attr_reader(:party_state_id)
 
   def after_initialize
-    @party_id_and_state_code = "#{@party_id}-#{@state_code}"
+    @party_state_id = "#{@party_id}-#{@state_code}"
 
     if !database_or_nil.nil?
       database = database_or_nil
 
+      @party_state = database.party_states.find!(@party_state_id)
       @candidate_states = database.candidate_states.find_all_by_party_id_and_state_code(party_id, state_code).sort || []
       @candidate_counties = database.candidate_counties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
       @county_parties = database.county_parties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
@@ -52,9 +53,11 @@ Race = RubyImmutableStruct.new(:database_or_nil, :race_day_id, :party_id, :state
   def state_fips_int; state.fips_int; end
   def state_name; state.name; end
   def date; race_day.date; end
-  def disabled?; !race_day || race_day.disabled?; end
-  def enabled?; race_day && race_day.enabled?; end
-  def n_delegates; state.n_delegates(party_id); end
+  def disabled?; race_day.disabled?; end
+  def enabled?; race_day.enabled?; end
+  def n_delegates; party_state.n_delegates; end
+  def pollster_slug; party_state.pollster_slug; end
+  def pollster_last_updated; party_state.pollster_last_updated; end
 
   # True iff at least one candidate has a delegate -- pledged or unpledged
   def has_delegate_counts

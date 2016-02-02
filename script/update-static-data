@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'open-uri'
+
+require_relative '../lib/paths'
+require_relative '../lib/logger'
+
+Urls = {
+  'copy.archieml': 'https://docs.google.com/document/export?format=txt&id=1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w',
+  'candidates.tsv': 'https://docs.google.com/a/huffingtonpost.com/spreadsheets/d/1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw/export?format=tsv&id=1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw&gid=1702185742',
+  'parties.tsv': 'https://docs.google.com/a/huffingtonpost.com/spreadsheets/d/1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw/export?format=tsv&id=1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw&gid=1790726926',
+  'races.tsv': 'https://docs.google.com/a/huffingtonpost.com/spreadsheets/d/1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw/export?format=tsv&id=1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw&gid=0',
+  'race_days.tsv': 'https://docs.google.com/a/huffingtonpost.com/spreadsheets/d/1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw/export?format=tsv&id=1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw&gid=743098493',
+  'states.tsv': 'https://docs.google.com/a/huffingtonpost.com/spreadsheets/d/1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw/export?format=tsv&id=1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw&gid=158195756'
+}
+
+Urls.each do |basename, url|
+  output_filename = "#{Paths.StaticData}/#{basename}"
+
+  open(url, 'r') do |input|
+    text = input.read
+    IO.write("#{Paths.StaticData}/#{basename}", text, encoding: 'utf-8')
+  end
+
+  $logger.info("Overwrote #{output_filename}")
+end
