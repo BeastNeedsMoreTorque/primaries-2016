@@ -41,7 +41,7 @@ class PollsterSource < Source
       last_name = estimate[:last_name]
       poll_percent = estimate[:value]
 
-      sparkline = Sparkline.new(last_day)
+      sparkline = Sparkline.new(last_day.mjd)
 
       ret << Candidate.new(last_name, poll_percent, sparkline, last_updated)
       choice_to_sparkline[choice] = sparkline
@@ -65,7 +65,7 @@ class PollsterSource < Source
       last_name = estimate[:last_name]
       poll_percent = estimate[:value]
 
-      sparkline = Sparkline.new(last_day)
+      sparkline = Sparkline.new(last_day.mjd)
 
       ret << CandidateState.new(last_name, state_code, poll_percent, sparkline, slug, last_updated)
       choice_to_sparkline[choice] = sparkline
@@ -78,7 +78,7 @@ class PollsterSource < Source
 
   def fill_sparklines(choice_to_sparkline, estimates_by_date)
     for estimate_points in estimates_by_date
-      date = Date.parse(estimate_points[:date])
+      date_mjd = Date.parse(estimate_points[:date]).mjd
 
       for estimate in estimate_points[:estimates]
         choice = estimate[:choice]
@@ -86,7 +86,7 @@ class PollsterSource < Source
 
         sparkline = choice_to_sparkline[choice]
         if sparkline # "Lessig" might show up in :estimates_by_date but not :estimates
-          sparkline.add_value(date, value)
+          sparkline.add_value(date_mjd, value)
         end
       end
     end
