@@ -59,7 +59,7 @@
                     %td.n-votes.when-past.when-present= format_int(cd_state.n_votes)
             %div.footnotes
               -if party.id == 'Dem'
-                %p.sde= "*The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
+                %p.sde.when-past.when-present= "*The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
               %p.footnotes-for-pollster.when-future!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
 
   %script{src: '/2016/javascripts/pym.min.js'}
