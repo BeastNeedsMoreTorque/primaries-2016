@@ -169,8 +169,8 @@ id: 45650
 date: 2016-02-01
 title: Iowa Caucuses
 pubbed: Tuesday, Jan. 26, 6:30 PM EST
-body: Iowa residents are the first in the nation to cast their ballots. Watch live updates here!
-twitter: Iowa residents are casting their ballots, watch live updates here!
+body: View election results from the Iowa caucuses and see how each candidate performed in counties throughout the state.
+twitter: Cruz is projected to win Iowa and Sanders is virtually tied with Clinton, see election maps at 
 :end
 
 
@@ -188,13 +188,13 @@ Set over to true when AP flags the race as completed. Normally we mark a race �
 
 state: IA
 party: Dem
-text: Hillary Clinton has enjoyed a lead in the Iowa caucus polls, but Bernie Sanders has steadily closed the gap over the last few months. Some show Clinton with a clear lead, but others show the candidates in a tight race. HuffPost Pollster’s average gives Clinton a narrow lead. Stay tuned -- this one could be a nail-biter.
+text: Bernie Sanders was nearly tied with Hillary Clinton in the Democratic race while O’Malley suspended his campaign before all results were counted.
 :end
 
 
 state: IA
 party: GOP
-text: The Republican contest in Iowa has seen a few candidates surge and fall, but headed into the caucus it’s Ted Cruz who is giving Donald Trump a run for his money. Trump is ahead in the HuffPost Pollster average, but the race is still tight. But don’t dismiss Marco Rubio. He’s solidly in third place, according to the polls. All other candidates are averaging single digits. 
+text: Republican voters in Iowa turned out in record numbers for the GOP caucus showing strong support for Ted Cruz, who is projected to win the race according to the AP. Marco Rubio finished third despite lagging well behind Donald Trump in the polls. Other candidates, like Jeb Bush, failed to gain traction with voters.
 :end
 
 
