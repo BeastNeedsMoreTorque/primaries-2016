@@ -9,7 +9,11 @@ Race = RubyImmutableStruct.new(:database_or_nil, :ap_id, :race_day_id, :party_id
 
   def id; "#{race_day_id}-#{party_id}-#{state_code}"; end
 
+  attr_reader(:party_id_and_state_code)
+
   def after_initialize
+    @party_id_and_state_code = "#{@party_id}-#{@state_code}"
+
     if !database_or_nil.nil?
       database = database_or_nil
 

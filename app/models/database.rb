@@ -2,11 +2,11 @@ require 'date'
 require 'set'
 
 require_relative '../../lib/api_sources'
-require_relative '../../lib/sparkline'
 require_relative '../collections/parties'
 require_relative '../collections/race_days'
 require_relative '../sources/ap_del_super_source'
 require_relative '../sources/ap_election_days_source'
+require_relative '../sources/pollster_source'
 
 # All data that goes into page rendering.
 #
@@ -126,7 +126,7 @@ class Database
     drop_out_candidates_from_copy(copy, candidates, races, candidate_states)
     mark_races_finished_from_copy(copy, races)
     stub_races_ap_isnt_reporting_yet(races)
-    add_pollster_estimates(parties, candidates, candidate_states, races)
+    add_pollster_estimates(parties, candidates, candidate_states, races, LastDate)
 
     Database.new({
       candidates: candidates,
@@ -249,102 +249,88 @@ class Database
 
   # Writes Candidate.poll_percent, Candidate.poll_updated_at,
   # CandidateState.poll_percent, Race.poll_last_updated.
-  def self.add_pollster_estimates(parties, candidates, candidate_states, races)
-    key_to_races = {}
+  def self.add_pollster_estimates(parties, candidates, candidate_states, races, last_date)
+    last_date_s = last_date.to_s
+    wanted_race_keys = Set.new # party_id-state_code Strings
     races.each do |race|
-      key = "#{race.party_id}-#{race.state_code}"
-      key_to_races[key] ||= []
-      key_to_races[key] << race
+      if race.race_day_id <= last_date_s
+        wanted_race_keys.add(race.party_id_and_state_code)
+      end
     end
 
-    last_name_to_candidate_id = {} # but also full_name, because Pollster has a :choice => "Rand Paul"
-    candidates.each { |c| last_name_to_candidate_id[c.name] = last_name_to_candidate_id[c.full_name] = c.id }
-
-    chart_slugs = []
-
-    race_key_to_pollster = {} # party_id-state_code -> [ slug, last_updated ]
-    candidate_state_id_to_pollster = {} # candidate_id-state_code -> [ poll_percent, sparkline ]
-    candidate_id_to_pollster = {} # candidate_id -> [ poll_percent, sparkline, last_updated ]
+    pollster_jsons = []
 
     for party in parties
-      party_id = party.id
-
-      for chart in ApiSources.GET_pollster_primaries(party_id)
+      for chart in ApiSources.GET_pollster_primaries(party.id)
         state_code = chart[:state]
-        last_updated = DateTime.parse(chart[:last_updated])
-        slug = chart[:slug]
 
-        race_key = "#{party_id}-#{state_code}"
-        race_key_to_pollster[race_key] = [ slug, last_updated ]
-
-        chart_slugs << slug
-
-        for estimate in chart[:estimates]
-          last_name = estimate[:last_name]
-
-          candidate_id = last_name_to_candidate_id[last_name]
-          if candidate_id
-            poll_percent = estimate[:value]
-
-            if state_code == 'US'
-              candidate_id_to_pollster[candidate_id] = [ poll_percent, nil, last_updated ]
-            else
-              candidate_state_id_to_pollster["#{candidate_id}-#{state_code}"] = [ poll_percent, nil ]
-            end
-          end
+        if state_code == 'US' || wanted_race_keys.include?("#{party.id}-#{state_code}")
+          slug = chart[:slug]
+          pollster_jsons << ApiSources.GET_pollster_primary(slug)
         end
       end
+    end
 
-      for slug in chart_slugs
-        chart_data = ApiSources.GET_pollster_primary(slug)
-        state_code = chart_data[:state]
+    source = PollsterSource.new(pollster_jsons)
 
-        last_day = if chart_data[:election_date]
-          [ Date.today, Date.parse(chart_data[:election_date]) ].min
-        else
-          Date.today
-        end
+    last_name_to_pollster_candidate = source.candidates.each_with_object({}) { |c, h| h[c.last_name] = c }
 
-        for estimate_points in chart_data[:estimates_by_date]
-          date = Date.parse(estimate_points[:date])
+    candidates.map! do |candidate|
+      pollster_candidate = last_name_to_pollster_candidate[candidate.name]
+      if pollster_candidate
+        candidate.merge(
+          poll_percent: pollster_candidate.poll_percent,
+          poll_sparkline: pollster_candidate.sparkline,
+          poll_last_updated: pollster_candidate.last_updated
+        )
+      else
+        candidate
+      end
+    end
 
-          for estimate in estimate_points[:estimates]
-            choice = estimate[:choice]
-            value = estimate[:value]
+    candidate_last_name_to_id = candidates.each_with_object({}) { |c, h| h[c.name] = c.id }
+    candidate_state_id_to_pollster_candidate_state = source.candidate_states.each_with_object({}) do |cs, h|
+      candidate_id = candidate_last_name_to_id[cs.last_name]
+      if candidate_id
+        candidate_state_id = "#{candidate_id}-#{cs.state_code}"
+        h[candidate_state_id] = cs
+      end
+    end
 
-            candidate_id = last_name_to_candidate_id[choice]
-            next if !candidate_id
+    candidate_states.map! do |candidate_state|
+      pollster_candidate_state = candidate_state_id_to_pollster_candidate_state[candidate_state.id]
+      if pollster_candidate_state
+        candidate_state.merge(
+          poll_percent: pollster_candidate_state.poll_percent,
+          poll_sparkline: pollster_candidate_state.sparkline
+        )
+      else
+        candidate_state
+      end
+    end
 
-            if state_code == 'US'
-              pollster_candidate = candidate_id_to_pollster[candidate_id]
-              next if !pollster_candidate
-              pollster_candidate[1] ||= Sparkline.new(last_day)
-              pollster_candidate[1].add_value(date, value)
-            else
-              key = "#{candidate_id}-#{state_code}"
-              candidate_state = candidate_state_id_to_pollster[key]
-              next if !candidate_state
-              candidate_state[1] ||= Sparkline.new(last_day)
-              candidate_state[1].add_value(date, value)
-            end
-          end
-        end
+    candidate_last_name_to_party_id = candidates.each_with_object({}) { |c, h| h[c.name] = c.party_id }
+    race_key_to_pollster_info = source.candidate_states.each_with_object({}) do |cs, h|
+      # pollster_info has { slug, last_updated }.
+      # Actually, any CandidateState in the Source has that. So for each
+      # race key, we'll just put a random CandidateState.
+      party_id = candidate_last_name_to_party_id[cs.last_name]
+      if party_id
+        key = "#{party_id}-#{cs.state_code}"
+        h[key] = cs if !h.include?(cs)
       end
     end
 
     races.map! do |race|
-      pollster = race_key_to_pollster["#{race.party_id}-#{race.state_code}"]
-      pollster ? race.merge(pollster_slug: pollster[0], poll_last_updated: pollster[1]) : race
-    end
-
-    candidates.map! do |candidate|
-      pollster = candidate_id_to_pollster[candidate.id]
-      pollster ? candidate.merge(poll_percent: pollster[0], poll_sparkline: pollster[1], poll_last_update: pollster[2]) : candidate
-    end
-
-    candidate_states.map! do |candidate_state|
-      pollster = candidate_state_id_to_pollster[candidate_state.id]
-      pollster ? candidate_state.merge(poll_percent: pollster[0], poll_sparkline: pollster[1]) : candidate_state
+      pollster_info = race_key_to_pollster_info[race.party_id_and_state_code]
+      if pollster_info
+        race.merge(
+          poll_last_updated: pollster_info.last_updated,
+          pollster_slug: pollster_info.slug
+        )
+      else
+        race
+      end
     end
 
     nil
