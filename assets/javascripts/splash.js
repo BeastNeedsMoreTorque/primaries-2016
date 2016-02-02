@@ -17,7 +17,13 @@ $(function() {
         $(this).addClass("has-results");
       }
     });
-    var precinctsPct = ((precinctsReporting/totalPrecincts)*100).toFixed(0) + "%";
+    var precinctsPct = ((precinctsReporting/totalPrecincts)*100).toFixed(0);
+    if(precinctsPct > 99.0 && precinctsReporting != totalPrecincts){
+      precinctsPct = "99%"
+    }else{
+      precinctsPct = precinctsPct.toFixed(0) + "%"
+    }
+
     $("#unreported-counties").text(totalCounties - countiesReporting)
     $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " of precincts)</span>");
   }
