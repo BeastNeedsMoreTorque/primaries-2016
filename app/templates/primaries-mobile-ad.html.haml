@@ -10,7 +10,7 @@
   %div.primary-mobile-ad
     %div.head
       %h3.main-hed.when-future= "HAPPENING SOON: Iowa Caucus"
-      %h3.main-hed.when-present= "HAPPENING NOW: Iowa Caucus"
+      %h3.main-hed.when-present= "RESULTS: Iowa Caucus"
       %h1.main-hed.when-past= "RESULTS: Iowa Caucus"
     %div.parties-container
       -race_day.state_party_races.first[1].each do |party, race, _|
@@ -41,10 +41,12 @@
 
   %p.source.sde.when-present.when-past= "*Iowa Democrats report State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
 
+  %div.tease-link.when-past
+    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See Results"
+  %div.tease-link.when-present
+    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See Live Results"
   %div.tease-link.when-future
-    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See All Candidates"
-  %div.tease-link.when-present.when-past
-    %a{href: "/2016/primaries/#{next_race_day.id}", "target": "_blank"}= "See Live Results"
+    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See All Candidates"
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
     var pymChild = new pym.Child();

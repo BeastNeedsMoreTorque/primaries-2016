@@ -11,7 +11,7 @@
     %div.header
       %div.line
       %div.hed
-        %h1.main-hed.when-present= "HAPPENING NOW: Iowa Caucus"
+        %h1.main-hed.when-present= "RESULTS: Iowa Caucus"
         %h1.main-hed.when-past= "RESULTS: Iowa Caucus"
         %h1.main-hed.when-future= "HAPPENING TONIGHT: Iowa Caucus"
       %div.line
@@ -31,7 +31,7 @@
               %span#unreported-counties
               NOT FINISHED
         %div.tease-link
-          %a{target: '_blank', href: "/2016/primaries/2016-02-01"}= "See Live Results"
+          %a{target: '_blank', href: "/2016/primaries/2016-02-01"}= "See Results"
       %div.parties-container
         -race_day.state_party_races.first[1].each do |party, race, _|
           .party-container{class: party.id}
