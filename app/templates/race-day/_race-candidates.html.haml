@@ -18,6 +18,8 @@
         %td.candidate
           %img{src: image_path("#{candidate.slug}.png"), alt: ''}
           = candidate.name
+          - if candidate_state.winner?
+            %span.winner ✓
         %td.n-votes= format_int(candidate_state.n_votes)
         %td.n-delegates
           .n-delegates-inner

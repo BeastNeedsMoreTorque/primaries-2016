@@ -112,7 +112,7 @@ class Database
             candidates << c
             id_to_candidate[candidate_id] = c
           else
-            cs = [ candidate_id, state_code, -1, 0, n_delegates, nil, nil ]
+            cs = [ candidate_id, state_code, -1, 0, n_delegates, nil, nil, nil ]
             candidate_states << cs
             ids_to_candidate_state[[candidate_id, state_code]] = cs
           end
@@ -173,6 +173,7 @@ class Database
 
               candidate_state[2] = candidate_hash[:ballotOrder]
               candidate_state[3] = candidate_hash[:voteCount]
+              candidate_state[7] = candidate_hash[:winner] == 'X'
             end
           elsif reporting_unit[:level] == 'FIPSCode'
             fips_code = reporting_unit[:fipsCode]
