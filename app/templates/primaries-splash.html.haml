@@ -56,7 +56,7 @@
                       %td
                         = cd.name
                         - if cd_state.winner?
-                          %span.winner ✓
+                          %span.winner!= inline_svg('winner')
                       %td= format_int(cd_state.n_votes)
             - if party.id == "Dem"
               %div.sdefootnote= "*The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."

@@ -12,6 +12,10 @@ $party-container-height: 100px;
   -webkit-flex-direction: row;
 }
 
+span.winner {
+  @include winner-span;
+}
+
 .primary-splash-banner {
   @include desktop-splash-base;
   max-width: 945px;

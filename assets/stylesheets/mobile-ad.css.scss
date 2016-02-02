@@ -147,6 +147,10 @@ body {
 	margin: 0 auto;
 }
 
+span.winner {
+  @include winner-span;
+}
+
 .tease-link {
 	@include tease-link();
 	@include huffpo-body-copy;

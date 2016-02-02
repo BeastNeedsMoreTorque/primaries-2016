@@ -133,6 +133,11 @@ class BaseView
     @map_svg[path] ||= File.read("#{Paths.Assets}/maps/#{path}.svg")[header_length .. -1]
   end
 
+  def inline_svg(path)
+    @inline_svg ||= {}
+    @inline_svg[path] ||= File.read("#{Paths.Assets}/images/#{path}.svg")
+  end
+
   def template_name
     t = self.class.name.gsub(/([A-Z])/) { "-#{$1.downcase}" }
     t[1..-6]

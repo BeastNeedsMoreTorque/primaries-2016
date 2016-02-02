@@ -87,6 +87,10 @@ body.race-day table.candidates {
       font-weight: normal; // because they're dots and they'd be janky if they resized
     }
   }
+
+  span.winner {
+    @include winner-span;
+  }
 }
 
 body.race-day .race {

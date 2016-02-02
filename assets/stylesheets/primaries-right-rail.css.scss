@@ -123,4 +123,7 @@ h2.sub a {
     }
   }
 
+  span.winner {
+    @include winner-span;
+  }
 }
