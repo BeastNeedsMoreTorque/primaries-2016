@@ -2,10 +2,18 @@ require 'date'
 require 'set'
 
 require_relative '../../lib/api_sources'
-require_relative '../collections/parties'
 require_relative '../collections/race_days'
+require_relative '../models/candidate'
+require_relative '../models/candidate_county'
+require_relative '../models/candidate_state'
+require_relative '../models/county'
+require_relative '../models/county_party'
+require_relative '../models/party'
+require_relative '../models/race'
+require_relative '../models/race_day'
 require_relative '../sources/ap_del_super_source'
 require_relative '../sources/ap_election_days_source'
+require_relative '../sources/copy_source'
 require_relative '../sources/pollster_source'
 
 # All data that goes into page rendering.
@@ -72,61 +80,22 @@ class Database
   # If AP_TEST=true, we use AP's test data.
   def self.load(options={})
     override_copy = options[:override_copy] || {}
-    copy = production_copy(override_copy)
 
-    candidates = []
-    candidate_counties = []
-    candidate_states = []
-    counties = []
-    county_parties = []
-    parties = []
-    races = []
-
-    id_to_candidate = {}
-    seen_county_ids = Set.new([])
-    ids_to_candidate_state = {}
-
-    id_to_candidate_full_name = {}
-    for copy_candidate in copy['candidates']
-      id_to_candidate_full_name[copy_candidate['id']] = copy_candidate['name']
-    end
-
-    del_super = ApDelSuperSource.new(ApiSources.GET_del_super)
-    for candidate in del_super.candidates
-      full_name = id_to_candidate_full_name[candidate.id]
-      candidates << candidate.merge(full_name: full_name)
-      id_to_candidate[candidate.id] = candidate
-    end
-    for candidate_state in del_super.candidate_states
-      candidate_states << candidate_state
-      ids_to_candidate_state[[candidate_state.candidate_id, candidate_state.state_code]] = candidate_state
-    end
-    for party in del_super.parties
-      party_extra = Parties.extra_attributes_by_id.fetch(party.id.to_sym)
-      parties << party.merge(party_extra)
-    end
-
+    copy_source = CopySource.new(IO.read(Paths.Copy))
+    ap_del_super = ApDelSuperSource.new(ApiSources.GET_del_super)
     ap_election_days = ApElectionDaysSource.new(ApiSources.GET_all_primary_election_days)
+    pollster_source = load_pollster_source(copy_source.parties, ap_election_days.races, LastDate)
 
-    id_to_candidate_state = {}
-    for candidate_state in ap_election_days.candidate_states
-      id_to_candidate_state[candidate_state.id] = candidate_state
-    end
-    candidate_states.map! { |cs| cs2 = id_to_candidate_state[cs.id]; cs2 ? cs.merge(ballot_order: cs2.ballot_order, n_votes: cs2.n_votes) : cs }
+    candidates = load_candidates(copy_source.candidates, ap_del_super.candidates, pollster_source.candidates)
+    candidate_counties = load_candidate_counties(copy_source.candidates, ap_election_days.candidate_counties)
+    candidate_states = load_candidate_states(copy_source.candidates, ap_election_days.candidate_states, ap_del_super.candidates, ap_del_super.candidate_states, pollster_source.candidate_states)
+    counties = load_counties(ap_election_days.county_fips_ints)
+    county_parties = load_county_parties(ap_election_days.county_parties)
+    parties = load_parties(copy_source.parties, ap_del_super.parties)
+    races = load_races(copy_source.races, ap_election_days.races, pollster_source.candidate_states, ap_del_super.candidates)
 
-    candidate_counties = ap_election_days.candidate_counties
-
-    counties = ap_election_days.counties
-
-    county_parties = ap_election_days.county_parties
-
-    races = ap_election_days.races
-
-    fix_invalid_ap_candidate_data(copy, candidates, candidate_states, candidate_counties)
-    drop_out_candidates_from_copy(copy, candidates, races, candidate_states)
-    mark_races_finished_from_copy(copy, races)
-    stub_races_ap_isnt_reporting_yet(races)
-    add_pollster_estimates(parties, candidates, candidate_states, races, LastDate)
+    drop_out_candidates(copy_source.candidates, races, candidate_states) # TODO refactor so this isn't here
+    stub_races_ap_isnt_reporting_yet(races) # TODO refactor so this isn't here
 
     Database.new({
       candidates: candidates,
@@ -136,77 +105,183 @@ class Database
       county_parties: county_parties,
       parties: parties,
       races: races
-    }, Date.today, LastDate, copy)
+    }, Date.today, LastDate, copy_source.raw_data)
   end
 
-  # Removes candidates AP shouldn't be reporting to us, and override AP's
-  # delegate counts.
-  #
-  # Prior to 2016-01-31, AP reports the wrong list of candidates and the
-  # wrong delegate counts. We put the correct data in our `copy`.
-  def self.fix_invalid_ap_candidate_data(copy, candidates, candidate_states, candidate_counties)
-    candidate_ids = Set.new(copy.fetch('candidates', []).map{ |c| c['id'] })
+  def self.load_candidates(copy_candidates, ap_del_super_candidates, pollster_candidates)
+    last_name_to_candidate_id = {}
+    candidate_id_to_del_super_candidate = {}
+    for del_super_candidate in ap_del_super_candidates
+      last_name_to_candidate_id[del_super_candidate.last_name] = del_super_candidate.id
+      candidate_id_to_del_super_candidate[del_super_candidate.id] = del_super_candidate
+    end
 
-    candidates.select! { |c| candidate_ids.include?(c.id) }
-    candidate_states.select! { |cs| candidate_ids.include?(cs.candidate_id) }
-    candidate_counties.select! { |cc| candidate_ids.include?(cc.candidate_id) }
+    candidate_id_to_pollster_candidate = {}
+    for pollster_candidate in pollster_candidates
+      candidate_id = last_name_to_candidate_id[pollster_candidate.last_name]
+      if candidate_id
+        candidate_id_to_pollster_candidate[candidate_id] = pollster_candidate
+      end
+    end
+
+    copy_candidates.map do |copy_candidate|
+      del_super_candidate = candidate_id_to_del_super_candidate[copy_candidate.id]
+      pollster_candidate = candidate_id_to_pollster_candidate[copy_candidate.id]
+
+      Candidate.new(
+        nil,
+        copy_candidate.id,
+        copy_candidate.party_id,
+        copy_candidate.full_name,
+        del_super_candidate.last_name,
+        del_super_candidate.n_delegates,
+        del_super_candidate.n_unpledged_delegates,
+        pollster_candidate ? pollster_candidate.poll_percent : nil,
+        pollster_candidate ? pollster_candidate.sparkline : nil,
+        pollster_candidate ? pollster_candidate.last_updated : nil,
+        copy_candidate.dropped_out_date_or_nil
+      )
+    end
   end
 
-  # Adds :dropped_out_date to candidates from the copy. Nixes candidate_states
-  # and candidate_counties that we should never show.
-  def self.drop_out_candidates_from_copy(copy, candidates, races, candidate_states)
-    full_name_to_candidate = {}
-    candidate_id_to_party_id = {}
-    for candidate in candidates
-      candidate_id_to_party_id[candidate.id] = candidate.party_id
-      full_name_to_candidate[candidate.name] = candidate
+  def self.load_candidate_counties(copy_candidates, ap_candidate_counties)
+    valid_candidate_ids = Set.new(copy_candidates.map(&:id))
+
+    ap_candidate_counties
+      .select { |candidate_county| valid_candidate_ids.include?(candidate_county.candidate_id) }
+      .map! { |cc| CandidateCounty.new(nil, cc.party_id, cc.candidate_id, cc.fips_int, cc.n_votes) }
+  end
+
+  def self.load_candidate_states(copy_candidates, ap_candidate_states, del_super_candidates, del_super_candidate_states, pollster_candidate_states)
+    valid_candidate_ids = Set.new(copy_candidates.map(&:id))
+
+    last_name_to_party_id = del_super_candidates.each_with_object({}) { |c, h| h[c.last_name] = c.party_id }
+
+    id_to_ap_candidate_state = ap_candidate_states.each_with_object({}) { |cs, h| h[cs.id] = cs }
+
+    id_to_pollster_candidate_state = pollster_candidate_states.each_with_object({}) do |pollster_candidate_state, h|
+      party_id = last_name_to_party_id[pollster_candidate_state.last_name]
+      if party_id
+        id = "#{party_id}-#{pollster_candidate_state.state_code}"
+        h[id] = pollster_candidate_state
+      end
     end
 
-    candidate_id_to_last_race_day_id = {} # id -> "YYYY-MM-DD"
+    # TODO drop out candidates here, treating the list of races as a Source
+    del_super_candidate_states
+      .select { |candidate_state| valid_candidate_ids.include?(candidate_state.candidate_id) }
+      .map! do |del_super_candidate_state|
+        ap_candidate_state = id_to_ap_candidate_state[del_super_candidate_state.id]
+        pollster_candidate_state = id_to_pollster_candidate_state[del_super_candidate_state.id]
 
-    for candidate_copy in copy['candidates']
-      next if !candidate_copy['dropped out']
-
-      date = Date.parse(candidate_copy['dropped out'])
-      if date > Date.parse('2016-07-01') || date < Date.parse('2016-01-01')
-        throw "The drop-out date of #{date} for #{candidate_copy['name']} is clearly a mistake in the copy. Aborting."
+        CandidateState.new(
+          nil,
+          del_super_candidate_state.candidate_id,
+          del_super_candidate_state.state_code,
+          ap_candidate_state ? ap_candidate_state.ballot_order : nil,
+          ap_candidate_state ? ap_candidate_state.n_votes : nil,
+          del_super_candidate_state.n_delegates,
+          pollster_candidate_state ? pollster_candidate_state.poll_percent : nil,
+          pollster_candidate_state ? pollster_candidate_state.sparkline : nil
+        )
       end
+  end
 
-      candidate = full_name_to_candidate[candidate_copy['name']]
-      if !candidate
-        throw "The candidate named #{candidate_copy['name']} does not exist and is thus a mistake in the copy. Aborting."
+  def self.load_counties(ap_county_fips_ints)
+    ap_county_fips_ints.to_a
+      .map! { |fips_int| County.new(nil, fips_int) }
+  end
+
+  def self.load_county_parties(ap_county_parties)
+    ap_county_parties
+      .map! do |ap_county_party|
+        CountyParty.new(
+          nil,
+          ap_county_party.fips_int,
+          ap_county_party.party_id,
+          ap_county_party.n_precincts_reporting,
+          ap_county_party.n_precincts_total,
+          ap_county_party.last_updated
+        )
       end
+  end
 
-      candidate_id_to_last_race_day_id[candidate[0]] = date
+  def self.load_parties(copy_parties, del_super_parties)
+    id_to_del_super_party = del_super_parties.each_with_object({}) { |p, h| h[p.id] = p }
+
+    copy_parties.map do |copy_party|
+      del_super_party = id_to_del_super_party[copy_party.id]
+      Party.new(
+        nil,
+        copy_party.id,
+        copy_party.name,
+        copy_party.adjective,
+        del_super_party.n_delegates_total,
+        del_super_party.n_delegates_needed
+      )
+    end
+  end
+
+  def self.load_races(copy_races, ap_races, pollster_candidate_states, del_super_candidates)
+    last_name_to_candidate_id = del_super_candidates.each_with_object({}) { |c, h| h[c.last_name] = c.id }
+
+    key_to_pollster_info = pollster_candidate_states.each_with_object({}) do |cs, h|
+      candidate_id = last_name_to_candidate_id[cs.last_name]
+      if candidate_id
+        key = "#{candidate_id}-#{cs.state_code}"
+        if !h.include?(key)
+          h[key] = cs
+        end
+      end
     end
 
-    candidates.map! do |c|
-      date = candidate_id_to_last_race_day_id[c.id]
-      date ? c.merge(dropped_out_date: Date.parse(date)) : c
+    id_to_copy_race = copy_races.each_with_object({}) { |r, h| h[r.id] = r }
+
+    # TODO fill in all races, by putting then in a spreadsheet and using it as a Source
+    ap_races.map do |ap_race|
+      key = "#{ap_race.party_id}-#{ap_race.state_code}"
+      copy_race = id_to_copy_race[ap_race.id]
+      pollster_info = key_to_pollster_info[key]
+
+      Race.new(
+        nil,
+        ap_race.race_day_id,
+        ap_race.party_id,
+        ap_race.state_code,
+        ap_race.race_type,
+        ap_race.n_precincts_reporting,
+        ap_race.n_precincts_total,
+        ap_race.last_updated,
+        pollster_info ? pollster_info.slug : nil,
+        pollster_info ? pollster_info.last_updated : nil,
+        copy_race ? copy_race.over : false
+      )
+    end
+  end
+
+  # Nixes candidate_states and candidate_counties that we should never show.
+  def self.drop_out_candidates(candidates, races, candidate_states)
+    candidate_id_to_party_id = candidates.each_with_object({}) { |c, h| h[c.id] = c.party_id }
+    candidate_id_to_dropped_out_date_s = candidates.each_with_object({}) do |c, h|
+      date_or_nil = c.dropped_out_date_or_nil
+      if date_or_nil
+        h[c.id] = date_or_nil.to_s
+      end
     end
 
-    party_id_state_code_to_first_race_day_id = {}
-    for race in races
-      key = "#{race.party_id}-#{race.state_code}"
-      race_day_id = race.race_day_id
-      if !party_id_state_code_to_first_race_day_id[key] || party_id_state_code_to_first_race_day_id[key] > race_day_id
-        party_id_state_code_to_first_race_day_id[key] = race_day_id
-      end
+    race_key_to_first_race_day_id = races.each_with_object({}) do |race, h|
+      # Assume races are ordered from earliest to latest
+      h[race.party_id_and_state_code] ||= race.race_day_id
     end
 
     candidate_states.select! do |candidate_state|
       candidate_id = candidate_state.candidate_id
-      drop_out_date = candidate_id_to_last_race_day_id[candidate_id]
+      party_id = candidate_id_to_party_id[candidate_id]
+      race_key = "#{party_id}-#{candidate_state.state_code}"
+      first_race_day_id = race_key_to_first_race_day_id[race_key]
+      dropped_out_date_s = candidate_id_to_dropped_out_date_s[candidate_id]
 
-      if !drop_out_date
-        true
-      else
-        state_code = candidate_state.state_code
-        party_id = candidate_id_to_party_id[candidate_id]
-        key = "#{party_id}-#{state_code}"
-        race_day_id = party_id_state_code_to_first_race_day_id[key]
-        !race_day_id || race_day_id <= drop_out_date
-      end
+      first_race_day_id && (!dropped_out_date_s || dropped_out_date_s >= first_race_day_id)
     end
   end
 
@@ -214,7 +289,7 @@ class Database
   #
   # They'll have lots of nils.
   def self.stub_races_ap_isnt_reporting_yet(races)
-    existing_race_keys = races.map(&:id).to_set # race_day_id-party_id-state_code
+    existing_race_ids = races.map(&:id).to_set # race_day_id-party_id-state_code
 
     RaceDays::HardCodedData.each do |date_sym, party_races|
       race_day_id = date_sym.to_s
@@ -223,36 +298,18 @@ class Database
         state_code_syms.each do |state_code_sym|
           state_code = state_code_sym.to_s
           race_id = "#{race_day_id}-#{party_id}-#{state_code}"
-          next if existing_race_keys.include?(race_id)
+          next if existing_race_ids.include?(race_id)
 
-          races << Race.new(nil, nil, race_day_id, party_id, state_code)
+          races << Race.new(nil, race_day_id, party_id, state_code)
         end
       end
     end
   end
 
-  def self.mark_races_finished_from_copy(copy, races)
-    called_race_keys = Set.new
-    for copy_race in copy['primaries']['races']
-      if copy_race['over'] == 'true'
-        called_race_keys.add("#{copy_race['party']}-#{copy_race['state']}")
-      end
-    end
-
-    races.map! do |race|
-      race_key = "#{race.party_id}-#{race.state_code}"
-      called_race_keys.include?(race_key) ? race.merge(ap_says_its_over: true) : race
-    end
-
-    nil
-  end
-
-  # Writes Candidate.poll_percent, Candidate.poll_updated_at,
-  # CandidateState.poll_percent, Race.poll_last_updated.
-  def self.add_pollster_estimates(parties, candidates, candidate_states, races, last_date)
+  def self.load_pollster_source(copy_parties, ap_races, last_date)
     last_date_s = last_date.to_s
     wanted_race_keys = Set.new # party_id-state_code Strings
-    races.each do |race|
+    ap_races.each do |race|
       if race.race_day_id <= last_date_s
         wanted_race_keys.add(race.party_id_and_state_code)
       end
@@ -260,7 +317,7 @@ class Database
 
     pollster_jsons = []
 
-    for party in parties
+    for party in copy_parties
       for chart in ApiSources.GET_pollster_primaries(party.id)
         state_code = chart[:state]
 
@@ -271,69 +328,7 @@ class Database
       end
     end
 
-    source = PollsterSource.new(pollster_jsons)
-
-    last_name_to_pollster_candidate = source.candidates.each_with_object({}) { |c, h| h[c.last_name] = c }
-
-    candidates.map! do |candidate|
-      pollster_candidate = last_name_to_pollster_candidate[candidate.name]
-      if pollster_candidate
-        candidate.merge(
-          poll_percent: pollster_candidate.poll_percent,
-          poll_sparkline: pollster_candidate.sparkline,
-          poll_last_updated: pollster_candidate.last_updated
-        )
-      else
-        candidate
-      end
-    end
-
-    candidate_last_name_to_id = candidates.each_with_object({}) { |c, h| h[c.name] = c.id }
-    candidate_state_id_to_pollster_candidate_state = source.candidate_states.each_with_object({}) do |cs, h|
-      candidate_id = candidate_last_name_to_id[cs.last_name]
-      if candidate_id
-        candidate_state_id = "#{candidate_id}-#{cs.state_code}"
-        h[candidate_state_id] = cs
-      end
-    end
-
-    candidate_states.map! do |candidate_state|
-      pollster_candidate_state = candidate_state_id_to_pollster_candidate_state[candidate_state.id]
-      if pollster_candidate_state
-        candidate_state.merge(
-          poll_percent: pollster_candidate_state.poll_percent,
-          poll_sparkline: pollster_candidate_state.sparkline
-        )
-      else
-        candidate_state
-      end
-    end
-
-    candidate_last_name_to_party_id = candidates.each_with_object({}) { |c, h| h[c.name] = c.party_id }
-    race_key_to_pollster_info = source.candidate_states.each_with_object({}) do |cs, h|
-      # pollster_info has { slug, last_updated }.
-      # Actually, any CandidateState in the Source has that. So for each
-      # race key, we'll just put a random CandidateState.
-      party_id = candidate_last_name_to_party_id[cs.last_name]
-      if party_id
-        key = "#{party_id}-#{cs.state_code}"
-        h[key] = cs if !h.include?(cs)
-      end
-    end
-
-    races.map! do |race|
-      pollster_info = race_key_to_pollster_info[race.party_id_and_state_code]
-      if pollster_info
-        race.merge(
-          poll_last_updated: pollster_info.last_updated,
-          pollster_slug: pollster_info.slug
-        )
-      else
-        race
-      end
-    end
-
-    nil
+    PollsterSource.new(pollster_jsons)
   end
 
   def self.production_copy(override_copy={})

@@ -2,24 +2,45 @@ require 'set'
 
 require_relative './source'
 
-require_relative '../models/candidate'
-require_relative '../models/candidate_county'
-require_relative '../models/candidate_state'
-require_relative '../models/county'
-require_relative '../models/county_party'
-require_relative '../models/race'
-
 # Data from AP's election_day results.
 #
 # Provides:
 #
-# * candidates: id, party_id, name
 # * candidate_states: candidate_id, state_code, ballot_order, n_votes
 # * candidate_counties: party_id, candidate_id, county_id, n_votes
-# * counties: fips_int
+# * county_fips_ints (Set of Integers)
 # * county_parties: county_id, party_id, n_precincts_reporting, n_precincts_total, last_updated
-# * races: ap_id, race_day_id, party_id, state_code, race_type, n_precincts_reporting, n_precincts_total, last_updated
+# * races: race_day_id, party_id, state_code, race_type, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource < Source
+  CandidateState = RubyImmutableStruct.new(:candidate_id, :state_code, :ballot_order, :n_votes) do
+    attr_reader(:id)
+
+    def after_initialize
+      @id = "#{@candidate_id}-#{@state_code}"
+    end
+  end
+
+  CandidateCounty = RubyImmutableStruct.new(:candidate_id, :fips_int, :party_id, :n_votes)
+
+  CountyParty = RubyImmutableStruct.new(:fips_int, :party_id, :n_precincts_reporting, :n_precincts_total, :last_updated) do
+    attr_reader(:id)
+
+    def after_initialize
+      @id ="#{@county_id}-#{@party_id}"
+    end
+  end
+
+  Race = RubyImmutableStruct.new(:race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated) do
+    attr_reader(:id, :party_id_and_state_code)
+
+    def after_initialize
+      @id = "#{@race_day_id}-#{@party_id}-#{@state_code}"
+      @party_id_and_state_code = "#{@party_id}-#{@state_code}"
+    end
+  end
+
+  attr_reader(:county_fips_ints)
+
   def initialize(ap_election_day_jsons)
     @county_fips_ints = Set.new
     @candidate_states = []
@@ -30,8 +51,6 @@ class ApElectionDaysSource < Source
     for ap_election_day_json in ap_election_day_jsons
       add(ap_election_day_json)
     end
-
-    @counties = @county_fips_ints.to_a.map { |fips_int| County.new(nil, fips_int) }
   end
 
   private
@@ -40,7 +59,6 @@ class ApElectionDaysSource < Source
     race_day_id = ap_election_day_json[:electionDate]
 
     for race_hash in ap_election_day_json[:races]
-      race_id = race_hash[:raceID]
       party_id = race_hash[:party]
       race_type = race_hash[:raceType]
       state_n_precincts_reporting = nil # if there are :reportingUnits, they'll set this
@@ -74,7 +92,7 @@ class ApElectionDaysSource < Source
             candidate_id = candidate_hash[:polID]
             next if candidate_id.length >= 6 # unassigned, no preference, etc
 
-            @candidate_states << CandidateState.new(nil, candidate_id, state_code, candidate_hash[:ballotOrder], candidate_hash[:voteCount])
+            @candidate_states << CandidateState.new(candidate_id, state_code, candidate_hash[:ballotOrder], candidate_hash[:voteCount])
           end
         elsif reporting_unit[:level] == 'FIPSCode'
           fips_code = reporting_unit[:fipsCode]
@@ -82,7 +100,7 @@ class ApElectionDaysSource < Source
           county_id = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
           @county_fips_ints.add(county_id)
 
-          @county_parties << CountyParty.new(nil, county_id, party_id, n_precincts_reporting, n_precincts_total, last_updated)
+          @county_parties << CountyParty.new(county_id, party_id, n_precincts_reporting, n_precincts_total, last_updated)
 
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
@@ -90,14 +108,14 @@ class ApElectionDaysSource < Source
 
             n_votes = candidate_hash[:voteCount]
 
-            @candidate_counties << CandidateCounty.new(nil, party_id, candidate_id, county_id, n_votes)
+            @candidate_counties << CandidateCounty.new(party_id, candidate_id, county_id, n_votes)
           end
         else
           raise "Invalid reporting unit level `#{reporting_unit[:level]}'"
         end
       end
 
-      @races << Race.new(nil, race_id, race_day_id, party_id, state_code, race_type, state_n_precincts_reporting, state_n_precincts_total, last_updated)
+      @races << Race.new(race_day_id, party_id, state_code, race_type, state_n_precincts_reporting, state_n_precincts_total, last_updated)
     end
   end
 end
