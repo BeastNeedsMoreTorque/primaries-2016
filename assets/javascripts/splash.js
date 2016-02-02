@@ -21,9 +21,8 @@ $(function() {
     if(precinctsPct > 99.0 && precinctsReporting != totalPrecincts){
       precinctsPct = "99%"
     }else{
-      precinctsPct = precinctsPct.toFixed(0) + "%"
+      precinctsPct = precinctsPct + "%"
     }
-
     $("#unreported-counties").text(totalCounties - countiesReporting)
     $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " of precincts)</span>");
   }
