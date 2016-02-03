@@ -31,11 +31,10 @@ class ApElectionDaysSource < Source
   end
 
   Race = RubyImmutableStruct.new(:race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated) do
-    attr_reader(:id, :party_id_and_state_code)
+    attr_reader(:id)
 
     def after_initialize
       @id = "#{@race_day_id}-#{@party_id}-#{@state_code}"
-      @party_id_and_state_code = "#{@party_id}-#{@state_code}"
     end
   end
 

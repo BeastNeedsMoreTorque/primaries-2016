@@ -1,25 +1,20 @@
 #!/usr/bin/env ruby
 
-ENV['DIST_PATH'] = 'tmp/dist-path'
-require_relative '../lib/paths'
+require 'rubygems'
+require 'bundler/setup'
 
-require_relative '../lib/env'
-Bundler.require(:development)
-require_relative '../lib/assets'
+require 'listen'
 
 def rspec
-  FileUtils.rm_rf(Paths.Dist)
-  FileUtils.mkdir_p(Paths.Dist)
-  Assets.build
   system('rspec')
 end
+
+rspec
 
 listener = Listen.to('app', 'lib', 'assets', 'spec', 'script', only: /(^copy)|(\.(csv|rb|js|json|png|css|sass|scss|haml|svg))$/) do |modified, added, removed|
   rspec
 end
 
 listener.start
-
-rspec
 
 sleep # Wait for Ctrl+C

@@ -58,7 +58,7 @@ class Database
   attr_reader(:last_date)
   attr_reader(:copy)
 
-  def initialize(copy_source, sheets_source, ap_del_super, ap_election_days, pollster_source, today, last_date, copy)
+  def initialize(copy_source, sheets_source, ap_del_super, ap_election_days, pollster_source, today, last_date)
     @parties = load_parties(sheets_source.parties, ap_del_super.parties)
     @states = load_states(sheets_source.states)
     @party_states = load_party_states(sheets_source.party_states, pollster_source.party_states)
@@ -72,7 +72,7 @@ class Database
 
     @today = today
     @last_date = last_date
-    @copy = copy
+    @copy = copy_source.raw_data
   end
 
   def inspect
@@ -81,17 +81,11 @@ class Database
 
   # The "production" Database: all default Sources
   def self.load
-    copy_source = CopySource.new(IO.read("#{Paths.StaticData}/copy.archieml"))
-    sheets_source = SheetsSource.new(
-      IO.read("#{Paths.StaticData}/candidates.tsv"),
-      IO.read("#{Paths.StaticData}/parties.tsv"),
-      IO.read("#{Paths.StaticData}/races.tsv"),
-      IO.read("#{Paths.StaticData}/race_days.tsv"),
-      IO.read("#{Paths.StaticData}/states.tsv")
-    )
-    ap_del_super = ApDelSuperSource.new(ApiSources.GET_del_super)
-    ap_election_days = ApElectionDaysSource.new(ApiSources.GET_all_primary_election_days)
-    pollster_source = load_pollster_source(sheets_source.parties, ap_election_days.races, LastDate)
+    copy_source = default_copy_source
+    sheets_source = default_sheets_source
+    ap_del_super = default_ap_del_super_source
+    ap_election_days = default_ap_election_days_source
+    pollster_source = default_pollster_source(sheets_source.parties, sheets_source.races)
 
     Database.new(
       copy_source,
@@ -100,9 +94,34 @@ class Database
       ap_election_days,
       pollster_source,
       Date.today,
-      LastDate,
-      copy_source.raw_data
+      LastDate
     )
+  end
+
+  def self.default_copy_source
+    CopySource.new(IO.read("#{Paths.StaticData}/copy.archieml"))
+  end
+
+  def self.default_sheets_source
+    SheetsSource.new(
+      IO.read("#{Paths.StaticData}/candidates.tsv"),
+      IO.read("#{Paths.StaticData}/parties.tsv"),
+      IO.read("#{Paths.StaticData}/races.tsv"),
+      IO.read("#{Paths.StaticData}/race_days.tsv"),
+      IO.read("#{Paths.StaticData}/states.tsv")
+    )
+  end
+
+  def self.default_ap_del_super_source
+    ApDelSuperSource.new(ApiSources.GET_del_super)
+  end
+
+  def self.default_ap_election_days_source
+    ApElectionDaysSource.new(ApiSources.GET_all_primary_election_days)
+  end
+
+  def self.default_pollster_source(parties, races)
+    load_pollster_source(parties, races, LastDate)
   end
 
   def load_candidates(copy_candidates, ap_del_super_candidates, pollster_candidates)
@@ -338,12 +357,12 @@ class Database
     States.new(all)
   end
 
-  def self.load_pollster_source(copy_parties, ap_races, last_date)
+  def self.load_pollster_source(copy_parties, sheets_races, last_date)
     last_date_s = last_date.to_s
-    wanted_race_keys = Set.new # party_id-state_code Strings
-    ap_races.each do |race|
+    wanted_party_state_ids = Set.new # party_id-state_code Strings
+    sheets_races.each do |race|
       if race.race_day_id <= last_date_s
-        wanted_race_keys.add(race.party_id_and_state_code)
+        wanted_party_state_ids.add(race.party_state_id)
       end
     end
 
@@ -353,7 +372,7 @@ class Database
       for chart in ApiSources.GET_pollster_primaries(party.id)
         state_code = chart[:state]
 
-        if state_code == 'US' || wanted_race_keys.include?("#{party.id}-#{state_code}")
+        if state_code == 'US' || wanted_party_state_ids.include?("#{party.id}-#{state_code}")
           slug = chart[:slug]
           pollster_jsons << ApiSources.GET_pollster_primary(slug)
         end

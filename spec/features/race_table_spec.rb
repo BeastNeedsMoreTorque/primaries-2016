@@ -10,11 +10,28 @@ describe 'a Race table of candidates', type: :feature do
     el.click
   end
 
+  def sheets_source_with_ap_says_its_over(bool)
+    ret = Database.default_sheets_source
+    ret.races.map! { |r| r.merge(ap_says_its_over: bool) }
+    ret
+  end
+
   context 'after a candidate has dropped out' do
     before(:all) do
-      database = Database.load(override_copy: {
-        'candidates.name=Jim Gilmore.dropped out' => '2016-02-01'
-      })
+      sheets_source = Database.default_sheets_source
+      sheets_source.candidates.map! do |candidate|
+        if candidate.full_name == 'Jim Gilmore'
+          candidate.merge(dropped_out_date_or_nil: Date.parse('2016-02-01'))
+        else
+          candidate
+        end
+      end
+
+      database = mock_database(
+        '2016-02-01',
+        '2016-02-09',
+        sheets_source: sheets_source
+      )
 
       require_relative '../../app/views/race_day_view'
       RaceDayView.generate_all(database)
