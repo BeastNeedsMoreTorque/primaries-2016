@@ -111,6 +111,10 @@ module Assets
     end
   end
 
+  def self.string_digest_hex(string)
+    Digest::SHA1.hexdigest(string)
+  end
+
   def self.asset_digest_hex(absolute_path)
     Digest::SHA1.file(absolute_path).hexdigest
   end
@@ -133,14 +137,23 @@ module Assets
 
     SprocketsAssets.each do |filename|
       asset = sprockets.find_asset(filename)
-      dirname, basename = filename.split('/')
-      FileUtils.mkpath("#{Paths.Dist}/#{dirname}")
-      $logger.debug("Writing asset #{asset.digest_path}")
-      asset.write_to("#{Paths.Dist}/2016/#{asset.digest_path}")
+      source = asset.source
+      digest = Assets.string_digest_hex(source)
+
+      dirname, basename = filename.split(/\//)
+      pre_ext, ext = filename.split(/\./)
+
+      digest_filename = "#{pre_ext}-#{digest}.#{ext}"
+
+      FileUtils.mkpath("#{Paths.Dist}/2016/#{dirname}")
+
+      $logger.debug("Writing asset #{digest_filename}")
+
+      IO.write("#{Paths.Dist}/2016/#{digest_filename}", source)
 
       # Write the non-digest path as well. We'll use that in `asset_path()` to
       # determine the digest.
-      asset.write_to("#{Paths.Dist}/2016/#{filename}")
+      IO.write("#{Paths.Dist}/2016/#{filename}", source)
     end
   end
 
