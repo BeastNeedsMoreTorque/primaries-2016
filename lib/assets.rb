@@ -54,37 +54,30 @@ module Assets
 
   # asset_path('main.css') -> '//asset_host/2016/stylesheets/main-abcdef.css'
   def self.asset_path(path)
-    @asset_paths ||= {}
-    @asset_paths[path] ||= begin
-      dir = dir_for_path(path)
-
-      path_without_digest = "#{Paths.Dist}/2016/#{dir}/#{path}"
-      digest = asset_digest_hex(path_without_digest)
-
-      arr = path.split(/\./, 2)
-
-      "#{asset_host}/2016/#{dir}/#{arr[0]}-#{digest}.#{arr[1]}"
+    if !@sprockets_asset_paths.include?(path)
+      raise "You requested asset_path('#{path}'), but Assets did not compile #{path}."
     end
+
+    "#{asset_host}/2016/#{@sprockets_asset_paths[path]}"
   end
 
   # static_asset_path('pym.min.js') -> '//asset_host/2016/javascripts/pym.min.js'
   def self.static_asset_path(path)
-    @static_asset_paths ||= {}
-    @static_asset_paths[path] ||= begin
-      dir = dir_for_path(path)
-      "#{asset_host}/2016/#{dir}/#{path}"
-    end
+    dir = dir_for_path(path)
+    "#{asset_host}/2016/#{dir}/#{path}"
   end
 
   # image_path('clinton.png') -> '//asset_host/2016/images/clinton-abcdef.png'
   def self.image_path(name)
-    @image_paths ||= {}
-    @image_paths[name] ||= begin
-      basename, extension = name.split(/\./)
-      path_without_digest = "#{Paths.Assets}/images/#{name}"
-      digest = asset_digest_hex(path_without_digest)
-      "#{asset_host}/2016/images/#{basename}-#{digest}.#{extension}"
+    digest_asset_path('images/' + name)
+  end
+
+  # digest_asset_path('images/clinton.png') -> '//asset_host/2016/images/clinton-abcdef.png'
+  def self.digest_asset_path(path)
+    if !@digest_asset_paths.include?(path)
+      raise "You requested image_path('#{name}'), but Assets did not compile #{name}."
     end
+    "#{asset_host}/2016/#{@digest_asset_paths[path]}"
   end
 
   private
@@ -115,12 +108,8 @@ module Assets
     Digest::SHA1.hexdigest(string)
   end
 
-  def self.asset_digest_hex(absolute_path)
-    Digest::SHA1.file(absolute_path).hexdigest
-  end
-
   def self.build_sprockets_assets
-    @asset_paths = {}
+    @sprockets_asset_paths = {}
 
     sprockets = Sprockets::Environment.new("#{Paths.Dist}/2016") do |env|
       env.cache = Sprockets::Cache::FileStore.new(Paths.Cache)
@@ -135,6 +124,9 @@ module Assets
     end
     sprockets.append_path(Paths.Assets)
 
+    FileUtils.mkpath("#{Paths.Dist}/2016/javascripts")
+    FileUtils.mkpath("#{Paths.Dist}/2016/stylesheets")
+
     SprocketsAssets.each do |filename|
       asset = sprockets.find_asset(filename)
       source = asset.source
@@ -145,20 +137,16 @@ module Assets
 
       digest_filename = "#{pre_ext}-#{digest}.#{ext}"
 
-      FileUtils.mkpath("#{Paths.Dist}/2016/#{dirname}")
-
       $logger.debug("Writing asset #{digest_filename}")
 
       IO.write("#{Paths.Dist}/2016/#{digest_filename}", source)
 
-      # Write the non-digest path as well. We'll use that in `asset_path()` to
-      # determine the digest.
-      IO.write("#{Paths.Dist}/2016/#{filename}", source)
+      @sprockets_asset_paths[basename] = digest_filename
     end
   end
 
   def self.build_digest_assets
-    @image_paths = {}
+    @digest_asset_paths = {}
 
     DigestAssets.each do |pattern|
       Dir["#{Paths.Assets}/#{pattern}"].each do |absolute_filename|
@@ -170,6 +158,8 @@ module Assets
         $logger.debug("Copying asset #{output_relative_filename}")
         FileUtils.mkpath(File.dirname(output_filename))
         FileUtils.cp(absolute_filename, output_filename)
+
+        @digest_asset_paths[filename] = output_relative_filename
       end
     end
   end
