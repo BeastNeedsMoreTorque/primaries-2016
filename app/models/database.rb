@@ -104,6 +104,7 @@ class Database
     party_states = load_party_states(sheets_source.party_states, pollster_source.party_states)
     races = load_races(sheets_source.races, copy_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
     race_days = load_race_days(sheets_source.race_days, copy_source.race_days, LastDate)
+    states = load_states(sheets_source.states)
 
     Database.new({
       candidates: candidates,
@@ -114,7 +115,8 @@ class Database
       parties: parties,
       party_states: party_states,
       races: races,
-      race_days: race_days
+      race_days: race_days,
+      states: states
     }, Date.today, LastDate, copy_source.raw_data)
   end
 
@@ -314,6 +316,18 @@ class Database
         copy_race_day ? copy_race_day.tweet : nil,
         copy_race_day ? copy_race_day.pubbed_dt : nil,
         copy_race_day ? copy_race_day.updated_dt_or_nil : nil
+      )
+    end
+  end
+
+  def self.load_states(sheets_states)
+    sheets_states.map do |sheets_state|
+      State.new(
+        nil,
+        sheets_state.fips_int,
+        sheets_state.state_code,
+        sheets_state.abbreviation,
+        sheets_state.name
       )
     end
   end
