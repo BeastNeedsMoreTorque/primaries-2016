@@ -1,7 +1,7 @@
 require 'date'
 require 'set'
 
-RaceDay = RubyImmutableStruct.new(:database_or_nil, :id, :title, :enabled) do
+RaceDay = RubyImmutableStruct.new(:database_or_nil, :id, :enabled, :title, :body, :tweet, :pubbed_dt, :updated_dt_or_nil) do
   attr_reader(:date)
 
   # All Races on this day

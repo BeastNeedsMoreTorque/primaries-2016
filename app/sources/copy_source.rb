@@ -7,12 +7,12 @@ require_relative './source'
 # Provides:
 #
 # * raw_data: nested Hash
-# * race_days: id, title, pubbed, body, twitter
+# * race_days: id, title, body, tweet, pubbed_dt, updated_dt_or_nil
 # * races: race_day_id, party_id, state_code, text, over
 # * primaries_landing_page_copy (String)
 # * primaries_delegates_explainer (String)
 class CopySource < Source
-  RaceDay = RubyImmutableStruct.new(:id, :title, :pubbed, :body, :twitter)
+  RaceDay = RubyImmutableStruct.new(:id, :title, :body, :tweet, :pubbed_dt, :updated_dt_or_nil)
   Race = RubyImmutableStruct.new(:race_day_id, :party_id, :state_code, :text, :over) do
     attr_reader(:id)
 
@@ -29,7 +29,14 @@ class CopySource < Source
     @primaries_delegates_explainer = @raw_data['primaries']['delegates_explainer']
 
     @race_days = @raw_data['primaries']['race-days'].map do |hash|
-      RaceDay.new(hash['date'], hash['title'], hash['pubbed'], hash['body'], hash['twitter'])
+      RaceDay.new(
+        hash['date'],
+        hash['title'],
+        hash['body'],
+        hash['tweet'],
+        hash['pubbed_dt'],
+        hash['updated_dt'] || nil
+      )
     end
 
     @races = @raw_data['primaries']['races'].map do |hash|

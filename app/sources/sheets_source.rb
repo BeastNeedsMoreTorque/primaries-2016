@@ -8,6 +8,7 @@ require_relative './source'
 # * parties: id, name, adjective
 # * party_states: party_id, state_code, n_delegates
 # * races: race_day_id, party_id, state_code, race_type, ap_says_its_over
+# * race_days: id
 # * states: fips_int, code, abbreviation, name
 class SheetsSource < Source
   Candidate = RubyImmutableStruct.new(:id, :party_id, :full_name, :last_name, :dropped_out_date_or_nil)
@@ -32,7 +33,7 @@ class SheetsSource < Source
     end
   end
 
-  RaceDay = RubyImmutableStruct.new(:id, :title)
+  RaceDay = RubyImmutableStruct.new(:id)
 
   State = RubyImmutableStruct.new(:fips_int, :state_code, :abbreviation, :name)
 
@@ -56,8 +57,7 @@ class SheetsSource < Source
     end
 
     @race_days = race_days_tsv.split(/\r?\n/)[1..-1].map do |line|
-      id, title = line.split(/\t/)
-      RaceDay.new(id, title)
+      RaceDay.new(line)
     end
 
     @states = []

@@ -1,7 +1,7 @@
 -# Called with a RaceDayPageGenerator::HtmlContext
 #main
   %h1= hed
-  %h3.date-hed= race_date
+  %h3.date-hed= race_day.date.strftime('%B %-d, %Y')
 
   != render(partial: 'share-buttons')
 

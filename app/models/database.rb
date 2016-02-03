@@ -103,7 +103,7 @@ class Database
     parties = load_parties(sheets_source.parties, ap_del_super.parties)
     party_states = load_party_states(sheets_source.party_states, pollster_source.party_states)
     races = load_races(sheets_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
-    race_days = load_race_days(sheets_source.race_days, LastDate)
+    race_days = load_race_days(sheets_source.race_days, copy_source.race_days, LastDate)
 
     Database.new({
       candidates: candidates,
@@ -294,10 +294,24 @@ class Database
     end
   end
 
-  def self.load_race_days(sheets_race_days, last_date)
+  def self.load_race_days(sheets_race_days, copy_race_days, last_date)
     last_date_s = last_date.to_s
+
+    id_to_copy_race_day = copy_race_days.each_with_object({}) { |rd, h| h[rd.id] = rd }
+
     sheets_race_days.map do |race_day|
-      RaceDay.new(nil, race_day.id, race_day.title, race_day.id <= last_date_s)
+      copy_race_day = id_to_copy_race_day[race_day.id]
+
+      RaceDay.new(
+        nil,
+        race_day.id,
+        race_day.id <= last_date_s,
+        copy_race_day ? copy_race_day.title : nil,
+        copy_race_day ? copy_race_day.body : nil,
+        copy_race_day ? copy_race_day.tweet : nil,
+        copy_race_day ? copy_race_day.pubbed_dt : nil,
+        copy_race_day ? copy_race_day.updated_dt_or_nil : nil
+      )
     end
   end
 
