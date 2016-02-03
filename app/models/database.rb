@@ -97,15 +97,13 @@ class Database
 
     candidates = load_candidates(sheets_source.candidates, ap_del_super.candidates, pollster_source.candidates)
     candidate_counties = load_candidate_counties(sheets_source.candidates, ap_election_days.candidate_counties)
-    candidate_states = load_candidate_states(sheets_source.candidates, ap_election_days.candidate_states, ap_del_super.candidates, ap_del_super.candidate_states, pollster_source.candidate_states)
+    candidate_states = load_candidate_states(sheets_source.candidates, ap_election_days.candidate_states, ap_del_super.candidate_states, pollster_source.candidate_states, sheets_source.races)
     counties = load_counties(ap_election_days.county_fips_ints)
     county_parties = load_county_parties(ap_election_days.county_parties)
     parties = load_parties(sheets_source.parties, ap_del_super.parties)
     party_states = load_party_states(sheets_source.party_states, pollster_source.party_states)
     races = load_races(sheets_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
     race_days = load_race_days(sheets_source.race_days, LastDate)
-
-    drop_out_candidates(sheets_source.candidates, races, candidate_states) # TODO refactor so this isn't here
 
     Database.new({
       candidates: candidates,
@@ -164,8 +162,8 @@ class Database
       .map! { |cc| CandidateCounty.new(nil, cc.party_id, cc.candidate_id, cc.fips_int, cc.n_votes) }
   end
 
-  def self.load_candidate_states(sheets_candidates, ap_candidate_states, del_super_candidates, del_super_candidate_states, pollster_candidate_states)
-    valid_candidate_ids = Set.new(sheets_candidates.map(&:id))
+  def self.load_candidate_states(sheets_candidates, ap_candidate_states, del_super_candidate_states, pollster_candidate_states, sheets_races)
+    id_to_candidate = sheets_candidates.each_with_object({}) { |c, h| h[c.id] = c }
 
     id_to_ap_candidate_state = ap_candidate_states.each_with_object({}) { |cs, h| h[cs.id] = cs }
 
@@ -178,9 +176,35 @@ class Database
       end
     end
 
-    # TODO drop out candidates here, treating the list of races as a Source
+    candidate_id_to_party_id = sheets_candidates.each_with_object({}) { |c, h| h[c.id] = c.party_id }
+
+    party_state_id_to_first_race_day_id = sheets_races.each_with_object({}) do |race, h|
+      # Assume races are in alphabetical order; this loop will only save the first race for each party_state
+      h[race.party_state_id] ||= race.race_day_id
+    end
+
     del_super_candidate_states
-      .select { |candidate_state| valid_candidate_ids.include?(candidate_state.candidate_id) }
+      .select do |candidate_state|
+        candidate = id_to_candidate[candidate_state.candidate_id]
+        if !candidate
+          false
+        else
+          dropped_out_date = candidate.dropped_out_date_or_nil
+          if !dropped_out_date
+            true
+          else
+            dropped_out_date_s = dropped_out_date.to_s
+            party_state_id = "#{candidate.party_id}-#{candidate_state.state_code}"
+            race_day_id = party_state_id_to_first_race_day_id[party_state_id]
+            if !race_day_id # GOP-CO has no race
+              # TODO revisit this logic?
+              false # the candidate dropped out and won't get any Colorado delegates
+            else
+              dropped_out_date_s >= race_day_id
+            end
+          end
+        end
+      end
       .map! do |del_super_candidate_state|
         ap_candidate_state = id_to_ap_candidate_state[del_super_candidate_state.id]
         pollster_candidate_state = id_to_pollster_candidate_state[del_super_candidate_state.id]
@@ -274,32 +298,6 @@ class Database
     last_date_s = last_date.to_s
     sheets_race_days.map do |race_day|
       RaceDay.new(nil, race_day.id, race_day.title, race_day.id <= last_date_s)
-    end
-  end
-
-  # Nixes candidate_states and candidate_counties that we should never show.
-  def self.drop_out_candidates(candidates, races, candidate_states)
-    candidate_id_to_party_id = candidates.each_with_object({}) { |c, h| h[c.id] = c.party_id }
-    candidate_id_to_dropped_out_date_s = candidates.each_with_object({}) do |c, h|
-      date_or_nil = c.dropped_out_date_or_nil
-      if date_or_nil
-        h[c.id] = date_or_nil.to_s
-      end
-    end
-
-    party_state_id_to_first_race_day_id = races.each_with_object({}) do |race, h|
-      # Assume races are ordered from earliest to latest
-      h[race.party_state_id] ||= race.race_day_id
-    end
-
-    candidate_states.select! do |candidate_state|
-      candidate_id = candidate_state.candidate_id
-      party_id = candidate_id_to_party_id[candidate_id]
-      race_key = "#{party_id}-#{candidate_state.state_code}"
-      first_race_day_id = party_state_id_to_first_race_day_id[race_key]
-      dropped_out_date_s = candidate_id_to_dropped_out_date_s[candidate_id]
-
-      first_race_day_id && (!dropped_out_date_s || dropped_out_date_s >= first_race_day_id)
     end
   end
 
