@@ -73,7 +73,7 @@ class PollsterSource < Source
 
     for estimate in json[:estimates]
       choice = estimate[:choice] # Usually last_name, but sometimes not (e.g., "Rand Paul")
-      last_name = estimate[:last_name]
+      last_name = estimate[:last_name] || choice # sometimes there are no names
       poll_percent = estimate[:value]
 
       sparkline = Sparkline.new(last_day.mjd)
