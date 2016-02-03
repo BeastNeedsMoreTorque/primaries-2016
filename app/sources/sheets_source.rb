@@ -51,8 +51,8 @@ class SheetsSource < Source
     end
 
     @races = races_tsv.split(/\r?\n/)[1..-1].map do |line|
-      date_s, party_id, state_code, ap_says_its_over = line.split(/\t/)
-      Race.new(date_s, party_id, state_code, ap_says_its_over == 'TRUE')
+      date_s, party_id, state_code, race_type, ap_says_its_over = line.split(/\t/)
+      Race.new(date_s, party_id, state_code, race_type, ap_says_its_over == 'TRUE')
     end
 
     @race_days = race_days_tsv.split(/\r?\n/)[1..-1].map do |line|
