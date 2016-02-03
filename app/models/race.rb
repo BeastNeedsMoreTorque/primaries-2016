@@ -1,5 +1,16 @@
 # Could almost be called PartyState. Gives the votes/delegates of a state.
-Race = RubyImmutableStruct.new(:database_or_nil, :race_day_id, :party_id, :state_code, :race_type, :n_precincts_reporting, :n_precincts_total, :last_updated, :ap_says_its_over) do
+Race = RubyImmutableStruct.new(
+  :database_or_nil,
+  :race_day_id,
+  :party_id,
+  :state_code,
+  :race_type,
+  :text,
+  :n_precincts_reporting,
+  :n_precincts_total,
+  :last_updated,
+  :ap_says_its_over
+) do
   include Comparable
 
   # Sum of candidate_states.n_delegates (pledged and unpledged alike)
@@ -100,4 +111,9 @@ Race = RubyImmutableStruct.new(:database_or_nil, :race_day_id, :party_id, :state
   def present?; when_race_happens == 'present'; end
   def past?; when_race_happens == 'past'; end
   def future?; when_race_happens == 'future'; end
+
+  # e.g., 'Iowa Democratic Caucus'
+  def title
+    "#{state_name} #{party_adjective} #{race_type}"
+  end
 end

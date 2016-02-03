@@ -102,7 +102,7 @@ class Database
     county_parties = load_county_parties(ap_election_days.county_parties)
     parties = load_parties(sheets_source.parties, ap_del_super.parties)
     party_states = load_party_states(sheets_source.party_states, pollster_source.party_states)
-    races = load_races(sheets_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
+    races = load_races(sheets_source.races, copy_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
     race_days = load_race_days(sheets_source.race_days, copy_source.race_days, LastDate)
 
     Database.new({
@@ -274,11 +274,13 @@ class Database
       end
   end
 
-  def self.load_races(sheets_races, sheets_candidates, ap_races, pollster_candidate_states)
+  def self.load_races(sheets_races, copy_races, sheets_candidates, ap_races, pollster_candidate_states)
     id_to_ap_race = ap_races.each_with_object({}) { |r, h| h[r.id] = r }
+    id_to_copy_race = copy_races.each_with_object({}) { |r, h| h[r.id] = r }
 
     sheets_races.map do |sheets_race|
       ap_race = id_to_ap_race[sheets_race.id]
+      copy_race = id_to_copy_race[sheets_race.id]
 
       Race.new(
         nil,
@@ -286,6 +288,7 @@ class Database
         sheets_race.party_id,
         sheets_race.state_code,
         sheets_race.race_type,
+        copy_race ? copy_race.text : '',
         ap_race ? ap_race.n_precincts_reporting : nil,
         ap_race ? ap_race.n_precincts_total : nil,
         ap_race ? ap_race.last_updated : nil,
