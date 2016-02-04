@@ -33,13 +33,13 @@ module PrimariesWidgetsView
     result = {}
     race_day.races.each do |race|
       data = (result[race.race_day_id] ||= {"candidates" => {"Dem" => {}, "GOP" => {}}, "total_Dem" => 0, "total_GOP" => 0})
-      total_votes = race.candidate_states.map{|cd| cd.n_votes}.inject(0){|sum,x| sum + x }
+      total_votes = race.candidate_races.map{|cd| cd.n_votes}.inject(0){|sum,x| sum + x }
       data["total_#{race.party_id}"] = total_votes
-      race.candidate_states.each{|cd|
+      race.candidate_races.each{|cd|
         candidate_pct = ((total_votes > 0) ? ((cd.n_votes.to_f / total_votes.to_f) * 100.0).round(1) : 0.0)
         data["candidates"][race.party_id][cd.candidate_id] = {votes: cd.n_votes, pct: candidate_pct}
       }
-      leader = race.candidate_states.sort_by(&:n_votes).reverse.first
+      leader = race.candidate_races.sort_by(&:n_votes).reverse.first
       data["leader_#{race.party_id}"] = ((leader.n_votes != 0) ? leader.candidate_id : -1)
     end
     result

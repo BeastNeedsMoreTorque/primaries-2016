@@ -2,20 +2,15 @@
 
 require 'rubygems'
 require 'bundler/setup'
+#Bundler.require(:default)
 
-# Before we load sprockets.rb, which is slow, monkey-patch its dependency
-# https://github.com/rails/sprockets/issues/17
-require 'sprockets/mime'
-module Sprockets::Mime
-  alias_method(:original_register_mime_type, :register_mime_type)
-
-  def register_mime_type(mime_type, extensions: [], charset: nil)
-    if mime_type == 'application/javascript' || mime_type == 'text/css'
-      original_register_mime_type(mime_type, extensions: extensions, charset: charset)
-    end
-  end
-end
-
-Bundler.require(:default)
+# Only require the stuff we need, for a bit of speed
+require 'archieml'
+require 'aws-sdk'
+require 'oj'
+require 'redcarpet'
+require 'ruby-immutable-struct'
+require 'hamlit'
+require 'sassc'
 
 require_relative './logger'

@@ -170,33 +170,39 @@ $party-container-height: 100px;
 
 .candidate-position-listing {
 	height: 100%;
+  border-top: 4px solid transparent;
 	@include vertical-center-column-flex;
-	padding-left: 10px;
-	.candidate {
-		width: 127px;
-		background: #fff;
-		margin: 3px;
-		margin-right: 5px;
-		font-size: 13px;
 
-		table {
-			width: 100%;
-			font-weight: bold;
-			tr {
-				td {
-					&:first-child {
-						text-align: left;
-					}
-					&:last-child {
-						text-align: right;
-					}
-					&.see-all {
-						text-align: center;
-					}
-				}
-			}
-		}
+	.candidate {
+    font-weight: bold;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    flex: 0 0 auto;
+    -webkit-flex: 0 0 auto;
+    box-sizing: border-box;
+    width: 140px;
+		background: #fff;
+    padding: 4px;
+    border: 0 solid transparent;
+    border-left-width: 6px;
+    border-bottom-width: 6px;
+		font-size: 13px;
+    line-height: 15px;
+
+    &.winner .candidate-name::after {
+      content: ' ✓';
+    }
 	}
+}
+
+.Dem .candidate {
+  border-color: $widgetLightBlue;
+}
+
+.GOP .candidate {
+  border-color: $widgetLightRed;
 }
 
 .party-container {
@@ -220,7 +226,7 @@ $party-container-height: 100px;
 	&.Dem {
 		background-color: $widgetLightBlue;
 		.frontrunner-lbl { color: $strongDem; }
-		table.leader {
+		.candidate.leader {
 			background: $widgetBlue;
 			color: #fff;
 		}
@@ -228,7 +234,7 @@ $party-container-height: 100px;
 	&.GOP {
 		background-color: $widgetLightRed; 
 		.frontrunner-lbl { color: $strongGOP; }
-		table.leader {
+		.candidate.leader {
 			background: $widgetRed;
 			color: #fff;
 		}

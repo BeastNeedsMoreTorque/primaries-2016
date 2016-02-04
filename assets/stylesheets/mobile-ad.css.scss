@@ -126,7 +126,10 @@ body {
 
 .frontrunner-cd {
 	font-weight: bold;
-	text-transform: uppercase;
+  text-transform: uppercase;
+  &.winner::after {
+    content: ' ✓';
+  }
 }
 
 .leads {

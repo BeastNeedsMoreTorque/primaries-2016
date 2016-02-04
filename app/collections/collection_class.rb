@@ -13,39 +13,23 @@ module CollectionClass
 
       def initialize(items)
         @all = items
+        @by_id = @all.each_with_object({}) { |i, h| h[i.id] = i }
       end
 
       def each(&block)
-        all.each(&block)
+        @all.each(&block)
       end
 
       def find(id)
-        by_id[id.to_s]
+        @by_id[id.to_s]
       end
 
       def find!(id)
-        by_id.fetch(id.to_s)
+        @by_id.fetch(id.to_s)
       end
 
       def include?(id)
-        by_id.include?(id.to_s)
-      end
-
-      # Creates a Collection of all the given objects.
-      #
-      # For instance: Candidate.create([[ '1', 'GOP', 'Mr. Foo', 13, 25 ], ...])
-      def self.build(database, array_of_param_arrays)
-        all = array_of_param_arrays.map { |param_array| @item_class.new(database, *param_array) }
-        if @item_class.included_modules.include?(Comparable)
-          all.sort!
-        end
-        self.new(all)
-      end
-
-      private
-
-      def by_id
-        @by_id ||= all.map{ |i| [ i.id.to_s, i ] }.to_h
+        @by_id.include?(id.to_s)
       end
     end
 

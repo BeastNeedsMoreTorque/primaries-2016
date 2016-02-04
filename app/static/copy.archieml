@@ -15,9 +15,7 @@ Valid Parties:
 States and parties are case-sensitive
 
 
-Dates come in two formats:
-* pubbed_dt and updated_dt look like “Tuesday, Jan. 26, 6:30 PM EST” and are shown on the page as-is.
-* dropped out looks like YYYY-MM-DD and indicates the last race day we should show for a candidate
+Dates in pubbed and updated look like “Tuesday, Jan. 26, 6:30 PM EST” and are shown on the page as-is.
 {primaries.landing-page}
 
 
@@ -27,7 +25,6 @@ body: See which candidates are leading the pack for their party’s nomination, 
 twitter: Check out HuffPost's 2016 elections dashboard for live updates on primary nights 
 
 
-:end
 
 
 {primaries.delegates-explainer}
@@ -82,122 +79,46 @@ We report the sum of the pledged and unpledged delegates in the totals at the to
 :end
 
 
-[candidates]
-
-
-Don’t edit this list for now. We’ll add some properties later, such as the dates candidates `dropped-out` (a YYYY-MM-DD value -- see the top of this document for instructions).
-
-
-name: Hillary Clinton
-party: Dem
-id: 1746
-
-
-name: Bernie Sanders
-party: Dem
-id: 1445
-
-
-name: Martin O'Malley
-party: Dem
-id: 22603
-dropped-out: 2016-02-01
-
-
-name: John Kasich
-party: GOP
-id: 36679
-
-
-name: Ted Cruz
-party: GOP
-id: 61815
-
-
-name: Jeb Bush
-party: GOP
-id: 1239
-
-
-name: Chris Christie
-party: GOP
-id: 60051
-
-
-name: Rick Santorum
-party: GOP
-id: 1752
-
-
-name: Donald Trump
-party: GOP
-id: 8639
-
-
-name: Marco Rubio
-party: GOP
-id: 53044
-
-
-name: Ben Carson
-party: GOP
-id: 64509
-
-
-name: Rand Paul
-party: GOP
-id: 60208
-
-
-name: Carly Fiorina
-party: GOP
-id: 60339
-
-
-name: Mike Huckabee
-party: GOP
-id: 1187
-dropped-out: 2016-02-01
-
-
-name: Jim Gilmore
-party: GOP
-id: 45650
 [primaries.race-days]
+
+
+Write top-of-the-page copy here: title, pubbed_dt, body and tweet.
+
+
+The possible race days are listed here: https://docs.google.com/spreadsheets/d/1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw/edit?ts=56b10868#gid=743098493
 
 
 date: 2016-02-01
 title: Iowa Caucuses
-pubbed: Tuesday, Jan. 26, 6:30 PM EST
+pubbed_dt: Tuesday, Jan. 26, 6:30 PM EST
 body: View election results from the Iowa caucuses and see how each candidate performed in counties throughout the state.
-twitter: Cruz won Iowa and Sanders is virtually tied with Clinton, see election maps at 
-:end
+tweet: Cruz won Iowa and Sanders almost tied Clinton. See election maps at 
 
 
 date: 2016-02-09
 title: New Hampshire Primaries
-pubbed: Tuesday, Jan. 26, 6:30 PM EST
+pubbed_dt: Tuesday, Jan. 26, 6:30 PM EST
 body: Only eight days after the first contest in Iowa, New Hampshire voters will head to the polls to cast their ballots. Check here to see which candidates are leading, and tune in on election night for live results.
-twitter: Check back on Feb. 9 for live election results in New Hampshire
-:end
+tweet: Check back on Feb. 9 for live election results in New Hampshire
 
 
 [primaries.races]
-Set over to true when AP flags the race as completed. Normally we mark a race “over” when 100% of precincts are reporting, but sometimes 100% don’t report and we want to stop declaring we’re doing live updates.
+This is just for setting race text, given date, state and party.
 
 
+If you want to mark a race over, go to https://docs.google.com/spreadsheets/d/1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw/edit?ts=56b10868#gid=0
+
+
+date: 2016-02-01
 state: IA
 party: Dem
 text: Bernie Sanders was nearly tied with Hillary Clinton in the Democratic race, while O’Malley suspended his campaign before all results were counted.
-:end
 
 
-
-
+date: 2016-02-01
 state: IA
 party: GOP
 text: Republican voters in Iowa turned out in record numbers for the GOP caucus, showing strong support for Ted Cruz. Marco Rubio finished a close third despite lagging well behind Donald Trump in the polls. Other candidates, like Jeb Bush, failed to gain traction with voters.
-:end
 
 
 

@@ -6,10 +6,10 @@ gem 'aws-sdk'
 gem 'oj'
 gem 'redcarpet' # for rendering Markdown in Google Docs
 gem 'ruby-immutable-struct'
-gem 'sprockets'
 gem 'uglifier'
+gem 'therubyracer' # for Uglifier
 gem 'hamlit' # Faster version of Haml
-gem 'sass'
+gem 'sassc'
 gem 'mkfifo'
 
 group :development do

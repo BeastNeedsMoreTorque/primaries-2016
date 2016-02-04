@@ -6,14 +6,14 @@ require 'date'
 class Sparkline
   NDates = 180
 
-  def initialize(last_day=nil)
-    @last_day = last_day || Date.today
+  def initialize(last_day_mjd=nil)
+    @last_day = last_day_mjd || Date.today.mjd # Julian day number, an Integer
     @day0 = @last_day - NDates + 1
     @values = [nil] * NDates
   end
 
-  def add_value(date, float)
-    index = date - @day0
+  def add_value(date_mjd, float)
+    index = date_mjd - @day0
     return if index < 0 || index >= NDates
     @values[index] = float
   end

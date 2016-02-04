@@ -47,7 +47,7 @@ class BaseView
     if percent_or_nil.nil?
       'N/A'
     else
-      "#{percent_or_nil}%"
+      "#{percent_or_nil.round(1)}%"
     end
   end
 

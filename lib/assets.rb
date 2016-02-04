@@ -4,22 +4,47 @@ require_relative './logger'
 require_relative './paths'
 
 module Assets
-  # Assets we compile with Sprockets.
+  # JavaScript assets we concatenate and minify.
   #
-  # Sprockets is useful when there's code like `//= require 'subfile.js'`.
+  # To refer to `main.js` from a template, write `asset_path('main.js')`.
+  JavascriptAssets = {
+    'ga.js' => %w(ga.js),
+    'stats.js' => %w(stats.js),
+    'main.js' => %w(
+      vendor/jquery-2.2.0.js
+      wait_for_font_then.js
+      render_time.js
+      format_int.js
+      format_percent.js
+      ellipsize_table.js
+      polyfill_array_fill.js
+      position_svg_cities.js
+      state-race-days.js
+      race-day.js
+      all-primaries.js
+      social.js
+    ),
+    'splash.js' => %w(
+      vendor/jquery-2.2.0.js
+      format_int.js
+      position_svg_cities.js
+      splash.js
+    ),
+    'primary-right-rail.js' => %w(
+      vendor/jquery-2.2.0.js
+      format_int.js
+      primary-right-rail.js
+    )
+  }
+
+  # SCSS assets we compile with SassC.
   #
-  # To refer to `javascripts/main.js` from a template, write
-  # `asset_path('main.js')`.
-  SprocketsAssets = %w(
-    javascripts/ga.js
-    javascripts/stats.js
-    javascripts/main.js
-    javascripts/splash.js
-    javascripts/primary-right-rail.js
-    stylesheets/main.css
-    stylesheets/splash.css
-    stylesheets/primaries-right-rail.css
-    stylesheets/mobile-ad.css
+  # To refer to `main.css` from a template, write `asset_path('main.css')`.
+  StylesheetAssets = %w(
+    main.css
+    splash.css
+    primaries-right-rail.css
+    mobile-ad.css
   )
 
   # Assets we serve with a sha1 digest.
@@ -47,44 +72,39 @@ module Assets
   def self.build
     $logger.info("Building assets...")
 
-    self.build_sprockets_assets
+    @asset_paths = {}
+    self.build_javascript_assets
+    self.build_stylesheet_assets
     self.build_digest_assets
     self.build_static_assets
   end
 
   # asset_path('main.css') -> '//asset_host/2016/stylesheets/main-abcdef.css'
   def self.asset_path(path)
-    @asset_paths ||= {}
-    @asset_paths[path] ||= begin
-      dir = dir_for_path(path)
-
-      path_without_digest = "#{Paths.Dist}/2016/#{dir}/#{path}"
-      digest = asset_digest_hex(path_without_digest)
-
-      arr = path.split(/\./, 2)
-
-      "#{asset_host}/2016/#{dir}/#{arr[0]}-#{digest}.#{arr[1]}"
+    if !@asset_paths.include?(path)
+      raise "You requested asset_path('#{path}'), but Assets did not compile #{path}."
     end
+
+    "#{asset_host}/2016/#{@asset_paths[path]}"
   end
 
   # static_asset_path('pym.min.js') -> '//asset_host/2016/javascripts/pym.min.js'
   def self.static_asset_path(path)
-    @static_asset_paths ||= {}
-    @static_asset_paths[path] ||= begin
-      dir = dir_for_path(path)
-      "#{asset_host}/2016/#{dir}/#{path}"
-    end
+    dir = dir_for_path(path)
+    "#{asset_host}/2016/#{dir}/#{path}"
   end
 
   # image_path('clinton.png') -> '//asset_host/2016/images/clinton-abcdef.png'
   def self.image_path(name)
-    @image_paths ||= {}
-    @image_paths[name] ||= begin
-      basename, extension = name.split(/\./)
-      path_without_digest = "#{Paths.Assets}/images/#{name}"
-      digest = asset_digest_hex(path_without_digest)
-      "#{asset_host}/2016/images/#{basename}-#{digest}.#{extension}"
+    digest_asset_path('images/' + name)
+  end
+
+  # digest_asset_path('images/clinton.png') -> '//asset_host/2016/images/clinton-abcdef.png'
+  def self.digest_asset_path(path)
+    if !@digest_asset_paths.include?(path)
+      raise "You requested image_path('#{name}'), but Assets did not compile #{name}."
     end
+    "#{asset_host}/2016/#{@digest_asset_paths[path]}"
   end
 
   private
@@ -111,41 +131,67 @@ module Assets
     end
   end
 
-  def self.asset_digest_hex(absolute_path)
-    Digest::SHA1.file(absolute_path).hexdigest
+  def self.string_digest_hex(string)
+    Digest::SHA1.hexdigest(string)
   end
 
-  def self.build_sprockets_assets
-    @asset_paths = {}
+  def self.build_stylesheet_assets
+    FileUtils.mkpath("#{Paths.Dist}/2016/stylesheets")
 
-    sprockets = Sprockets::Environment.new("#{Paths.Dist}/2016") do |env|
-      env.cache = Sprockets::Cache::FileStore.new(Paths.Cache)
-      env.digest_class = Digest::SHA1
+    for filename in StylesheetAssets
+      scss_filename = "#{filename}.scss"
+      scss = IO.read("#{Paths.Assets}/stylesheets/#{scss_filename}")
 
-      if ENV['DEBUG_ASSETS'] != 'true'
-        env.js_compressor = :uglify
-        env.css_compressor = :sass
-      end
+      engine = SassC::Engine.new(scss, {
+        style: :compact,
+        syntax: :scss,
+        filename: filename,
+        cache: false,
+        load_paths: [ "#{Paths.Assets}/stylesheets" ],
+        sourcemap: :none
+      })
+      css = engine.render
 
-      env.logger = $logger
+      write_asset_with_digest('stylesheets', filename, css)
     end
-    sprockets.append_path(Paths.Assets)
+  end
 
-    SprocketsAssets.each do |filename|
-      asset = sprockets.find_asset(filename)
-      dirname, basename = filename.split('/')
-      FileUtils.mkpath("#{Paths.Dist}/#{dirname}")
-      $logger.debug("Writing asset #{asset.digest_path}")
-      asset.write_to("#{Paths.Dist}/2016/#{asset.digest_path}")
+  def self.build_javascript_assets
+    FileUtils.mkpath("#{Paths.Cache}/uglified-javascript")
+    FileUtils.mkpath("#{Paths.Dist}/2016/javascripts")
 
-      # Write the non-digest path as well. We'll use that in `asset_path()` to
-      # determine the digest.
-      asset.write_to("#{Paths.Dist}/2016/#{filename}")
+    path_to_contents = JavascriptAssets.values.flatten.each_with_object({}) do |path, h|
+      h[path] = read_javascript_source(path)
+    end
+
+    JavascriptAssets.each do |output_filename, input_filenames|
+      js = input_filenames.map{ |p| path_to_contents[p] }.join("\n")
+      write_asset_with_digest('javascripts', output_filename, js)
+    end
+  end
+
+  def self.read_javascript_source(path)
+    raw_js = IO.read("#{Paths.Assets}/javascripts/#{path}")
+
+    if ENV['DEBUG_ASSETS'] == 'true'
+      raw_js
+    else
+      digest = string_digest_hex(raw_js)
+      cache_path = "#{Paths.Cache}/uglified-javascript/#{digest}"
+      begin
+        IO.read(cache_path)
+      rescue Errno::ENOENT
+        require 'uglifier'
+        require 'therubyracer'
+        js = Uglifier.compile(raw_js)
+        IO.write(cache_path, js)
+        js
+      end
     end
   end
 
   def self.build_digest_assets
-    @image_paths = {}
+    @digest_asset_paths = {}
 
     DigestAssets.each do |pattern|
       Dir["#{Paths.Assets}/#{pattern}"].each do |absolute_filename|
@@ -157,8 +203,24 @@ module Assets
         $logger.debug("Copying asset #{output_relative_filename}")
         FileUtils.mkpath(File.dirname(output_filename))
         FileUtils.cp(absolute_filename, output_filename)
+
+        @digest_asset_paths[filename] = output_relative_filename
       end
     end
+  end
+
+  def self.write_asset_with_digest(dirname, filename, contents)
+    digest = Assets.string_digest_hex(contents)
+
+    pre_ext, ext = filename.split(/\./)
+
+    digest_filename = "#{pre_ext}-#{digest}.#{ext}"
+
+    $logger.debug("Writing asset #{dirname}/#{digest_filename}")
+
+    IO.write("#{Paths.Dist}/2016/#{dirname}/#{digest_filename}", contents)
+
+    @asset_paths[filename] = "#{dirname}/#{digest_filename}"
   end
 
   def self.build_static_assets

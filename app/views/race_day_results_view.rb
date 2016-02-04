@@ -15,7 +15,7 @@ class RaceDayResultsView < BaseView
   def build_json
     JSON.dump(
       candidate_csv: candidate_csv,
-      candidate_state_csv: candidate_state_csv,
+      candidate_race_csv: candidate_race_csv,
       candidate_county_csv: candidate_county_csv,
       county_party_csv: county_party_csv,
       race_csv: race_csv
@@ -30,9 +30,9 @@ class RaceDayResultsView < BaseView
     header + data
   end
 
-  def candidate_state_csv
-    header = "candidate_id,state_code,n_votes,n_delegates\n"
-    data = race_day.candidate_states.map{ |cs| "#{cs.candidate_id},#{cs.state_code},#{cs.n_votes},#{cs.n_delegates}" }.join("\n")
+  def candidate_race_csv
+    header = "candidate_id,state_code,n_votes,percent_vote,n_delegates,winner\n"
+    data = race_day.candidate_races.map{ |cr| "#{cr.candidate_id},#{cr.state_code},#{cr.n_votes},#{cr.percent_vote},#{cr.n_delegates},#{cr.winner?}" }.join("\n")
     header + data
   end
 

@@ -80,11 +80,13 @@ We adjust this schedule in this git repo. See `config/schedule.rb`.
 
 Race day? Adjust `config/schedule.rb` and run `cap production deploy`.
 
-## To change copy
+## To change copy or static data
 
 1. Update the copy on Google Docs, at
    https://docs.google.com/document/d/1NqASd8jSJk85wZsvNlt4htsQcuDeDHBb0kQJFYzET3w/edit.
-2. Run `script/update-copy`.
+   Or update the data on Google Sheets, at
+   https://docs.google.com/spreadsheets/d/1ScOH-WdbvrCysEHIGRRKIc4jOPcUY9a8UAMkyWnBnbw/edit.
+2. Run `script/update-static-data`.
 3. Check the `script/serve` output on localhost.
 4. Run `git commit; git push; cap staging deploy` and test on staging.
 5. Run `cap production deploy` and test on production.
@@ -109,23 +111,27 @@ markup in `app/templates/something-view.html.haml`.
 
 # Architecture
 
-A build has three phases:
+Basically, we do this:
 
-1. Pull the newest data from the AP Elections API
-2. Build our static files (HTML, CSS, JavaScript, JSON)
-3. Upload the static files to S3
+1. Download data from AP Elections API, Pollster and Google Docs.
+2. Parse it all (`app/sources/*.rb`)
+3. Bundle everything into a single data model (`app/models/*.rb`)
+4. Generate output (HTML, CSS, JavaScript, JSON)
+5. Upload the output to S3 (`script/upload`)
 
 The AP Elections API has severe quota restrictions. We try and avoid calls to
 it whenever possible. We dump our HTML response JSON into `cache/`.
 
 You can use or ignore each level of the cache using the following commands:
 
-* To force-update the cache, run `script/build-primaries-from-scratch`.
+* To force-update the cache, run `rm -r cache/`
 * To update only what's needed, run `script/update-primaries YYYY-MM-DD`, where
   `YYYY-MM-DD` is the date of elections. This will update delegate and vote
   counts so they are the most recent.
+* To update Google Docs data (which we commit to the repo), run
+  `script/update-static-data`.
 * To rebuild HTML/JSON after code changes, relying entirely on cached data, run
-  `script/build-primaries`.
+  `script/build`.
 * To serve at [http://localhost:3000](http://localhost:3000) and rebuild every
   time code changes, run `script/serve`. This will also call `rspec` whenever
   code changes, so you can't help but see test results :).
@@ -136,6 +142,8 @@ You can use or ignore each level of the cache using the following commands:
 
 Here's an attempt to document all the sources of information we build upon.
 
-* `app/collections/states.csv`: states and FIPS codes from Wikipedia; delegate
+* `states.tsv` (in Google Docs): states and FIPS codes from Wikipedia; delegate
   counts from AP-emailed Excel file, `2016 State Party Delegate Numbers_121715.xlsx`
-* Vote counts, candidate list, delegate counts: AP's API
+* `candidates.tsv`: copied from AP's `del_super` API, so it wont' change
+* `races.tsv`: transcribed from AP's schedule
+* Vote counts, delegate counts: AP's API

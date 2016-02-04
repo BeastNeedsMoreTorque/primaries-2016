@@ -1,6 +1,3 @@
-//= require './vendor/jquery-2.2.0.js'
-//= require './format_int.js'
-//= require './position_svg_cities.js'
 $(function() {
   function fillSvg(data, precincts){
     var totalCounties = $(".counties").children().length;
@@ -16,27 +13,29 @@ $(function() {
   }
 
   function updateCandidates(data, tense){
-    $(".candidate table").removeClass("leader");
-    for(key in data){
-      sorted = data[key].sort(function(a,b){return b[1] - a[1]})
-      if(sorted[0][1] !== 0 && tense !== 'future')
-        $(".candidate[data-candidate-id='"+sorted[0][0]+"'] table").addClass("leader");
-      sorted.forEach(function(item){
-        $(".candidate[data-candidate-id='"+item[0]+"'] td:last-child").text(format_int(item[1]));
+    $(".leader").removeClass("leader");
+
+    for (key in data) {
+      var candidates = data[key];
+      if (candidates[0].n_votes) {
+        $(".candidate[data-candidate-id="+candidates[0].id+"]").addClass("leader");
+      }
+
+      data[key].forEach(function(item){
+        $(".candidate[data-candidate-id="+item.id+"] .n-votes").text(format_int(item.n_votes));
       });  
     }
   }
 
   function getData(){
-    var url = window.location.protocol + "//" + window.location.host + "/2016/primaries/widget-results.json"
-    $.getJSON(url, function(json) {
-      tense = json["when_race_day_happens"];
+    $.getJSON('/2016/primaries/widget-results.json', function(json) {
+      var tense = json["when_race_day_happens"];
       $("body").removeClass().addClass("race-day-" + tense);
       fillSvg(json["counties"], json['precincts']);
       updateCandidates(json["candidates"], tense);
     })
-    .fail(function() { console.warn('Failed to load', this); })
-    .always(function() { window.setTimeout(getData, 30000); });
+      .fail(function() { console.warn('Failed to load', this); })
+      .always(function() { window.setTimeout(getData, 30000); });
   }
 
   $("svg").position_svg_cities();

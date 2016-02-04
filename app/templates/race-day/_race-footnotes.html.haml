@@ -8,6 +8,6 @@
     %p.last-updated
       Last updated:
       %time{datetime: format_datetime(race.last_updated)}
-  - if race.poll_last_updated
-    %p.poll-last-updated.no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.poll_last_updated)}\"></time>"
+  - if race.pollster_last_updated
+    %p.poll-last-updated.no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.pollster_last_updated)}\"></time>"
     %p.poll-last-updated.some-precincts-reporting!= "Visit <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> for survey results from before the race."

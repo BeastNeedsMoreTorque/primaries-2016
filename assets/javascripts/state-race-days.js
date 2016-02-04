@@ -1,5 +1,3 @@
-//= require './wait_for_font_then.js'
-
 $(function() {
   $('a[href="#state-race-days-by-date"]').click(function(ev) {
     ev.preventDefault();
@@ -8,9 +6,6 @@ $(function() {
   $('a[href="#state-race-days-by-state"]').click(function(ev) {
     ev.preventDefault();
     switch_to('state');
-  });
-  $('tr[data-href]').click(function(ev) {
-    window.location = this.getAttribute('data-href');
   });
 
   $flipper = $('.state-race-days .flipper');

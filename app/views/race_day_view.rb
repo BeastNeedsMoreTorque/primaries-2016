@@ -15,13 +15,12 @@ class RaceDayView < BaseView
   def layout; 'main'; end
   def stylesheets; [ asset_path('main.css') ]; end
 
-  def hed; race_day_copy ? race_day_copy['title'] : nil; end
-  def race_date; "#{race_day.date.strftime('%B %-d, %Y')}"; end
-  def body; race_day_copy ? race_day_copy['body'] : nil; end
+  def hed; race_day.title; end
+  def body; race_day.body; end
   def social_img; absolute_image_path_if_possible('share.png'); end
-  def twitter; race_day_copy ? race_day_copy['twitter'] : nil; end
-  def pubbed_dt; race_day_copy ? race_day_copy['pubbed'] : nil; end
-  def updated_dt; race_day_copy ? race_day_copy['updated'] : nil; end
+  def twitter; race_day.tweet; end
+  def pubbed_dt; race_day.pubbed_dt; end
+  def updated_dt; race_day.updated_dt_or_nil; end
 
   def meta
     @meta ||= {
@@ -46,27 +45,6 @@ class RaceDayView < BaseView
     database.race_days
       .select { |rd| rd.id > race_day.id }
       .first
-  end
-
-  def race_day_copy
-    @race_day_copy ||= copy
-      .fetch('primaries', {})
-      .fetch('race-days', [])
-      .find { |rd| rd['date'] == race_day.id }
-  end
-
-  def race_text(race)
-    return nil if !race
-
-    @race_text ||= {}
-    if !@race_text.include?(race)
-      node = copy
-        .fetch('primaries', {})
-        .fetch('races', [])
-        .find { |r| r['state'] == race.state_code && r['party'] == race.party_id }
-      @race_text[race] = node && node['text'] || nil
-    end
-    @race_text[race]
   end
 
   def self.generate_all(database)

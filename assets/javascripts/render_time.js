@@ -1,5 +1,3 @@
-//= require './vendor/jquery-2.2.0.js'
-
 /**
  * Date -> "9:30 p.m." in the user's time zone.
  *
