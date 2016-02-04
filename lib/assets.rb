@@ -15,7 +15,6 @@ module Assets
     javascripts/stats.js
     javascripts/main.js
     javascripts/splash.js
-    javascripts/mobile.js
     javascripts/primary-right-rail.js
     stylesheets/main.css
     stylesheets/splash.css

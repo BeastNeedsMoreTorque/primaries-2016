@@ -38,7 +38,7 @@
               %p.frontrunner-unit.when-present.when-past Votes 
               %p.source.when-future!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
 
-  %p.precincts.when-present.when-past!= "<span id='precincts-val'>0%</span> OF PRECINCTS REPORTING"
+  %p.precincts.when-present.when-past= "#{pct_precincts_reporting_str} OF PRECINCTS REPORTING"
 
   %div.tease-link.when-past
     %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See Results"
@@ -49,6 +49,5 @@
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
     var pymChild = new pym.Child();
-  %script{src: asset_path('mobile.js')}
   %script{src: asset_path('ga.js')}
   %script{src: asset_path('stats.js')}
