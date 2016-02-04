@@ -7,7 +7,7 @@
     - last_value = nil
     - for race in races
       - current_value = race.send(hide_repeats_column)
-      %tr{'class': "#{race.enabled? ? 'enabled' : 'disabled'} #{current_value == last_value ? 'key-repeated' : ''}", 'data-href': race.enabled? ? "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}" : nil}
+      %tr{'class': "#{race.enabled? ? 'enabled' : 'disabled'} #{current_value == last_value ? 'key-repeated' : ''}"}
         - for column in columns
           %td{'class': "#{column.html_class} #{(column.html_class == hide_repeats_column && current_value == last_value) ? 'repeated' : ''}"}
             - case column.html_class
@@ -28,8 +28,15 @@
                   %div{'class': "dots dots-#{race.party_id.downcase}"}
                     -# That's a zero-width space (zwsp) between each dot, so they can wrap
                     = "\u200b•" * race.n_delegates
-        %td{'class': "#{race.enabled? ? 'enabled-button' : 'disabled-button'}"}
-          %div.results-button
-            %span.results-button-desktop See results
-            &raquo;
+        - if !race.enabled?
+          %td.disabled-button
+        - else
+          %td.enabled-button
+            %a.results-button{href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"}
+              %span.results-button-desktop
+                - if race.when_race_happens == 'future'
+                  Preview
+                - else
+                  Results
+              »
       - last_value = current_value

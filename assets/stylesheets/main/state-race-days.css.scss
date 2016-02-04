@@ -1,14 +1,11 @@
 @import '../_variables';
 
 .state-race-days {
-  .enabled {
+  tr:hover td {
     background: aliceblue;
-    &:hover {
-      background: darken(aliceblue, 5%);
-      .results-button {
-        border-color: #999;
-        color: #999;
-      }
+    .results-button {
+      border-color: #999;
+      color: #999;
     }
   }
 
@@ -53,8 +50,11 @@
     background: #fff;
     border: 1px solid #ccc;
     text-transform: uppercase;
-    padding: 2px 6px;
-    font-size: 13px;
+    text-decoration: none;
+    font: inherit;
+    font-size: .9rem;
+    display:block;
+    padding: .15rem .3rem;
     color: #999;
     white-space: nowrap;
   }

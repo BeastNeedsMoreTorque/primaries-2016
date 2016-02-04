@@ -7,9 +7,6 @@ $(function() {
     ev.preventDefault();
     switch_to('state');
   });
-  $('tr[data-href]').click(function(ev) {
-    window.location = this.getAttribute('data-href');
-  });
 
   $flipper = $('.state-race-days .flipper');
   $toggle = $('.state-race-days-toggle');
