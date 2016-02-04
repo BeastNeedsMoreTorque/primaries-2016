@@ -1,5 +1,3 @@
-//= require './vendor/jquery-2.2.0.js'
-
 /** Waits for the specified font to load, then runs the given code.
   *
   * This is important when calculating dimensions dynamically. Browsers don't

@@ -1,6 +1,3 @@
-//= require './vendor/jquery-2.2.0.js'
-//= require './format_int.js'
-//= require './position_svg_cities.js'
 $(function() {
   function fillSvg(data){
     var countiesReporting = 0;

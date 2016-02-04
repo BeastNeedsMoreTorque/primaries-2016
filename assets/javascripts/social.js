@@ -1,5 +1,3 @@
-//= require './vendor/jquery-2.2.0.js'
-
 $(function() {
   // Don't use innerHTML +=, because that breaks ellipsize_table() somehow on all-primaries.html.haml
   $('body').append('<div id="fb-root" style="display:none;"></div>');
