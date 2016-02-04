@@ -25,15 +25,20 @@ CandidateRace = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :race_i
   def leader?; @leader; end
 
   def <=>(rhs)
-    c1 = (rhs.n_votes || 0) - (n_votes || 0)
-    if c1 != 0
-      c1
+    c0 = race_id <=> rhs.race_id
+    if c0 != 0
+      c0
     else
-      c2 = (rhs.n_delegates || 0) - (n_delegates || 0)
-      if c2 != 0
-        c2
+      c1 = (rhs.n_votes || 0) - (n_votes || 0)
+      if c1 != 0
+        c1
       else
-        candidate_last_name <=> rhs.candidate_last_name
+        c2 = (rhs.poll_percent || 0) - (poll_percent || 0)
+        if c2 != 0
+          c2
+        else
+          candidate_last_name <=> rhs.candidate_last_name
+        end
       end
     end
   end

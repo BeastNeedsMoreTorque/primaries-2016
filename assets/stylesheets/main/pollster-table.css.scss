@@ -30,8 +30,16 @@
     @include pollster-table;
   }
 
-  tr.dropped-out td {
-    color: $muted;
+  tr.dropped-out {
+    img {
+      opacity: .5;
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1);
+    }
+
+    td {
+      color: $muted;
+    }
   }
 
   .party-hed {
