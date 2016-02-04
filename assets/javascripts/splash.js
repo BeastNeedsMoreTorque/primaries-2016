@@ -41,7 +41,6 @@ $(function() {
 
   function getData(){
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
-      console.log(json);
       var tense = json["when_race_day_happens"];
       $("body").removeClass().addClass("race-day-" + tense);
       fillSvg(json["counties"]);
@@ -51,7 +50,6 @@ $(function() {
       .always(function() { window.setTimeout(getData, 30000); });
   }
 
-  console.log('HERE');
   $("svg").position_svg_cities();
   getData();
 });
