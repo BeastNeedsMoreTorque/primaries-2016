@@ -41,6 +41,11 @@ body.race-day table.candidates {
     padding-right: 0; // goes with .n-delegates padding-left: 0;
   }
 
+  tr.winner td.candidate::after {
+    color: inherit;
+    content: '✓';
+  }
+
   .n-delegates {
     padding-left: 0; // Every pixel counts. This column's data is thin, so we're sure this won't be ugly
   }

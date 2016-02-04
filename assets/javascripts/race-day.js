@@ -441,6 +441,7 @@ function poll_results() {
 
         els[candidate_id + '-' + state_code] = {
           tr: this,
+          candidate: $('td.candidate', this),
           n_votes: $('td.n-votes', this),
           n_delegates_dots: $('td.n-delegates .dots', this),
           n_delegates_int: $('td.n-delegates .n-delegates-int', this)
@@ -501,17 +502,23 @@ function poll_results() {
 
     var trs_in_order = []; // The server gives us the correct ordering.
 
+    window.csv = database.candidate_state_csv;
+    window.csv = 'Here we are!';
+    console.log('Hello');
+
     database.candidate_state_csv.split('\n').slice(1).forEach(function(line) {
       var arr = line.split(',');
       var candidate_id = arr[0];
       var state_code = arr[1];
       var n_votes = +arr[2];
       var n_delegates = +arr[3];
+      var winner = (arr[4] == 'true');
 
       var key = candidate_id + '-' + state_code;
       var elems = els_by_candidate_id_and_state_code[key];
       if (elems) {
         trs_in_order.push(elems.tr);
+        $(elems.tr).toggleClass('winner', winner);
         elems.n_votes.text(format_int(n_votes));
         elems.n_delegates_dots.text(new Array(n_delegates).fill("\u200b•").join(''));
         elems.n_delegates_int.text(format_int(n_delegates));
@@ -623,9 +630,10 @@ $(function() {
     wait_for_font_then('Source Sans Pro', function() {
       fix_text_heights();
       $('.race svg').position_svg_cities();
-      add_tooltips();
-      poll_results();
-      color_counties();
     });
+
+    add_tooltips();
+    color_counties(); // set up on_database_change
+    poll_results(); // send AJAX request
   });
 });
