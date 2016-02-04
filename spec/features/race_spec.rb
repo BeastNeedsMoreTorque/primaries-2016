@@ -19,7 +19,7 @@ describe 'a Race on the Race Day dashboard', type: :feature do
       '2016-02-01',
       '2016-02-01',
       sheets_source: sheets_source_with_ap_says_its_over(false),
-      ap_election_days: ap_election_days_source_with_precincts(120, 120)
+      ap_election_days_source: ap_election_days_source_with_precincts(120, 120)
     )
     RaceDayView.generate_all(database)
     RaceDayResultsView.generate_all(database)
@@ -33,7 +33,7 @@ describe 'a Race on the Race Day dashboard', type: :feature do
       '2016-02-01',
       '2016-02-01',
       sheets_source: sheets_source_with_ap_says_its_over(false),
-      ap_election_days: ap_election_days_source_with_precincts(0, 120)
+      ap_election_days_source: ap_election_days_source_with_precincts(0, 120)
     )
     RaceDayView.generate_all(database)
     RaceDayResultsView.generate_all(database)
@@ -47,7 +47,7 @@ describe 'a Race on the Race Day dashboard', type: :feature do
       '2016-02-01',
       '2016-02-01',
       sheets_source: sheets_source_with_ap_says_its_over(false),
-      ap_election_days: ap_election_days_source_with_precincts(nil, nil)
+      ap_election_days_source: ap_election_days_source_with_precincts(nil, nil)
     )
     RaceDayView.generate_all(database)
     RaceDayResultsView.generate_all(database)
@@ -61,7 +61,7 @@ describe 'a Race on the Race Day dashboard', type: :feature do
       '2016-02-01',
       '2016-02-01',
       sheets_source: sheets_source_with_ap_says_its_over(false),
-      ap_election_days: ap_election_days_source_with_precincts(1, 120)
+      ap_election_days_source: ap_election_days_source_with_precincts(1, 120)
     )
     RaceDayView.generate_all(database)
     RaceDayResultsView.generate_all(database)
@@ -75,7 +75,7 @@ describe 'a Race on the Race Day dashboard', type: :feature do
       '2016-02-01',
       '2016-02-01',
       sheets_source: sheets_source_with_ap_says_its_over(true),
-      ap_election_days: ap_election_days_source_with_precincts(109, 120)
+      ap_election_days_source: ap_election_days_source_with_precincts(109, 120)
     )
     RaceDayView.generate_all(database)
     RaceDayResultsView.generate_all(database)

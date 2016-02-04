@@ -62,8 +62,8 @@ def mock_database(date_string, last_date_string, source_overrides={})
   Database.new(
     source_overrides[:copy_source] || Database.default_copy_source,
     sheets_source,
-    source_overrides[:ap_del_super] || Database.default_ap_del_super_source,
-    source_overrides[:ap_election_days] || Database.default_ap_election_days_source,
+    source_overrides[:ap_del_super_source] || Database.default_ap_del_super_source,
+    source_overrides[:ap_election_days_source] || Database.default_ap_election_days_source,
     source_overrides[:pollster_source] || Database.default_pollster_source(sheets_source.parties, sheets_source.races),
     date,
     last_date

@@ -174,7 +174,6 @@ class Database
 
   def load_candidate_states(sheets_candidates, ap_candidate_states, del_super_candidate_states, pollster_candidate_states, sheets_races)
     id_to_candidate = sheets_candidates.each_with_object({}) { |c, h| h[c.id] = c }
-
     id_to_ap_candidate_state = ap_candidate_states.each_with_object({}) { |cs, h| h[cs.id] = cs }
 
     last_name_to_candidate_id = sheets_candidates.each_with_object({}) { |c, h| h[c.last_name] = c.id }
@@ -187,6 +186,10 @@ class Database
     end
 
     candidate_id_to_party_id = sheets_candidates.each_with_object({}) { |c, h| h[c.id] = c.party_id }
+
+    party_state_id_to_huffpost_override_winner_last_name = sheets_races.each_with_object({}) do |race, h|
+      h[race.party_state_id] = race.huffpost_override_winner_last_name
+    end
 
     party_state_id_to_first_race_day_id = sheets_races.each_with_object({}) do |race, h|
       # Assume races are in alphabetical order; this loop will only save the first race for each party_state
@@ -216,8 +219,14 @@ class Database
         end
       end
       .map! do |del_super_candidate_state|
+        candidate_id = del_super_candidate_state.candidate_id
+        candidate_last_name = id_to_candidate[candidate_id].last_name
+        party_id = candidate_id_to_party_id[candidate_id]
+        party_state_id = "#{party_id}-#{del_super_candidate_state.state_code}"
+
         ap_candidate_state = id_to_ap_candidate_state[del_super_candidate_state.id]
         pollster_candidate_state = id_to_pollster_candidate_state[del_super_candidate_state.id]
+        huffpost_override_winner_last_name = party_state_id_to_huffpost_override_winner_last_name[party_state_id]
 
         CandidateState.new(
           self,
@@ -228,7 +237,8 @@ class Database
           del_super_candidate_state.n_delegates,
           pollster_candidate_state ? pollster_candidate_state.poll_percent : nil,
           pollster_candidate_state ? pollster_candidate_state.sparkline : nil,
-          ap_candidate_state ? ap_candidate_state.winner : false
+          !huffpost_override_winner_last_name && (ap_candidate_state ? ap_candidate_state.winner : false),
+          candidate_last_name == huffpost_override_winner_last_name
         )
       end
 
