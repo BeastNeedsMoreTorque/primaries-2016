@@ -111,6 +111,40 @@ module Assets
   def self.build_sprockets_assets
     @sprockets_asset_paths = {}
 
+    self.build_css_assets(SprocketsAssets.select { |a| a =~ /\.css$/ })
+    self.build_js_assets(SprocketsAssets.select { |a| a =~ /\.js$/ })
+  end
+
+  def self.build_css_assets(output_paths)
+    FileUtils.mkpath("#{Paths.Dist}/2016/stylesheets")
+
+    output_paths.each do |filename|
+      engine = Sass::Engine.for_file("#{Paths.Assets}/#{filename}.scss", {
+        style: :compact,
+        syntax: :scss,
+        cache_location: "#{Paths.Cache}/sass",
+        load_paths: [ "#{Paths.Assets}/stylesheets" ],
+        sourcemap: :none
+      })
+      css = engine.render
+      digest = Assets.string_digest_hex(css)
+
+      dirname, basename = filename.split(/\//)
+      pre_ext, ext = filename.split(/\./)
+
+      digest_filename = "#{pre_ext}-#{digest}.#{ext}"
+
+      $logger.debug("Writing asset #{digest_filename}")
+
+      IO.write("#{Paths.Dist}/2016/#{digest_filename}", css)
+
+      @sprockets_asset_paths[basename] = digest_filename
+    end
+  end
+
+  def self.build_js_assets(output_paths)
+    FileUtils.mkpath("#{Paths.Dist}/2016/javascripts")
+
     sprockets = Sprockets::Environment.new("#{Paths.Dist}/2016") do |env|
       env.cache = Sprockets::Cache::FileStore.new(Paths.Cache)
       env.digest_class = Digest::SHA1
@@ -124,10 +158,7 @@ module Assets
     end
     sprockets.append_path(Paths.Assets)
 
-    FileUtils.mkpath("#{Paths.Dist}/2016/javascripts")
-    FileUtils.mkpath("#{Paths.Dist}/2016/stylesheets")
-
-    SprocketsAssets.each do |filename|
+    output_paths.each do |filename|
       asset = sprockets.find_asset(filename)
       source = asset.source
       digest = Assets.string_digest_hex(source)
