@@ -1,6 +1,6 @@
-date	party_id	state_code	race_type	ap_says_its_over	huffpost_override_winner_last_name
-2016-02-01	Dem	IA	Caucus	TRUE	
-2016-02-01	GOP	IA	Caucus	TRUE	
+date	party_id	state_code	race_type	huffpost_override_race_is_over	huffpost_override_winner_last_name
+2016-02-01	Dem	IA	Caucus		
+2016-02-01	GOP	IA	Caucus		
 2016-02-09	Dem	NH	Primary		
 2016-02-09	GOP	NH	Primary		
 2016-02-20	Dem	NV			
