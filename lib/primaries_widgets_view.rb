@@ -2,7 +2,7 @@ require_relative '../app/models/race_day'
 
 module PrimariesWidgetsView
 
-  def race_date_str; @race_date_str = "2016-02-01"; end;
+  def race_date_str; @race_date_str = "2016-02-09"; end;
 
   def race_day; @race_day ||= database.race_days.find(race_date_str); end
 
@@ -33,7 +33,6 @@ module PrimariesWidgetsView
     result = {}
     race_day.races.each do |race|
       data = (result[race.race_day_id] ||= {"candidates" => {"Dem" => {}, "GOP" => {}}, "total_Dem" => 0, "total_GOP" => 0})
-      puts race.candidate_races.first
       total_votes = race.candidate_races.map{|cd| cd.n_votes}.inject(0){|sum,x| sum + x }
       data["total_#{race.party_id}"] = total_votes
       race.candidate_races.each{|cd|

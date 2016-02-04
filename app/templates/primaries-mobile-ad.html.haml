@@ -33,18 +33,18 @@
                 %p.leads= "WINS"
               -else 
                 %p.leads= "LEADS"
-              %p.frontrunner-num.when-future= format_percent_or_nil(leader.poll_percent)
-              %p.frontrunner-unit.when-future Polling Average 
-              %p.source.when-future
-                %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-          %div.votes-container.when-present.when-past
-            %span.frontrunner-num= "#{format_int(leader.n_votes)}"
-            %span.frontrunner-unit
+          %div.votes-container
+            %span.polling.when-future= format_percent_or_nil(leader.poll_percent)
+            %span.polling.when-future Polling Average 
+            %span.polling.source.when-future
+              %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
+            %span.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
+            %span.frontrunner-unit.when-present.when-past
               - if race.n_votes_is_really_n_sdes
                 SDEs *
               - else
-                %span.frontrunner-unit Votes 
-            %span.frontrunner-num.pct= "#{get_vote_pct(race.race_day_id, leader.candidate_id)}%"
+                %span.frontrunner-unit.when-present.when-past Votes 
+            %span.frontrunner-num.pct.when-present.when-past= "#{get_vote_pct(race.race_day_id, leader.candidate_id)}%"
 
   - if race_day.races.any?(&:n_votes_is_really_n_sdes)
     %p.source.sde.when-present.when-past

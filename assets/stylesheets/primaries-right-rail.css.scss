@@ -3,6 +3,10 @@
 
 @include tense-conditionals;
 
+.sparkline {
+  fill: none;
+}
+
 body{
   @include widget-base;
 }

@@ -62,7 +62,6 @@ RaceDay = RubyImmutableStruct.new(:database_or_nil, :id, :enabled, :title, :body
   # "future" if no races are reporting
   def when_race_day_happens
     tenses = races.map(&:when_race_happens)
-    return "past"
     if tenses.include? "present"
       "present"
     elsif tenses.first == "past"

@@ -139,6 +139,13 @@ body {
 .votes-container {
 	text-align: center;	
 	margin-bottom: 5px;
+	.polling {
+		&.source {
+			display: block;
+			font-size: 11px;
+		}
+		font-size: 13px;
+	}
 }
 
 .frontrunner-num {
