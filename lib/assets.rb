@@ -119,9 +119,12 @@ module Assets
     FileUtils.mkpath("#{Paths.Dist}/2016/stylesheets")
 
     output_paths.each do |filename|
-      engine = Sass::Engine.for_file("#{Paths.Assets}/#{filename}.scss", {
+      scss = IO.read("#{Paths.Assets}/#{filename}.scss")
+
+      engine = SassC::Engine.new(scss, {
         style: :compact,
         syntax: :scss,
+        filename: filename,
         cache_location: "#{Paths.Cache}/sass",
         load_paths: [ "#{Paths.Assets}/stylesheets" ],
         sourcemap: :none
