@@ -34,7 +34,6 @@ body {
 }
 
 .countdown-container {
-	border-bottom: 1px solid black;
 	font-weight: bold;
 	margin: 5px;
 	text-align: center;
@@ -127,17 +126,27 @@ body {
 
 .frontrunner-cd {
 	font-weight: bold;
-  text-transform: uppercase;
-	border-bottom: 1px solid #000;
+	text-transform: uppercase;
+}
+
+.leads {
+	font-weight: bold;
+}
+
+.votes-container {
+	text-align: center;	
+	margin-bottom: 5px;
+	margin-top: -10px;//not sure how to avoid negative margin this case, the tall pictures make the div above have too much unused space
 }
 
 .frontrunner-num {
-	font-weight: bold;
-	font-size: 24px;
+	font-size: 18px;
+	&.pct {
+		font-size: 12px;
+	}
 }
 
 .frontrunner-unit {
-	font-weight: lighter;
 }
 
 .no-results {

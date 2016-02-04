@@ -32,11 +32,14 @@
                 = leader.candidate.name
                 - if leader.winner?
                   %span.winner ✓
+              %p.leads= "LEADS"
               %p.frontrunner-num.when-future= format_percent_or_nil(leader.poll_percent)
               %p.frontrunner-unit.when-future Polling Average 
-              %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
-              %p.frontrunner-unit.when-present.when-past Votes 
-              %p.source.when-future!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
+          %div.votes-container
+            %span.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
+            %span.frontrunner-unit.when-present.when-past Votes 
+            %span.frontrunner-num.pct.when-present.when-past= "#{get_vote_pct(race.race_day_id, leader.candidate_id)}%"
+            %p.source.when-future!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-new-hampshire-presidential-#{party.adjective.downcase}-primary\">Source</a>"
 
   %p.precincts.when-present.when-past= "#{pct_precincts_reporting_str} OF PRECINCTS REPORTING"
 
