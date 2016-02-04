@@ -125,7 +125,7 @@ module Assets
         style: :compact,
         syntax: :scss,
         filename: filename,
-        cache_location: "#{Paths.Cache}/sass",
+        cache: false,
         load_paths: [ "#{Paths.Assets}/stylesheets" ],
         sourcemap: :none
       })
