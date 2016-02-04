@@ -16,28 +16,35 @@
     .parties-container
       - race_day.races.each do |race|
         - leader = race.candidate_races.first
-
         .party-container{class: race.party_id}
           .frontrunner-lbl
             %img{src: image_path("#{race.party_name.downcase}.svg"), alt: ''}
             .container
-              %p= race.party_adjective
-              %p Frontrunner
+              -if race.party.id == 'Dem'
+                %p= "DEMOCRATS"
+              -else
+                %p= "REPUBLICANS"
           .img-stats-container
             .leading-candidate-img
               %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
             .leading-candidate-delegates
-              %p.frontrunner-cd{class: leader.winner? ? 'winner' : ''}= leader.candidate.name
+              %p.frontrunner-cd= leader.candidate.name
+              -if leader.winner?
+                %p.leads= "WINS"
+              -else 
+                %p.leads= "LEADS"
               %p.frontrunner-num.when-future= format_percent_or_nil(leader.poll_percent)
               %p.frontrunner-unit.when-future Polling Average 
               %p.source.when-future
                 %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-              %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
-              %p.frontrunner-unit.when-present.when-past
-                - if race.n_votes_is_really_n_sdes
-                  SDEs *
-                - else
-                  %p.frontrunner-unit.when-present.when-past Votes 
+          %div.votes-container.when-present.when-past
+            %span.frontrunner-num= "#{format_int(leader.n_votes)}"
+            %span.frontrunner-unit
+              - if race.n_votes_is_really_n_sdes
+                SDEs *
+              - else
+                %span.frontrunner-unit Votes 
+            %span.frontrunner-num.pct= "#{get_vote_pct(race.race_day_id, leader.candidate_id)}%"
 
   - if race_day.races.any?(&:n_votes_is_really_n_sdes)
     %p.source.sde.when-present.when-past

@@ -11,9 +11,9 @@
       %div.header
         %div.line
         %div.hed
-          %h1.main-hed.when-present= "HAPPENING NOW"
-          %h1.main-hed.when-past= "RESULTS"
-          %h1.main-hed.when-future= "HAPPENING SOON"
+          %h1.when-future= "HAPPENING SOON: #{race_day.title}"
+          %h1.when-present= "LIVE RESULTS: #{race_day.title}"
+          %h1.when-past= "RESULTS: #{race_day.title}"
         %div.line
       %h2.main-hed.sub
         %a{target: '_blank', href: '/2016/primaries/2016-02-09'} New Hampshire 
