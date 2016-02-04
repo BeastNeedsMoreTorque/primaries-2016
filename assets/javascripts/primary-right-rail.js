@@ -4,7 +4,9 @@ $(function() {
 
     for (party_id in data) {
       var candidates = data[party_id];
-      $('tr[data-candidate-id=' + candidates[0].id + ']').addClass('leader');
+      if (candidates[0].n_votes) {
+        $('tr[data-candidate-id=' + candidates[0].id + ']').addClass('leader');
+      }
 
       candidates.forEach(function(candidate){
         $("tr[data-candidate-id="+candidate.id+"] .n-votes").text(format_int(candidate.n_votes));

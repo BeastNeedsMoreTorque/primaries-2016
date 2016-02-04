@@ -25,10 +25,13 @@ $(function() {
   }
 
   function updateCandidates(data, tense){
-    $(".candidate table").removeClass("leader");
+    $(".leader").removeClass("leader");
+
     for (key in data) {
       var candidates = data[key];
-      $(".candidate[data-candidate-id="+candidates[0].id+"]").addClass("leader");
+      if (candidates[0].n_votes) {
+        $(".candidate[data-candidate-id="+candidates[0].id+"]").addClass("leader");
+      }
 
       data[key].forEach(function(item){
         $(".candidate[data-candidate-id="+item.id+"] .n-votes").text(format_int(item.n_votes));
