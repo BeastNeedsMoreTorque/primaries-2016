@@ -29,7 +29,7 @@ CandidateRace = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :race_i
     if c1 != 0
       c1
     else
-      c2 = (rhs.n_delegates || 0) - (n_delegates || 0)
+      c2 = (rhs.poll_percent || 0) - (poll_percent || 0)
       if c2 != 0
         c2
       else
