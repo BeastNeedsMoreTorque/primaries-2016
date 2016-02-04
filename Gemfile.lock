@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.4.0)
-    airbrake-ruby (1.0.3)
+    airbrake-ruby (1.0.4)
     archieml (0.2.0)
     aws-sdk (2.2.14)
       aws-sdk-resources (= 2.2.14)
@@ -81,7 +81,7 @@ GEM
     ruby-immutable-struct (0.1.1)
     ruby-prof (0.15.9)
     sass (3.4.21)
-    sassc (1.8.3)
+    sassc (1.8.4)
       bundler
       ffi (~> 1.9.6)
       sass (>= 3.3.0)
