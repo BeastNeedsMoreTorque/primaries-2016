@@ -211,6 +211,7 @@ class Database
   end
 
   def load_candidate_states(sheets_candidates, del_super_candidate_states, pollster_candidate_states, sheets_races)
+    valid_candidate_ids = sheets_candidates.map(&:id).to_set
     last_name_to_candidate_id = sheets_candidates.each_with_object({}) { |c, h| h[c.last_name] = c.id }
     id_to_pollster_candidate_state = pollster_candidate_states.each_with_object({}) do |pollster_candidate_state, h|
       candidate_id = last_name_to_candidate_id[pollster_candidate_state.last_name]
@@ -221,6 +222,7 @@ class Database
     end
 
     all = del_super_candidate_states
+      .select { |cs| valid_candidate_ids.include?(cs.candidate_id) }
       .map! do |del_super_candidate_state|
         pollster_candidate_state = id_to_pollster_candidate_state[del_super_candidate_state.id]
 
