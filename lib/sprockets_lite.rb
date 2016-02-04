@@ -61,6 +61,9 @@ module Sprockets
 
   register_bundle_metadata_reducer 'application/javascript', :data, proc { "" }, Utils.method(:concat_javascript_sources)
 
+  require 'sprockets/uglifier_compressor'
+  register_compressor 'application/javascript', :uglify, UglifierCompressor
+
   register_dependency_resolver 'environment-version' do |env|
     env.version
   end

@@ -154,7 +154,6 @@ module Assets
 
       if ENV['DEBUG_ASSETS'] != 'true'
         env.js_compressor = :uglify
-        env.css_compressor = :sass
       end
 
       env.logger = $logger
