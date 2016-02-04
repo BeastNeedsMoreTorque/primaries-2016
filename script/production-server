@@ -80,7 +80,7 @@ class Server
         '-C', Paths.Cache,
         '-zcf', archive_path,
         "--exclude=pollster*",
-        "--exclude=sprockets",
+        "--exclude=uglified-javascript",
         "--exclude=templates",
         "--exclude=*.etag",
         '.'
