@@ -502,10 +502,6 @@ function poll_results() {
 
     var trs_in_order = []; // The server gives us the correct ordering.
 
-    window.csv = database.candidate_state_csv;
-    window.csv = 'Here we are!';
-    console.log('Hello');
-
     database.candidate_state_csv.split('\n').slice(1).forEach(function(line) {
       var arr = line.split(',');
       var candidate_id = arr[0];
