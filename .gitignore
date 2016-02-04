@@ -2,8 +2,6 @@ dist/
 cache/
 cache-by-date/
 *.swp
-assets/javascripts/states.js
-assets/javascripts/race_days.js
 profile.html
 tmp/
 node_modules/

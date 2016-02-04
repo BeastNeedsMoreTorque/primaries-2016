@@ -1,5 +1,3 @@
-//= require './vendor/jquery-2.2.0.js'
-//= require './format_int.js'
 $(function() {
   function updateCandidates(data, tense){
     $(".leader").removeClass("leader");

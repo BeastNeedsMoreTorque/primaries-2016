@@ -1,5 +1,3 @@
-//= require './wait_for_font_then.js'
-
 $(function() {
   $('a[href="#state-race-days-by-date"]').click(function(ev) {
     ev.preventDefault();

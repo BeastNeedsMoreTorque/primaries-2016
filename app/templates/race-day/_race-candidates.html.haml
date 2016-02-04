@@ -14,12 +14,10 @@
     - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
     - race.candidate_states.each do |candidate_state|
       - candidate = candidate_state.candidate
-      %tr{'data-candidate-id': candidate.id, 'class': n_unellipsized <= 0 ? 'ellipsized' : ''}
+      %tr{'data-candidate-id': candidate.id, 'class': "#{n_unellipsized <= 0 ? 'ellipsized' : ''} #{candidate_state.winner? ? 'winner' : ''}"}
         %td.candidate
           %img{src: image_path("#{candidate.slug}.png"), alt: ''}
           %span.name= candidate.name
-          - if candidate_state.winner?
-            %span.winner ✓
         %td.n-votes= format_int(candidate_state.n_votes)
         %td.n-delegates
           .n-delegates-inner

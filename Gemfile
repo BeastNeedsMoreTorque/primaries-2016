@@ -6,8 +6,8 @@ gem 'aws-sdk'
 gem 'oj'
 gem 'redcarpet' # for rendering Markdown in Google Docs
 gem 'ruby-immutable-struct'
-gem 'sprockets', require: false # we'll require it manually, after a speedup
 gem 'uglifier'
+gem 'therubyracer' # for Uglifier
 gem 'hamlit' # Faster version of Haml
 gem 'sassc'
 gem 'mkfifo'

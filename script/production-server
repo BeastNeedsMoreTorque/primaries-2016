@@ -24,6 +24,8 @@ require_relative '../lib/with_airbrake'
 require_relative '../app/models/database'
 require_relative '../config/schedule'
 
+require 'mkfifo'
+
 FileUtils.mkdir_p(Paths.ProductionDir)
 
 for path in [ Paths.ProductionCommands, Paths.ProductionOutput ]
@@ -80,7 +82,7 @@ class Server
         '-C', Paths.Cache,
         '-zcf', archive_path,
         "--exclude=pollster*",
-        "--exclude=sprockets",
+        "--exclude=uglified-javascript",
         "--exclude=templates",
         "--exclude=*.etag",
         '.'
