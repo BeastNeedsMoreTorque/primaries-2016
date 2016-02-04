@@ -3,13 +3,15 @@
 $(function() {
   function updateCandidates(data, tense){
     $(".leader").removeClass("leader");
-    for(key in data){
-      sorted = data[key].sort(function(a,b){return b[1] - a[1]})
-      if(sorted[0][1] !== 0 && tense !== 'future')
-        $("tr[data-candidate-id='"+sorted[0][0]+"']").addClass("leader");
-      sorted.forEach(function(item){
-        $("tr[data-candidate-id='"+item[0]+"'] .n-votes").text(format_int(item[1]));
-      });  
+    for(party in data['candidates']){
+      sorted = data['candidates'][party];
+      leader = data['leader_' + party];
+      if(tense !== 'future')
+        $("tr[data-candidate-id='"+leader+"']").addClass("leader");
+      for(candidate_id in sorted){
+        candidate = sorted[candidate_id];
+        $("tr[data-candidate-id='"+candidate_id+"'] .n-votes").text(format_int(candidate.votes));
+      }
     }
   }
 

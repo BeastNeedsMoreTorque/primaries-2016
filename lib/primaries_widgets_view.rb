@@ -2,7 +2,9 @@ require_relative '../app/models/race_day'
 
 module PrimariesWidgetsView
 
-  def race_day; @race_day ||= database.race_days.find("2016-02-09"); end
+  def race_date_str; @race_date_str = "2016-02-01"; end;
+
+  def race_day; @race_day ||= database.race_days.find(race_date_str); end
 
   def precinct_stats
     counties = county_party_objects()
@@ -22,17 +24,21 @@ module PrimariesWidgetsView
     }
   end
 
-  def candidate_objects
-    data = {
-      "Dem" => [],
-      "GOP" => []
-    }
+  #"result" contains all votes, vote percents by candidate by party for each race happening that day
+  def candidate_objects_by_race
+    result = {}
     race_day.races.each do |race|
+      data = (result[race.race_day_id] ||= {"candidates" => {"Dem" => {}, "GOP" => {}}, "total_Dem" => 0, "total_GOP" => 0})
+      total_votes = race.candidate_states.map{|cd| cd.n_votes}.inject(0){|sum,x| sum + x }
+      data["total_#{race.party_id}"] = total_votes
       race.candidate_states.each{|cd|
-        data[race.party_id].push([cd.candidate_id, cd.n_votes])
+        candidate_pct = ((total_votes > 0) ? ((cd.n_votes.to_f / total_votes.to_f) * 100.0).round(1) : 0.0)
+        data["candidates"][race.party_id][cd.candidate_id] = {votes: cd.n_votes, pct: candidate_pct}
       }
+      leader = race.candidate_states.sort_by(&:n_votes).reverse.first
+      data["leader_#{race.party_id}"] = ((leader.n_votes != 0) ? leader.candidate_id : -1)
     end
-    data
+    result
   end
 
   def county_party_objects

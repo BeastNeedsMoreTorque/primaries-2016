@@ -25,7 +25,7 @@
           %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See Live Updates
         %p.tease-link.when-past
           %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See Upcoming Races
-        - race_day.state_party_races.first[1].each do |party, race, _|
+        - race_day.state_party_races.first[1].each do |party, race, _|#TODO: Look at all races for multi race days!
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
           .party-container
             - del_key = "n_#{party.id.downcase}_delegates"
@@ -40,7 +40,8 @@
                   %th.candidate Candidate
                   %th.pollster.when-future
                     .long-table-heading Polling Average
-                  %th.n-votes.when-past.when-present Votes
+                  %th.n-votes-pct.when-past.when-present Votes
+                  %th.n-votes.when-past.when-present
               %tbody
                 - candidates = race_day.when_race_day_happens == "future" ? race.candidate_states.sort_by{|c| -(c.candidate.poll_percent or 0)} : race.candidate_states.sort_by(&:n_votes).reverse
                 - candidates.each_with_index do |cd_state, idx|
@@ -55,6 +56,7 @@
                       - if cd_state.poll_sparkline && !cd_state.poll_sparkline.empty?
                         .sparkline!= cd_state.poll_sparkline.to_svg
                       %span.percent= format_percent_or_nil(cd_state.poll_percent)
+                    %td.n-votes-pct.when-past.when-present= "#{candidate_objects_by_race[race.race_day_id]["candidates"][party.id][candidate.id][:pct]}%"
                     %td.n-votes.when-past.when-present= format_int(cd_state.n_votes)
             %div.footnotes
               %p.footnotes-for-pollster.when-future!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
