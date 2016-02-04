@@ -16,6 +16,13 @@
     .parties-container
       - race_day.races.each do |race|
         - leader = race.candidate_races.first
+
+        .party-container{class: race.party_id}
+          .frontrunner-lbl
+            %img{src: image_path("#{race.party_name.downcase}.svg"), alt: ''}
+            .container
+              %p= race.party_adjective
+              %p Frontrunner
           .img-stats-container
             .leading-candidate-img
               %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
@@ -25,20 +32,18 @@
               %p.frontrunner-unit.when-future Polling Average 
               %p.source.when-future
                 %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-            %div.votes-container
-              %span.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
-              %span.frontrunner-unit.when-present.when-past Votes 
-              %span.frontrunner-num.pct.when-present.when-past= "#{get_vote_pct(race.race_day_id, leader.candidate_id)}%"
+              %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
               %p.frontrunner-unit.when-present.when-past
                 - if race.n_votes_is_really_n_sdes
                   SDEs *
                 - else
                   %p.frontrunner-unit.when-present.when-past Votes 
-  %p.precincts.when-present.when-past= "#{pct_precincts_reporting_str} OF PRECINCTS REPORTING"
+
   - if race_day.races.any?(&:n_votes_is_really_n_sdes)
     %p.source.sde.when-present.when-past
       * Iowa Democrats report State Delegate Equivalents (SDEs), predictions of
       who will attend the state-wide party convention.
+
   .tease-link.when-past
     %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See Results"
   .tease-link.when-present

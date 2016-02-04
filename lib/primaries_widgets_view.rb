@@ -33,6 +33,7 @@ module PrimariesWidgetsView
     result = {}
     race_day.races.each do |race|
       data = (result[race.race_day_id] ||= {"candidates" => {"Dem" => {}, "GOP" => {}}, "total_Dem" => 0, "total_GOP" => 0})
+      puts race.candidate_races.first
       total_votes = race.candidate_races.map{|cd| cd.n_votes}.inject(0){|sum,x| sum + x }
       data["total_#{race.party_id}"] = total_votes
       race.candidate_races.each{|cd|
