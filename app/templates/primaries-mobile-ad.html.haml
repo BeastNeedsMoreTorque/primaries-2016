@@ -9,9 +9,9 @@
 %body{class: "race-day-#{race_day.when_race_day_happens}"}
   %div.primary-mobile-ad
     %div.head
-      %h3.main-hed.when-future= "HAPPENING SOON: Iowa Caucus"
-      %h3.main-hed.when-present= "RESULTS: Iowa Caucus"
-      %h1.main-hed.when-past= "RESULTS: Iowa Caucus"
+      %h3.main-hed.when-future= "HAPPENING SOON: New Hampshire"
+      %h3.main-hed.when-present= "HAPPENING NOW: New Hampshire"
+      %h1.main-hed.when-past= "RESULTS: New Hampshire"
     %div.parties-container
       -race_day.state_party_races.first[1].each do |party, race, _|
         - candidates_poll = race.candidate_states.sort_by{|c| -(c.candidate.poll_percent or 0)}
@@ -20,8 +20,10 @@
           .frontrunner-lbl
             %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
             .container
-              %p= party.adjective
-              %p Frontrunner
+              -if party.id == "Dem"
+                %p DEMOCRATS
+              -else
+                %p REPUBLICANS
           %div.img-stats-container
             %div.leading-candidate-img
               %img{src: image_path("#{leader.candidate.slug}.png"), alt: ''}
@@ -34,12 +36,12 @@
               %p.frontrunner-unit.when-future Polling Average 
               %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
               -if party.id == "Dem"
-                %p.frontrunner-unit.when-present.when-past SDEs *
+                %p.frontrunner-unit.when-present.when-past Votes 
               -else
                 %p.frontrunner-unit.when-present.when-past Votes 
               %p.source.when-future!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
 
-  %p.source.sde.when-present.when-past= "*Iowa Democrats report State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
+  %p.precincts.when-present.when-past= "N% OF PRECINCTS REPORTING"
 
   %div.tease-link.when-past
     %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See Results"

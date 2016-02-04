@@ -147,6 +147,13 @@ body {
 	margin: 0 auto;
 }
 
+p.precincts {
+	@include huffpo-body-copy;
+	font-weight: bold;
+	text-align: center;
+	margin: 0 5px 5px 5px;
+}
+
 .tease-link {
 	@include tease-link();
 	@include huffpo-body-copy;

@@ -14,6 +14,7 @@ class PrimariesSplashResultsView < BaseView
 
   def build_json
     JSON.dump(
+      precincts: precinct_stats,
       counties: county_party_objects,
       candidates: candidate_objects,
       when_race_day_happens: race_day.when_race_day_happens
@@ -21,6 +22,24 @@ class PrimariesSplashResultsView < BaseView
   end
 
   protected
+
+  def precinct_stats
+    counties = county_party_objects()
+    total_precincts = counties.map{|key, val| val["n_precincts_total"]}.inject(0){|sum,x| sum + x }
+    reporting_precincts = counties.map{|key, val| val["total_n_precincts_reporting"]}.inject(0){|sum,x| sum + x }
+    finished_counties = counties.values.select{|val| val['n_precincts_total'] == val['total_n_precincts_reporting']}.count
+    pct_reporting = (reporting_precincts.to_f / total_precincts.to_f) * 100.0
+    reporting_str = ((pct_reporting < 100.0 && pct_reporting > 99.0) ? "99%" : "#{pct_reporting.round}%")
+    {
+      counties_total: counties.keys.count,
+      counties_finished: finished_counties,
+      counties_outstanding: finished_counties - counties.keys.count,
+      reporting_precincts_sofar: reporting_precincts,
+      reporting_precincts_total: total_precincts,
+      reporting_precincts_pct_raw: pct_reporting,
+      reporting_precincts_pct_str: reporting_str
+    }
+  end
 
   def candidate_objects
     data = {

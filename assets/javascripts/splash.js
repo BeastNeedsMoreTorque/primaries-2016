@@ -2,7 +2,7 @@
 //= require './format_int.js'
 //= require './position_svg_cities.js'
 $(function() {
-  function fillSvg(data){
+  function fillSvg(data, precincts){
     var countiesReporting = 0;
     var totalPrecincts = 0;
     var precinctsReporting = 0;
@@ -17,14 +17,9 @@ $(function() {
         $(this).addClass("has-results");
       }
     });
-    var precinctsPct = ((precinctsReporting/totalPrecincts)*100).toFixed(0);
-    if(precinctsPct > 99.0 && precinctsReporting != totalPrecincts){
-      precinctsPct = "99%"
-    }else{
-      precinctsPct = precinctsPct + "%"
-    }
-    $("#unreported-counties").text(totalCounties - countiesReporting)
-    $("#counties-val").html(countiesReporting + " FINISHED <span id='precincts-val'>(" + precinctsPct + " of precincts)</span>");
+    console.log(precincts)
+    $("#unreported-counties").text(precincts['counties_outstanding']);
+    $("#counties-val").html(precincts['counties_finished'] + " FINISHED <span id='precincts-val'>(" + precincts['reporting_precincts_pct_str'] + " of precincts)</span>");
   }
 
   function updateCandidates(data, tense){
@@ -44,7 +39,7 @@ $(function() {
     $.getJSON(url, function(json) {
       tense = json["when_race_day_happens"];
       $("body").removeClass().addClass("race-day-" + tense);
-      fillSvg(json["counties"]);
+      fillSvg(json["counties"], json['precincts']);
       updateCandidates(json["candidates"], tense);
     })
     .fail(function() { console.warn('Failed to load', this); })
