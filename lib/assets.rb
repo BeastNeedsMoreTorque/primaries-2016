@@ -178,6 +178,8 @@ module Assets
       begin
         IO.read(cache_path)
       rescue Errno::ENOENT
+        require 'uglifier'
+        require 'therubyracer'
         js = Uglifier.compile(raw_js)
         IO.write(cache_path, js)
         js
