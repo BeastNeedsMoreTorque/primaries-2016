@@ -35,13 +35,10 @@
               %p.frontrunner-num.when-future= format_percent_or_nil(leader.poll_percent)
               %p.frontrunner-unit.when-future Polling Average 
               %p.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
-              -if party.id == "Dem"
-                %p.frontrunner-unit.when-present.when-past Votes 
-              -else
-                %p.frontrunner-unit.when-present.when-past Votes 
+              %p.frontrunner-unit.when-present.when-past Votes 
               %p.source.when-future!= "<a target=\"_blank\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">Source</a>"
 
-  %p.precincts.when-present.when-past= "N% OF PRECINCTS REPORTING"
+  %p.precincts.when-present.when-past!= "<span id='precincts-val'>0%</span> OF PRECINCTS REPORTING"
 
   %div.tease-link.when-past
     %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See Results"
@@ -52,5 +49,6 @@
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
     var pymChild = new pym.Child();
+  %script{src: asset_path('mobile.js')}
   %script{src: asset_path('ga.js')}
   %script{src: asset_path('stats.js')}
