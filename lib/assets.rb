@@ -15,6 +15,7 @@ module Assets
       wait_for_font_then.js
       render_time.js
       format_int.js
+      format_percent.js
       ellipsize_table.js
       polyfill_array_fill.js
       position_svg_cities.js
@@ -27,10 +28,12 @@ module Assets
       vendor/jquery-2.2.0.js
       format_int.js
       position_svg_cities.js
+      splash.js
     ),
     'primary-right-rail.js' => %w(
       vendor/jquery-2.2.0.js
       format_int.js
+      primary-right-rail.js
     )
   }
 

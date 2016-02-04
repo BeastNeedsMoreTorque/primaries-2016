@@ -50,7 +50,7 @@ body.race-day table.candidates {
     padding-left: 0; // Every pixel counts. This column's data is thin, so we're sure this won't be ugly
   }
 
-  .n-votes {
+  .n-votes, .percent-vote {
     text-align: right;
   }
 
@@ -161,7 +161,7 @@ body.race-day .race.past table.candidates td {
 }
 
 body.race-day .race.future {
-  .n-votes { display: none; }
+  .n-votes, .percent-vote { display: none; }
   .poll-last-updated.some-precincts-reporting { display: none; }
 }
 

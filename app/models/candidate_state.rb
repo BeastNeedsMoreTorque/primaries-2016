@@ -1,32 +1,34 @@
-require_relative './candidate'
-require_relative './state'
-
-# Delegate/vote counts for a Candidate in a State.
-CandidateState = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :state_code, :ballot_order, :n_votes, :n_delegates, :poll_percent, :poll_sparkline, :ap_says_winner, :huffpost_says_winner) do
+# Delegate counts and poll results for a Candidate in a State.
+#
+# See also CandidateRace. They aren't the same thing: there can be two races
+# in one state with the same candidate.
+CandidateState = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :state_code, :n_delegates, :poll_percent, :poll_sparkline) do
   include Comparable
 
-  def id; "#{candidate_id}-#{state_code}"; end
+  attr_reader(:id, :candidate, :party_id, :state)
 
-  def candidate; database_or_nil.candidates.find!(candidate_id); end
-  def state; database_or_nil.states.find!(state_code); end
-  def party_id; candidate.party_id; end
-  def winner?; ap_says_winner || huffpost_says_winner; end
+  def after_initialize
+    @id = "#{candidate_id}-#{state_code}"
+
+    if database_or_nil
+      @candidate = database_or_nil.candidates.find!(candidate_id)
+      @party_id = @candidate.party_id
+      @state = database_or_nil.states.find!(state_code)
+    end
+  end
+
+  def candidate_last_name; candidate.name; end
 
   def <=>(rhs)
     c1 = rhs.n_delegates - n_delegates
     if c1 != 0
       c1
     else
-      c2 = (rhs.n_votes || 0) - (n_votes || 0)
+      c2 = (rhs.poll_percent || 0) - (poll_percent || 0)
       if c2 != 0
         c2
       else
-        c3 = (rhs.poll_percent || 0) - (poll_percent || 0)
-        if c3 != 0
-          c3
-        else
-          (ballot_order || 0) - (rhs.ballot_order || 0)
-        end
+        candidate_last_name <=> rhs.candidate_last_name
       end
     end
   end

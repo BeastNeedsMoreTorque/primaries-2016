@@ -4,6 +4,7 @@ require 'set'
 require_relative '../../lib/api_sources'
 require_relative '../collections/candidates'
 require_relative '../collections/candidate_counties'
+require_relative '../collections/candidate_races'
 require_relative '../collections/candidate_states'
 require_relative '../collections/counties'
 require_relative '../collections/county_parties'
@@ -14,6 +15,7 @@ require_relative '../collections/race_days'
 require_relative '../collections/states'
 require_relative '../models/candidate'
 require_relative '../models/candidate_county'
+require_relative '../models/candidate_race'
 require_relative '../models/candidate_state'
 require_relative '../models/county'
 require_relative '../models/county_party'
@@ -37,20 +39,18 @@ require_relative '../sources/sheets_source'
 class Database
   LastDate = Date.parse(ENV['LAST_DATE'] || '2016-02-09') # because we haven't coded+tested everything yet
 
-  # Order these collections correctly: when each is built it will be sorted,
-  # and if it depends on other collections that aren't initialized yet, the
-  # sort will crash.
   CollectionNames = %w(
-    counties
-    parties
     candidates
-    states
-    party_states
     candidate_counties
+    candidate_races
     candidate_states
+    counties
     county_parties
+    parties
+    party_states
     races
     race_days
+    states
   )
 
   attr_reader(*CollectionNames)
@@ -66,7 +66,8 @@ class Database
     @counties = load_counties(ap_election_days.county_fips_ints)
     @county_parties = load_county_parties(ap_election_days.county_parties)
     @candidate_counties = load_candidate_counties(sheets_source.candidates, ap_election_days.candidate_counties)
-    @candidate_states = load_candidate_states(sheets_source.candidates, ap_election_days.candidate_states, ap_del_super.candidate_states, pollster_source.candidate_states, sheets_source.races)
+    @candidate_states = load_candidate_states(sheets_source.candidates, ap_del_super.candidate_states, pollster_source.candidate_states, sheets_source.races)
+    @candidate_races = load_candidate_races(sheets_source.candidates, ap_election_days.candidate_races, ap_election_days.races, sheets_source.races)
     @races = load_races(sheets_source.races, copy_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
     @race_days = load_race_days(sheets_source.race_days, copy_source.race_days, LastDate)
 
@@ -172,10 +173,44 @@ class Database
     CandidateCounties.new(all)
   end
 
-  def load_candidate_states(sheets_candidates, ap_candidate_states, del_super_candidate_states, pollster_candidate_states, sheets_races)
-    id_to_candidate = sheets_candidates.each_with_object({}) { |c, h| h[c.id] = c }
-    id_to_ap_candidate_state = ap_candidate_states.each_with_object({}) { |cs, h| h[cs.id] = cs }
+  # Creates a CandidateRace for each candidate in each race (as long as the
+  # candidate has not dropped out before the race). Values can be nil.
+  def load_candidate_races(sheets_candidates, ap_candidate_races, ap_races, sheets_races)
+    id_to_ap_candidate_race = ap_candidate_races.each_with_object({}) { |cr, h| h[cr.id] = cr }
+    id_to_ap_race = ap_races.each_with_object({}) { |r, h| h[r.id] = r }
 
+    all = []
+
+    for race in sheets_races
+      ap_race = id_to_ap_race[race.id]
+      can_calculate_percent = (!ap_race.nil? && !ap_race.n_votes.nil? && ap_race.n_votes > 0)
+
+      for candidate in sheets_candidates
+        next if candidate.party_id != race.party_id
+        next if candidate.dropped_out_date_or_nil && candidate.dropped_out_date_or_nil.to_s < race.race_day_id
+
+        id = "#{candidate.id}-#{race.id}"
+        ap_candidate_race = id_to_ap_candidate_race[id]
+
+        all << CandidateRace.new(
+          self,
+          candidate.id,
+          race.id,
+          ap_candidate_race ? ap_candidate_race.ballot_order : nil,
+          ap_candidate_race ? ap_candidate_race.n_votes : nil,
+          (can_calculate_percent && ap_candidate_race) ? (100 * ap_candidate_race.n_votes.to_f / ap_race.n_votes) : nil,
+          (ap_candidate_race && ap_candidate_race.n_votes > 0) ? ap_candidate_race.n_votes == ap_race.max_n_votes : nil,
+          !race.huffpost_override_winner_last_name && (ap_candidate_race ? ap_candidate_race.winner : false),
+          race.huffpost_override_winner_last_name == candidate.last_name
+        )
+      end
+    end
+
+    all.sort!
+    @candidate_races = CandidateRaces.new(all)
+  end
+
+  def load_candidate_states(sheets_candidates, del_super_candidate_states, pollster_candidate_states, sheets_races)
     last_name_to_candidate_id = sheets_candidates.each_with_object({}) { |c, h| h[c.last_name] = c.id }
     id_to_pollster_candidate_state = pollster_candidate_states.each_with_object({}) do |pollster_candidate_state, h|
       candidate_id = last_name_to_candidate_id[pollster_candidate_state.last_name]
@@ -185,60 +220,17 @@ class Database
       end
     end
 
-    candidate_id_to_party_id = sheets_candidates.each_with_object({}) { |c, h| h[c.id] = c.party_id }
-
-    party_state_id_to_huffpost_override_winner_last_name = sheets_races.each_with_object({}) do |race, h|
-      h[race.party_state_id] = race.huffpost_override_winner_last_name
-    end
-
-    party_state_id_to_first_race_day_id = sheets_races.each_with_object({}) do |race, h|
-      # Assume races are in alphabetical order; this loop will only save the first race for each party_state
-      h[race.party_state_id] ||= race.race_day_id
-    end
-
     all = del_super_candidate_states
-      .select do |candidate_state|
-        candidate = id_to_candidate[candidate_state.candidate_id]
-        if !candidate
-          false
-        else
-          dropped_out_date = candidate.dropped_out_date_or_nil
-          if !dropped_out_date
-            true
-          else
-            dropped_out_date_s = dropped_out_date.to_s
-            party_state_id = "#{candidate.party_id}-#{candidate_state.state_code}"
-            race_day_id = party_state_id_to_first_race_day_id[party_state_id]
-            if !race_day_id # GOP-CO has no race
-              # TODO revisit this logic?
-              false # the candidate dropped out and won't get any Colorado delegates
-            else
-              dropped_out_date_s >= race_day_id
-            end
-          end
-        end
-      end
       .map! do |del_super_candidate_state|
-        candidate_id = del_super_candidate_state.candidate_id
-        candidate_last_name = id_to_candidate[candidate_id].last_name
-        party_id = candidate_id_to_party_id[candidate_id]
-        party_state_id = "#{party_id}-#{del_super_candidate_state.state_code}"
-
-        ap_candidate_state = id_to_ap_candidate_state[del_super_candidate_state.id]
         pollster_candidate_state = id_to_pollster_candidate_state[del_super_candidate_state.id]
-        huffpost_override_winner_last_name = party_state_id_to_huffpost_override_winner_last_name[party_state_id]
 
         CandidateState.new(
           self,
           del_super_candidate_state.candidate_id,
           del_super_candidate_state.state_code,
-          ap_candidate_state ? ap_candidate_state.ballot_order : nil,
-          ap_candidate_state ? ap_candidate_state.n_votes : nil,
           del_super_candidate_state.n_delegates,
           pollster_candidate_state ? pollster_candidate_state.poll_percent : nil,
-          pollster_candidate_state ? pollster_candidate_state.sparkline : nil,
-          !huffpost_override_winner_last_name && (ap_candidate_state ? ap_candidate_state.winner : false),
-          candidate_last_name == huffpost_override_winner_last_name
+          pollster_candidate_state ? pollster_candidate_state.sparkline : nil
         )
       end
 

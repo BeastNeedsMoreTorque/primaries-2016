@@ -27,11 +27,13 @@ class PrimariesSplashResultsView < BaseView
       "Dem" => [],
       "GOP" => []
     }
+
     race_day.races.each do |race|
-      race.candidate_states.each{|cd|
-        data[race.party_id].push([cd.candidate_id, cd.n_votes])
+      race.candidate_races.each{|cr|
+        data[race.party_id].push(id: cr.candidate_id, n_votes: cr.n_votes)
       }
     end
+
     data
   end
 
