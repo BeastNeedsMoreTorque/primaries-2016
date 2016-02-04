@@ -44,7 +44,6 @@ module Sprockets
 
   # Common asset text types
   register_mime_type 'application/javascript', extensions: ['.js'], charset: :unicode
-  register_mime_type 'text/css', extensions: ['.css'], charset: :css
 
   register_pipeline :self do |env, type, file_type, engine_extnames|
     env.self_processors_for(type, file_type, engine_extnames)
@@ -55,25 +54,15 @@ module Sprockets
   end
 
   require 'sprockets/directive_processor'
-  register_preprocessor 'text/css', DirectiveProcessor.new(comments: ["//"])
   register_preprocessor 'application/javascript', DirectiveProcessor.new(comments: ["//"])
 
   require 'sprockets/bundle'
   register_bundle_processor 'application/javascript', Bundle
-  register_bundle_processor 'text/css', Bundle
 
   register_bundle_metadata_reducer 'application/javascript', :data, proc { "" }, Utils.method(:concat_javascript_sources)
 
-  require 'sprockets/sass_compressor'
   require 'sprockets/uglifier_compressor'
-  register_compressor 'text/css', :sass, SassCompressor
-  register_compressor 'text/css', :scss, SassCompressor
   register_compressor 'application/javascript', :uglify, UglifierCompressor
-
-  # CSS engines
-  require 'sprockets/sass_processor'
-  register_engine '.scss', ScssProcessor, mime_type: 'text/css'
-  register_bundle_metadata_reducer 'text/css', :sass_dependencies, Set.new, :+
 
   register_dependency_resolver 'environment-version' do |env|
     env.version

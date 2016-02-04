@@ -9,7 +9,7 @@ gem 'ruby-immutable-struct'
 gem 'sprockets', require: false # we'll require it manually, after a speedup
 gem 'uglifier'
 gem 'hamlit' # Faster version of Haml
-gem 'sass'
+gem 'sassc'
 gem 'mkfifo'
 
 group :development do
