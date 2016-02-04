@@ -6,6 +6,10 @@ module PrimariesWidgetsView
 
   def race_day; @race_day ||= database.race_days.find(race_date_str); end
 
+  def get_vote_pct(race_id, c_id)
+    (candidate_objects_by_race[race_id]["candidates"]["Dem"][c_id] or candidate_objects_by_race[race_id]["candidates"]["GOP"][c_id])[:pct]
+  end
+
   def precinct_stats
     counties = county_party_objects()
     total_precincts = counties.map{|key, val| val["n_precincts_total"]}.inject(0){|sum,x| sum + x }

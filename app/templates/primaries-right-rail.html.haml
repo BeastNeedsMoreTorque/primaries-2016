@@ -56,7 +56,7 @@
                       - if cd_state.poll_sparkline && !cd_state.poll_sparkline.empty?
                         .sparkline!= cd_state.poll_sparkline.to_svg
                       %span.percent= format_percent_or_nil(cd_state.poll_percent)
-                    %td.n-votes-pct.when-past.when-present= "#{candidate_objects_by_race[race.race_day_id]["candidates"][party.id][candidate.id][:pct]}%"
+                    %td.n-votes-pct.when-past.when-present= "#{get_vote_pct(race.race_day_id, candidate.id)}%"
                     %td.n-votes.when-past.when-present= format_int(cd_state.n_votes)
             %div.footnotes
               %p.footnotes-for-pollster.when-future!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
