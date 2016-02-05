@@ -9,7 +9,7 @@ $(function() {
       for(candidate_id in sorted){
         candidate = sorted[candidate_id];
         $("tr[data-candidate-id='"+candidate_id+"'] .n-votes").text(format_int(candidate.votes));
-        $("tr[data-candidate-id='"+candidate_id+"'] .n-votes-pct").text(candidate.pct + "%");
+        $("tr[data-candidate-id='"+candidate_id+"'] .n-votes-pct").text(format_percent(candidate.pct));
       }
     }
   }

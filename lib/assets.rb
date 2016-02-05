@@ -33,6 +33,7 @@ module Assets
     'primary-right-rail.js' => %w(
       vendor/jquery-2.2.0.js
       format_int.js
+      format_percent.js
       primary-right-rail.js
     )
   }
