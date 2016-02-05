@@ -26,6 +26,10 @@
     }
   }
 
+  g.subcounties path {
+    stroke-width: 5; // divided by 10
+  }
+
   g.cities {
     pointer-events: none;
   }
