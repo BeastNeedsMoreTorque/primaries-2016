@@ -221,7 +221,7 @@ topojsonize = (features) ->
       p = d.properties
       state_code: p.STATE
       fips_string: p.ADMIN_FIPS # counties only
-      geoid: p.GEOID # subcounties only
+      geo_id: p.GEOID # subcounties only
       name: p.ADMIN_NAME || p.NAME
       feature: p.FEATURE # cities only; we filter for 'Civil'
       population: +p.POP_2010 # cities only
@@ -316,14 +316,14 @@ render_counties_g = (path, topology, geometries) ->
   ret.push('  </g>')
   ret.join('\n')
 
-# Returns a <g class="subcounties"> full of <path data-geoid="...">s
+# Returns a <g class="subcounties"> full of <path data-geo-id="...">s
 render_subcounties_g = (path, topology, geometries) ->
   ret = [ '  <g class="subcounties" transform="scale(0.1)">' ]
 
   for geometry in geometries
     d = path(topojson.feature(topology, geometry))
     d = compress_svg_path(d)
-    ret.push("    <path data-geoid=\"#{+geometry.properties.geoid}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
+    ret.push("    <path data-geo-id=\"#{+geometry.properties.geo_id}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
 
   ret.push('  </g>')
   ret.join('\n')

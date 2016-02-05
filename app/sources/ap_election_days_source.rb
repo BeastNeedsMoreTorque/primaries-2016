@@ -16,18 +16,18 @@ require_relative './source'
 #
 # * candidate_races: id, n_votes, winner
 # * candidate_county_races: id, fips_int, party_id, n_votes
-# * candidate_subcounty_races: id, n_votes
+# * candidate_race_subcounties: candidate_id, race_id, reporting_unit_id, n_votes
 # * county_fips_ints (Set of Integers)
 # * county_races: id, n_votes, n_precincts_reporting, n_precincts_total
 # * subcounty_reporting_unit_ids (Set of Integers)
-# * race_subcounties: id, race_id, reporting_unit_id, n_votes, n_precincts_reporting, n_precincts_total
+# * race_subcounties: race_id, reporting_unit_id, n_votes, n_precincts_reporting, n_precincts_total
 # * races: id, party_id, state_code, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource < Source
   CandidateRace = RubyImmutableStruct.new(:id, :candidate_id, :n_votes, :winner)
   CandidateCountyRace = RubyImmutableStruct.new(:id, :n_votes)
-  CandidateRaceSubcounty = RubyImmutableStruct.new(:id, :n_votes)
+  CandidateRaceSubcounty = RubyImmutableStruct.new(:candidate_id, :race_id, :reporting_unit_id, :n_votes)
   CountyRace = RubyImmutableStruct.new(:fips_int, :race_id, :n_votes, :n_precincts_reporting, :n_precincts_total)
-  RaceSubcounty = RubyImmutableStruct.new(:id, :n_votes, :n_precincts_reporting, :n_precincts_total)
+  RaceSubcounty = RubyImmutableStruct.new(:race_id, :reporting_unit_id, :n_votes, :n_precincts_reporting, :n_precincts_total)
   Race = RubyImmutableStruct.new(:id, :party_id, :state_code, :n_votes, :max_n_votes, :n_precincts_reporting, :n_precincts_total, :last_updated)
 
   attr_reader(
@@ -35,7 +35,7 @@ class ApElectionDaysSource < Source
     :subcounty_reporting_unit_ids,
     :candidate_races,
     :candidate_county_races,
-    :candidate_subcounty_races,
+    :candidate_race_subcounties,
     :county_races,
     :race_subcounties,
     :races
@@ -151,13 +151,16 @@ class ApElectionDaysSource < Source
             next if candidate_id.length >= 6 # unassigned, no preference, etc
 
             @candidate_race_subcounties << CandidateRaceSubcounty.new(
-              "#{candidate_id}-#{reporting_unit_id}-#{race_id}",
+              candidate_id,
+              race_id,
+              reporting_unit_id,
               candidate_hash[:voteCount]
             )
           end
 
           @race_subcounties << RaceSubcounty.new(
-            "#{race_id}-#{reporting_unit_id}",
+            race_id,
+            reporting_unit_id,
             n_subcounty_votes,
             n_precincts_reporting,
             n_precincts_total

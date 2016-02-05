@@ -1,6 +1,7 @@
 var database = {
   candidate_csv: "",
   candidate_county_race_csv: "",
+  candidate_race_subcounty_csv: "",
   candidate_race_csv: "",
   county_race_csv: "",
   race_csv: ""
@@ -102,35 +103,69 @@ function add_tooltips() {
     $tooltip.remove();
   }
 
-  function show_tooltip_for_svg_path(svg_path, is_from_touch) {
-    var county_name = svg_path.getAttribute('data-name');
-    var fips_int = +svg_path.getAttribute('data-fips-int');
-    var party_id = $(svg_path).closest('[data-party-id]').attr('data-party-id');
-    var state_code = $(svg_path).closest('[data-state-code]').attr('data-state-code');
-
-    var candidates = extract_candidate_list($(svg_path).closest('.party-state').find('table.candidates'));
-    var candidates_regex = candidates.map(function(c) { return c.id; }).join('|');
-
+  function find_geo_data_from_csvs(geo_id, race_key, geo_race_csv, candidate_geo_race_csv, candidates) {
     var id_to_candidate = {};
     candidates.forEach(function(c) { id_to_candidate[c.id] = c; });
 
-    var regex = new RegExp('^(' + candidates_regex + '),' + fips_int + ',(.*)$', 'gm');
+    var candidates_regex = candidates.map(function(c) { return c.id; }).join('|');
+    var regex = new RegExp('^(' + candidates_regex + '),' + geo_id + ',(.*)$', 'gm');
     var match;
-    while ((match = regex.exec(database.candidate_county_race_csv)) !== null) {
+    while ((match = regex.exec(candidate_geo_race_csv)) !== null) {
       var candidate_id = match[1];
       var n_votes = parseInt(match[2], 10);
       id_to_candidate[candidate_id].n_votes = n_votes;
     }
 
-    var meta_regex = new RegExp('^' + fips_int + ',' + party_id + ',(.*)$', 'm');
-    if ((match = meta_regex.exec(database.county_race_csv)) !== null) {
+    var meta_regex = new RegExp('^' + race_key + ',(.*)$', 'm');
+    if ((match = meta_regex.exec(geo_race_csv)) !== null) {
       var match_arr = match[1].split(',');
 
-      var n_votes = +match_arr[0];
-      var n_reporting = +match_arr[1];
-      var n_total = +match_arr[2];
+      return {
+        n_votes: +match_arr[0],
+        n_reporting: +match_arr[1],
+        n_total: +match_arr[2]
+      };
+    } else {
+      return null;
+    }
+  }
 
-      update_tooltip(county_name, candidates, n_votes, n_reporting, n_total, is_from_touch);
+  function find_county_data_for_fips_int(fips_int, party_id, candidates) {
+    return find_geo_data_from_csvs(
+      fips_int,
+      fips_int + ',' + party_id,
+      database.county_race_csv,
+      database.candidate_county_race_csv,
+      candidates
+    );
+  }
+
+  function find_subcounty_data_for_geo_id(geo_id, party_id, candidates) {
+    return find_geo_data_from_csvs(
+      geo_id,
+      party_id + ',' + geo_id,
+      database.race_subcounty_csv,
+      database.candidate_race_subcounty_csv,
+      candidates
+    );
+  }
+
+  function show_tooltip_for_svg_path(svg_path, is_from_touch) {
+    var geo_name = svg_path.getAttribute('data-name');
+    var party_id = $(svg_path).closest('[data-party-id]').attr('data-party-id');
+    var state_code = $(svg_path).closest('[data-state-code]').attr('data-state-code');
+    var candidates = extract_candidate_list($(svg_path).closest('.party-state').find('table.candidates'));
+
+    var data;
+
+    if (svg_path.hasAttribute('data-fips-int')) {
+      data = find_county_data_for_fips_int(svg_path.getAttribute('data-fips-int'), party_id, candidates);
+    } else {
+      data = find_subcounty_data_for_geo_id(svg_path.getAttribute('data-geo-id'), party_id, candidates);
+    }
+
+    if (data) {
+      update_tooltip(geo_name, candidates, data.n_votes, data.n_reporting, data.n_total, is_from_touch);
       $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
       position_tooltip_near_svg_path(svg_path);
     } else {
@@ -141,10 +176,10 @@ function add_tooltips() {
   function add_hover_path(svg_path) {
     if (svg_hover_path) throw new Error('There is already a hover path');
 
-    var counties = svg_path.parentNode;
+    var g = svg_path.parentNode;
     svg_hover_path = svg_path.cloneNode();
     svg_hover_path.setAttribute('class', 'hover');
-    counties.appendChild(svg_hover_path);
+    g.appendChild(svg_hover_path);
   }
 
   function remove_hover_path() {
@@ -184,8 +219,8 @@ function add_tooltips() {
 
   function add_tooltip(svg) {
     $(svg)
-      .on('mouseenter', 'g.counties path', on_mouseenter)
-      .on('mouseleave', 'g.counties path', on_mouseleave);
+      .on('mouseenter', 'g.counties path, g.subcounties path', on_mouseenter)
+      .on('mouseleave', 'g.counties path, g.subcounties path', on_mouseleave);
   }
 
   $(document).on('touchend', on_touchend);
