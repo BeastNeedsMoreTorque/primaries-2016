@@ -45,11 +45,9 @@ module PrimariesWidgetsView
   def candidate_objects_by_race
     result = {}
     race_day.races.each do |race|
-      data = (result[race.race_day_id] ||= {"candidates" => {"Dem" => {}, "GOP" => {}}, "total_Dem" => 0, "total_GOP" => 0})
-      total_votes = race.candidate_races.map{|cd| cd.n_votes}.reject(&:nil?).reduce(0, :+)
-      data["total_#{race.party_id}"] = total_votes
+      data = (result[race.race_day_id] ||= {"candidates" => {"Dem" => {}, "GOP" => {}}})
       race.candidate_races.each{|cd|
-        candidate_pct = ((total_votes > 0) ? ((cd.n_votes.to_f / total_votes.to_f) * 100.0).round(1) : 0.0)
+        candidate_pct = cd.percent_vote
         candidate_votes = cd.n_votes
         data["candidates"][race.party_id][cd.candidate_id] = {votes: candidate_votes, pct: candidate_pct}
       }
