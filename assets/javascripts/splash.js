@@ -4,7 +4,7 @@ $(function() {
     $("svg .counties").children().each(function(ele){
       fips = this.getAttribute("data-fips-int");
       obj = data[fips];
-      if(obj["total_n_precincts_reporting"] == obj["n_precincts_total"] && obj["total_n_precincts_reporting"] != 0){
+      if(obj && obj.total_n_precincts_reporting == obj.n_precincts_total && obj.total_n_precincts_reporting){
         $(this).addClass("has-results");
       }
     });
@@ -17,13 +17,16 @@ $(function() {
 
     for (key in data) {
       var candidates = data[key];
-      if (candidates[0].n_votes) {
+      if (candidates[0] && candidates[0].n_votes) {
         $(".candidate[data-candidate-id="+candidates[0].id+"]").addClass("leader");
       }
 
-      data[key].forEach(function(item){
-        $(".candidate[data-candidate-id="+item.id+"] .n-votes").text(format_int(item.n_votes));
-      });  
+      for (candidate_id in data[key]) {
+        console.log(data[key][candidate_id]);
+        var n_votes = data[key][candidate_id].votes;
+        console.log(n_votes);
+        $(".candidate[data-candidate-id="+candidate_id+"] .n-votes").text(format_int(n_votes || 0));
+      }
     }
   }
 
