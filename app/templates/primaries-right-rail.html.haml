@@ -41,7 +41,7 @@
                   %th.pollster.when-future
                     .long-table-heading Polling Average
                   %th.n-votes-pct.when-past.when-present Votes
-                  %th.n-votes.when-past.when-present
+                  %th.n-votes.when-past.when-present %
               %tbody
                 - race.candidate_races.each do |candidate_race|
                   - candidate = candidate_race.candidate
@@ -55,8 +55,8 @@
                       - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
                         .sparkline!= candidate_race.poll_sparkline.to_svg
                       %span.percent= format_percent_or_nil(candidate_race.poll_percent)
-                    %td.n-votes-pct.when-past.when-present= "#{get_vote_pct(race.race_day_id, candidate_race.candidate_id)}%"
                     %td.n-votes.when-past.when-present= format_int(candidate_race.n_votes)
+                    %td.n-votes-pct.when-past.when-present= "#{get_vote_pct(race.race_day_id, candidate_race.candidate_id)}%"
             %div.footnotes
               %p.footnotes-for-pollster.when-future!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
 
