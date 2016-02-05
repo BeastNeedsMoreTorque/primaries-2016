@@ -1,10 +1,5 @@
 d3 = require('d3')
 fs = require('fs')
-get = require('simple-get')
-tar = require('tar-fs')
-unzip = require('unzip')
-zlib = require('zlib')
-shapefile = require('shapefile')
 topojson = require('topojson')
 
 require('d3-geo-projection')(d3)
@@ -12,31 +7,7 @@ require('d3-geo-projection')(d3)
 MaxWidth = 350
 MaxHeight = 350
 
-DataFiles =
-  cities:
-    basename: 'citiesx010g'
-    url: 'http://dds.cr.usgs.gov/pub/data/nationalatlas/citiesx010g_shp_nt00962.tar.gz'
-    shp_size: 1069308
-  counties:
-    basename: 'countyp010g'
-    url: 'http://dds.cr.usgs.gov/pub/data/nationalatlas/countyp010g.shp_nt00934.tar.gz'
-    shp_size: 48737664
-  AS:
-    basename: 'tl_2015_60_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_60_cousub.zip'
-    shp_size: 37256
-  GU:
-    basename: 'tl_2015_66_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_66_cousub.zip'
-    shp_size: 709728
-  MP:
-    basename: 'tl_2015_69_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_69_cousub.zip'
-    shp_size: 1345544
-  NH:
-    basename: 'tl_2015_33_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_33_cousub.zip'
-    shp_size: 914616
+geo_loader = require('./geo-loader')
 
 # These cities didn't come from any one source. Adam Hooper compiled them from
 # Google searches.
@@ -126,78 +97,6 @@ TerritoryFipsCodeNames =
   69120: 'Tinian'
   69110: 'Saipan'
   69100: 'Rota'
-
-is_data_downloaded = (key, callback) ->
-  data_file = DataFiles[key]
-  shp_size = data_file.shp_size
-  path = "./input/#{data_file.basename}.shp"
-
-  fs.stat path, (err, stats) ->
-    ret = if err
-      if err.errno == 'ENOENT'
-        throw err
-      else
-        false
-    else
-      stats.size == shp_size
-
-    callback(null, ret)
-
-download_data = (key, callback) ->
-  data_file = DataFiles[key]
-  basename = data_file.basename
-  url = data_file.url
-
-  console.log("GET #{url}...")
-  get url, (err, res) ->
-    throw err if err
-
-    deflated = if /\.zip$/.test(url)
-      res.pipe(unzip.Extract(path: './input'))
-    else
-      res.pipe(zlib.createGunzip()).pipe(tar.extract('./input'))
-
-    deflated
-      .on('error', (err) -> throw err)
-      .on('finish', -> callback())
-
-ensure_data_downloaded = (key, callback) ->
-  is_data_downloaded key, (err, is_downloaded) ->
-    throw err if err
-
-    if is_downloaded
-      callback(null)
-    else
-      download_data(key, callback)
-
-load_features = (key, callback) ->
-  console.log("Loading #{key}...")
-  ensure_data_downloaded key, (err) ->
-    data_file = DataFiles[key]
-    basename = data_file.basename
-    shp_filename = "./input/#{basename}.shp"
-    shapefile.read shp_filename, (err, feature_collection) ->
-      throw err if err
-      callback(null, feature_collection.features)
-
-# Calls callback with a mapping from DataFiles key to Array of GeoJSON features
-load_all_features = (callback) ->
-  ret = {} # key -> feature_collection.features
-
-  to_load = Object.keys(DataFiles)
-
-  step = ->
-    if to_load.length == 0
-      callback(null, ret)
-    else
-      key = to_load.pop()
-      load_features key, (err, features) ->
-        return callback(err) if err
-
-        ret[key] = features
-        process.nextTick(step)
-
-  step()
 
 features_by_state = {} # { state_code -> { cities: [...], counties: [...], subcounties: [...] } }
 
@@ -502,7 +401,7 @@ render_all_states = (callback) ->
 
   step()
 
-load_all_features (err, key_to_features) ->
+geo_loader.load_all_features (err, key_to_features) ->
   throw err if err
 
   organize_features('cities', key_to_features.cities)
