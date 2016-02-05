@@ -75,6 +75,7 @@ class ApElectionDaysSource < Source
 
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
+
             n_votes += candidate_hash[:voteCount]
             max_n_votes = candidate_hash[:voteCount] if candidate_hash[:voteCount] > max_n_votes
 
@@ -92,6 +93,7 @@ class ApElectionDaysSource < Source
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
             n_county_votes += candidate_hash[:voteCount]
+
             next if candidate_id.length >= 6 # unassigned, no preference, etc
 
             @candidate_counties << CandidateCounty.new(candidate_id, fips_int, party_id, candidate_hash[:voteCount])
@@ -99,7 +101,7 @@ class ApElectionDaysSource < Source
 
           @county_parties << CountyParty.new(fips_int, party_id, n_county_votes, n_precincts_reporting, n_precincts_total, last_updated)
         else
-          raise "Invalid reporting unit level `#{reporting_unit[:level]}'"
+          # Ignore it
         end
       end
 
