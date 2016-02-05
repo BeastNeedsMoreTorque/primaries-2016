@@ -37,7 +37,7 @@ function add_tooltips() {
             '<th class="candidate">Candidate</th>' +
             '<th class="n-votes">Votes</th>' +
             '<th class="n-votes n-state-delegate-equivalents"><abbr title="State Delegate Equivalents">SDEs</abbr>×100<sup>∗</sup></th>' +
-            '<th class="percent-vote">Percent</th>' +
+            '<th class="percent-vote">%</th>' +
           '</tr>' +
         '</thead>' +
         '<tbody></tbody>' +
