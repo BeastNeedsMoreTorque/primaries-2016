@@ -54,7 +54,11 @@
                     %td.pollster.when-future
                       - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
                         .sparkline!= candidate_race.poll_sparkline.to_svg
-                      %span.percent= format_percent_or_nil(candidate_race.poll_percent)
+                      %span.percent
+                        - if candidate_race.poll_percent.nil?
+                          N/A
+                        - else
+                          = "#{format_percent_or_nil(candidate_race.poll_percent)}%"
                     %td.n-votes.when-past.when-present= format_int(candidate_race.n_votes)
                     %td.n-votes-pct.when-past.when-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
             %div.footnotes

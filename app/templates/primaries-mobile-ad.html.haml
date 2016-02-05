@@ -34,7 +34,7 @@
               -else 
                 %p.leads= "LEADS"
           %div.votes-container
-            %span.polling.when-future= format_percent_or_nil(leader.poll_percent)
+            %span.polling.when-future= "#{format_percent_or_nil(leader.poll_percent)}%"
             %span.polling.when-future Polling Average 
             %span.polling.source.when-future
               %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
