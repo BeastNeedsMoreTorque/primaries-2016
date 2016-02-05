@@ -7,13 +7,17 @@ require_relative './source'
 # Provides:
 #
 # * candidate_races: id, ballot_order, n_votes, winner
-# * candidate_counties: party_id, candidate_id, county_id, n_votes
+# * candidate_counties: candidate_id, fips_int, party_id, n_votes
+# * candidate_subcounties: candidate_id, reporting_unit_id, party_id, n_votes
 # * county_fips_ints (Set of Integers)
 # * county_parties: county_id, party_id, n_votes, n_precincts_reporting, n_precincts_total, last_updated
+# * subcounty_reporting_unit_ids (Set of Integers)
+# * party_subcounties: party_id, reporting_unit_id, n_votes, n_precincts_reporting, n_precincts_total
 # * races: id, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource < Source
   CandidateRace = RubyImmutableStruct.new(:id, :ballot_order, :n_votes, :winner)
   CandidateCounty = RubyImmutableStruct.new(:candidate_id, :fips_int, :party_id, :n_votes)
+  CandidateSubcounty = RubyImmutableStruct.new(:candidate_id, :reporting_unit_id, :party_id, :n_votes)
   CountyParty = RubyImmutableStruct.new(:fips_int, :party_id, :n_votes, :n_precincts_reporting, :n_precincts_total, :last_updated) do
     attr_reader(:id)
 
@@ -21,15 +25,34 @@ class ApElectionDaysSource < Source
       @id = "#{@fips_int}-#{@party_id}"
     end
   end
+  PartySubcounty = RubyImmutableStruct.new(:party_id, :reporting_unit_id, :n_votes, :n_precincts_reporting, :n_precincts_total) do
+    attr_reader(:id)
+
+    def after_initialize
+      @id = "#{@party_id}-#{@reporting_unit_id}"
+    end
+  end
   Race = RubyImmutableStruct.new(:id, :n_votes, :max_n_votes, :n_precincts_reporting, :n_precincts_total, :last_updated)
 
-  attr_reader(:county_fips_ints, :candidate_races, :candidate_counties, :county_parties, :races)
+  attr_reader(
+    :county_fips_ints,
+    :subcounty_reporting_unit_ids,
+    :candidate_races,
+    :candidate_counties,
+    :candidate_subcounties,
+    :county_parties,
+    :party_subcounties,
+    :races
+  )
 
   def initialize(ap_election_day_jsons)
     @county_fips_ints = Set.new
+    @subcounty_reporting_unit_ids = Set.new
     @candidate_races = []
     @candidate_counties = []
+    @candidate_subcounties = []
     @county_parties = []
+    @party_subcounties = []
     @races = []
 
     for ap_election_day_json in ap_election_day_jsons
@@ -100,8 +123,24 @@ class ApElectionDaysSource < Source
           end
 
           @county_parties << CountyParty.new(fips_int, party_id, n_county_votes, n_precincts_reporting, n_precincts_total, last_updated)
+        elsif reporting_unit[:level] == 'subunit'
+          reporting_unit_id = reporting_unit[:reportingunitID].to_i # Don't worry, Ruby won't parse '01234' as octal
+          @subcounty_reporting_unit_ids.add(reporting_unit_id)
+
+          n_subcounty_votes = 0
+
+          for candidate_hash in reporting_unit[:candidates]
+            candidate_id = candidate_hash[:polID]
+            n_subcounty_votes += candidate_hash[:voteCount]
+
+            next if candidate_id.length >= 6 # unassigned, no preference, etc
+
+            @candidate_subcounties << CandidateSubcounty.new(candidate_id, reporting_unit_id, party_id, candidate_hash[:voteCount])
+          end
+
+          @party_subcounties << PartySubcounty.new(party_id, reporting_unit_id, n_subcounty_votes, n_precincts_reporting, n_precincts_total)
         else
-          # Ignore it
+          raise "Unexpected reporting_unit level: `#{reporting_unit[:level]}`"
         end
       end
 
