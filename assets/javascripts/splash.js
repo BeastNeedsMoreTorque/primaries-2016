@@ -8,8 +8,8 @@ $(function() {
         $(this).addClass("has-results");
       }
     });
-    $("#unreported-counties").text(precincts['counties_outstanding']);
-    $("#counties-val").html(precincts['counties_finished'] + " FINISHED <span id='precincts-val'>(" + precincts['reporting_precincts_pct_str'] + " of precincts)</span>");
+    //$("#unreported-counties").text(precincts['counties_outstanding']);
+    //$("#counties-val").html(precincts['counties_finished'] + " FINISHED <span id='precincts-val'>(" + precincts['reporting_precincts_pct_str'] + " of precincts)</span>");
   }
 
   function updateCandidates(data, tense){
@@ -22,9 +22,7 @@ $(function() {
       }
 
       for (candidate_id in data[key]) {
-        console.log(data[key][candidate_id]);
         var n_votes = data[key][candidate_id].votes;
-        console.log(n_votes);
         $(".candidate[data-candidate-id="+candidate_id+"] .n-votes").text(format_int(n_votes || 0));
       }
     }

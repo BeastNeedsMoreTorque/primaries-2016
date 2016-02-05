@@ -16,22 +16,31 @@
         %h1.main-hed.when-future= "HAPPENING TONIGHT: #{race_day.title}"
       .line
     .flex-container
-      .map-container
-        %h5 COUNTIES REPORTING
-        .map
-          != map_svg('states/NH')
-        .legend
-          .container
-            .finished
-            %div
-              %span#counties-val= "FINISHED"
-          .container
-            .unfinished
-            %div
-              %span#unreported-counties
-              NOT FINISHED
-        .tease-link
-          %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See Results
+      .race-progress-container.flex-container
+        .legend-labels-container
+          .reporting
+            %span#precincts-reporting-val= "100%"
+            %span= " OF PRECINCTS REPORTING"
+          .updating
+            %span= "UPDATING IN: "
+            %span.icon
+            %span.timer= "0:30"
+          .tease-link
+            %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See Results
+          .legend
+            .label= "TOWNS REPORTING"
+            .container
+              .finished
+              %div
+                %span#counties-val= "0 FINISHED"
+            .container
+              .unfinished
+              %div
+                %span#unreported-counties
+                0 NOT FINISHED
+        .map-container
+          .map
+            != map_svg('states/NH') 
       -race_day.state_party_races.first[1].each do |party, race, _|
         .party-container{class: party.id}
           .candidate-row-container{class: party.id}
@@ -52,21 +61,25 @@
                     %td.n-votes= format_int(candidate_race.n_votes)
                     %td.n-votes-pct= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
             -if party.id == "GOP"
-              .candidate
+              .see-all-candidates
                 %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See all candidates
-        .map-container
-          .map{class: "#{party.id.downcase}"}
+        .map-container{class: "#{party.id.downcase}"}
+          .map
             != map_svg('states/NH')
           .legend
             .container
-              .finished
+              .leading
               %div
-                %span#counties-val= "FINISHED"
+                %span= "#{race.candidate_races.first.candidate.name.upcase} LEADS"
+            .container
+              .trailing
+              %div
+                %span= "#{race.candidate_races.first.candidate.name.upcase} TRAILS"
             .container
               .unfinished
               %div
-                %span#unreported-counties
-                NOT FINISHED
+                %span= "NOT FINISHED REPORTING"
+                
 
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
