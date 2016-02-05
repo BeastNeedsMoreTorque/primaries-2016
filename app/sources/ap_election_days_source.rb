@@ -9,12 +9,18 @@ require_relative './source'
 # * candidate_races: id, ballot_order, n_votes, winner
 # * candidate_counties: party_id, candidate_id, county_id, n_votes
 # * county_fips_ints (Set of Integers)
-# * county_parties: county_id, party_id, n_precincts_reporting, n_precincts_total, last_updated
+# * county_parties: county_id, party_id, n_votes, n_precincts_reporting, n_precincts_total, last_updated
 # * races: id, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource < Source
   CandidateRace = RubyImmutableStruct.new(:id, :ballot_order, :n_votes, :winner)
   CandidateCounty = RubyImmutableStruct.new(:candidate_id, :fips_int, :party_id, :n_votes)
-  CountyParty = RubyImmutableStruct.new(:fips_int, :party_id, :n_precincts_reporting, :n_precincts_total, :last_updated)
+  CountyParty = RubyImmutableStruct.new(:fips_int, :party_id, :n_votes, :n_precincts_reporting, :n_precincts_total, :last_updated) do
+    attr_reader(:id)
+
+    def after_initialize
+      @id = "#{@fips_int}-#{@party_id}"
+    end
+  end
   Race = RubyImmutableStruct.new(:id, :n_votes, :max_n_votes, :n_precincts_reporting, :n_precincts_total, :last_updated)
 
   attr_reader(:county_fips_ints, :candidate_races, :candidate_counties, :county_parties, :races)
@@ -81,15 +87,17 @@ class ApElectionDaysSource < Source
 
           fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
           @county_fips_ints.add(fips_int)
-
-          @county_parties << CountyParty.new(fips_int, party_id, n_precincts_reporting, n_precincts_total, last_updated)
+          n_county_votes = 0
 
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
+            n_county_votes += candidate_hash[:voteCount]
             next if candidate_id.length >= 6 # unassigned, no preference, etc
 
             @candidate_counties << CandidateCounty.new(candidate_id, fips_int, party_id, candidate_hash[:voteCount])
           end
+
+          @county_parties << CountyParty.new(fips_int, party_id, n_county_votes, n_precincts_reporting, n_precincts_total, last_updated)
         else
           raise "Invalid reporting unit level `#{reporting_unit[:level]}'"
         end

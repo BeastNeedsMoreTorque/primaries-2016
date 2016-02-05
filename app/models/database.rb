@@ -168,7 +168,17 @@ class Database
 
     all = ap_candidate_counties
       .select { |candidate_county| valid_candidate_ids.include?(candidate_county.candidate_id) }
-      .map! { |cc| CandidateCounty.new(self, cc.party_id, cc.candidate_id, cc.fips_int, cc.n_votes) }
+      .map! do |cc|
+        county_party_id = "#{cc.candidate_id}-#{cc.party_id}"
+
+        CandidateCounty.new(
+          self,
+          cc.party_id,
+          cc.candidate_id,
+          cc.fips_int,
+          cc.n_votes
+        )
+      end
 
     CandidateCounties.new(all)
   end
@@ -248,11 +258,12 @@ class Database
 
   def load_county_parties(ap_county_parties)
     all = ap_county_parties
-      .map! do |ap_county_party|
+      .map do |ap_county_party|
         CountyParty.new(
           self,
           ap_county_party.fips_int,
           ap_county_party.party_id,
+          ap_county_party.n_votes,
           ap_county_party.n_precincts_reporting,
           ap_county_party.n_precincts_total,
           ap_county_party.last_updated

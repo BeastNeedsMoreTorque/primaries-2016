@@ -43,8 +43,8 @@ class RaceDayResultsView < BaseView
   end
 
   def county_party_csv
-    header = "fips_int,party_id,n_precincts_reporting,n_precincts_total,last_updated\n"
-    data = race_day.county_parties.map{ |cp| "#{cp.fips_int},#{cp.party_id},#{cp.n_precincts_reporting},#{cp.n_precincts_total},#{cp.last_updated}" }.join("\n")
+    header = "fips_int,party_id,n_votes,n_precincts_reporting,n_precincts_total,last_updated\n"
+    data = race_day.county_parties.map{ |cp| "#{cp.fips_int},#{cp.party_id},#{cp.n_votes},#{cp.n_precincts_reporting},#{cp.n_precincts_total},#{cp.last_updated}" }.join("\n")
     header + data
   end
 

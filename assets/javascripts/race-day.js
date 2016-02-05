@@ -37,6 +37,7 @@ function add_tooltips() {
             '<th class="candidate">Candidate</th>' +
             '<th class="n-votes">Votes</th>' +
             '<th class="n-votes n-state-delegate-equivalents"><abbr title="State Delegate Equivalents">SDEs</abbr>×100<sup>∗</sup></th>' +
+            '<th class="percent-vote">Percent</th>' +
           '</tr>' +
         '</thead>' +
         '<tbody></tbody>' +
@@ -45,7 +46,7 @@ function add_tooltips() {
       '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="last-updated">Last updated <time></time></p></div></div>');
   var svg_hover_path = null;
 
-  function update_tooltip(county_name, candidates, n_reporting, n_total, last_updated, is_from_touch) {
+  function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, last_updated, is_from_touch) {
     $tooltip.find('h4').text(county_name);
     $tooltip.find('span.n-reporting').text(format_int(n_reporting));
     $tooltip.find('span.n-total').text(format_int(n_total));
@@ -59,10 +60,11 @@ function add_tooltips() {
     candidates
       .sort(function(a, b) { return b.n_votes - a.n_votes || a.name.localeCompare(b.name); })
       .forEach(function(candidate) {
-        $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td></tr>')
+        $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td><td class="percent-vote"></td></tr>')
           .toggleClass('highlight-on-map', candidate.highlighted);
         $tr.find('.candidate').text(candidate.name);
         $tr.find('.n-votes').text(format_int(candidate.n_votes));
+        $tr.find('.percent-vote').text(n_votes_in_county ? format_percent(100 * candidate.n_votes / n_votes_in_county) : 0);
         $tbody.append($tr);
       });
   }
@@ -126,11 +128,12 @@ function add_tooltips() {
     if ((match = meta_regex.exec(database.county_party_csv)) !== null) {
       var match_arr = match[1].split(',');
 
-      var n_reporting = +match_arr[0];
-      var n_total = +match_arr[1];
-      var last_updated = new Date(match_arr[2]);
+      var n_votes = +match_arr[0];
+      var n_reporting = +match_arr[1];
+      var n_total = +match_arr[2];
+      var last_updated = new Date(match_arr[3]);
 
-      update_tooltip(county_name, candidates, n_reporting, n_total, last_updated, is_from_touch);
+      update_tooltip(county_name, candidates, n_votes, n_reporting, n_total, last_updated, is_from_touch);
       $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
       position_tooltip_near_svg_path(svg_path);
     } else {
