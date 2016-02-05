@@ -26,6 +26,10 @@
     }
   }
 
+  g.subcounties path {
+    display: none; // for now
+  }
+
   g.cities {
     pointer-events: none;
   }
