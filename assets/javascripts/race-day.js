@@ -44,14 +44,27 @@ function add_tooltips() {
         '<tbody></tbody>' +
       '</table>' +
       '<p class="n-state-delegate-equivalents"><sup>∗</sup> The Iowa Democratic Party reports State Delegate Equivalents (SDEs), not votes.</p>' +
-      '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p>' +
+      '<p class="precincts"></p>' +
     '</div></div>');
   var svg_hover_path = null;
 
-  function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, last_updated, is_from_touch) {
+  function n_precincts_text(n) {
+    return n == 1 ? '1 precinct' : (n + ' precincts');
+  }
+
+  function n_precincts_reporting_text(reporting, total) {
+    if (total == 0) {
+      return 'There are no precincts here';
+    } else if (reporting == total) {
+      return n_precincts_text(reporting) + ' reporting (' + Math.round(100 * reporting / total) + '%)';
+    }
+  }
+
+  function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, is_from_touch) {
     $tooltip.find('h4').text(county_name);
     $tooltip.find('span.n-reporting').text(format_int(n_reporting));
     $tooltip.find('span.n-total').text(format_int(n_total));
+    $tooltip.find('p.precincts').text(n_precincts_reporting_text(n_reporting, n_total));
     $tooltip.toggleClass('opened-from-touch', is_from_touch);
 
     var $tbody = $tooltip.find('tbody').empty();
