@@ -1,95 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="305" height="350" viewBox="0 0 305 350">
-  <path class="state" transform="scale(0.1)" d="M2941,840l30,-9 -22,61 -139,354 -268,4 -188,136 -117,82 -206,131 -5,-2 -13,-16 -8,-10 -3,-9 -3,14 -1,0 -16,1 -2,15 -6,2 -3,0 -1,-2 -4,2 -6,5 0,2 0,20 -2,5 -33,0 2,138 1,194 -22,34 -27,-7 -19,31 -65,22 -34,30 -21,63 -24,24 -18,48 7,43 39,-2 49,69 0,28 -37,58 -9,62 11,41 -24,25 16,22 6,50 -6,60 -15,48 28,20 66,60 8,21 82,5 42,58 76,25 34,22 24,27 10,51 14,20 61,38 51,52 62,13 62,87 16,36 -7,39 3,58 14,15 8,46 -210,4 -294,5 -245,3 -247,0 -244,-2 -248,-6 -246,-4 -247,-6 -162,-7 9,-196 7,-196 10,-245 4,-98 9,-261 -16,-57 -48,-25 -23,-1 -30,-64 -26,-38 -3,-30 72,-51 35,-47 10,-50 -1,-63 8,-47 -10,-41 -1,-87 -45,-65 -19,-108 9,-149 -21,-64 9,-48 -6,-31 6,-87 -9,-60 8,-51 1,-55 -10,-14 -16,-83 -9,-5 -20,-83 -14,-23 -3,-50 -25,-73 17,-83 -14,-22 10,-23 -9,-79 28,-79 -29,-75 6,-34 -21,-39 3,-32 306,15 401,13 63,2 4,-218 35,18 39,-10 46,45 18,98 8,15 19,98 -1,80 56,44 41,1 52,-3 16,31 153,17 15,62 56,0 69,-19 -3,-21 45,-22 52,-8 45,8 49,-3 10,15 75,36 35,-1 3,21 -32,24 29,15 48,-7 19,18 -8,24 43,84 36,-15 -15,-38 18,-22 76,-6 22,23 -3,32 19,18 25,-3 36,16 33,7 0,42 28,11 30,-8 -6,35 32,-12 21,8 69,-19 61,-55 20,-5 54,-35 17,3 3,28 22,20 10,35 71,-20 3,15 66,0 93,-15 41,14 22,38 37,15 39,-23 76,9Z"/>
+  <path class="state" transform="scale(0.1)" d="M2941,840l30,-9 -22,61 -139,354 -268,4 -188,136 -117,82 -206,131 -5,-2 -13,-16 -8,-10 -3,-9 -3,14h-1l-16,1 -2,15 -6,2h-3l-1,-2 -4,2 -6,5v2v20l-2,5h-33l2,138 1,194 -22,34 -27,-7 -19,31 -65,22 -34,30 -21,63 -24,24 -18,48 7,43 39,-2 49,69v28l-37,58 -9,62 11,41 -24,25 16,22 6,50 -6,60 -15,48 28,20 66,60 8,21 82,5 42,58 76,25 34,22 24,27 10,51 14,20 61,38 51,52 62,13 62,87 16,36 -7,39 3,58 14,15 8,46 -210,4 -294,5 -245,3h-247l-244,-2 -248,-6 -246,-4 -247,-6 -162,-7 9,-196 7,-196 10,-245 4,-98 9,-261 -16,-57 -48,-25 -23,-1 -30,-64 -26,-38 -3,-30 72,-51 35,-47 10,-50 -1,-63 8,-47 -10,-41 -1,-87 -45,-65 -19,-108 9,-149 -21,-64 9,-48 -6,-31 6,-87 -9,-60 8,-51 1,-55 -10,-14 -16,-83 -9,-5 -20,-83 -14,-23 -3,-50 -25,-73 17,-83 -14,-22 10,-23 -9,-79 28,-79 -29,-75 6,-34 -21,-39 3,-32 306,15 401,13 63,2 4,-218 35,18 39,-10 46,45 18,98 8,15 19,98 -1,80 56,44 41,1 52,-3 16,31 153,17 15,62h56l69,-19 -3,-21 45,-22 52,-8 45,8 49,-3 10,15 75,36 35,-1 3,21 -32,24 29,15 48,-7 19,18 -8,24 43,84 36,-15 -15,-38 18,-22 76,-6 22,23 -3,32 19,18 25,-3 36,16 33,7v42l28,11 30,-8 -6,35 32,-12 21,8 69,-19 61,-55 20,-5 54,-35 17,3 3,28 22,20 10,35 71,-20 3,15h66l93,-15 41,14 22,38 37,15 39,-23 76,9Z"/>
   <g class="counties" transform="scale(0.1)">
-    <path data-fips-int="27001" data-name="Aitkin County" d="M1353,1419l275,4 -1,148 4,194 0,148 -148,2 2,-52 -144,2 -4,-3 0,-190 13,-3 0,-120Z"/>
-    <path data-fips-int="27003" data-name="Anoka County" d="M1647,2334l0,65 0,97 -83,0 0,51 -21,0 -8,-56 -84,-64 0,-95Z"/>
-    <path data-fips-int="27005" data-name="Becker County" d="M818,1343l-1,198 -3,50 -171,-5 -217,-9 4,-144 -7,-2 3,-97 49,0 197,7Z"/>
-    <path data-fips-int="27007" data-name="Beltrami County" d="M1112,664l-1,295 -2,226 0,18 -97,0 -195,-5 1,-259 -20,-7 -10,-35 17,-42 -132,-3 -1,-86 4,-108 -3,-99 99,2 49,2 -3,98Z"/>
+    <path data-fips-int="27001" data-name="Aitkin County" d="M1353,1419l275,4 -1,148 4,194v148l-148,2 2,-52 -144,2 -4,-3v-190l13,-3v-120Z"/>
+    <path data-fips-int="27003" data-name="Anoka County" d="M1647,2334v65v97h-83v51h-21l-8,-56 -84,-64v-95Z"/>
+    <path data-fips-int="27005" data-name="Becker County" d="M818,1343l-1,198 -3,50 -171,-5 -217,-9 4,-144 -7,-2 3,-97h49l197,7Z"/>
+    <path data-fips-int="27007" data-name="Beltrami County" d="M1112,664l-1,295 -2,226v18h-97l-195,-5 1,-259 -20,-7 -10,-35 17,-42 -132,-3 -1,-86 4,-108 -3,-99 99,2 49,2 -3,98Z"/>
     <path data-fips-int="27009" data-name="Benton County" d="M1353,2103l1,148 -153,-2 -22,-33 -4,-61 -21,-27 -32,-28Z"/>
-    <path data-fips-int="27011" data-name="Big Stone County" d="M142,2206l230,10 0,97 49,3 -4,96 6,35 -60,-25 -13,-16 -65,-15 -16,-57 -48,-25 -23,-1 -30,-64Z"/>
-    <path data-fips-int="27013" data-name="Blue Earth County" d="M1153,3004l10,4 67,31 23,-6 -4,-38 97,0 0,24 0,195 -195,-2 -49,0 2,-146 -2,-90Z"/>
-    <path data-fips-int="27015" data-name="Brown County" d="M940,2868l130,68 32,40 2,90 -199,-3 -97,-2 -3,-48 0,-50 99,2 3,-122Z"/>
+    <path data-fips-int="27011" data-name="Big Stone County" d="M142,2206l230,10v97l49,3 -4,96 6,35 -60,-25 -13,-16 -65,-15 -16,-57 -48,-25 -23,-1 -30,-64Z"/>
+    <path data-fips-int="27013" data-name="Blue Earth County" d="M1153,3004l10,4 67,31 23,-6 -4,-38h97v24v195l-195,-2h-49l2,-146 -2,-90Z"/>
+    <path data-fips-int="27015" data-name="Brown County" d="M940,2868l130,68 32,40 2,90 -199,-3 -97,-2 -3,-48v-50l99,2 3,-122Z"/>
     <path data-fips-int="27017" data-name="Carlton County" d="M1925,1626l2,138 -296,1 -4,-194 294,-2Z"/>
-    <path data-fips-int="27019" data-name="Carver County" d="M1350,2579l0,48 96,0 1,51 -23,4 -16,48 -58,38 -2,0 0,-18 -47,0 0,-27 -50,0 0,-146Z"/>
-    <path data-fips-int="27021" data-name="Cass County" d="M1273,1246l6,5 6,7 35,0 0,-2 0,2 4,3 4,4 5,1 4,0 3,37 13,17 0,99 -3,130 -217,-3 3,106 0,185 -6,6 -22,-21 -19,-10 -36,17 -44,-27 -30,-12 -19,-15 2,-231 49,2 1,-343 97,0 0,-18 31,16 84,-34 33,39 0,34Z"/>
+    <path data-fips-int="27019" data-name="Carver County" d="M1350,2579v48h96l1,51 -23,4 -16,48 -58,38h-2v-18h-47v-27h-50v-146Z"/>
+    <path data-fips-int="27021" data-name="Cass County" d="M1273,1246l6,5 6,7h35v-2v2l4,3 4,4 5,1h4l3,37 13,17v99l-3,130 -217,-3 3,106v185l-6,6 -22,-21 -19,-10 -36,17 -44,-27 -30,-12 -19,-15 2,-231 49,2 1,-343h97v-18l31,16 84,-34 33,39v34Z"/>
     <path data-fips-int="27023" data-name="Chippewa County" d="M762,2472l-5,147 -92,-2 -5,78 -4,-22 -93,-84 -11,-7 -76,-80 -27,-40Z"/>
-    <path data-fips-int="27025" data-name="Chisago County" d="M1716,2155l-18,48 7,43 39,-2 49,69 0,28 -37,58 -109,0 0,-65 -2,-81 -47,-2 0,-96Z"/>
-    <path data-fips-int="27027" data-name="Clay County" d="M426,1334l-3,97 7,2 -4,144 -2,49 -43,0 -193,-9 9,-149 -21,-64 9,-48 -6,-31Z"/>
-    <path data-fips-int="27029" data-name="Clearwater County" d="M817,1198l4,48 -3,97 -146,-2 4,-196 2,-98 -9,0 4,-148 0,-47 132,3 -17,42 10,35 20,7Z"/>
-    <path data-fips-int="27033" data-name="Cottonwood County" d="M805,3013l3,48 97,2 -3,148 -242,-7 -4,0 4,-198Z"/>
-    <path data-fips-int="27035" data-name="Crow Wing County" d="M1350,1549l0,120 -13,3 0,190 4,3 -4,48 -220,-1 -9,-30 22,-39 6,-6 0,-185 -3,-106Z"/>
-    <path data-fips-int="27037" data-name="Dakota County" d="M1648,2627l5,68 43,-5 39,17 28,20 1,48 -24,0 0,48 -51,0 0,15 -48,2 0,23 -97,2 0,-42 0,-45 -16,-3 -4,-90 45,-23 14,-33 2,-2 18,-15 32,0Z"/>
-    <path data-fips-int="27039" data-name="Dodge County" d="M1787,3019l2,193 -4,0 -145,2 -2,-195 3,0Z"/>
-    <path data-fips-int="27041" data-name="Douglas County" d="M795,1933l19,2 -2,188 0,8 -243,-8 2,-195Z"/>
-    <path data-fips-int="27043" data-name="Faribault County" d="M1346,3214l49,0 -2,198 -244,-2 2,-198Z"/>
+    <path data-fips-int="27025" data-name="Chisago County" d="M1716,2155l-18,48 7,43 39,-2 49,69v28l-37,58h-109v-65l-2,-81 -47,-2v-96Z"/>
+    <path data-fips-int="27027" data-name="Clay County" d="M426,1334l-3,97 7,2 -4,144 -2,49h-43l-193,-9 9,-149 -21,-64 9,-48 -6,-31Z"/>
+    <path data-fips-int="27029" data-name="Clearwater County" d="M817,1198l4,48 -3,97 -146,-2 4,-196 2,-98h-9l4,-148v-47l132,3 -17,42 10,35 20,7Z"/>
+    <path data-fips-int="27033" data-name="Cottonwood County" d="M805,3013l3,48 97,2 -3,148 -242,-7h-4l4,-198Z"/>
+    <path data-fips-int="27035" data-name="Crow Wing County" d="M1350,1549v120l-13,3v190l4,3 -4,48 -220,-1 -9,-30 22,-39 6,-6v-185l-3,-106Z"/>
+    <path data-fips-int="27037" data-name="Dakota County" d="M1648,2627l5,68 43,-5 39,17 28,20 1,48h-24v48h-51v15l-48,2v23l-97,2v-42v-45l-16,-3 -4,-90 45,-23 14,-33 2,-2 18,-15h32Z"/>
+    <path data-fips-int="27039" data-name="Dodge County" d="M1787,3019l2,193h-4l-145,2 -2,-195h3Z"/>
+    <path data-fips-int="27041" data-name="Douglas County" d="M795,1933l19,2 -2,188v8l-243,-8 2,-195Z"/>
+    <path data-fips-int="27043" data-name="Faribault County" d="M1346,3214h49l-2,198 -244,-2 2,-198Z"/>
     <path data-fips-int="27045" data-name="Fillmore County" d="M2032,3212l142,-3 5,195 -294,5 -2,-188 22,-9Z"/>
-    <path data-fips-int="27047" data-name="Freeborn County" d="M1638,3214l2,198 -247,0 2,-198 98,0Z"/>
-    <path data-fips-int="27049" data-name="Goodhue County" d="M1961,2871l-75,0 0,49 -48,1 2,97 -53,1 -146,0 0,-156 0,-23 48,-2 0,-15 51,0 0,-48 24,0 -1,-48 66,60 8,21 82,5Z"/>
-    <path data-fips-int="27051" data-name="Grant County" d="M571,1928l-2,195 -194,-5 0,-148 1,-50Z"/>
-    <path data-fips-int="27053" data-name="Hennepin County" d="M1447,2427l4,0 84,64 8,56 21,0 9,-2 3,72 9,10 -2,2 -14,33 -45,23 -77,-7 -1,-51 -96,0 0,-48 0,-52 3,-7 40,-64 54,-29Z"/>
+    <path data-fips-int="27047" data-name="Freeborn County" d="M1638,3214l2,198h-247l2,-198h98Z"/>
+    <path data-fips-int="27049" data-name="Goodhue County" d="M1961,2871h-75v49l-48,1 2,97 -53,1h-146v-156v-23l48,-2v-15h51v-48h24l-1,-48 66,60 8,21 82,5Z"/>
+    <path data-fips-int="27051" data-name="Grant County" d="M571,1928l-2,195 -194,-5v-148l1,-50Z"/>
+    <path data-fips-int="27053" data-name="Hennepin County" d="M1447,2427h4l84,64 8,56h21l9,-2 3,72 9,10 -2,2 -14,33 -45,23 -77,-7 -1,-51h-96v-48v-52l3,-7 40,-64 54,-29Z"/>
     <path data-fips-int="27055" data-name="Houston County" d="M2355,3206l16,36 -7,39 3,58 14,15 8,46 -210,4 -5,-195Z"/>
     <path data-fips-int="27057" data-name="Hubbard County" d="M1012,1203l-1,343 -49,-2 -145,-3 1,-198 3,-97 -4,-48Z"/>
-    <path data-fips-int="27059" data-name="Isanti County" d="M1598,2155l0,96 47,2 2,81 -196,-2 0,-81 0,-98Z"/>
-    <path data-fips-int="27061" data-name="Itasca County" d="M1618,935l-2,97 9,0 -3,148 6,243 -275,-4 0,-99 -13,-17 -3,-37 -4,0 -5,-1 -4,-4 -4,-3 0,-2 0,2 -35,0 -6,-7 -6,-5 -16,-6 0,-34 -33,-39 -84,34 -31,-16 2,-226 243,1 0,-28Z"/>
-    <path data-fips-int="27063" data-name="Jackson County" d="M902,3211l2,0 -3,193 -246,-4 5,-196Z"/>
-    <path data-fips-int="27065" data-name="Kanabec County" d="M1631,1913l0,100 -35,0 2,142 -147,-2 -1,-140 33,0 0,-98Z"/>
-    <path data-fips-int="27067" data-name="Kandiyohi County" d="M956,2377l-2,245 -197,-3 5,-147 0,-148 48,2 147,3Z"/>
+    <path data-fips-int="27059" data-name="Isanti County" d="M1598,2155v96l47,2 2,81 -196,-2v-81v-98Z"/>
+    <path data-fips-int="27061" data-name="Itasca County" d="M1618,935l-2,97h9l-3,148 6,243 -275,-4v-99l-13,-17 -3,-37h-4l-5,-1 -4,-4 -4,-3v-2v2h-35l-6,-7 -6,-5 -16,-6v-34l-33,-39 -84,34 -31,-16 2,-226 243,1v-28Z"/>
+    <path data-fips-int="27063" data-name="Jackson County" d="M902,3211h2l-3,193 -246,-4 5,-196Z"/>
+    <path data-fips-int="27065" data-name="Kanabec County" d="M1631,1913v100h-35l2,142 -147,-2 -1,-140h33v-98Z"/>
+    <path data-fips-int="27067" data-name="Kandiyohi County" d="M956,2377l-2,245 -197,-3 5,-147v-148l48,2 147,3Z"/>
     <path data-fips-int="27069" data-name="Kittson County" d="M385,290l-6,158 6,2 -4,96 -289,-12 28,-79 -29,-75 6,-34 -21,-39 3,-32Z"/>
-    <path data-fips-int="27071" data-name="Koochiching County" d="M1614,521l-3,314 7,100 -264,-3 0,28 -243,-1 1,-295 2,-188 52,-3 16,31 153,17 15,62 56,0 69,-19 -3,-21 45,-22 52,-8Z"/>
-    <path data-fips-int="27073" data-name="Lac qui Parle County" d="M350,2406l13,16 60,25 26,15 27,40 76,80 11,7 0,25 -45,-2 -1,47 -241,-7 9,-261Z"/>
-    <path data-fips-int="27075" data-name="Lake County" d="M2387,756l9,169 6,238 -31,30 -104,130 -33,35 -34,20 -85,88 -4,-183 -2,-180 -7,-114 -3,-237 33,7 0,42 28,11 30,-8 -6,35 32,-12 21,8 69,-19 61,-55Z"/>
+    <path data-fips-int="27071" data-name="Koochiching County" d="M1614,521l-3,314 7,100 -264,-3v28l-243,-1 1,-295 2,-188 52,-3 16,31 153,17 15,62h56l69,-19 -3,-21 45,-22 52,-8Z"/>
+    <path data-fips-int="27073" data-name="Lac qui Parle County" d="M350,2406l13,16 60,25 26,15 27,40 76,80 11,7v25l-45,-2 -1,47 -241,-7 9,-261Z"/>
+    <path data-fips-int="27075" data-name="Lake County" d="M2387,756l9,169 6,238 -31,30 -104,130 -33,35 -34,20 -85,88 -4,-183 -2,-180 -7,-114 -3,-237 33,7v42l28,11 30,-8 -6,35 32,-12 21,8 69,-19 61,-55Z"/>
     <path data-fips-int="27077" data-name="Lake of the Woods County" d="M791,332l-2,-4 -3,-25 63,2 4,-218 35,18 39,-10 46,45 18,98 8,15 19,98 -1,80 56,44 41,1 -2,188 -294,-3 3,-98 -49,-2 3,-98 94,2 1,-117 -16,15 -40,7 -22,-14Z"/>
-    <path data-fips-int="27079" data-name="Le Sueur County" d="M1446,2823l0,196 -100,0 0,-24 -97,0 -5,-10 36,-52 -11,-10 14,-53 15,-27 -9,-20Z"/>
+    <path data-fips-int="27079" data-name="Le Sueur County" d="M1446,2823v196h-100v-24h-97l-5,-10 36,-52 -11,-10 14,-53 15,-27 -9,-20Z"/>
     <path data-fips-int="27081" data-name="Lincoln County" d="M416,2753l1,62 -4,186 -151,-6 10,-245Z"/>
-    <path data-fips-int="27083" data-name="Lyon County" d="M614,2812l-4,194 -190,-5 -7,0 4,-186 -1,-62 197,9Z"/>
-    <path data-fips-int="27085" data-name="McLeod County" d="M1154,2575l97,2 0,146 -97,-1 -1,51 -97,-3 0,-48 0,-98 1,-49Z"/>
+    <path data-fips-int="27083" data-name="Lyon County" d="M614,2812l-4,194 -190,-5h-7l4,-186 -1,-62 197,9Z"/>
+    <path data-fips-int="27085" data-name="McLeod County" d="M1154,2575l97,2v146l-97,-1 -1,51 -97,-3v-48v-98l1,-49Z"/>
     <path data-fips-int="27087" data-name="Mahnomen County" d="M672,1341l-197,-7 7,-194 194,5Z"/>
     <path data-fips-int="27089" data-name="Marshall County" d="M673,559l3,99 -4,108 -235,-7 -106,-7 -243,-11 17,-83 -14,-22 10,-23 -9,-79 289,12Z"/>
-    <path data-fips-int="27091" data-name="Martin County" d="M1102,3212l49,0 -2,198 -248,-6 3,-193Z"/>
-    <path data-fips-int="27093" data-name="Meeker County" d="M1154,2404l0,171 -97,0 -1,49 -102,-2 2,-245 151,2 0,25Z"/>
-    <path data-fips-int="27095" data-name="Mille Lacs County" d="M1483,1915l0,98 -33,0 1,140 0,98 -97,0 -1,-148 -3,-92 -15,0 2,-98 4,-48 144,-2Z"/>
-    <path data-fips-int="27097" data-name="Morrison County" d="M1108,1822l22,21 -22,39 9,30 220,1 -2,98 15,0 3,92 -231,-3 32,28 -146,-2 1,-324 44,27 36,-17Z"/>
-    <path data-fips-int="27099" data-name="Mower County" d="M1785,3212l0,10 98,-1 2,188 -245,3 -2,-198 2,0Z"/>
-    <path data-fips-int="27101" data-name="Murray County" d="M610,3006l50,0 -4,198 -100,-3 -139,-5 -4,0 7,-195Z"/>
-    <path data-fips-int="27103" data-name="Nicollet County" d="M1249,2995l4,38 -23,6 -67,-31 -10,-4 -51,-28 -32,-40 -130,-68 64,0 279,2 -14,53 11,10 -36,52Z"/>
-    <path data-fips-int="27105" data-name="Nobles County" d="M556,3201l100,3 4,0 -5,196 -247,-6 9,-198Z"/>
-    <path data-fips-int="27107" data-name="Norman County" d="M184,1127l29,3 269,10 -7,194 -49,0 -247,-9 6,-87 -9,-60Z"/>
-    <path data-fips-int="27109" data-name="Olmsted County" d="M1840,3018l92,0 2,48 97,0 1,146 -127,0 -22,9 -98,1 0,-10 4,0 -2,-193Z"/>
-    <path data-fips-int="27111" data-name="Otter Tail County" d="M814,1591l0,196 0,148 -19,-2 -224,-5 -195,-8 5,-98 -5,-53 5,-143 43,0 2,-49 217,9Z"/>
-    <path data-fips-int="27113" data-name="Pennington County" d="M672,766l1,86 0,47 -47,-2 0,-15 -292,-10 -5,-33 2,-87 106,7Z"/>
-    <path data-fips-int="27115" data-name="Pine County" d="M1927,1764l1,194 -22,34 -27,-7 -19,31 -65,22 -34,30 -21,63 -24,24 -118,0 -2,-142 35,0 0,-100 0,-148Z"/>
-    <path data-fips-int="27117" data-name="Pipestone County" d="M413,3001l7,0 -7,195 -158,-5 7,-196Z"/>
-    <path data-fips-int="27119" data-name="Polk County" d="M331,752l-2,87 5,33 -3,65 50,2 -2,50 194,6 2,-50 49,2 2,-50 47,2 -4,148 9,0 -2,98 -194,-5 -269,-10 -29,-3 1,-55 -10,-14 -16,-83 -9,-5 -20,-83 -14,-23 -3,-50 -25,-73Z"/>
+    <path data-fips-int="27091" data-name="Martin County" d="M1102,3212h49l-2,198 -248,-6 3,-193Z"/>
+    <path data-fips-int="27093" data-name="Meeker County" d="M1154,2404v171h-97l-1,49 -102,-2 2,-245 151,2v25Z"/>
+    <path data-fips-int="27095" data-name="Mille Lacs County" d="M1483,1915v98h-33l1,140v98h-97l-1,-148 -3,-92h-15l2,-98 4,-48 144,-2Z"/>
+    <path data-fips-int="27097" data-name="Morrison County" d="M1108,1822l22,21 -22,39 9,30 220,1 -2,98h15l3,92 -231,-3 32,28 -146,-2 1,-324 44,27 36,-17Z"/>
+    <path data-fips-int="27099" data-name="Mower County" d="M1785,3212v10l98,-1 2,188 -245,3 -2,-198h2Z"/>
+    <path data-fips-int="27101" data-name="Murray County" d="M610,3006h50l-4,198 -100,-3 -139,-5h-4l7,-195Z"/>
+    <path data-fips-int="27103" data-name="Nicollet County" d="M1249,2995l4,38 -23,6 -67,-31 -10,-4 -51,-28 -32,-40 -130,-68h64l279,2 -14,53 11,10 -36,52Z"/>
+    <path data-fips-int="27105" data-name="Nobles County" d="M556,3201l100,3h4l-5,196 -247,-6 9,-198Z"/>
+    <path data-fips-int="27107" data-name="Norman County" d="M184,1127l29,3 269,10 -7,194h-49l-247,-9 6,-87 -9,-60Z"/>
+    <path data-fips-int="27109" data-name="Olmsted County" d="M1840,3018h92l2,48h97l1,146h-127l-22,9 -98,1v-10h4l-2,-193Z"/>
+    <path data-fips-int="27111" data-name="Otter Tail County" d="M814,1591v196v148l-19,-2 -224,-5 -195,-8 5,-98 -5,-53 5,-143h43l2,-49 217,9Z"/>
+    <path data-fips-int="27113" data-name="Pennington County" d="M672,766l1,86v47l-47,-2v-15l-292,-10 -5,-33 2,-87 106,7Z"/>
+    <path data-fips-int="27115" data-name="Pine County" d="M1927,1764l1,194 -22,34 -27,-7 -19,31 -65,22 -34,30 -21,63 -24,24h-118l-2,-142h35v-100v-148Z"/>
+    <path data-fips-int="27117" data-name="Pipestone County" d="M413,3001h7l-7,195 -158,-5 7,-196Z"/>
+    <path data-fips-int="27119" data-name="Polk County" d="M331,752l-2,87 5,33 -3,65 50,2 -2,50 194,6 2,-50 49,2 2,-50 47,2 -4,148h9l-2,98 -194,-5 -269,-10 -29,-3 1,-55 -10,-14 -16,-83 -9,-5 -20,-83 -14,-23 -3,-50 -25,-73Z"/>
     <path data-fips-int="27121" data-name="Pope County" d="M812,2131l-2,195 -48,-2 -194,-5 1,-196Z"/>
-    <path data-fips-int="27123" data-name="Ramsey County" d="M1647,2496l14,0 0,131 -13,0 -13,-15 -32,0 -18,15 -9,-10 -3,-72 -9,2 0,-51Z"/>
+    <path data-fips-int="27123" data-name="Ramsey County" d="M1647,2496h14v131h-13l-13,-15h-32l-18,15 -9,-10 -3,-72 -9,2v-51Z"/>
     <path data-fips-int="27125" data-name="Red Lake County" d="M626,897l-2,50 -49,-2 -2,50 -194,-6 2,-50 -50,-2 3,-65 292,10Z"/>
-    <path data-fips-int="27127" data-name="Redwood County" d="M817,2797l90,46 -3,122 -99,-2 0,50 -145,-7 -50,0 4,-194 94,3 3,-88 44,18Z"/>
-    <path data-fips-int="27129" data-name="Renville County" d="M954,2622l102,2 0,98 -2,0 -50,0 0,146 -64,0 -33,-25 -90,-46 -62,-52 -44,-18 -9,-7 -42,-25 5,-78 92,2Z"/>
-    <path data-fips-int="27131" data-name="Rice County" d="M1544,2823l0,42 97,-2 0,156 -3,0 -145,0 -47,0 0,-196Z"/>
-    <path data-fips-int="27133" data-name="Rock County" d="M413,3196l4,0 -9,198 -162,-7 9,-196Z"/>
+    <path data-fips-int="27127" data-name="Redwood County" d="M817,2797l90,46 -3,122 -99,-2v50l-145,-7h-50l4,-194 94,3 3,-88 44,18Z"/>
+    <path data-fips-int="27129" data-name="Renville County" d="M954,2622l102,2v98h-2h-50v146h-64l-33,-25 -90,-46 -62,-52 -44,-18 -9,-7 -42,-25 5,-78 92,2Z"/>
+    <path data-fips-int="27131" data-name="Rice County" d="M1544,2823v42l97,-2v156h-3h-145h-47v-196Z"/>
+    <path data-fips-int="27133" data-name="Rock County" d="M413,3196h4l-9,198 -162,-7 9,-196Z"/>
     <path data-fips-int="27135" data-name="Roseau County" d="M789,332l3,24 22,14 40,-7 16,-15 -1,117 -94,-2 -3,98 -99,-2 -292,-13 4,-96 -6,-2 6,-158 401,13 3,25Z"/>
-    <path data-fips-int="27137" data-name="Saint Louis County" d="M2099,752l3,237 7,114 2,180 4,183 -39,23 -76,65 2,8 11,19 13,16 5,2 -5,-2 -13,-16 -8,-10 -3,-9 -3,14 -1,0 -16,1 -2,15 -6,2 -3,0 -1,-2 -4,2 -6,5 0,2 0,20 -2,5 -33,0 -4,-57 -294,2 1,-148 -6,-243 3,-148 -9,0 2,-97 -7,-100 3,-314 49,-3 10,15 75,36 35,-1 3,21 -32,24 29,15 48,-7 19,18 -8,24 43,84 36,-15 -15,-38 18,-22 76,-6 22,23 -3,32 19,18 25,-3Z"/>
-    <path data-fips-int="27139" data-name="Scott County" d="M1524,2685l4,90 16,3 0,45 -98,0 -157,0 9,-30 48,-25 4,0 -4,0 2,0 2,0 58,-38 16,-48 23,-4Z"/>
-    <path data-fips-int="27141" data-name="Sherburne County" d="M1354,2251l97,0 0,81 0,95 -4,0 -13,-25 -84,-3 -65,-52 -45,-19 -22,-19 -17,-43 0,-17Z"/>
-    <path data-fips-int="27143" data-name="Sibley County" d="M1251,2723l50,0 0,27 47,0 0,18 -2,0 4,0 -4,0 -48,25 -9,30 9,20 -15,27 -279,-2 0,-146 50,0 2,0 0,48 97,3 1,-51Z"/>
-    <path data-fips-int="27145" data-name="Stearns County" d="M1154,2128l21,27 4,61 22,33 0,17 17,43 22,19 -13,31 -31,35 -39,-3 -3,13 -47,0 0,-25 -151,-2 1,-48 -147,-3 2,-195 0,-8 196,3Z"/>
-    <path data-fips-int="27147" data-name="Steele County" d="M1638,3019l2,195 -2,0 -145,0 0,-195Z"/>
-    <path data-fips-int="27149" data-name="Stevens County" d="M568,2319l-147,-3 -49,-3 0,-97 3,-98 194,5Z"/>
-    <path data-fips-int="27151" data-name="Swift County" d="M762,2324l0,148 -313,-10 -26,-15 -6,-35 4,-96 147,3Z"/>
-    <path data-fips-int="27153" data-name="Todd County" d="M979,1790l30,12 -1,324 -196,-3 2,-188 0,-148Z"/>
-    <path data-fips-int="27155" data-name="Traverse County" d="M375,1970l0,148 -3,98 -230,-10 -3,-30 72,-51 35,-47 10,-50 -1,-63Z"/>
-    <path data-fips-int="27157" data-name="Wabasha County" d="M1961,2871l76,25 34,22 24,27 10,51 14,20 -90,2 2,48 -97,0 -2,-48 -92,0 -2,-97 48,-1 0,-49Z"/>
-    <path data-fips-int="27159" data-name="Wadena County" d="M962,1544l-2,231 19,15 -165,-3 0,-196 3,-50Z"/>
-    <path data-fips-int="27161" data-name="Waseca County" d="M1493,3019l0,195 -98,0 -49,0 0,-195 100,0Z"/>
-    <path data-fips-int="27163" data-name="Washington County" d="M1756,2399l-9,62 11,41 -24,25 16,22 6,50 -6,60 -15,48 -39,-17 -43,5 -5,-68 13,0 0,-131 -14,0 0,-97Z"/>
-    <path data-fips-int="27165" data-name="Watonwan County" d="M1104,3066l-2,146 -198,-1 -2,0 3,-148Z"/>
+    <path data-fips-int="27137" data-name="Saint Louis County" d="M2099,752l3,237 7,114 2,180 4,183 -39,23 -76,65 2,8 11,19 13,16 5,2 -5,-2 -13,-16 -8,-10 -3,-9 -3,14h-1l-16,1 -2,15 -6,2h-3l-1,-2 -4,2 -6,5v2v20l-2,5h-33l-4,-57 -294,2 1,-148 -6,-243 3,-148h-9l2,-97 -7,-100 3,-314 49,-3 10,15 75,36 35,-1 3,21 -32,24 29,15 48,-7 19,18 -8,24 43,84 36,-15 -15,-38 18,-22 76,-6 22,23 -3,32 19,18 25,-3Z"/>
+    <path data-fips-int="27139" data-name="Scott County" d="M1524,2685l4,90 16,3v45h-98h-157l9,-30 48,-25h4h-4h2h2l58,-38 16,-48 23,-4Z"/>
+    <path data-fips-int="27141" data-name="Sherburne County" d="M1354,2251h97v81v95h-4l-13,-25 -84,-3 -65,-52 -45,-19 -22,-19 -17,-43v-17Z"/>
+    <path data-fips-int="27143" data-name="Sibley County" d="M1251,2723h50v27h47v18h-2h4h-4l-48,25 -9,30 9,20 -15,27 -279,-2v-146h50h2v48l97,3 1,-51Z"/>
+    <path data-fips-int="27145" data-name="Stearns County" d="M1154,2128l21,27 4,61 22,33v17l17,43 22,19 -13,31 -31,35 -39,-3 -3,13h-47v-25l-151,-2 1,-48 -147,-3 2,-195v-8l196,3Z"/>
+    <path data-fips-int="27147" data-name="Steele County" d="M1638,3019l2,195h-2h-145v-195Z"/>
+    <path data-fips-int="27149" data-name="Stevens County" d="M568,2319l-147,-3 -49,-3v-97l3,-98 194,5Z"/>
+    <path data-fips-int="27151" data-name="Swift County" d="M762,2324v148l-313,-10 -26,-15 -6,-35 4,-96 147,3Z"/>
+    <path data-fips-int="27153" data-name="Todd County" d="M979,1790l30,12 -1,324 -196,-3 2,-188v-148Z"/>
+    <path data-fips-int="27155" data-name="Traverse County" d="M375,1970v148l-3,98 -230,-10 -3,-30 72,-51 35,-47 10,-50 -1,-63Z"/>
+    <path data-fips-int="27157" data-name="Wabasha County" d="M1961,2871l76,25 34,22 24,27 10,51 14,20 -90,2 2,48h-97l-2,-48h-92l-2,-97 48,-1v-49Z"/>
+    <path data-fips-int="27159" data-name="Wadena County" d="M962,1544l-2,231 19,15 -165,-3v-196l3,-50Z"/>
+    <path data-fips-int="27161" data-name="Waseca County" d="M1493,3019v195h-98h-49v-195h100Z"/>
+    <path data-fips-int="27163" data-name="Washington County" d="M1756,2399l-9,62 11,41 -24,25 16,22 6,50 -6,60 -15,48 -39,-17 -43,5 -5,-68h13v-131h-14v-97Z"/>
+    <path data-fips-int="27165" data-name="Watonwan County" d="M1104,3066l-2,146 -198,-1h-2l3,-148Z"/>
     <path data-fips-int="27167" data-name="Wilkin County" d="M381,1626l-5,143 5,53 -5,98 -1,50 -120,-5 8,-47 -10,-41 -1,-87 -45,-65 -19,-108Z"/>
     <path data-fips-int="27169" data-name="Winona County" d="M2119,3016l61,38 51,52 62,13 62,87 -181,3 -142,3 -1,-146 -2,-48Z"/>
-    <path data-fips-int="27171" data-name="Wright County" d="M1240,2328l45,19 65,52 84,3 13,25 -54,29 -40,64 -3,7 0,52 -99,-2 -97,-2 0,-171 3,-13 39,3 31,-35Z"/>
-    <path data-fips-int="27173" data-name="Yellow Medicine County" d="M660,2695l42,25 9,7 -3,88 -94,-3 -1,-50 -197,-9 -144,-3 4,-98 241,7 1,-47 45,2 0,-25 93,84Z"/>
-    <path data-fips-int="27031" data-name="Cook County" d="M2941,840l-21,4 -49,55 -35,16 -30,17 -39,20 -181,68 -77,48 -107,95 -6,-238 -9,-169 54,-35 17,3 3,28 22,20 10,35 71,-20 3,15 66,0 93,-15 41,14 22,38 37,15 39,-23Z"/>
+    <path data-fips-int="27171" data-name="Wright County" d="M1240,2328l45,19 65,52 84,3 13,25 -54,29 -40,64 -3,7v52l-99,-2 -97,-2v-171l3,-13 39,3 31,-35Z"/>
+    <path data-fips-int="27173" data-name="Yellow Medicine County" d="M660,2695l42,25 9,7 -3,88 -94,-3 -1,-50 -197,-9 -144,-3 4,-98 241,7 1,-47 45,2v-25l93,84Z"/>
+    <path data-fips-int="27031" data-name="Cook County" d="M2941,840l-21,4 -49,55 -35,16 -30,17 -39,20 -181,68 -77,48 -107,95 -6,-238 -9,-169 54,-35 17,3 3,28 22,20 10,35 71,-20 3,15h66l93,-15 41,14 22,38 37,15 39,-23Z"/>
   </g>
   <g class="cities">
     <circle r="3" cx="155.0" cy="257.8"/>

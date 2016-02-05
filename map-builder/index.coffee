@@ -361,16 +361,29 @@ compress_svg_path = (path) ->
 
     commands = [ "M#{point[0]},#{point[1]}" ]
 
-    next_instr = 'l'
+    # We'll try to put " " instead of "l" for lineto, to make the path easier
+    # to read.
+    last_instruction_was_l = false
+
     for point_string in point_strings
       point2 = parse_point_string(point_string)
 
-      continue if point[0] == point2[0] && point[1] == point2[1]
+      dx = point2[0] - point[0]
+      dy = point2[1] - point[1]
 
-      commands.push("#{next_instr}#{point2[0] - point[0]},#{point2[1] - point[1]}")
+      continue if dx == 0 && dy == 0
+
+      if dx == 0
+        commands.push("v#{dy}")
+        last_instruction_was_l = false
+      else if dy == 0
+        commands.push("h#{dx}")
+        last_instruction_was_l = false
+      else
+        commands.push("#{last_instruction_was_l && ' ' || 'l'}#{dx},#{dy}")
+        last_instruction_was_l = true
 
       point = point2
-      next_instr = ' ' # Makes output easier to read
 
     commands.push('Z')
 
