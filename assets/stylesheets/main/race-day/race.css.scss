@@ -16,22 +16,37 @@ body.race-day .race {
       margin: .5rem auto;
     }
 
-    .status-past, .status-future {
+    .status-past, .status-present-text, .status-future {
       font-style: italic;
     }
 
-    .status-present {
+    .refresh-flag {
+      padding: 2px 8px;
+      margin: 0;
       background: $red;
       color: white;
       font-weight: bold;
       text-transform: uppercase;
+      img {
+        width: 15px;
+      }
+    }
+
+    .status-present-text {
+      margin: .5rem auto;
     }
   }
 
   // Show the current status
   &.past .race-status .status-past,
-  &.present .race-status .status-present,
   &.future .race-status .status-future { display: inline-block; }
+
+  &.present .race-status .status-present {
+    display: block;
+    .refresh-flag {
+      display: inline-block;
+    }
+  }
 
   .race-name {
     margin: 5px 0 15px;
