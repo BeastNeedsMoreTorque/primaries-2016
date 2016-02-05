@@ -21,9 +21,35 @@ $party-container-height: 100px;
   margin-top: 10px;
 }
 
+
+.map {
+	height: 230px;
+	svg {
+		width: 100%;
+	  height: 100%;
+
+    path.state { display: none; }
+
+	  g.counties path {
+	    stroke: white;
+	    stroke-width: 15; // divided by 10, then squished
+	    fill: #eee;
+	    &.has-results {
+	    	fill: #999;
+	    }
+	  }
+
+    text {
+      @include svg-city-label();
+      @include huffpo-body-copy;
+      font-size: 23px; // the image is squished quite small; bump the font.
+    }
+	}
+}
+
 .map-container {
   width: 14rem;
-  height: 230px;
+  
   padding: 0 .75rem;
   text-align: center;
 
@@ -37,30 +63,6 @@ $party-container-height: 100px;
 	h3,h5 {
 		margin: 0;
 		text-align: center;
-	}
-
-	.map {
-		svg {
-			width: 100%;
-		  height: 100%;
-
-      path.state { display: none; }
-
-		  g.counties path {
-		    stroke: white;
-		    stroke-width: 15; // divided by 10, then squished
-		    fill: #eee;
-		    &.has-results {
-		    	fill: #999;
-		    }
-		  }
-
-      text {
-        @include svg-city-label();
-        @include huffpo-body-copy;
-        font-size: 23px; // the image is squished quite small; bump the font.
-      }
-		}
 	}
 
 	img {
@@ -110,8 +112,8 @@ $party-container-height: 100px;
 .candidate-row-container {
 	//height: $party-container-height;
 	height: 80px;
-	width: 140px;
-	padding: 10px;
+	padding: 10px 40px 10px 40px;
+
 	display: flex;
 	flex-flow: column;
 	display: -webkit-flex;
@@ -172,7 +174,7 @@ $party-container-height: 100px;
 	height: 100%;
   border-top: 4px solid transparent;
 	@include vertical-center-column-flex;
-
+  padding: 10px;
 	.candidate {
     font-weight: bold;
     display: -webkit-flex;
@@ -182,11 +184,23 @@ $party-container-height: 100px;
     flex: 0 0 auto;
     -webkit-flex: 0 0 auto;
     box-sizing: border-box;
-    width: 140px;
+    width: 100%;
+    tbody {
+    	width: 100%;
+    	max-width: 200px;
+    	.candidate-name {
+    		width: 100%;
+    	}
+    	.n-votes, .n-votes-pct {
+    		padding: 0 3px 0 3px;
+    	}
+    }
+  	a {
+  		margin: 0 auto;
+  	}
 		background: #fff;
     padding: 4px;
     border: 0 solid transparent;
-    border-left-width: 6px;
     border-bottom-width: 6px;
 		font-size: 13px;
     line-height: 15px;
@@ -206,14 +220,9 @@ $party-container-height: 100px;
 }
 
 .party-container {
-	height: $party-container-height;
 	&:first-child {
 		margin-top: 5px;
 	}
-	margin-left: 20px;
-	margin-bottom: 15px;
-
-	@include left-column-flex;
 
 	position: relative;
 

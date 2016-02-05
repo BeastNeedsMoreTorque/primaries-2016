@@ -11,15 +11,15 @@
     .header
       .line
       .hed
-        %h1.main-hed.when-present= "RESULTS: #{race_day.title}"
-        %h1.main-hed.when-past= "LIVE RESULTS: #{race_day.title}"
+        %h1.main-hed.when-present= "LIVE RESULTS: #{race_day.title}"
+        %h1.main-hed.when-past= "RESULTS: #{race_day.title}"
         %h1.main-hed.when-future= "HAPPENING TONIGHT: #{race_day.title}"
       .line
     .flex-container
       .map-container
         %h5 COUNTIES REPORTING
         .map
-          != map_svg('states/IA')
+          != map_svg('states/NH')
         .legend
           .container
             .finished
@@ -31,30 +31,43 @@
               %span#unreported-counties
               NOT FINISHED
         .tease-link
-          %a{target: '_blank', href: "/2016/primaries/2016-02-01"} See Results
-      .parties-container
-        -race_day.state_party_races.first[1].each do |party, race, _|
-          .party-container{class: party.id}
-            .candidate-row-container{class: party.id}
-              .leading-candidate-img
-                %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
-              .leading-candidate-delegates.left
-                .frontrunner-lbl
-                  %span= party.adjective.upcase
-                  %span CANDIDATES
-                  -if party.id == 'Dem'
-                    %span.sde= "Total SDEs *"
+          %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See Results
+      -race_day.state_party_races.first[1].each do |party, race, _|
+        .party-container{class: party.id}
+          .candidate-row-container{class: party.id}
+            .leading-candidate-img
+              %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
+            .leading-candidate-delegates.left
+              .frontrunner-lbl
+                %span= party.adjective.upcase
+                %span CANDIDATES
+                %span Total Votes
+          .candidate-position-listing
+            - race.candidate_races[0..2].each do |candidate_race|
+              - candidate = candidate_race.candidate
+              %table.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
+                %tbody
+                  %tr
+                    %td.candidate-name= candidate.name
+                    %td.n-votes= format_int(candidate_race.n_votes)
+                    %td.n-votes-pct= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
+            -if party.id == "GOP"
+              .candidate
+                %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See all candidates
+        .map-container
+          .map{class: "#{party.id.downcase}"}
+            != map_svg('states/NH')
+          .legend
+            .container
+              .finished
+              %div
+                %span#counties-val= "FINISHED"
+            .container
+              .unfinished
+              %div
+                %span#unreported-counties
+                NOT FINISHED
 
-                  -else
-                    %span Total Votes
-            .candidate-position-listing
-              - race.candidate_races.each do |candidate_race|
-                - candidate = candidate_race.candidate
-                .candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
-                  .candidate-name= candidate.name
-                  .n-votes= format_int(candidate_race.n_votes)
-            - if race.n_votes_is_really_n_sdes
-              .sdefootnote= "*The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention."
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script
