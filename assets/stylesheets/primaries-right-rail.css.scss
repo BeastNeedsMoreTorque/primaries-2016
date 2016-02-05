@@ -85,7 +85,7 @@ h2.sub a {
   table.t-pollster {
     @include pollster-table(); // 10px left/right padding on cells
 
-    .n-votes {
+    .n-votes, .n-votes-pct {
       text-align: right;
     }
   }

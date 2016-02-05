@@ -46,7 +46,7 @@ class HttpClient
       get_json!("http://elections.huffingtonpost.com/pollster/api/charts/#{maybe_param}.json", maybe_etag)
     when :election_day
       throw ArgumentError.new('param must be a date in YYYY-MM-DD format') if maybe_param.nil?
-      get_json!("https://api.ap.org/v2/elections/#{maybe_param}?level=fipscode&national=true&officeID=P&format=json&apikey=#{ap_api_key}#{is_test_query_param}#{is_zero_query_param}", maybe_etag)
+      get_json!("https://api.ap.org/v2/elections/#{maybe_param}?level=ru&national=true&officeID=P&format=json&apikey=#{ap_api_key}#{is_test_query_param}#{is_zero_query_param}", maybe_etag)
     when :election_days
       throw ArgumentError.new('param must be nil') if !maybe_param.nil?
       get_json!("https://api.ap.org/v2/elections?format=json&apikey=#{ap_api_key}", maybe_etag)
