@@ -11,9 +11,9 @@
     .header
       .line
       .hed
-        %h1.main-hed.when-present= "RESULTS: Iowa Caucus"
-        %h1.main-hed.when-past= "RESULTS: Iowa Caucus"
-        %h1.main-hed.when-future= "HAPPENING TONIGHT: Iowa Caucus"
+        %h1.main-hed.when-present= "RESULTS: #{race_day.title}"
+        %h1.main-hed.when-past= "LIVE RESULTS: #{race_day.title}"
+        %h1.main-hed.when-future= "HAPPENING TONIGHT: #{race_day.title}"
       .line
     .flex-container
       .map-container
