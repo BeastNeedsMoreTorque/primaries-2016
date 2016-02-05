@@ -3,27 +3,33 @@ require 'set'
 
 require_relative '../../lib/api_sources'
 require_relative '../collections/candidates'
-require_relative '../collections/candidate_counties'
+require_relative '../collections/candidate_county_races'
 require_relative '../collections/candidate_races'
 require_relative '../collections/candidate_states'
+require_relative '../collections/candidate_race_subcounties'
 require_relative '../collections/counties'
-require_relative '../collections/county_parties'
+require_relative '../collections/county_races'
+require_relative '../collections/race_subcounties'
 require_relative '../collections/parties'
 require_relative '../collections/party_states'
 require_relative '../collections/races'
 require_relative '../collections/race_days'
 require_relative '../collections/states'
+require_relative '../collections/subcounties'
 require_relative '../models/candidate'
-require_relative '../models/candidate_county'
+require_relative '../models/candidate_county_race'
 require_relative '../models/candidate_race'
 require_relative '../models/candidate_state'
+require_relative '../models/candidate_race_subcounty'
 require_relative '../models/county'
-require_relative '../models/county_party'
+require_relative '../models/county_race'
 require_relative '../models/party'
 require_relative '../models/party_state'
 require_relative '../models/race'
 require_relative '../models/race_day'
+require_relative '../models/race_subcounty'
 require_relative '../models/state'
+require_relative '../models/subcounty'
 require_relative '../sources/ap_del_super_source'
 require_relative '../sources/ap_election_days_source'
 require_relative '../sources/copy_source'
@@ -41,15 +47,17 @@ class Database
 
   CollectionNames = %w(
     candidates
-    candidate_counties
+    candidate_county_races
+    candidate_race_subcounties
     candidate_races
     candidate_states
     counties
-    county_parties
+    county_races
     parties
     party_states
     races
     race_days
+    race_subcounties
     states
   )
 
@@ -64,10 +72,12 @@ class Database
     @party_states = load_party_states(sheets_source.party_states, pollster_source.party_states)
     @candidates = load_candidates(sheets_source.candidates, ap_del_super.candidates, pollster_source.candidates)
     @counties = load_counties(ap_election_days.county_fips_ints)
-    @county_parties = load_county_parties(ap_election_days.county_parties)
-    @candidate_counties = load_candidate_counties(sheets_source.candidates, ap_election_days.candidate_counties)
+    @county_races = load_county_races(ap_election_days.county_races)
+    @candidate_county_races = load_candidate_county_races(sheets_source.candidates, sheets_source.races, sheets_source.states, ap_election_days.county_fips_ints, ap_election_days.candidate_county_races)
+    @candidate_race_subcounties = CandidateRaceSubcounties.new([])#load_candidate_race_subcounties(sheets_source.candidates, sheets_source.races, sheets_source.states, ap_election_days.subcounty_reporting_unit_ids, ap_election_days.candidate_race_subcounties)
     @candidate_states = load_candidate_states(sheets_source.candidates, ap_del_super.candidate_states, pollster_source.candidate_states, sheets_source.races)
     @candidate_races = load_candidate_races(sheets_source.candidates, ap_election_days.candidate_races, ap_election_days.races, sheets_source.races)
+    @race_subcounties = load_race_subcounties(ap_election_days.race_subcounties)
     @races = load_races(sheets_source.races, copy_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
     @race_days = load_race_days(sheets_source.race_days, copy_source.race_days, LastDate)
 
@@ -163,24 +173,42 @@ class Database
     Candidates.new(candidates)
   end
 
-  def load_candidate_counties(copy_candidates, ap_candidate_counties)
-    valid_candidate_ids = Set.new(copy_candidates.map(&:id))
+  def load_candidate_county_races(sheets_candidates, sheets_races, sheets_states, ap_county_fips_ints, ap_candidate_county_races)
+    id_to_ap_candidate_county_race = ap_candidate_county_races.each_with_object({}) { |ccr, h| h[ccr.id] = ccr }
+    state_fips_int_to_county_fips_ints = ap_county_fips_ints.group_by { |fips_int| fips_int / 1000 }
 
-    all = ap_candidate_counties
-      .select { |candidate_county| valid_candidate_ids.include?(candidate_county.candidate_id) }
-      .map! do |cc|
-        county_party_id = "#{cc.candidate_id}-#{cc.party_id}"
+    state_code_to_fips_ints = sheets_states.each_with_object({}) do |state, h|
+      h[state.state_code] = state_fips_int_to_county_fips_ints[state.fips_int]
+    end
 
-        CandidateCounty.new(
-          self,
-          cc.party_id,
-          cc.candidate_id,
-          cc.fips_int,
-          cc.n_votes
-        )
+    party_id_to_candidates = sheets_candidates.group_by(&:party_id)
+
+    all_arrays = []
+
+    for race in sheets_races
+      race_array = []
+
+      for fips_int in state_code_to_fips_ints[race.state_code] || []
+        county_array = []
+
+        for candidate in party_id_to_candidates[race.party_id]
+          ap_ccr = id_to_ap_candidate_county_race["#{candidate.id}-#{fips_int}-#{race.id}"]
+
+          if ap_ccr
+            county_array << CandidateCountyRace.new(self, candidate.id, fips_int, race.id, ap_ccr.n_votes)
+          end
+        end
+
+        county_array.sort!
+        race_array << county_array
       end
 
-    CandidateCounties.new(all)
+      all_arrays << race_array
+    end
+
+    all = all_arrays.flatten
+
+    CandidateCountyRaces.new(all)
   end
 
   # Creates a CandidateRace for each candidate in each race (as long as the
@@ -206,7 +234,6 @@ class Database
           self,
           candidate.id,
           race.id,
-          ap_candidate_race ? ap_candidate_race.ballot_order : nil,
           ap_candidate_race ? ap_candidate_race.n_votes : nil,
           (can_calculate_percent && ap_candidate_race) ? (100 * ap_candidate_race.n_votes.to_f / ap_race.n_votes) : nil,
           (ap_candidate_race && ap_candidate_race.n_votes > 0) ? ap_candidate_race.n_votes == ap_race.max_n_votes : nil,
@@ -256,21 +283,20 @@ class Database
     Counties.new(all)
   end
 
-  def load_county_parties(ap_county_parties)
-    all = ap_county_parties
-      .map do |ap_county_party|
-        CountyParty.new(
+  def load_county_races(ap_county_races)
+    all = ap_county_races
+      .map do |ap_county_race|
+        CountyRace.new(
           self,
-          ap_county_party.fips_int,
-          ap_county_party.party_id,
-          ap_county_party.n_votes,
-          ap_county_party.n_precincts_reporting,
-          ap_county_party.n_precincts_total,
-          ap_county_party.last_updated
+          ap_county_race.fips_int,
+          ap_county_race.race_id,
+          ap_county_race.n_votes,
+          ap_county_race.n_precincts_reporting,
+          ap_county_race.n_precincts_total
         )
       end
 
-    CountyParties.new(all)
+    CountyRaces.new(all)
   end
 
   def load_parties(copy_parties, del_super_parties)
@@ -333,6 +359,10 @@ class Database
     end
 
     Races.new(all)
+  end
+
+  def load_race_subcounties(ap_race_subcounties)
+    RaceSubcounties.new([])
   end
 
   def load_race_days(sheets_race_days, copy_race_days, last_date)

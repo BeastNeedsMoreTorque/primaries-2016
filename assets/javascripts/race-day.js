@@ -1,8 +1,8 @@
 var database = {
   candidate_csv: "",
-  candidate_county_csv: "",
+  candidate_county_race_csv: "",
   candidate_race_csv: "",
-  county_party_csv: "",
+  county_race_csv: "",
   race_csv: ""
 };
 var on_database_change = []; // Array of zero-argument callbacks
@@ -43,7 +43,8 @@ function add_tooltips() {
         '<tbody></tbody>' +
       '</table>' +
       '<p class="n-state-delegate-equivalents"><sup>∗</sup> The Iowa Democratic Party reports State Delegate Equivalents (SDEs), not votes.</p>' +
-      '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="last-updated">Last updated <time></time></p></div></div>');
+      '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p>' +
+    '</div></div>');
   var svg_hover_path = null;
 
   function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, last_updated, is_from_touch) {
@@ -51,9 +52,6 @@ function add_tooltips() {
     $tooltip.find('span.n-reporting').text(format_int(n_reporting));
     $tooltip.find('span.n-total').text(format_int(n_total));
     $tooltip.toggleClass('opened-from-touch', is_from_touch);
-    if (last_updated) {
-      $tooltip.find('.last-updated time').attr('datetime', last_updated.toISOString()).render_datetime();
-    }
 
     var $tbody = $tooltip.find('tbody').empty();
 
@@ -118,22 +116,21 @@ function add_tooltips() {
 
     var regex = new RegExp('^(' + candidates_regex + '),' + fips_int + ',(.*)$', 'gm');
     var match;
-    while ((match = regex.exec(database.candidate_county_csv)) !== null) {
+    while ((match = regex.exec(database.candidate_county_race_csv)) !== null) {
       var candidate_id = match[1];
       var n_votes = parseInt(match[2], 10);
       id_to_candidate[candidate_id].n_votes = n_votes;
     }
 
     var meta_regex = new RegExp('^' + fips_int + ',' + party_id + ',(.*)$', 'm');
-    if ((match = meta_regex.exec(database.county_party_csv)) !== null) {
+    if ((match = meta_regex.exec(database.county_race_csv)) !== null) {
       var match_arr = match[1].split(',');
 
       var n_votes = +match_arr[0];
       var n_reporting = +match_arr[1];
       var n_total = +match_arr[2];
-      var last_updated = new Date(match_arr[3]);
 
-      update_tooltip(county_name, candidates, n_votes, n_reporting, n_total, last_updated, is_from_touch);
+      update_tooltip(county_name, candidates, n_votes, n_reporting, n_total, is_from_touch);
       $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
       position_tooltip_near_svg_path(svg_path);
     } else {
@@ -237,7 +234,7 @@ function color_counties() {
 
     var regex = new RegExp('^(\\d+),(\\d+),(\\d+)$', 'gm');
     var match;
-    while ((match = regex.exec(database.candidate_county_csv)) !== null) {
+    while ((match = regex.exec(database.candidate_county_race_csv)) !== null) {
       var candidate_id = match[1];
       var party_id = candidate_id_to_party_id[candidate_id];
       if (!party_id) continue;

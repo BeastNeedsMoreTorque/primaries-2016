@@ -20,7 +20,7 @@ describe 'HttpClient' do
     end
 
     it 'should fetch the election-day JSON' do
-      expect_GET('https://api.ap.org/v2/elections/2015-12-22?level=fipscode&national=true&officeID=P&format=json&apikey=abcdef', nil, Net::HTTPOK.new('1.1', '200', 'OK'), '{}')
+      expect_GET('https://api.ap.org/v2/elections/2015-12-22?level=ru&national=true&officeID=P&format=json&apikey=abcdef', nil, Net::HTTPOK.new('1.1', '200', 'OK'), '{}')
       expect(@subject.get(:election_day, '2015-12-22', nil)[:data]).to eq('{}')
     end
 

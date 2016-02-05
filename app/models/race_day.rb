@@ -21,7 +21,14 @@ RaceDay = RubyImmutableStruct.new(:database_or_nil, :id, :enabled, :title, :body
   #   end
   attr_reader(:state_party_races)
 
-  attr_reader(:candidate_races, :candidate_states, :candidate_counties, :county_parties)
+  attr_reader(
+    :candidate_county_races,
+    :candidate_races,
+    :candidate_states,
+    :candidate_race_subcounties,
+    :county_races,
+    :race_subcounties
+  )
 
   def after_initialize
     @date = Date.parse(id)
@@ -39,8 +46,8 @@ RaceDay = RubyImmutableStruct.new(:database_or_nil, :id, :enabled, :title, :body
           database_or_nil.parties.map do |party|
             [
               party,
-              database_or_nil.races.find_by_party_id_race_day_id_state_code(party.id, id, state.code),
-              database_or_nil.races.find_all_by_party_id_state_code(party.id, state.code)
+              database_or_nil.races.find("#{@id}-#{party.id}-#{state.code}"),
+              database_or_nil.races.find_all_by_party_state_id("#{party.id}-#{state.code}")
                 .reject { |r| r.race_day_id == id }
             ]
           end
@@ -49,8 +56,10 @@ RaceDay = RubyImmutableStruct.new(:database_or_nil, :id, :enabled, :title, :body
 
       @candidate_races = races.flat_map(&:candidate_races)
       @candidate_states = races.flat_map(&:candidate_states)
-      @candidate_counties = races.flat_map(&:candidate_counties)
-      @county_parties = races.flat_map(&:county_parties)
+      @candidate_county_races = races.flat_map(&:candidate_county_races)
+      @candidate_race_subcounties = races.flat_map(&:candidate_race_subcounties)
+      @county_races = races.flat_map(&:county_races)
+      @race_subcounties = races.flat_map(&:race_subcounties)
     end
   end
 
