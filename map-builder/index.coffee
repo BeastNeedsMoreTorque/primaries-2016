@@ -1,10 +1,5 @@
 d3 = require('d3')
 fs = require('fs')
-get = require('simple-get')
-tar = require('tar-fs')
-unzip = require('unzip')
-zlib = require('zlib')
-shapefile = require('shapefile')
 topojson = require('topojson')
 
 require('d3-geo-projection')(d3)
@@ -12,27 +7,7 @@ require('d3-geo-projection')(d3)
 MaxWidth = 350
 MaxHeight = 350
 
-DataFiles =
-  cities:
-    basename: 'citiesx010g'
-    url: 'http://dds.cr.usgs.gov/pub/data/nationalatlas/citiesx010g_shp_nt00962.tar.gz'
-    shp_size: 1069308
-  counties:
-    basename: 'countyp010g'
-    url: 'http://dds.cr.usgs.gov/pub/data/nationalatlas/countyp010g.shp_nt00934.tar.gz'
-    shp_size: 48737664
-  AS:
-    basename: 'tl_2015_60_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_60_cousub.zip'
-    shp_size: 37256
-  GU:
-    basename: 'tl_2015_66_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_66_cousub.zip'
-    shp_size: 709728
-  MP:
-    basename: 'tl_2015_69_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_69_cousub.zip'
-    shp_size: 1345544
+geo_loader = require('./geo-loader')
 
 # These cities didn't come from any one source. Adam Hooper compiled them from
 # Google searches.
@@ -123,87 +98,20 @@ TerritoryFipsCodeNames =
   69110: 'Saipan'
   69100: 'Rota'
 
-is_data_downloaded = (key, callback) ->
-  data_file = DataFiles[key]
-  shp_size = data_file.shp_size
-  path = "./input/#{data_file.basename}.shp"
-
-  fs.stat path, (err, stats) ->
-    ret = if err
-      if err.errno == 'ENOENT'
-        throw err
-      else
-        false
-    else
-      stats.size == shp_size
-
-    callback(null, ret)
-
-download_data = (key, callback) ->
-  data_file = DataFiles[key]
-  basename = data_file.basename
-  url = data_file.url
-
-  console.log("GET #{url}...")
-  get url, (err, res) ->
-    throw err if err
-
-    deflated = if /\.zip$/.test(url)
-      res.pipe(unzip.Extract(path: './input'))
-    else
-      res.pipe(zlib.createGunzip()).pipe(tar.extract('./input'))
-
-    deflated
-      .on('error', (err) -> throw err)
-      .on('finish', -> callback())
-
-ensure_data_downloaded = (key, callback) ->
-  is_data_downloaded key, (err, is_downloaded) ->
-    throw err if err
-
-    if is_downloaded
-      callback(null)
-    else
-      download_data(key, callback)
-
-load_features = (key, callback) ->
-  console.log("Loading #{key}...")
-  ensure_data_downloaded key, (err) ->
-    data_file = DataFiles[key]
-    basename = data_file.basename
-    shp_filename = "./input/#{basename}.shp"
-    shapefile.read shp_filename, (err, feature_collection) ->
-      throw err if err
-      callback(null, feature_collection.features)
-
-# Calls callback with a mapping from DataFiles key to Array of GeoJSON features
-load_all_features = (callback) ->
-  ret = {} # key -> feature_collection.features
-
-  to_load = Object.keys(DataFiles)
-
-  step = ->
-    if to_load.length == 0
-      callback(null, ret)
-    else
-      key = to_load.pop()
-      load_features key, (err, features) ->
-        return callback(err) if err
-
-        ret[key] = features
-        process.nextTick(step)
-
-  step()
-
-features_by_state = {} # { state_code -> { cities: [...], counties: [...] } }
+features_by_state = {} # { state_code -> { cities: [...], counties: [...], subcounties: [...] } }
 
 organize_features = (key, features) ->
   console.log("Organizing #{key} by state...")
   for feature in features
     state_code = feature.properties.STATE
     if state_code not of features_by_state
-      features_by_state[state_code] = { cities: [], counties: [] }
+      features_by_state[state_code] = { cities: [], counties: [], subcounties: [] }
     features_by_state[state_code][key].push(feature)
+
+organize_subcounty_features = (state_code, features) ->
+  console.log("Organizing #{state_code} subcounties...")
+  for feature in features
+    features_by_state[state_code].subcounties.push(feature)
 
 organize_territory_features = (state_code, features) ->
   # Our geo-data for territories (*not* countyp10g) is by county, but counties
@@ -211,7 +119,7 @@ organize_territory_features = (state_code, features) ->
   # one big name for them.
   console.log("Organizing #{state_code} features...")
 
-  features_by_state[state_code] = { cities: [], counties: [] }
+  features_by_state[state_code] = { cities: [], counties: [], subcounties: [] }
 
   fips_string_to_out_feature = {}
 
@@ -313,6 +221,7 @@ topojsonize = (features) ->
       p = d.properties
       state_code: p.STATE
       fips_string: p.ADMIN_FIPS # counties only
+      geoid: p.GEOID # subcounties only
       name: p.ADMIN_NAME || p.NAME
       feature: p.FEATURE # cities only; we filter for 'Civil'
       population: +p.POP_2010 # cities only
@@ -351,16 +260,29 @@ compress_svg_path = (path) ->
 
     commands = [ "M#{point[0]},#{point[1]}" ]
 
-    next_instr = 'l'
+    # We'll try to put " " instead of "l" for lineto, to make the path easier
+    # to read.
+    last_instruction_was_l = false
+
     for point_string in point_strings
       point2 = parse_point_string(point_string)
 
-      continue if point[0] == point2[0] && point[1] == point2[1]
+      dx = point2[0] - point[0]
+      dy = point2[1] - point[1]
 
-      commands.push("#{next_instr}#{point2[0] - point[0]},#{point2[1] - point[1]}")
+      continue if dx == 0 && dy == 0
+
+      if dx == 0
+        commands.push("v#{dy}")
+        last_instruction_was_l = false
+      else if dy == 0
+        commands.push("h#{dx}")
+        last_instruction_was_l = false
+      else
+        commands.push("#{last_instruction_was_l && ' ' || 'l'}#{dx},#{dy}")
+        last_instruction_was_l = true
 
       point = point2
-      next_instr = ' ' # Makes output easier to read
 
     commands.push('Z')
 
@@ -373,10 +295,69 @@ distance2 = (p1, p2) ->
   dy = p2[1] - p1[1]
   dx * dx + dy * dy
 
-render_state = (state_code, features, callback) ->
+# Returns a <path class="state">
+render_state_path = (path, topology, features) ->
+  d = path(topojson.mesh(topology, topology.objects.counties, (a, b) -> a == b))
+  d = compress_svg_path(d)
+  '  <path class="state" transform="scale(0.1)" d="' + d + '"/>'
+
+# Returns a <g class="counties"> full of <path data-fips-int="...">s
+render_counties_g = (path, topology, geometries) ->
+  ret = [ '  <g class="counties" transform="scale(0.1)">' ]
+
+  for geometry in geometries
+    # Minnesota has a weird FIPS code, 27000, for Lake Superior
+    continue if /000$/.test(geometry.properties.fips_string)
+
+    d = path(topojson.feature(topology, geometry))
+    d = compress_svg_path(d)
+    ret.push("    <path data-fips-int=\"#{+geometry.properties.fips_string}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
+
+  ret.push('  </g>')
+  ret.join('\n')
+
+# Returns a <g class="subcounties"> full of <path data-geoid="...">s
+render_subcounties_g = (path, topology, geometries) ->
+  ret = [ '  <g class="subcounties" transform="scale(0.1)">' ]
+
+  for geometry in geometries
+    d = path(topojson.feature(topology, geometry))
+    d = compress_svg_path(d)
+    ret.push("    <path data-geoid=\"#{+geometry.properties.geoid}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
+
+  ret.push('  </g>')
+  ret.join('\n')
+
+render_cities_g = (topology, geometries) ->
+  ret = [ '  <g class="cities">' ]
+
+  rendered_cities = [] # Track all dots we rendered; ensure we don't render them too close to one another
+  cities = (topojson.feature(topology, geometry) for geometry in topology.objects.cities.geometries)
+    .sort (a, b) ->
+      # Prefer "Civil" to "Populated Place". Some states (e.g., VI) don't have
+      # any cities, so we can't filter.
+      p1 = a.properties
+      p2 = b.properties
+      ((p1 == 'Civil' && -1 || 0) - (p2 == 'Civil' && -1 || 0)) || p2.population - p1.population || p1.name.localeCompare(p2.name)
+  for city in cities
+    p = city.geometry.coordinates
+
+    continue if rendered_cities.find((p2) -> distance2(p, p2) < 25 * 25)
+
+    x = p[0].toFixed(1)
+    y = p[1].toFixed(1)
+    ret.push("    <circle r=\"3\" cx=\"#{x}\" cy=\"#{y}\"/>")
+    ret.push("    <text x=\"#{x}\" y=\"#{y}\">#{city.properties.name}</text>")
+
+    rendered_cities.push(p)
+    break if rendered_cities.length == 3
+  ret.push('  </g>')
+  ret.join('\n')
+
+render_state_svg = (state_code, features, callback) ->
   output_filename = "./output/#{state_code}.svg"
 
-  if (features.counties.length == 0)
+  if !features.counties.length
     console.log("Skipping #{output_filename} because we have no county paths")
     return callback(null)
 
@@ -394,42 +375,12 @@ render_state = (state_code, features, callback) ->
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"#{width}\" height=\"#{height}\" viewBox=\"0 0 #{width} #{height}\">"
   ]
 
-  d = path(topojson.mesh(topology, topology.objects.counties, (a, b) -> a == b))
-  d = compress_svg_path(d)
-  data.push('  <path class="state" transform="scale(0.1)" d="' + d + '"/>')
-
-  data.push('  <g class="counties" transform="scale(0.1)">')
-  for geometry in topology.objects.counties.geometries
-    # Minnesota has a weird FIPS code, 27000, for Lake Superior
-    continue if /000$/.test(geometry.properties.fips_string)
-    d = path(topojson.feature(topology, geometry))
-    d = compress_svg_path(d)
-    data.push("    <path data-fips-int=\"#{+geometry.properties.fips_string}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
-  data.push('  </g>')
-
-  if topology.objects.cities.geometries
-    data.push('  <g class="cities">')
-    rendered_cities = [] # Track all dots we rendered; ensure we don't render them too close to one another
-    cities = (topojson.feature(topology, geometry) for geometry in topology.objects.cities.geometries)
-      .sort (a, b) ->
-        # Prefer "Civil" to "Populated Place". Some states (e.g., VI) don't have
-        # any cities, so we can't filter.
-        p1 = a.properties
-        p2 = b.properties
-        ((p1 == 'Civil' && -1 || 0) - (p2 == 'Civil' && -1 || 0)) || p2.population - p1.population || p1.name.localeCompare(p2.name)
-    for city in cities
-      p = city.geometry.coordinates
-
-      continue if rendered_cities.find((p2) -> distance2(p, p2) < 25 * 25)
-
-      x = p[0].toFixed(1)
-      y = p[1].toFixed(1)
-      data.push("    <circle r=\"3\" cx=\"#{x}\" cy=\"#{y}\"/>")
-      data.push("    <text x=\"#{x}\" y=\"#{y}\">#{city.properties.name}</text>")
-
-      rendered_cities.push(p)
-      break if rendered_cities.length == 3
-    data.push('  </g>')
+  data.push(render_state_path(path, topology, topology.objects.counties))
+  data.push(render_counties_g(path, topology, topology.objects.counties.geometries))
+  if topology.objects.subcounties?.geometries?.length
+    data.push(render_subcounties_g(path, topology, topology.objects.subcounties.geometries))
+  if topology.objects.cities.geometries.length
+    data.push(render_cities_g(topology, topology.objects.cities.geometries))
 
   data.push('</svg>')
 
@@ -442,7 +393,7 @@ render_all_states = (callback) ->
   step = ->
     if pending_states.length > 0
       state_code = pending_states.shift()
-      render_state state_code, features_by_state[state_code], (err) ->
+      render_state_svg state_code, features_by_state[state_code], (err) ->
         throw err if err
         process.nextTick(step)
     else
@@ -450,11 +401,14 @@ render_all_states = (callback) ->
 
   step()
 
-load_all_features (err, key_to_features) ->
+geo_loader.load_all_features (err, key_to_features) ->
   throw err if err
 
   organize_features('cities', key_to_features.cities)
   organize_features('counties', key_to_features.counties)
+
+  [ 'NH' ].forEach (key) ->
+    organize_subcounty_features(key, key_to_features[key])
 
   [ 'AS', 'GU', 'MP' ].forEach (key) ->
     organize_territory_features(key, key_to_features[key])

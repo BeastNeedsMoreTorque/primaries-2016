@@ -16,8 +16,10 @@ class RaceDayResultsView < BaseView
     JSON.dump(
       candidate_csv: candidate_csv,
       candidate_race_csv: candidate_race_csv,
-      candidate_county_csv: candidate_county_csv,
-      county_party_csv: county_party_csv,
+      candidate_county_race_csv: candidate_county_race_csv,
+      candidate_race_subcounty_csv: candidate_race_subcounty_csv,
+      county_race_csv: county_race_csv,
+      race_subcounty_csv: race_subcounty_csv,
       race_csv: race_csv
     )
   end
@@ -36,16 +38,33 @@ class RaceDayResultsView < BaseView
     header + data
   end
 
-  def candidate_county_csv
+  def candidate_county_race_csv
     header = "candidate_id,fips_int,n_votes\n"
-    data = race_day.candidate_counties.map{ |cc| "#{cc.candidate_id},#{cc.fips_int},#{cc.n_votes}" }.join("\n")
+    data = race_day.candidate_county_races.map{ |cc| "#{cc.candidate_id},#{cc.fips_int},#{cc.n_votes}" }.join("\n")
     header + data
   end
 
-  def county_party_csv
-    header = "fips_int,party_id,n_precincts_reporting,n_precincts_total,last_updated\n"
-    data = race_day.county_parties.map{ |cp| "#{cp.fips_int},#{cp.party_id},#{cp.n_precincts_reporting},#{cp.n_precincts_total},#{cp.last_updated}" }.join("\n")
+  def candidate_race_subcounty_csv
+    header = "candidate_id,geo_id,n_votes\n"
+    data = race_day.candidate_race_subcounties.map{ |cs| "#{cs.candidate_id},#{cs.geo_id},#{cs.n_votes}" }.join("\n")
     header + data
+  end
+
+  def candidate_subcounty_csv
+    header = "candidate_id,geo_id,n_votes\n"
+    data = race_day.candidate_subcounties.map{ |cs| "#{cs.candidate_id},#{cs.geo_id},#{cs.n_votes}" }.join("\n")
+    header + data
+  end
+
+  def county_race_csv
+    header = "fips_int,party_id,n_votes,n_precincts_reporting,n_precincts_total\n"
+    data = race_day.county_races.map{ |cr| "#{cr.fips_int},#{cr.party_id},#{cr.n_votes},#{cr.n_precincts_reporting},#{cr.n_precincts_total}" }.join("\n")
+    header + data
+  end
+
+  def race_subcounty_csv
+    header = "party_id,geo_id,n_votes,n_precincts_reporting,n_precincts_total\n"
+    data = race_day.race_subcounties.map{ |ps| "#{ps.party_id},#{ps.geo_id},#{ps.n_votes},#{ps.n_precincts_reporting},#{ps.n_precincts_total}" }.join("\n")
   end
 
   def race_csv

@@ -42,12 +42,12 @@ class BaseView
     datetime.new_offset(0).iso8601.sub('+00:00', '.000Z')
   end
 
-  # nil -> "N/A"; 32.4 -> "32.4%"
+  # nil -> "N/A"; 32.4 -> "32.4"
   def format_percent_or_nil(percent_or_nil)
     if percent_or_nil.nil?
       'N/A'
     else
-      "#{percent_or_nil.round(1)}%"
+      "#{percent_or_nil.round(1)}"
     end
   end
 
@@ -78,7 +78,14 @@ class BaseView
         [ 'n-delegates', 'Delegates' ]
       ].map { |arr| StateRaceDaysColumn.new(*arr) },
       hide_repeats_column: 'state',
-      races: races.sorted_by_state_name_and_race_day
+      races: races.sort do |a, b|
+        c1 = a.state_name <=> b.state_name
+        if c1 != 0
+          c1
+        else
+          a.race_day_id <=> b.race_day_id
+        end
+      end
     })
   end
 
