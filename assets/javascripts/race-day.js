@@ -241,7 +241,7 @@ function add_tooltips() {
 }
 
 function color_counties() {
-  var county_results = null; // party_id -> fips_int -> { candidate_id_to_n_votes, winner_n_votes }
+  var geo_results = null; // party_id -> geo_id -> { candidate_id_to_n_votes, winner_n_votes }
   var races_with_results = {}; // "#{party_id}-#{state_code}" -> null
 
   /**
@@ -262,26 +262,24 @@ function color_counties() {
     return ret;
   }
 
-  function refresh_county_results() {
-    county_results = {};
+  function refresh_geo_results() {
+    geo_results = {};
 
     var candidate_id_to_party_id = build_candidate_id_to_party_id(); // candidate_id -> party_id
 
-    var regex = new RegExp('^(\\d+),(\\d+),(\\d+)$', 'gm');
-    var match;
-    while ((match = regex.exec(database.candidate_county_race_csv)) !== null) {
+    function maybe_add_match(match) {
       var candidate_id = match[1];
       var party_id = candidate_id_to_party_id[candidate_id];
-      if (!party_id) continue;
+      if (!party_id) return;
 
       var fips_int = match[2];
       var n_votes = +match[3];
 
-      if (!county_results[party_id]) county_results[party_id] = {};
+      if (!geo_results[party_id]) geo_results[party_id] = {};
 
-      var counts = county_results[party_id][fips_int];
+      var counts = geo_results[party_id][fips_int];
       if (!counts) {
-        counts = county_results[party_id][fips_int] = {
+        counts = geo_results[party_id][fips_int] = {
           candidate_id_to_n_votes: {},
           winner_n_votes: 0
         };
@@ -293,8 +291,19 @@ function color_counties() {
         counts.winner_n_votes = n_votes;
       }
     }
+
+    var regex = new RegExp('^(\\d+),(\\d+),(\\d+)$', 'gm');
+    var match;
+    while ((match = regex.exec(database.candidate_county_race_csv)) !== null) {
+      maybe_add_match(match);
+    }
+
+    regex = new RegExp('^(\\d+),(\\d+),(\\d+)$', 'gm'); // reset
+    while ((match = regex.exec(database.candidate_race_subcounty_csv)) !== null) {
+      maybe_add_match(match);
+    }
   }
-  on_database_change.push(refresh_county_results);
+  on_database_change.push(refresh_geo_results);
 
   function refresh_races_with_results() {
     races_with_results = {};
@@ -313,18 +322,18 @@ function color_counties() {
   on_database_change.push(refresh_races_with_results);
 
   /**
-   * Returns a className for an svg <path>, from county_results.
+   * Returns a className for an svg <path>, from geo_results.
    *
    * @param party_id String party ID.
-   * @param fips_int String county ID.
+   * @param geo_id String county fips_int or subcounty geo_id.
    * @param candidate_id String candidate ID.
    * @return One of 'candidate-leads', 'candidate-trails', 'no-results-yet'.
    */
-  function lookup_candidate_class(party_id, fips_int, candidate_id) {
-    if (!county_results[party_id] || !county_results[party_id][fips_int] || !county_results[party_id][fips_int].winner_n_votes) {
+  function lookup_candidate_class(party_id, geo_id, candidate_id) {
+    if (!geo_results[party_id] || !geo_results[party_id][geo_id] || !geo_results[party_id][geo_id].winner_n_votes) {
       return 'no-results-yet';
     } else {
-      var counts = county_results[party_id][fips_int];
+      var counts = geo_results[party_id][geo_id];
       var n_votes = counts.candidate_id_to_n_votes[candidate_id];
       if (n_votes == counts.winner_n_votes) {
         return 'candidate-leads';
@@ -362,9 +371,9 @@ function color_counties() {
 
     var candidate_id = $candidate_tr.attr('data-candidate-id');
 
-    $(svg).find('g.counties path:not(.hover)').each(function() {
-      var fips_int = this.getAttribute('data-fips-int');
-      var class_name = lookup_candidate_class(party_id, fips_int, candidate_id);
+    $(svg).find('g.counties path:not(.hover), g.subcounties path:not(.hover)').each(function() {
+      var geo_id = this.getAttribute('data-fips-int') || this.getAttribute('data-geo-id');
+      var class_name = lookup_candidate_class(party_id, geo_id, candidate_id);
       this.setAttribute('class', class_name);
       if (class_name == 'no-results-yet') {
         this.setAttribute('style', 'fill: url(#' + no_results_pattern_id + ')');
