@@ -112,9 +112,8 @@ class ApElectionDaysSource < Source
               candidate_hash[:winner] == 'X'
             )
           end
-        elsif reporting_unit[:level] == 'FIPSCode'
+        elsif reporting_unit[:level] == 'subunit'
           fips_code = reporting_unit[:fipsCode]
-
           fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
           @county_fips_ints.add(fips_int)
           n_county_votes = 0
