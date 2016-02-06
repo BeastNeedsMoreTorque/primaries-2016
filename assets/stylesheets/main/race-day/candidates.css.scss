@@ -52,6 +52,7 @@ body.race-day table.candidates {
 
   .n-votes, .percent-vote {
     text-align: right;
+    width: 1px;
   }
 
   .sparkline {
@@ -126,7 +127,7 @@ body.race-day .race {
   }
 
   .n-delegates-without-candidates {
-    margin-top: .5rem;
+    margin-top: 1.5rem;
     text-align: center;
     font-size: .8rem;
 

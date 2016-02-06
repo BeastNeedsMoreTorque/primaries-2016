@@ -13,7 +13,7 @@
     fill: #fff;
   }
 
-  g.counties path {
+  g.counties path, g.subcounties path {
     stroke: white;
     stroke-width: 10; // divided by 10
     fill: #eee;
@@ -24,6 +24,10 @@
       fill: rgba(255, 255, 255, 0.2);
       pointer-events: none; // so it doesn't cause mouseleave
     }
+  }
+
+  g.subcounties path {
+    stroke-width: 5; // divided by 10
   }
 
   g.cities {
@@ -87,10 +91,7 @@
     border-top: 1px dotted #ccc;
   }
   p.precincts {
-    margin: 0 1rem;
-  }
-  p.last-updated {
-    margin: .25rem 1rem 1rem;
+    margin: 0 1rem 1rem;
   }
   .candidate {
     width: 100%;
@@ -128,28 +129,34 @@
   display: block;
 }
 
-.race[data-party-id=Dem] svg g.counties {
-  path.candidate-leads {
-    fill: $strongDem;
-  }
+.race[data-party-id=Dem] svg {
+  g.counties, g.subcounties {
+    path.candidate-leads {
+      fill: $strongDem;
+    }
 
-  path.candidate-trails {
-    fill: $undecided;
-  }
-}
-
-.race[data-party-id=GOP] svg g.counties {
-  path.candidate-leads {
-    fill: $strongGOP;
-  }
-
-  path.candidate-trails {
-    fill: $undecided;
+    path.candidate-trails {
+      fill: $undecided;
+    }
   }
 }
 
-.race.future .party-state-map g.counties {
-  display: none;
+.race[data-party-id=GOP] svg {
+  g.counties, g.subcounties {
+    path.candidate-leads {
+      fill: $strongGOP;
+    }
+
+    path.candidate-trails {
+      fill: $undecided;
+    }
+  }
+}
+
+.race.future .party-state-map {
+  g.counties, g.subcounties {
+    display: none;
+  }
 }
 
 .race.present .party-state-map path.state,

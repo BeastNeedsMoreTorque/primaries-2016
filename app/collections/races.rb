@@ -1,40 +1,8 @@
 require_relative './collection_class'
-require_relative '../models/race'
 
-Races = CollectionClass.new('races', 'race', Race) do
-  # Returns a Race ... or nil if there won't be one.
-  #
-  # (Colorado Republicans  won't vote for a presidential nominee in 2016.)
-  def find_by_party_and_state(party, state)
-    @by_party_and_state ||= map{ |r| [ "#{r.party.id}-#{r.state.code}", r ] }.to_h
-    @by_party_and_state["#{party.id}-#{state.code}"]
-  end
-
-  # Returns a Race ... or nil if there won't be one.
-  def find_by_party_id_race_day_id_state_code(party_id, race_day_id, state_code)
-    @by_party_id_race_day_id_state_code ||= map{ |r| [ "#{r.party_id}-#{r.race_day_id}-#{r.state_code}", r ] }.to_h
-    @by_party_id_race_day_id_state_code["#{party_id}-#{race_day_id}-#{state_code}"]
-  end
-
-  # Returns an Array of Races. May be empty.
-  def find_all_by_party_id_state_code(party_id, state_code)
-    @all_by_party_id_state_code ||= group_by{ |r| "#{r.party_id}-#{r.state_code}" }
-    @all_by_party_id_state_code["#{party_id}-#{state_code}"] || []
-  end
-
-  def sorted_by_state_name_and_race_day
-    all.sort do |a,b|
-      c1 = a.state_name.<=>(b.state_name)
-      if c1 != 0
-        c1
-      else
-        c2 = a.race_day_id.<=>(b.race_day_id)
-        if c2 != 0
-          c2
-        else
-          a.party_name.<=>(b.party_name)
-        end
-      end
-    end
+Races = CollectionClass.new do
+  def find_all_by_party_state_id(party_state_id)
+    @by_party_state_id = all.group_by(&:party_state_id)
+    @by_party_state_id[party_state_id] || []
   end
 end

@@ -16,9 +16,17 @@ Race = RubyImmutableStruct.new(
   # Sum of candidate_states.n_delegates (pledged and unpledged alike)
   attr_reader(:n_delegates_with_candidates)
 
-  attr_reader(:id, :candidate_races, :candidate_states, :candidate_counties, :county_parties, :party_state)
-
-  attr_reader(:party_state_id)
+  attr_reader(
+    :id,
+    :candidate_races,
+    :candidate_states,
+    :candidate_county_races,
+    :candidate_race_subcounties,
+    :county_races,
+    :party_state,
+    :party_state_id,
+    :race_subcounties
+  )
 
   def after_initialize
     @id = "#{race_day_id}-#{party_id}-#{state_code}"
@@ -32,8 +40,10 @@ Race = RubyImmutableStruct.new(
       @candidate_states = @candidate_races.map(&:candidate_state) # via candidate-races to nix dropped-out candidates
       @candidate_states.uniq!
       @candidate_states.compact!
-      @candidate_counties = database.candidate_counties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
-      @county_parties = database.county_parties.find_all_by_party_id_and_state_fips_int(party_id, state_fips_int) || []
+      @candidate_county_races = database.candidate_county_races.find_all_by_race_id(@id) || []
+      @candidate_race_subcounties = database.candidate_race_subcounties.find_all_by_race_id(@id) || []
+      @county_races = database.county_races.find_all_by_race_id(@id) || []
+      @race_subcounties = database.race_subcounties.find_all_by_race_id(@id) || []
 
       @n_delegates_with_candidates = @candidate_states.map(&:n_delegates).reduce(0, :+)
     end
