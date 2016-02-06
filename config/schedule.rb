@@ -13,6 +13,6 @@
 module ServerSchedule
   TimeoutInS = 60
   RefreshDelegates = true
-  RefreshPrimariesRaceDays = [ '2016-02-09' ] # in case it ever gets that last precinct
+  RefreshPrimariesRaceDays = [  ] # in case it ever gets that last precinct
   RefreshPollsterPrimaries = true
 end
