@@ -92,6 +92,21 @@ Race = RubyImmutableStruct.new(
     n_delegates - n_delegates_with_candidates
   end
 
+  def pct_precincts_reporting
+    reporting_str = if n_precincts_total.nil? || n_precincts_total == 0
+      'N/A'
+    elsif n_precincts_reporting == n_precincts_total
+      '100%'
+    else
+      pct_reporting = (n_precincts_reporting.to_f / n_precincts_total.to_f) * 100.0
+      if pct_reporting > 99
+        '99%'
+      else
+        "#{pct_reporting.round}%"
+      end
+    end
+  end
+
   # Determines whether a race is 'future', 'present' or 'past'.
   #
   # These times are relative to the _user_'s clock. In other words, if a race

@@ -15,7 +15,7 @@ class PrimariesSplashResultsView < BaseView
   def build_json
     JSON.dump(
       precincts: precinct_stats,
-      counties: county_party_objects,
+      geos: geos_party_objects,
       candidates: candidate_objects_by_race.first.last,#TODO: look at all races multi-race days
       when_race_day_happens: race_day.when_race_day_happens
     )

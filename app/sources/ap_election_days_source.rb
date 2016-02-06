@@ -151,7 +151,6 @@ class ApElectionDaysSource < Source
             n_subcounty_votes += candidate_hash[:voteCount]
 
             next if candidate_id.length >= 6 # unassigned, no preference, etc
-
             @candidate_race_subcounties << CandidateRaceSubcounty.new(
               candidate_id,
               race_id,

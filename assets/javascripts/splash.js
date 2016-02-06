@@ -1,8 +1,8 @@
 $(function() {
   function fillSvg(data, precincts){
-    var totalCounties = $(".counties").children().length;
-    $("svg .counties").children().each(function(ele){
-      fips = this.getAttribute("data-fips-int");
+    console.log(data)
+    $("svg .subcounties").children().each(function(ele){
+      fips = this.getAttribute("data-geo-id");
       obj = data[fips];
       if(obj && obj.total_n_precincts_reporting == obj.n_precincts_total && obj.total_n_precincts_reporting){
         $(this).addClass("has-results");
@@ -29,14 +29,15 @@ $(function() {
   }
 
   function getData(){
+    console.log("Hi")
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
       var tense = json["when_race_day_happens"];
       $("body").removeClass().addClass("race-day-" + tense);
-      fillSvg(json["counties"], json['precincts']);
+      fillSvg(json["geos"], json['precincts']);
       updateCandidates(json["candidates"], tense);
     })
-      .fail(function() { console.warn('Failed to load', this); })
-      .always(function() { window.setTimeout(getData, 30000); });
+    .fail(function() { console.warn('Failed to load', this); })
+    .always(function() { window.setTimeout(getData, 30000); });
   }
 
   //$("svg").position_svg_cities();

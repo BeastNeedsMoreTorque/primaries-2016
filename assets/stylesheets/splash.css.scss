@@ -101,12 +101,10 @@ $party-container-height: 100px;
 				background: $widgetLightBlue;
 			}
 			.container .unfinished {
-				//texture
-				background-color: #eee;
 				@include no-results-swatch;
+				background-color: #eee;
 			}
 			.container .no-results {
-				@include no-results-swatch;
 				background-color: #eee;
 			}
 		}
@@ -120,12 +118,10 @@ $party-container-height: 100px;
 				background: $widgetLightRed;
 			}
 			.container .unfinished {
-				//texture
 				background-color: #eee;
 				@include no-results-swatch;
 			}
 			.container .no-results {
-				@include no-results-swatch;
 				background-color: #eee;
 			}
 		}
@@ -181,9 +177,9 @@ $party-container-height: 100px;
 			}
 			.unfinished {
 				background-color: #eee;
+				@include no-results-swatch;
 			}
 			.no-results {
-				@include no-results-swatch;
 				background-color: #eee;
 			}
 		}

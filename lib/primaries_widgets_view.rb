@@ -11,12 +11,13 @@ module PrimariesWidgetsView
   end
 
   def precinct_stats
-    counties = county_party_objects()
+    geos = race_day.race_subcounties #race_day.county_races for races other than NH
 
     reporting_precincts = race_day.races.map(&:n_precincts_reporting).reject(&:nil?).reduce(0, :+)
     total_precincts = race_day.races.map(&:n_precincts_total).reject(&:nil?).reduce(0, :+)
-    finished_counties = counties.values.select{|val| val['n_precincts_total'] == val['total_n_precincts_reporting']}.count
-
+    finished_geos = geos.select{|val| val.n_precincts_total == val.n_precincts_reporting}.count
+    unfinished_geos = geos.select{|val| val.n_precincts_reporting > 0 and val.n_precincts_reporting < val.n_precincts_total}.count
+    noresults = geos.select{|val| val.n_precincts_reporting == 0}.count
     reporting_str = if total_precincts.nil? || total_precincts == 0
       'N/A'
     elsif reporting_precincts == total_precincts
@@ -31,9 +32,10 @@ module PrimariesWidgetsView
     end
 
     {
-      counties_total: counties.keys.count,
-      counties_finished: finished_counties,
-      counties_outstanding: finished_counties - counties.keys.count,
+      geos_total: geos.count,
+      geos_finished: finished_geos,
+      geos_unfinished: unfinished_geos,
+      geos_noresults: noresults,
       reporting_precincts_sofar: reporting_precincts,
       reporting_precincts_total: total_precincts,
       reporting_precincts_pct_raw: pct_reporting,
@@ -57,16 +59,19 @@ module PrimariesWidgetsView
     result
   end
 
-  def county_party_objects
-    fips = {}
-    race_day.county_races.each do |cp|
-      key = cp.fips_int.to_s
-      obj = (fips[key] ||= { "n_precincts_total" => 0, "total_n_precincts_reporting" => 0 })
+  def geos_party_objects
+    ids = {}
+    #race_day.county_races.each for days other than NH
+    race_day.race_subcounties.each do |cp|
+      key = cp.geo_id.to_s
+      candidates = race_day.candidate_race_subcounties.select{|cr_sub| cr_sub.geo_id == key}.sort_by(&:n_votes).reverse
+      leader = (candidates.first ? {:candidate_id => candidates.first.id, :n_votes => candidates.first.n_votes} : {:candidate_id => -1, :n_votes => -1})
+      obj = (ids[key] ||= { "n_precincts_total" => 0, "total_n_precincts_reporting" => 0, "leader" => leader})
       obj["total_n_precincts_reporting"] += cp.n_precincts_reporting
       obj["n_precincts_total"] += cp.n_precincts_total
-      fips[key] = obj
+      ids[key] = obj
     end
-    fips
+    ids
   end
 
 end

@@ -19,11 +19,11 @@
       .race-progress-container.flex-container
         .legend-labels-container
           .reporting
-            %span#precincts-reporting-val= "0%"
+            %span#precincts-reporting-val= "#{precinct_stats[:reporting_precincts_pct_str]}"
             %span= " OF PRECINCTS REPORTING"
           .updating
-            %span= "UPDATING IN: "
-            %span.icon
+            %span= "UPDATING IN "
+            %img{src: image_path("refresh.svg")}
             %span.timer= "0:30"
           .tease-link
             %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See Results
@@ -32,17 +32,15 @@
             .container
               .finished
               %div
-                %span#finished-geos-val= "0 FINISHED"
+                %span#finished-geos-val= "#{precinct_stats[:geos_finished]} FINISHED"
             .container
               .unfinished
               %div
-                %span#unfinished-geos
-                0 NOT FINISHED
+                %span#unfinished-geos= "#{precinct_stats[:geos_unfinished]} NOT FINISHED"
             .container
               .no-results
               %div
-                %span#no-result-geos
-                0 W/O NO RESULTS
+                %span#no-result-geos= "#{precinct_stats[:geos_noresults]} W/O RESULTS"
         .map-container
           .map
             != map_svg('states/NH') 
