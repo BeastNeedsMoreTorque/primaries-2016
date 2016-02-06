@@ -62,7 +62,7 @@
                     %td.n-votes.when-past.when-present= format_int(candidate_race.n_votes)
                     %td.n-votes-pct.when-past.when-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
             %div.footnotes
-              %p.footnotes-for-pollster.when-future!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
+              %a.footnotes-for-pollster.when-future{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
