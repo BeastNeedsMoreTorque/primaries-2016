@@ -19,25 +19,30 @@
       .race-progress-container.flex-container
         .legend-labels-container
           .reporting
-            %span#precincts-reporting-val= "100%"
+            %span#precincts-reporting-val= "0%"
             %span= " OF PRECINCTS REPORTING"
           .updating
             %span= "UPDATING IN: "
             %span.icon
             %span.timer= "0:30"
           .tease-link
-            %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See Results
+            %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See Results
           .legend
             .label= "TOWNS REPORTING"
             .container
               .finished
               %div
-                %span#counties-val= "0 FINISHED"
+                %span#finished-geos-val= "0 FINISHED"
             .container
               .unfinished
               %div
-                %span#unreported-counties
+                %span#unfinished-geos
                 0 NOT FINISHED
+            .container
+              .no-results
+              %div
+                %span#no-result-geos
+                0 W/O NO RESULTS
         .map-container
           .map
             != map_svg('states/NH') 
@@ -59,26 +64,38 @@
                   %tr
                     %td.candidate-name= candidate.name
                     %td.n-votes= format_int(candidate_race.n_votes)
-                    %td.n-votes-pct= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
+                    -if format_percent_or_nil(candidate_race.percent_vote) != 'N/A'
+                      %td.n-votes-pct= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
             -if party.id == "GOP"
               .see-all-candidates
-                %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See all candidates
+                %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
         .map-container{class: "#{party.id.downcase}"}
           .map
             != map_svg('states/NH')
-          .legend
-            .container
-              .leading
-              %div
-                %span= "#{race.candidate_races.first.candidate.name.upcase} LEADS"
-            .container
-              .trailing
-              %div
-                %span= "#{race.candidate_races.first.candidate.name.upcase} TRAILS"
-            .container
-              .unfinished
-              %div
-                %span= "NOT FINISHED REPORTING"
+          -if race.candidate_races.first.n_votes != 0
+            .legend
+              .container
+                .leading
+                %div
+                  %span= "#{race.candidate_races.first.candidate.name.upcase} LEADS"
+              .container
+                .trailing
+                %div
+                  %span= "#{race.candidate_races.first.candidate.name.upcase} TRAILS"
+              .container
+                .unfinished
+                %div
+                  %span= "NOT FINISHED REPORTING"
+              .container
+                .no-results
+                %div
+                  %span= "W/O RESULTS"
+          -else
+            .legend
+              .container
+                .no-results
+                %div
+                  %span= "W/O RESULTS"
                 
 
 

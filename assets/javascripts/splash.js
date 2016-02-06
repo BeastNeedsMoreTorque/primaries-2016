@@ -39,6 +39,7 @@ $(function() {
       .always(function() { window.setTimeout(getData, 30000); });
   }
 
-  $("svg").position_svg_cities();
+  //$("svg").position_svg_cities();
+  $("svg .subcounties path").addClass("no-results")
   getData();
 });

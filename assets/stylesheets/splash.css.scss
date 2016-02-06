@@ -21,21 +21,21 @@ $party-container-height: 100px;
   margin-top: 10px;
 }
 
-	.legend {
-		font-size: 11px;
-		.container {
-			display: inline-flex;
-      display: -webkit-inline-flex;
-			text-align: left;
-			width: 100%;
-			margin-bottom: 3px;
-			div:first-child {
-			  width: 10px;
-			  height: 10px;
-			  margin-right: 3px;
-		  }
-		}
+.legend {
+	font-size: 11px;
+	.container {
+		display: inline-flex;
+    display: -webkit-inline-flex;
+		text-align: left;
+		width: 100%;
+		margin-bottom: 3px;
+		div:first-child {
+		  width: 10px;
+		  height: 10px;
+		  margin-right: 3px;
+	  }
 	}
+}
 
 .map-container {
 	&.dem, &.gop {
@@ -68,13 +68,17 @@ $party-container-height: 100px;
 		  height: 100%;
 	    path.state { display: none; }
 
-		  g.counties path {
+		  g path {
 		    stroke: white;
 		    stroke-width: 15; // divided by 10, then squished
 		    fill: #eee;
 		    &.has-results {
 		    	fill: #999;
 		    }
+		  }
+
+		  .no-results {
+		  	@include no-results-swatch;
 		  }
 
 	    text {
@@ -98,6 +102,12 @@ $party-container-height: 100px;
 			}
 			.container .unfinished {
 				//texture
+				background-color: #eee;
+				@include no-results-swatch;
+			}
+			.container .no-results {
+				@include no-results-swatch;
+				background-color: #eee;
 			}
 		}
 	}
@@ -111,6 +121,12 @@ $party-container-height: 100px;
 			}
 			.container .unfinished {
 				//texture
+				background-color: #eee;
+				@include no-results-swatch;
+			}
+			.container .no-results {
+				@include no-results-swatch;
+				background-color: #eee;
 			}
 		}
 	}
@@ -166,6 +182,10 @@ $party-container-height: 100px;
 			.unfinished {
 				background-color: #eee;
 			}
+			.no-results {
+				@include no-results-swatch;
+				background-color: #eee;
+			}
 		}
 	}
 	.map-container {
@@ -211,7 +231,6 @@ $party-container-height: 100px;
 }
 
 .leading-candidate-delegates {
-	font-weight: bold;
 	position: relative;
 	span {
 		color: #fff;

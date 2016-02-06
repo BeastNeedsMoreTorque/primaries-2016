@@ -24,6 +24,10 @@ $widgetBlue: #1559D1;
 $widgetLightRed: lighten($widgetRed, 45%);
 $widgetLightBlue: lighten($widgetBlue, 45%);
 
+@mixin no-results-swatch {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="%23ddd"/><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1" stroke="%23fff"/></svg>');
+}
+
 @mixin vertical-center-flex {
 	display: -webkit-inline-flex;
   display: inline-flex;
