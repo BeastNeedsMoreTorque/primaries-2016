@@ -15,7 +15,7 @@ require_relative './source'
 # Provides:
 #
 # * candidate_races: id, n_votes, winner
-# * candidate_county_races: id, fips_int, party_id, n_votes
+# * candidate_county_races: candidate_id, fips_int, race_id, n_votes
 # * candidate_race_subcounties: candidate_id, race_id, reporting_unit_id, n_votes
 # * county_fips_ints (Set of Integers)
 # * county_races: id, n_votes, n_precincts_reporting, n_precincts_total
@@ -24,7 +24,7 @@ require_relative './source'
 # * races: id, party_id, state_code, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource < Source
   CandidateRace = RubyImmutableStruct.new(:id, :candidate_id, :n_votes, :winner)
-  CandidateCountyRace = RubyImmutableStruct.new(:id, :n_votes)
+  CandidateCountyRace = RubyImmutableStruct.new(:candidate_id, :fips_int, :race_id, :n_votes)
   CandidateRaceSubcounty = RubyImmutableStruct.new(:candidate_id, :race_id, :reporting_unit_id, :n_votes)
   CountyRace = RubyImmutableStruct.new(:fips_int, :race_id, :n_votes, :n_precincts_reporting, :n_precincts_total)
   RaceSubcounty = RubyImmutableStruct.new(:race_id, :reporting_unit_id, :n_votes, :n_precincts_reporting, :n_precincts_total)
@@ -112,7 +112,7 @@ class ApElectionDaysSource < Source
               candidate_hash[:winner] == 'X'
             )
           end
-        elsif reporting_unit[:level] == 'FIPSCode'
+        elsif reporting_unit[:level] == 'subunit' && state_code != 'NH' # TODO fix this
           fips_code = reporting_unit[:fipsCode]
 
           fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
@@ -126,7 +126,9 @@ class ApElectionDaysSource < Source
             next if candidate_id.length >= 6 # unassigned, no preference, etc
 
             @candidate_county_races << CandidateCountyRace.new(
-              "#{candidate_id}-#{fips_int}-#{race_id}",
+              candidate_id,
+              fips_int,
+              race_id,
               candidate_hash[:voteCount]
             )
           end

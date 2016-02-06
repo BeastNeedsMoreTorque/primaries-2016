@@ -74,7 +74,7 @@ class Database
     @candidates = load_candidates(sheets_source.candidates, ap_del_super.candidates, pollster_source.candidates)
     @counties = load_counties(ap_election_days.county_fips_ints)
     @county_races = load_county_races(ap_election_days.county_races)
-    @candidate_county_races = load_candidate_county_races(sheets_source.candidates, sheets_source.races, sheets_source.states, ap_election_days.county_fips_ints, ap_election_days.candidate_county_races)
+    @candidate_county_races = load_candidate_county_races(sheets_source.candidates, sheets_source.races, ap_election_days.candidate_county_races)
     @candidate_race_subcounties = load_candidate_race_subcounties(sheets_source.candidates, sheets_source.races, geo_ids_source.geo_ids, ap_election_days.candidate_race_subcounties)
     @candidate_states = load_candidate_states(sheets_source.candidates, ap_del_super.candidate_states, pollster_source.candidate_states, sheets_source.races)
     @candidate_races = load_candidate_races(sheets_source.candidates, ap_election_days.candidate_races, ap_election_days.races, sheets_source.races)
@@ -180,40 +180,25 @@ class Database
     Candidates.new(candidates)
   end
 
-  def load_candidate_county_races(sheets_candidates, sheets_races, sheets_states, ap_county_fips_ints, ap_candidate_county_races)
-    id_to_ap_candidate_county_race = ap_candidate_county_races.each_with_object({}) { |ccr, h| h[ccr.id] = ccr }
-    state_fips_int_to_county_fips_ints = ap_county_fips_ints.group_by { |fips_int| fips_int / 1000 }
+  def load_candidate_county_races(sheets_candidates, sheets_races, ap_candidate_county_races)
+    valid_race_ids = sheets_races.map(&:id).to_set
+    valid_candidate_ids = sheets_candidates.map(&:id).to_set
 
-    state_code_to_fips_ints = sheets_states.each_with_object({}) do |state, h|
-      h[state.state_code] = state_fips_int_to_county_fips_ints[state.fips_int]
-    end
+    all = []
 
-    party_id_to_candidates = sheets_candidates.group_by(&:party_id)
-
-    all_arrays = []
-
-    for race in sheets_races
-      race_array = []
-
-      for fips_int in state_code_to_fips_ints[race.state_code] || []
-        county_array = []
-
-        for candidate in party_id_to_candidates[race.party_id]
-          ap_ccr = id_to_ap_candidate_county_race["#{candidate.id}-#{fips_int}-#{race.id}"]
-
-          if ap_ccr
-            county_array << CandidateCountyRace.new(self, candidate.id, fips_int, race.id, ap_ccr.n_votes)
-          end
-        end
-
-        county_array.sort!
-        race_array << county_array
+    ap_candidate_county_races.each do |ccr|
+      if valid_race_ids.include?(ccr.race_id) && valid_candidate_ids.include?(ccr.candidate_id)
+        all << CandidateCountyRace.new(
+          self,
+          ccr.candidate_id,
+          ccr.fips_int,
+          ccr.race_id,
+          ccr.n_votes
+        )
       end
-
-      all_arrays << race_array
     end
 
-    all = all_arrays.flatten
+    all.sort
 
     CandidateCountyRaces.new(all)
   end
@@ -224,7 +209,7 @@ class Database
 
     all = []
 
-    ap_candidate_race_subcounties.map do |crs|
+    ap_candidate_race_subcounties.each do |crs|
       if valid_race_ids.include?(crs.race_id) && valid_candidate_ids.include?(crs.candidate_id)
         all << CandidateRaceSubcounty.new(
           self,
