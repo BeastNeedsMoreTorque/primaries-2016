@@ -30,7 +30,7 @@
           .party-container
             - del_key = "n_#{party.id.downcase}_delegates"
             %div{'class': "race-name #{party_abbrev}"}
-              %h3= "#{party.adjective.upcase} CAUCUS"
+              %h3= "#{party.adjective.upcase} PRIMARY"
               %p{class: "#{party.id.downcase}-del-available"}
                 Delegates:
                 = race.n_delegates
