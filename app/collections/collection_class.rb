@@ -1,12 +1,6 @@
 module CollectionClass
-  def self.new(plural_id, singular_id, item_class)
+  def self.new
     ret = Class.new do
-      attr_reader(:plural_id, :singular_id, :item_class)
-
-      @plural_id = plural_id
-      @singular_id = singular_id
-      @item_class = item_class
-
       include Enumerable
 
       attr_reader(:all)

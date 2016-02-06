@@ -30,7 +30,7 @@
           .party-container
             - del_key = "n_#{party.id.downcase}_delegates"
             %div{'class': "race-name #{party_abbrev}"}
-              %h3= "#{party.adjective.upcase} CAUCUS"
+              %h3= "#{party.adjective.upcase} PRIMARY"
               %p{class: "#{party.id.downcase}-del-available"}
                 Delegates:
                 = race.n_delegates
@@ -62,7 +62,7 @@
                     %td.n-votes.when-past.when-present= format_int(candidate_race.n_votes)
                     %td.n-votes-pct.when-past.when-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
             %div.footnotes
-              %p.footnotes-for-pollster.when-future!= "Polling average based on latest Iowa polls aggregated by <a target=\"_top\" href=\"//elections.huffingtonpost.com/pollster/2016-iowa-presidential-#{party.adjective.downcase}-caucus\">HuffPost Pollster</a>."
+              %a.footnotes-for-pollster.when-future{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script

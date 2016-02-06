@@ -78,7 +78,14 @@ class BaseView
         [ 'n-delegates', 'Delegates' ]
       ].map { |arr| StateRaceDaysColumn.new(*arr) },
       hide_repeats_column: 'state',
-      races: races.sorted_by_state_name_and_race_day
+      races: races.sort do |a, b|
+        c1 = a.state_name <=> b.state_name
+        if c1 != 0
+          c1
+        else
+          a.race_day_id <=> b.race_day_id
+        end
+      end
     })
   end
 

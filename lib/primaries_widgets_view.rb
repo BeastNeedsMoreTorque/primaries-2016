@@ -59,7 +59,7 @@ module PrimariesWidgetsView
 
   def county_party_objects
     fips = {}
-    race_day.county_parties.each do |cp|
+    race_day.county_races.each do |cp|
       key = cp.fips_int.to_s
       obj = (fips[key] ||= { "n_precincts_total" => 0, "total_n_precincts_reporting" => 0 })
       obj["total_n_precincts_reporting"] += cp.n_precincts_reporting

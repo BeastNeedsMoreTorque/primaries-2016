@@ -8,9 +8,9 @@ describe "calling races", type: :feature do
     sheets_source.races.map! { |race| race.merge(huffpost_override_winner_last_name: nil) }
 
     ap_election_days_source = Database.default_ap_election_days_source
-    ap_election_days_source.candidate_states.map! do |candidate_state|
+    ap_election_days_source.candidate_races.map! do |candidate_race|
       # Rand Paul is the only winner of all races
-      candidate_state.merge(winner: candidate_state.candidate_id == '60208')
+      candidate_race.merge(winner: candidate_race.candidate_id == '60208')
     end
 
     database = mock_database(
@@ -32,9 +32,9 @@ describe "calling races", type: :feature do
     sheets_source.races.map! { |race| race.merge(huffpost_override_winner_last_name: 'Rubio') }
 
     ap_election_days_source = Database.default_ap_election_days_source
-    ap_election_days_source.candidate_states.map! do |candidate_state|
+    ap_election_days_source.candidate_races.map! do |candidate_race|
       # Rand Paul is the only winner of all races
-      candidate_state.merge(winner: candidate_state.candidate_id == '60208')
+      candidate_race.merge(winner: candidate_race.candidate_id == '60208')
     end
 
     database = mock_database(
@@ -57,8 +57,8 @@ describe "calling races", type: :feature do
     sheets_source.races.map! { |race| race.merge(huffpost_override_winner_last_name: nil) }
 
     ap_election_days_source = Database.default_ap_election_days_source
-    ap_election_days_source.candidate_states.map! do |candidate_state|
-      candidate_state.merge(winner: false)
+    ap_election_days_source.candidate_races.map! do |candidate_race|
+      candidate_race.merge(winner: false)
     end
 
     database = mock_database(

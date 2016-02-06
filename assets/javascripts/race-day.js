@@ -1,8 +1,9 @@
 var database = {
   candidate_csv: "",
-  candidate_county_csv: "",
+  candidate_county_race_csv: "",
+  candidate_race_subcounty_csv: "",
   candidate_race_csv: "",
-  county_party_csv: "",
+  county_race_csv: "",
   race_csv: ""
 };
 var on_database_change = []; // Array of zero-argument callbacks
@@ -43,17 +44,28 @@ function add_tooltips() {
         '<tbody></tbody>' +
       '</table>' +
       '<p class="n-state-delegate-equivalents"><sup>∗</sup> The Iowa Democratic Party reports State Delegate Equivalents (SDEs), not votes.</p>' +
-      '<p class="precincts"><span class="n-reporting">0</span> of <span class="n-total"></span> precincts reporting</p><p class="last-updated">Last updated <time></time></p></div></div>');
+      '<p class="precincts"></p>' +
+    '</div></div>');
   var svg_hover_path = null;
 
-  function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, last_updated, is_from_touch) {
+  function n_precincts_text(n) {
+    return n == 1 ? '1 precinct' : (n + ' precincts');
+  }
+
+  function n_precincts_reporting_text(reporting, total) {
+    if (total == 0) {
+      return 'There are no precincts here';
+    } else if (reporting == total) {
+      return n_precincts_text(reporting) + ' reporting (' + Math.round(100 * reporting / total) + '%)';
+    }
+  }
+
+  function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, is_from_touch) {
     $tooltip.find('h4').text(county_name);
     $tooltip.find('span.n-reporting').text(format_int(n_reporting));
     $tooltip.find('span.n-total').text(format_int(n_total));
+    $tooltip.find('p.precincts').text(n_precincts_reporting_text(n_reporting, n_total));
     $tooltip.toggleClass('opened-from-touch', is_from_touch);
-    if (last_updated) {
-      $tooltip.find('.last-updated time').attr('datetime', last_updated.toISOString()).render_datetime();
-    }
 
     var $tbody = $tooltip.find('tbody').empty();
 
@@ -104,36 +116,69 @@ function add_tooltips() {
     $tooltip.remove();
   }
 
-  function show_tooltip_for_svg_path(svg_path, is_from_touch) {
-    var county_name = svg_path.getAttribute('data-name');
-    var fips_int = +svg_path.getAttribute('data-fips-int');
-    var party_id = $(svg_path).closest('[data-party-id]').attr('data-party-id');
-    var state_code = $(svg_path).closest('[data-state-code]').attr('data-state-code');
-
-    var candidates = extract_candidate_list($(svg_path).closest('.party-state').find('table.candidates'));
-    var candidates_regex = candidates.map(function(c) { return c.id; }).join('|');
-
+  function find_geo_data_from_csvs(geo_id, race_key, geo_race_csv, candidate_geo_race_csv, candidates) {
     var id_to_candidate = {};
     candidates.forEach(function(c) { id_to_candidate[c.id] = c; });
 
-    var regex = new RegExp('^(' + candidates_regex + '),' + fips_int + ',(.*)$', 'gm');
+    var candidates_regex = candidates.map(function(c) { return c.id; }).join('|');
+    var regex = new RegExp('^(' + candidates_regex + '),' + geo_id + ',(.*)$', 'gm');
     var match;
-    while ((match = regex.exec(database.candidate_county_csv)) !== null) {
+    while ((match = regex.exec(candidate_geo_race_csv)) !== null) {
       var candidate_id = match[1];
       var n_votes = parseInt(match[2], 10);
       id_to_candidate[candidate_id].n_votes = n_votes;
     }
 
-    var meta_regex = new RegExp('^' + fips_int + ',' + party_id + ',(.*)$', 'm');
-    if ((match = meta_regex.exec(database.county_party_csv)) !== null) {
+    var meta_regex = new RegExp('^' + race_key + ',(.*)$', 'm');
+    if ((match = meta_regex.exec(geo_race_csv)) !== null) {
       var match_arr = match[1].split(',');
 
-      var n_votes = +match_arr[0];
-      var n_reporting = +match_arr[1];
-      var n_total = +match_arr[2];
-      var last_updated = new Date(match_arr[3]);
+      return {
+        n_votes: +match_arr[0],
+        n_reporting: +match_arr[1],
+        n_total: +match_arr[2]
+      };
+    } else {
+      return null;
+    }
+  }
 
-      update_tooltip(county_name, candidates, n_votes, n_reporting, n_total, last_updated, is_from_touch);
+  function find_county_data_for_fips_int(fips_int, party_id, candidates) {
+    return find_geo_data_from_csvs(
+      fips_int,
+      fips_int + ',' + party_id,
+      database.county_race_csv,
+      database.candidate_county_race_csv,
+      candidates
+    );
+  }
+
+  function find_subcounty_data_for_geo_id(geo_id, party_id, candidates) {
+    return find_geo_data_from_csvs(
+      geo_id,
+      party_id + ',' + geo_id,
+      database.race_subcounty_csv,
+      database.candidate_race_subcounty_csv,
+      candidates
+    );
+  }
+
+  function show_tooltip_for_svg_path(svg_path, is_from_touch) {
+    var geo_name = svg_path.getAttribute('data-name');
+    var party_id = $(svg_path).closest('[data-party-id]').attr('data-party-id');
+    var state_code = $(svg_path).closest('[data-state-code]').attr('data-state-code');
+    var candidates = extract_candidate_list($(svg_path).closest('.party-state').find('table.candidates'));
+
+    var data;
+
+    if (svg_path.hasAttribute('data-fips-int')) {
+      data = find_county_data_for_fips_int(svg_path.getAttribute('data-fips-int'), party_id, candidates);
+    } else {
+      data = find_subcounty_data_for_geo_id(svg_path.getAttribute('data-geo-id'), party_id, candidates);
+    }
+
+    if (data) {
+      update_tooltip(geo_name, candidates, data.n_votes, data.n_reporting, data.n_total, is_from_touch);
       $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
       position_tooltip_near_svg_path(svg_path);
     } else {
@@ -144,10 +189,10 @@ function add_tooltips() {
   function add_hover_path(svg_path) {
     if (svg_hover_path) throw new Error('There is already a hover path');
 
-    var counties = svg_path.parentNode;
+    var g = svg_path.parentNode;
     svg_hover_path = svg_path.cloneNode();
     svg_hover_path.setAttribute('class', 'hover');
-    counties.appendChild(svg_hover_path);
+    g.appendChild(svg_hover_path);
   }
 
   function remove_hover_path() {
@@ -187,8 +232,8 @@ function add_tooltips() {
 
   function add_tooltip(svg) {
     $(svg)
-      .on('mouseenter', 'g.counties path', on_mouseenter)
-      .on('mouseleave', 'g.counties path', on_mouseleave);
+      .on('mouseenter', 'g.counties path, g.subcounties path', on_mouseenter)
+      .on('mouseleave', 'g.counties path, g.subcounties path', on_mouseleave);
   }
 
   $(document).on('touchend', on_touchend);
@@ -209,7 +254,7 @@ function add_tooltips() {
 }
 
 function color_counties() {
-  var county_results = null; // party_id -> fips_int -> { candidate_id_to_n_votes, winner_n_votes }
+  var geo_results = null; // party_id -> geo_id -> { candidate_id_to_n_votes, winner_n_votes }
   var races_with_results = {}; // "#{party_id}-#{state_code}" -> null
 
   /**
@@ -230,26 +275,24 @@ function color_counties() {
     return ret;
   }
 
-  function refresh_county_results() {
-    county_results = {};
+  function refresh_geo_results() {
+    geo_results = {};
 
     var candidate_id_to_party_id = build_candidate_id_to_party_id(); // candidate_id -> party_id
 
-    var regex = new RegExp('^(\\d+),(\\d+),(\\d+)$', 'gm');
-    var match;
-    while ((match = regex.exec(database.candidate_county_csv)) !== null) {
+    function maybe_add_match(match) {
       var candidate_id = match[1];
       var party_id = candidate_id_to_party_id[candidate_id];
-      if (!party_id) continue;
+      if (!party_id) return;
 
       var fips_int = match[2];
       var n_votes = +match[3];
 
-      if (!county_results[party_id]) county_results[party_id] = {};
+      if (!geo_results[party_id]) geo_results[party_id] = {};
 
-      var counts = county_results[party_id][fips_int];
+      var counts = geo_results[party_id][fips_int];
       if (!counts) {
-        counts = county_results[party_id][fips_int] = {
+        counts = geo_results[party_id][fips_int] = {
           candidate_id_to_n_votes: {},
           winner_n_votes: 0
         };
@@ -261,8 +304,19 @@ function color_counties() {
         counts.winner_n_votes = n_votes;
       }
     }
+
+    var regex = new RegExp('^(\\d+),(\\d+),(\\d+)$', 'gm');
+    var match;
+    while ((match = regex.exec(database.candidate_county_race_csv)) !== null) {
+      maybe_add_match(match);
+    }
+
+    regex = new RegExp('^(\\d+),(\\d+),(\\d+)$', 'gm'); // reset
+    while ((match = regex.exec(database.candidate_race_subcounty_csv)) !== null) {
+      maybe_add_match(match);
+    }
   }
-  on_database_change.push(refresh_county_results);
+  on_database_change.push(refresh_geo_results);
 
   function refresh_races_with_results() {
     races_with_results = {};
@@ -281,18 +335,18 @@ function color_counties() {
   on_database_change.push(refresh_races_with_results);
 
   /**
-   * Returns a className for an svg <path>, from county_results.
+   * Returns a className for an svg <path>, from geo_results.
    *
    * @param party_id String party ID.
-   * @param fips_int String county ID.
+   * @param geo_id String county fips_int or subcounty geo_id.
    * @param candidate_id String candidate ID.
    * @return One of 'candidate-leads', 'candidate-trails', 'no-results-yet'.
    */
-  function lookup_candidate_class(party_id, fips_int, candidate_id) {
-    if (!county_results[party_id] || !county_results[party_id][fips_int] || !county_results[party_id][fips_int].winner_n_votes) {
+  function lookup_candidate_class(party_id, geo_id, candidate_id) {
+    if (!geo_results[party_id] || !geo_results[party_id][geo_id] || !geo_results[party_id][geo_id].winner_n_votes) {
       return 'no-results-yet';
     } else {
-      var counts = county_results[party_id][fips_int];
+      var counts = geo_results[party_id][geo_id];
       var n_votes = counts.candidate_id_to_n_votes[candidate_id];
       if (n_votes == counts.winner_n_votes) {
         return 'candidate-leads';
@@ -330,9 +384,9 @@ function color_counties() {
 
     var candidate_id = $candidate_tr.attr('data-candidate-id');
 
-    $(svg).find('g.counties path:not(.hover)').each(function() {
-      var fips_int = this.getAttribute('data-fips-int');
-      var class_name = lookup_candidate_class(party_id, fips_int, candidate_id);
+    $(svg).find('g.counties path:not(.hover), g.subcounties path:not(.hover)').each(function() {
+      var geo_id = this.getAttribute('data-fips-int') || this.getAttribute('data-geo-id');
+      var class_name = lookup_candidate_class(party_id, geo_id, candidate_id);
       this.setAttribute('class', class_name);
       if (class_name == 'no-results-yet') {
         this.setAttribute('style', 'fill: url(#' + no_results_pattern_id + ')');

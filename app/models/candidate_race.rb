@@ -2,7 +2,7 @@
 #
 # See also CandidateState. They aren't the same thing: there can be two races
 # in one state with the same candidate.
-CandidateRace = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :race_id, :ballot_order, :n_votes, :percent_vote, :leader, :ap_says_winner, :huffpost_says_winner) do
+CandidateRace = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :race_id, :n_votes, :percent_vote, :leader, :ap_says_winner, :huffpost_says_winner) do
   include Comparable
 
   attr_reader(:id, :candidate, :candidate_state, :state_code)

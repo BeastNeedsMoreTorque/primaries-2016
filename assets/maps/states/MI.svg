@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="310" height="350" viewBox="0 0 310 350">
-  <path class="state" transform="scale(0.1)" d="M2356,1260l0,NaN -1717,NaN 1589,NaN 224,NaN -224,17 -168,8 -7,-32 -175,2 -184,3 -166,0 -226,NaN -283,NaN -28,-48 34,-67 -14,-28 -24,23 -46,-3 9,-43 25,-33 -13,-32 21,-12 -17,-26 15,-14 -22,-26 -41,-19 -7,-18 -31,5 -21,-20 22,-21 -15,-29 -25,-16 -80,-14 -31,-23 -94,0 -71,-43 -37,-23 -351,-114 -28,-83 -62,-20 -7,-16 160,-325 15,-33 175,-354 50,21 225,-128 104,-28 1187,717 35,126 74,87 28,3 17,-25 50,4 5,-2 13,-20 26,2 11,5 -8,49 9,42 18,75 25,18 19,47 44,-34 23,9 36,-12 29,7 50,53 -53,88 388,228 2,15 140,654 42,204 -91,295 -6,6 0,NaN -56,NaN -25,NaN 5,NaN -283,NaN -335,NaN -1131,NaN 14,-66 33,-17 46,-50 31,-51 117,0 181,108 -63,53 -78,98 -41,88 -38,114 -69,266 -24,114 -15,102 -2,63 11,141 34,336 -26,114 -47,254 141,NaN 1585,NaN 10,NaN 16,-80 -7,-20 10,NaN 9,NaN -3,NaN 0,NaN -363,NaN 0,NaN 4,NaN -1,NaN 1,NaN 3,NaN 16,NaN 111,-115 -16,-42 8,-43 -4,-56 22,-42 25,NaN 60,NaN 53,NaN 3,NaN 22,NaNZ"/>
+  <path class="state" transform="scale(0.1)" d="M2356,1260vNaNl-1717,NaN 1589,NaN 224,NaN -224,17 -168,8 -7,-32 -175,2 -184,3h-166l-226,NaN -283,NaN -28,-48 34,-67 -14,-28 -24,23 -46,-3 9,-43 25,-33 -13,-32 21,-12 -17,-26 15,-14 -22,-26 -41,-19 -7,-18 -31,5 -21,-20 22,-21 -15,-29 -25,-16 -80,-14 -31,-23h-94l-71,-43 -37,-23 -351,-114 -28,-83 -62,-20 -7,-16 160,-325 15,-33 175,-354 50,21 225,-128 104,-28 1187,717 35,126 74,87 28,3 17,-25 50,4 5,-2 13,-20 26,2 11,5 -8,49 9,42 18,75 25,18 19,47 44,-34 23,9 36,-12 29,7 50,53 -53,88 388,228 2,15 140,654 42,204 -91,295 -6,6vNaNl-56,NaN -25,NaN 5,NaN -283,NaN -335,NaN -1131,NaN 14,-66 33,-17 46,-50 31,-51h117l181,108 -63,53 -78,98 -41,88 -38,114 -69,266 -24,114 -15,102 -2,63 11,141 34,336 -26,114 -47,254 141,NaN 1585,NaN 10,NaN 16,-80 -7,-20 10,NaN 9,NaN -3,NaNvNaNl-363,NaNvNaNl4,NaN -1,NaN 1,NaN 3,NaN 16,NaN 111,-115 -16,-42 8,-43 -4,-56 22,-42 25,NaN 60,NaN 53,NaN 3,NaN 22,NaNZ"/>
   <g class="counties" transform="scale(0.1)">
-    <path data-fips-int="26001" data-name="Alcona County" d="M2560,1809l20,73 -14,46 0,55 -201,9 -6,-175Z"/>
-    <path data-fips-int="26005" data-name="Allegan County" d="M1691,2878l87,0 3,173 -82,2 -188,1 7,-23 16,-151Z"/>
-    <path data-fips-int="26009" data-name="Antrim County" d="M2012,1694l6,130 -159,1 -13,25 -18,-25 -20,0 7,-18 12,-35 6,-75 -9,-48 57,0 2,46Z"/>
-    <path data-fips-int="26013" data-name="Baraga County" d="M872,764l-35,33 53,-13 13,5 -1,71 17,4 -1,43 -43,-2 -3,132 -194,-7 6,-216 44,2 0,-44 36,0 -11,78 8,12 28,-55 7,9 40,-39Z"/>
-    <path data-fips-int="26015" data-name="Barry County" d="M1956,3049l-84,2 -91,0 -3,-173 88,-2 87,-1Z"/>
-    <path data-fips-int="26017" data-name="Bay County" d="M2365,2293l-2,25 -1,6 -10,42 14,43 27,30 -2,-17 55,29 3,56 -44,0 -6,-20 -80,0 0,-21 -42,0 -3,-129 -3,-86 44,-2 1,44Z"/>
-    <path data-fips-int="26019" data-name="Benzie County" d="M1674,1870l0,131 -150,-1 4,-37 -13,-30 7,-28 46,-12 12,-25Z"/>
-    <path data-fips-int="26021" data-name="Berrien County" d="M1530,3229l-2,156 -226,-1 57,-44 27,-28 45,-106 44,-63 53,0Z"/>
+    <path data-fips-int="26001" data-name="Alcona County" d="M2560,1809l20,73 -14,46v55l-201,9 -6,-175Z"/>
+    <path data-fips-int="26005" data-name="Allegan County" d="M1691,2878h87l3,173 -82,2 -188,1 7,-23 16,-151Z"/>
+    <path data-fips-int="26009" data-name="Antrim County" d="M2012,1694l6,130 -159,1 -13,25 -18,-25h-20l7,-18 12,-35 6,-75 -9,-48h57l2,46Z"/>
+    <path data-fips-int="26013" data-name="Baraga County" d="M872,764l-35,33 53,-13 13,5 -1,71 17,4 -1,43 -43,-2 -3,132 -194,-7 6,-216 44,2v-44h36l-11,78 8,12 28,-55 7,9 40,-39Z"/>
+    <path data-fips-int="26015" data-name="Barry County" d="M1956,3049l-84,2h-91l-3,-173 88,-2 87,-1Z"/>
+    <path data-fips-int="26017" data-name="Bay County" d="M2365,2293l-2,25 -1,6 -10,42 14,43 27,30 -2,-17 55,29 3,56h-44l-6,-20h-80v-21h-42l-3,-129 -3,-86 44,-2 1,44Z"/>
+    <path data-fips-int="26019" data-name="Benzie County" d="M1674,1870v131l-150,-1 4,-37 -13,-30 7,-28 46,-12 12,-25Z"/>
+    <path data-fips-int="26021" data-name="Berrien County" d="M1530,3229l-2,156 -226,-1 57,-44 27,-28 45,-106 44,-63h53Z"/>
     <path data-fips-int="26023" data-name="Branch County" d="M2050,3224l3,156 -175,2 -3,-156Z"/>
-    <path data-fips-int="26027" data-name="Cass County" d="M1700,3229l3,136 -9,20 -166,0 2,-156Z"/>
-    <path data-fips-int="26031" data-name="Cheboygan County" d="M2159,1418l34,-4 42,19 -16,0 8,216 -43,0 -129,0 0,-43 -5,-250 83,55Z"/>
+    <path data-fips-int="26027" data-name="Cass County" d="M1700,3229l3,136 -9,20h-166l2,-156Z"/>
+    <path data-fips-int="26031" data-name="Cheboygan County" d="M2159,1418l34,-4 42,19h-16l8,216h-43h-129v-43l-5,-250 83,55Z"/>
     <path data-fips-int="26035" data-name="Clare County" d="M2022,2174l88,-1 5,173 -175,5 -3,-177Z"/>
     <path data-fips-int="26037" data-name="Clinton County" d="M2209,2695l6,170 -88,6 -87,2 -3,-175Z"/>
     <path data-fips-int="26039" data-name="Crawford County" d="M2187,1822l4,175 -172,1 -1,-174Z"/>
-    <path data-fips-int="26043" data-name="Dickinson County" d="M1041,1258l0,43 -27,0 -2,87 -53,0 -41,-19 -7,-18 -31,5 -21,-20 22,-21 -15,-29 3,-163 175,4Z"/>
+    <path data-fips-int="26043" data-name="Dickinson County" d="M1041,1258v43h-27l-2,87h-53l-41,-19 -7,-18 -31,5 -21,-20 22,-21 -15,-29 3,-163 175,4Z"/>
     <path data-fips-int="26045" data-name="Eaton County" d="M2040,2873l87,-2 4,175 -44,2 -131,1 -3,-174Z"/>
     <path data-fips-int="26049" data-name="Genesee County" d="M2540,2630l9,175 -87,7 1,44 -86,4 -8,-177 -1,-44 85,-4Z"/>
-    <path data-fips-int="26051" data-name="Gladwin County" d="M2269,2168l2,83 3,86 -72,0 0,9 -87,0 -5,-173 86,-2Z"/>
-    <path data-fips-int="26053" data-name="Gogebic County" d="M568,1072l-3,118 -37,-23 -351,-114 -28,-83 -62,-20 -7,-16 90,-37 52,-15 45,-40 8,0 -4,85 43,3 -2,45 130,5 -3,87Z"/>
-    <path data-fips-int="26057" data-name="Gratiot County" d="M2118,2522l87,-2 4,170 0,5 -172,3 -6,-174Z"/>
-    <path data-fips-int="26059" data-name="Hillsdale County" d="M2222,3219l6,185 -168,8 -7,-32 -3,-156 44,0Z"/>
+    <path data-fips-int="26051" data-name="Gladwin County" d="M2269,2168l2,83 3,86h-72v9h-87l-5,-173 86,-2Z"/>
+    <path data-fips-int="26053" data-name="Gogebic County" d="M568,1072l-3,118 -37,-23 -351,-114 -28,-83 -62,-20 -7,-16 90,-37 52,-15 45,-40h8l-4,85 43,3 -2,45 130,5 -3,87Z"/>
+    <path data-fips-int="26057" data-name="Gratiot County" d="M2118,2522l87,-2 4,170v5l-172,3 -6,-174Z"/>
+    <path data-fips-int="26059" data-name="Hillsdale County" d="M2222,3219l6,185 -168,8 -7,-32 -3,-156h44Z"/>
     <path data-fips-int="26065" data-name="Ingham County" d="M2290,2865l12,174 -171,7 -4,-175 88,-6Z"/>
     <path data-fips-int="26067" data-name="Ionia County" d="M2037,2698l3,175 -87,2 -87,1 -4,-176Z"/>
-    <path data-fips-int="26069" data-name="Iosco County" d="M2566,1983l0,88 -38,34 -16,-4 -22,27 -5,33 -114,5 -6,-174Z"/>
-    <path data-fips-int="26071" data-name="Iron County" d="M678,1030l194,7 -3,86 -3,163 -25,-16 -80,-14 -31,-23 -94,0 -71,-43 3,-118 1,-45Z"/>
+    <path data-fips-int="26069" data-name="Iosco County" d="M2566,1983v88l-38,34 -16,-4 -22,27 -5,33 -114,5 -6,-174Z"/>
+    <path data-fips-int="26071" data-name="Iron County" d="M678,1030l194,7 -3,86 -3,163 -25,-16 -80,-14 -31,-23h-94l-71,-43 3,-118 1,-45Z"/>
     <path data-fips-int="26073" data-name="Isabella County" d="M2118,2522l-87,2 -88,1 -3,-174 175,-5Z"/>
-    <path data-fips-int="26075" data-name="Jackson County" d="M2302,3039l3,0 4,178 -87,2 -128,5 -7,-176 44,-2Z"/>
+    <path data-fips-int="26075" data-name="Jackson County" d="M2302,3039h3l4,178 -87,2 -128,5 -7,-176 44,-2Z"/>
     <path data-fips-int="26077" data-name="Kalamazoo County" d="M1872,3051l3,175 -175,3 -1,-176 82,-2Z"/>
     <path data-fips-int="26079" data-name="Kalkaska County" d="M2018,1824l1,174 -172,2 -1,-150 13,-25Z"/>
-    <path data-fips-int="26081" data-name="Kent County" d="M1862,2700l4,176 -88,2 -87,0 -4,-219 0,-45 84,0 91,-2Z"/>
-    <path data-fips-int="26085" data-name="Lake County" d="M1594,2176l80,0 91,0 3,175 -172,1 -3,-176Z"/>
-    <path data-fips-int="26087" data-name="Lapeer County" d="M2710,2659l11,133 -44,3 -128,10 -9,-175 40,-5 -3,-45 85,-5 1,20 43,0Z"/>
+    <path data-fips-int="26081" data-name="Kent County" d="M1862,2700l4,176 -88,2h-87l-4,-219v-45h84l91,-2Z"/>
+    <path data-fips-int="26085" data-name="Lake County" d="M1594,2176h80h91l3,175 -172,1 -3,-176Z"/>
+    <path data-fips-int="26087" data-name="Lapeer County" d="M2710,2659l11,133 -44,3 -128,10 -9,-175 40,-5 -3,-45 85,-5 1,20h43Z"/>
     <path data-fips-int="26091" data-name="Lenawee County" d="M2452,3387l-224,17 -6,-185 87,-2 134,-8Z"/>
-    <path data-fips-int="26093" data-name="Livingston County" d="M2463,2856l15,177 -173,6 -3,0 -12,-174 87,-5Z"/>
-    <path data-fips-int="26095" data-name="Luce County" d="M1866,872l3,256 -217,4 0,-132 0,-93 35,7 90,0 47,-22 1,0Z"/>
-    <path data-fips-int="26099" data-name="Macomb County" d="M2821,2881l7,10 -35,17 9,45 -21,2 -15,40 0,3 0,1 6,12 -79,5 -16,-221 44,-3 88,-7Z"/>
-    <path data-fips-int="26101" data-name="Manistee County" d="M1522,2011l2,-11 150,1 0,175 -80,0 -1,0 -125,-7 45,-89 21,3 2,0 -21,-17Z"/>
+    <path data-fips-int="26093" data-name="Livingston County" d="M2463,2856l15,177 -173,6h-3l-12,-174 87,-5Z"/>
+    <path data-fips-int="26095" data-name="Luce County" d="M1866,872l3,256 -217,4v-132v-93l35,7h90l47,-22h1Z"/>
+    <path data-fips-int="26099" data-name="Macomb County" d="M2821,2881l7,10 -35,17 9,45 -21,2 -15,40v3v1l6,12 -79,5 -16,-221 44,-3 88,-7Z"/>
+    <path data-fips-int="26101" data-name="Manistee County" d="M1522,2011l2,-11 150,1v175h-80h-1l-125,-7 45,-89 21,3h2l-21,-17Z"/>
     <path data-fips-int="26105" data-name="Mason County" d="M1444,2283l-20,-55 44,-59 125,7 3,176 -144,-1 -8,-60 6,-2 -6,-5Z"/>
-    <path data-fips-int="26107" data-name="Mecosta County" d="M1940,2351l3,174 -174,0 -1,-174Z"/>
-    <path data-fips-int="26109" data-name="Menominee County" d="M1128,1260l0,43 15,0 -3,175 22,0 -31,71 -1,0 -33,58 -60,78 6,20 -24,-8 -28,-48 34,-67 -14,-28 -24,23 -46,-3 9,-43 25,-33 -13,-32 21,-12 -17,-26 15,-14 -22,-26 53,0 2,-87 27,0 0,-43Z"/>
-    <path data-fips-int="26111" data-name="Midland County" d="M2274,2337l3,129 0,44 -72,2 0,8 -87,2 -3,-176 87,0 0,-9Z"/>
-    <path data-fips-int="26113" data-name="Missaukee County" d="M2019,1998l3,176 -85,0 -88,0 -2,-174Z"/>
-    <path data-fips-int="26117" data-name="Montcalm County" d="M1943,2525l88,-1 6,174 -175,2 0,-88 -91,2 -2,-89Z"/>
-    <path data-fips-int="26119" data-name="Montmorency County" d="M2359,1817l-172,5 -3,-173 43,0 129,-7Z"/>
-    <path data-fips-int="26121" data-name="Muskegon County" d="M1596,2527l0,88 91,-1 0,45 -43,0 0,43 -133,1 -21,-58 28,-15 -3,0 -25,15 -15,-18 -34,-102Z"/>
-    <path data-fips-int="26123" data-name="Newaygo County" d="M1768,2351l1,174 2,89 -84,0 -91,1 0,-88 0,-175Z"/>
+    <path data-fips-int="26107" data-name="Mecosta County" d="M1940,2351l3,174h-174l-1,-174Z"/>
+    <path data-fips-int="26109" data-name="Menominee County" d="M1128,1260v43h15l-3,175h22l-31,71h-1l-33,58 -60,78 6,20 -24,-8 -28,-48 34,-67 -14,-28 -24,23 -46,-3 9,-43 25,-33 -13,-32 21,-12 -17,-26 15,-14 -22,-26h53l2,-87h27v-43Z"/>
+    <path data-fips-int="26111" data-name="Midland County" d="M2274,2337l3,129v44l-72,2v8l-87,2 -3,-176h87v-9Z"/>
+    <path data-fips-int="26113" data-name="Missaukee County" d="M2019,1998l3,176h-85h-88l-2,-174Z"/>
+    <path data-fips-int="26117" data-name="Montcalm County" d="M1943,2525l88,-1 6,174 -175,2v-88l-91,2 -2,-89Z"/>
+    <path data-fips-int="26119" data-name="Montmorency County" d="M2359,1817l-172,5 -3,-173h43l129,-7Z"/>
+    <path data-fips-int="26121" data-name="Muskegon County" d="M1596,2527v88l91,-1v45h-43v43l-133,1 -21,-58 28,-15h-3l-25,15 -15,-18 -34,-102Z"/>
+    <path data-fips-int="26123" data-name="Newaygo County" d="M1768,2351l1,174 2,89h-84l-91,1v-88v-175Z"/>
     <path data-fips-int="26125" data-name="Oakland County" d="M2693,3016l-174,13 -41,4 -15,-177 -1,-44 87,-7 128,-10Z"/>
-    <path data-fips-int="26127" data-name="Oceana County" d="M1596,2352l0,175 -155,-2 -25,-61 2,-45 23,-30 11,-38Z"/>
+    <path data-fips-int="26127" data-name="Oceana County" d="M1596,2352v175l-155,-2 -25,-61 2,-45 23,-30 11,-38Z"/>
     <path data-fips-int="26129" data-name="Ogemaw County" d="M2365,1992l6,174 -102,2 -73,3 -5,-174Z"/>
-    <path data-fips-int="26131" data-name="Ontonagon County" d="M569,1027l-1,45 -129,-5 3,-87 -130,-5 2,-45 -43,-3 4,-85 -8,0 36,-26 53,3 74,-8 67,-34 36,-40 56,-5 11,-11 -4,134 23,0 -1,44 -43,-2Z"/>
-    <path data-fips-int="26133" data-name="Osceola County" d="M1849,2174l88,0 3,177 -172,0 -3,-175Z"/>
+    <path data-fips-int="26131" data-name="Ontonagon County" d="M569,1027l-1,45 -129,-5 3,-87 -130,-5 2,-45 -43,-3 4,-85h-8l36,-26 53,3 74,-8 67,-34 36,-40 56,-5 11,-11 -4,134h23l-1,44 -43,-2Z"/>
+    <path data-fips-int="26133" data-name="Osceola County" d="M1849,2174h88l3,177h-172l-3,-175Z"/>
     <path data-fips-int="26135" data-name="Oscoda County" d="M2365,1992l-174,5 -4,-175 172,-5Z"/>
-    <path data-fips-int="26137" data-name="Otsego County" d="M2184,1649l3,173 -169,2 -6,-130 44,0 -1,-45Z"/>
-    <path data-fips-int="26139" data-name="Ottawa County" d="M1687,2659l4,219 -157,2 -3,-68 -3,-45 -17,-64 133,-1 0,-43Z"/>
-    <path data-fips-int="26141" data-name="Presque Isle County" d="M2493,1569l3,-2 -3,2 38,32 0,33 -175,8 -129,7 -8,-216 16,0 2,0 28,31 6,27 64,7 46,36 34,7 38,21Z"/>
+    <path data-fips-int="26137" data-name="Otsego County" d="M2184,1649l3,173 -169,2 -6,-130h44l-1,-45Z"/>
+    <path data-fips-int="26139" data-name="Ottawa County" d="M1687,2659l4,219 -157,2 -3,-68 -3,-45 -17,-64 133,-1v-43Z"/>
+    <path data-fips-int="26141" data-name="Presque Isle County" d="M2493,1569l3,-2 -3,2 38,32v33l-175,8 -129,7 -8,-216h16h2l28,31 6,27 64,7 46,36 34,7 38,21Z"/>
     <path data-fips-int="26143" data-name="Roscommon County" d="M2191,1997l5,174 -86,2 -88,1 -3,-176Z"/>
-    <path data-fips-int="26145" data-name="Saginaw County" d="M2449,2507l4,128 -85,4 1,44 -160,7 -4,-170 0,-8 72,-2 0,-44 42,0 0,21 80,0 6,20Z"/>
+    <path data-fips-int="26145" data-name="Saginaw County" d="M2449,2507l4,128 -85,4 1,44 -160,7 -4,-170v-8l72,-2v-44h42v21h80l6,20Z"/>
     <path data-fips-int="26149" data-name="Saint Joseph County" d="M1875,3226l3,156 -184,3 9,-20 -3,-136Z"/>
-    <path data-fips-int="26151" data-name="Sanilac County" d="M2841,2386l5,48 26,76 12,115 6,20 -180,14 -4,-64 -43,0 -1,-20 4,0 -10,-174Z"/>
-    <path data-fips-int="26153" data-name="Schoolcraft County" d="M1652,1000l0,132 1,138 -19,23 -32,-17 -71,-3 -40,27 -10,58 -34,18 -3,0 0,-70 -10,0 2,-131 -45,0 0,-88 87,0 0,-87Z"/>
-    <path data-fips-int="26155" data-name="Shiawassee County" d="M2369,2683l8,177 -87,5 -75,0 -6,-170 0,-5Z"/>
-    <path data-fips-int="26157" data-name="Tuscola County" d="M2510,2386l18,-7 2,30 126,-8 10,174 -4,0 -85,5 3,45 -40,5 -87,5 -4,-128 -3,-56 10,-2Z"/>
-    <path data-fips-int="26159" data-name="Van Buren County" d="M1699,3053l1,176 -170,0 -2,-86 -53,0 36,-89Z"/>
+    <path data-fips-int="26151" data-name="Sanilac County" d="M2841,2386l5,48 26,76 12,115 6,20 -180,14 -4,-64h-43l-1,-20h4l-10,-174Z"/>
+    <path data-fips-int="26153" data-name="Schoolcraft County" d="M1652,1000v132l1,138 -19,23 -32,-17 -71,-3 -40,27 -10,58 -34,18h-3v-70h-10l2,-131h-45v-88h87v-87Z"/>
+    <path data-fips-int="26155" data-name="Shiawassee County" d="M2369,2683l8,177 -87,5h-75l-6,-170v-5Z"/>
+    <path data-fips-int="26157" data-name="Tuscola County" d="M2510,2386l18,-7 2,30 126,-8 10,174h-4l-85,5 3,45 -40,5 -87,5 -4,-128 -3,-56 10,-2Z"/>
+    <path data-fips-int="26159" data-name="Van Buren County" d="M1699,3053l1,176h-170l-2,-86h-53l36,-89Z"/>
     <path data-fips-int="26161" data-name="Washtenaw County" d="M2530,3204l-87,5 -134,8 -4,-178 173,-6 41,-4Z"/>
-    <path data-fips-int="26165" data-name="Wexford County" d="M1847,2000l2,174 -84,2 -91,0 0,-175Z"/>
-    <path data-fips-int="26003" data-name="Alger County" d="M1378,972l6,55 -19,-4 -6,-43ZM1652,1000l-174,0 0,87 -87,0 0,88 -173,-2 1,-170 49,-14 15,31 38,15 29,-20 36,28 57,-66 25,-5 87,-57 20,10 37,-11 40,-7Z"/>
+    <path data-fips-int="26165" data-name="Wexford County" d="M1847,2000l2,174 -84,2h-91v-175Z"/>
+    <path data-fips-int="26003" data-name="Alger County" d="M1378,972l6,55 -19,-4 -6,-43ZM1652,1000h-174v87h-87v88l-173,-2 1,-170 49,-14 15,31 38,15 29,-20 36,28 57,-66 25,-5 87,-57 20,10 37,-11 40,-7Z"/>
     <path data-fips-int="26007" data-name="Alpena County" d="M2531,1634l28,60 -3,1 3,-1 -19,8 -16,3 -14,24 2,16 7,29 41,35 -201,8 -3,-175Z"/>
-    <path data-fips-int="26011" data-name="Arenac County" d="M2485,2161l-4,57 -25,0 -9,33 -26,-2 -11,4 -19,-5 -25,45 -1,0 -49,0 -1,-44 -44,2 -2,-83 102,-2Z"/>
-    <path data-fips-int="26029" data-name="Charlevoix County" d="M1925,1571l34,45 13,-9 83,-1 0,43 1,45 -44,0 -129,1 -2,-46 -57,0 4,-28 43,-37ZM1780,1376l6,73 -20,19 -25,-4 3,-53 14,-37Z"/>
-    <path data-fips-int="26033" data-name="Chippewa County" d="M2455,1278l-5,0 -1,0 -6,-8 -6,-2 -7,-3 -6,3 -46,7 -22,-15 -3,-7 12,-10 1,-2 -1,2 0,2 51,-24 0,-13 -10,-20 7,2 37,6 13,34 24,16 -15,32ZM2171,994l3,0 17,11 5,7 -3,-4 3,4 25,55 6,36 3,-15 19,-5 14,35 -17,17 -13,-27 -2,0 -22,39 19,16 19,-10 44,23 -14,20 16,22 42,18 -1,24 0,3 0,-3 -12,0 -7,0 -2,0 -50,-7 -35,0 -6,0 -3,-43 -44,0 0,-43 -262,4 0,-43 -44,0 -3,-256 99,-10 -24,30 -10,102 13,16 28,-3 44,20 62,-22 13,35 71,-41 4,-4 3,-1ZM2244,979l11,5 -24,54 25,37 -13,5 -25,-32 -18,-49 5,-2 19,-22Z"/>
-    <path data-fips-int="26041" data-name="Delta County" d="M1218,1173l173,2 45,0 -2,131 10,0 0,70 -25,3 -20,40 -6,35 -38,-31 36,-59 28,-34 -17,-25 -24,31 -23,-3 -22,-10 -22,71 -50,5 8,-99 2,0 -2,-5 -33,51 7,37 -21,18 -29,27 -31,50 -22,0 3,-175 -15,0 0,-43 44,0 2,-87Z"/>
+    <path data-fips-int="26011" data-name="Arenac County" d="M2485,2161l-4,57h-25l-9,33 -26,-2 -11,4 -19,-5 -25,45h-1h-49l-1,-44 -44,2 -2,-83 102,-2Z"/>
+    <path data-fips-int="26029" data-name="Charlevoix County" d="M1925,1571l34,45 13,-9 83,-1v43l1,45h-44l-129,1 -2,-46h-57l4,-28 43,-37ZM1780,1376l6,73 -20,19 -25,-4 3,-53 14,-37Z"/>
+    <path data-fips-int="26033" data-name="Chippewa County" d="M2455,1278h-5h-1l-6,-8 -6,-2 -7,-3 -6,3 -46,7 -22,-15 -3,-7 12,-10 1,-2 -1,2v2l51,-24v-13l-10,-20 7,2 37,6 13,34 24,16 -15,32ZM2171,994h3l17,11 5,7 -3,-4 3,4 25,55 6,36 3,-15 19,-5 14,35 -17,17 -13,-27h-2l-22,39 19,16 19,-10 44,23 -14,20 16,22 42,18 -1,24v3v-3h-12h-7h-2l-50,-7h-35h-6l-3,-43h-44v-43l-262,4v-43h-44l-3,-256 99,-10 -24,30 -10,102 13,16 28,-3 44,20 62,-22 13,35 71,-41 4,-4 3,-1ZM2244,979l11,5 -24,54 25,37 -13,5 -25,-32 -18,-49 5,-2 19,-22Z"/>
+    <path data-fips-int="26041" data-name="Delta County" d="M1218,1173l173,2h45l-2,131h10v70l-25,3 -20,40 -6,35 -38,-31 36,-59 28,-34 -17,-25 -24,31 -23,-3 -22,-10 -22,71 -50,5 8,-99h2l-2,-5 -33,51 7,37 -21,18 -29,27 -31,50h-22l3,-175h-15v-43h44l2,-87Z"/>
     <path data-fips-int="26047" data-name="Emmet County" d="M1958,1567l29,-26 -40,-5 -22,-24 -9,-49 62,-75 -13,-17 63,5 22,-20 5,250 -83,1 -13,9 -34,-45Z"/>
-    <path data-fips-int="26055" data-name="Grand Traverse County" d="M1806,1825l2,0 20,0 18,25 1,150 -173,1 0,-131 62,-2 16,5 22,-53 -12,-11 32,-49 -8,69 -27,49 16,5Z"/>
-    <path data-fips-int="26061" data-name="Houghton County" d="M780,653l-6,5 1,0 -1,0 -2,0 2,0 0,3 -2,2 0,-2 -3,3 -5,5 0,2 5,-7 3,-1 8,3 1,3 -7,25 -25,-10 -16,-5 -15,0 -4,-2 -6,-3 0,-48 39,-28 2,0 70,1 0,44 24,0 -4,31 -39,28 -7,30 -21,14 -3,0 -5,26 -36,0 0,44 -44,-2 -6,216 -109,-3 6,-130 43,2 1,-44 -23,0 4,-134 17,-35 41,-23 39,-37 12,15 -1,33 6,3 19,2 7,5 4,5 0,35 8,0 1,2 3,3 3,3 9,9 1,3 -1,-3 -9,-9 -3,-3 25,-60 -1,-3Z"/>
+    <path data-fips-int="26055" data-name="Grand Traverse County" d="M1806,1825h2h20l18,25 1,150 -173,1v-131l62,-2 16,5 22,-53 -12,-11 32,-49 -8,69 -27,49 16,5Z"/>
+    <path data-fips-int="26061" data-name="Houghton County" d="M780,653l-6,5h1h-1h-2h2v3l-2,2v-2l-3,3 -5,5v2l5,-7 3,-1 8,3 1,3 -7,25 -25,-10 -16,-5h-15l-4,-2 -6,-3v-48l39,-28h2l70,1v44h24l-4,31 -39,28 -7,30 -21,14h-3l-5,26h-36v44l-44,-2 -6,216 -109,-3 6,-130 43,2 1,-44h-23l4,-134 17,-35 41,-23 39,-37 12,15 -1,33 6,3 19,2 7,5 4,5v35h8l1,2 3,3 3,3 9,9 1,3 -1,-3 -9,-9 -3,-3 25,-60 -1,-3Z"/>
     <path data-fips-int="26063" data-name="Huron County" d="M2728,2206l59,30 35,70 18,70 1,10 -185,15 -126,8 -2,-30 28,-65 43,-63 67,-15 15,-23 34,-12Z"/>
-    <path data-fips-int="26083" data-name="Keweenaw County" d="M975,506l39,13 -6,25 -67,5 3,24 -42,23 -36,40 -23,7 -24,0 0,-44 -70,-1 28,-40 76,-42 71,-12ZM765,155l-1,2 -5,5 0,-2 2,0 -3,2 11,-7 3,-3 17,-7 -20,17 -5,3 -3,2 -2,5 2,-2 0,-3 3,0 0,-2 1,0 4,-3 5,0 3,-5 -3,5 -9,3 -1,2 -3,3 -2,2 -23,23 0,2 -21,26 -1,0 1,0 -41,22 -19,-2 -65,37 34,5 -74,33 -36,-11 20,-32 -17,10 1,-7 18,-18 103,-47 5,0 11,-6 45,-25 -1,1 0,2 -2,2 -4,3 4,-3 2,-2 1,-2 0,-1 11,-10 7,-5 -4,5 26,-7 13,-8 5,5 1,-2 2,-3 8,-7 3,0 2,0 -2,0 0,2 2,-2 -2,2 -3,3Z"/>
-    <path data-fips-int="26089" data-name="Leelanau County" d="M1608,1729l-22,-24 2,-28 27,10ZM1736,1868l-62,2 -94,-2 3,-61 29,0 19,-35 35,15 49,-68 18,-44 32,-26 9,17 -30,23 11,31 -6,74 -16,23Z"/>
-    <path data-fips-int="26097" data-name="Mackinac County" d="M2159,1343l21,15 -14,28 -35,-7 -31,-40 56,15ZM2222,1253l2,2 -16,-2 -5,5 -12,-5 -10,2 -4,3 -8,-5 -1,23 -13,-25 10,0 -19,-6 -5,16 -72,-38 -4,40 -19,15 14,47 -20,5 -28,-27 -57,-55 -68,-20 -46,-22 -66,-1 -48,65 -74,0 -1,-138 217,-4 44,0 0,43 262,-4 0,43 44,0Z"/>
-    <path data-fips-int="26103" data-name="Marquette County" d="M1108,950l10,4 10,23 9,23 82,3 -1,170 -44,0 -2,87 -44,0 -87,-2 3,-131 -175,-4 3,-86 3,-132 43,2 1,-43 -17,-4 1,-71 49,2 41,16 19,28 16,-8 28,32 8,31Z"/>
-    <path data-fips-int="26115" data-name="Monroe County" d="M2653,3222l4,2 0,2 3,3 -29,23 7,20 -29,9 0,18 -16,8 -22,48 -2,-3 -9,18 2,2 -3,7 -2,1 -105,7 -9,-178 87,-5 91,-7Z"/>
-    <path data-fips-int="26147" data-name="Saint Clair County" d="M2846,2948l7,-10 4,-2 8,-1 4,-9 18,10 -18,22 -3,0 -6,-5 -6,2 -2,1 -2,2 -3,2 -1,0 1,0 3,-2 2,-2 2,-1 6,-2 -6,-10ZM2828,2891l-7,-10 -12,-96 -88,7 -11,-133 180,-14 6,23 26,60 0,2 0,3 3,4 -9,23 -10,23 6,67 -13,66 -37,5 -5,-25Z"/>
+    <path data-fips-int="26083" data-name="Keweenaw County" d="M975,506l39,13 -6,25 -67,5 3,24 -42,23 -36,40 -23,7h-24v-44l-70,-1 28,-40 76,-42 71,-12ZM765,155l-1,2 -5,5v-2h2l-3,2 11,-7 3,-3 17,-7 -20,17 -5,3 -3,2 -2,5 2,-2v-3h3v-2h1l4,-3h5l3,-5 -3,5 -9,3 -1,2 -3,3 -2,2 -23,23v2l-21,26h-1h1l-41,22 -19,-2 -65,37 34,5 -74,33 -36,-11 20,-32 -17,10 1,-7 18,-18 103,-47h5l11,-6 45,-25 -1,1v2l-2,2 -4,3 4,-3 2,-2 1,-2v-1l11,-10 7,-5 -4,5 26,-7 13,-8 5,5 1,-2 2,-3 8,-7h3h2h-2v2l2,-2 -2,2 -3,3Z"/>
+    <path data-fips-int="26089" data-name="Leelanau County" d="M1608,1729l-22,-24 2,-28 27,10ZM1736,1868l-62,2 -94,-2 3,-61h29l19,-35 35,15 49,-68 18,-44 32,-26 9,17 -30,23 11,31 -6,74 -16,23Z"/>
+    <path data-fips-int="26097" data-name="Mackinac County" d="M2159,1343l21,15 -14,28 -35,-7 -31,-40 56,15ZM2222,1253l2,2 -16,-2 -5,5 -12,-5 -10,2 -4,3 -8,-5 -1,23 -13,-25h10l-19,-6 -5,16 -72,-38 -4,40 -19,15 14,47 -20,5 -28,-27 -57,-55 -68,-20 -46,-22 -66,-1 -48,65h-74l-1,-138 217,-4h44v43l262,-4v43h44Z"/>
+    <path data-fips-int="26103" data-name="Marquette County" d="M1108,950l10,4 10,23 9,23 82,3 -1,170h-44l-2,87h-44l-87,-2 3,-131 -175,-4 3,-86 3,-132 43,2 1,-43 -17,-4 1,-71 49,2 41,16 19,28 16,-8 28,32 8,31Z"/>
+    <path data-fips-int="26115" data-name="Monroe County" d="M2653,3222l4,2v2l3,3 -29,23 7,20 -29,9v18l-16,8 -22,48 -2,-3 -9,18 2,2 -3,7 -2,1 -105,7 -9,-178 87,-5 91,-7Z"/>
+    <path data-fips-int="26147" data-name="Saint Clair County" d="M2846,2948l7,-10 4,-2 8,-1 4,-9 18,10 -18,22h-3l-6,-5 -6,2 -2,1 -2,2 -3,2h-1h1l3,-2 2,-2 2,-1 6,-2 -6,-10ZM2828,2891l-7,-10 -12,-96 -88,7 -11,-133 180,-14 6,23 26,60v2v3l3,4 -9,23 -10,23 6,67 -13,66 -37,5 -5,-25Z"/>
     <path data-fips-int="26163" data-name="Wayne County" d="M2772,3011l-20,48 -24,4 -40,33 -28,93 -3,35 -4,-2 -32,-25 -91,7 -11,-175 174,-13Z"/>
-    <path data-fips-int="26025" data-name="Calhoun County" d="M2087,3048l7,176 -44,0 -175,2 -3,-175 84,-2Z"/>
+    <path data-fips-int="26025" data-name="Calhoun County" d="M2087,3048l7,176h-44l-175,2 -3,-175 84,-2Z"/>
   </g>
   <g class="cities">
     <circle r="3" cx="270.9" cy="307.5"/>
