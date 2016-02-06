@@ -12,7 +12,13 @@
 # commits. At this phase of development, it seems right.
 module ServerSchedule
   TimeoutInS = 3600 # Once an hour, update Pollster
+
+  # WARNING: Changing this to true? Deploy to staging first, then production.
   RefreshDelegates = true
-  RefreshPrimariesRaceDays = [ '2016-02-01' ] # in case it ever gets that last precinct
+
+  # WARNING: Adding a date? Deploy to staging first, then production.
+  RefreshPrimariesRaceDays = [ '2016-02-01' ]
+
+  # WARNING: Changing this to true? Deploy to staging first, then production.
   RefreshPollsterPrimaries = true
 end
