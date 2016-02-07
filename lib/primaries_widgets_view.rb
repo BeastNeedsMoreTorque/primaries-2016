@@ -11,13 +11,12 @@ module PrimariesWidgetsView
   end
 
   def precinct_stats
-    geos = race_day.race_subcounties #race_day.county_races for races other than NH
-
-    reporting_precincts = race_day.races.map(&:n_precincts_reporting).reject(&:nil?).reduce(0, :+)
-    total_precincts = race_day.races.map(&:n_precincts_total).reject(&:nil?).reduce(0, :+)
-    finished_geos = geos.select{|val| val.n_precincts_total == val.n_precincts_reporting}.count
-    unfinished_geos = geos.select{|val| val.n_precincts_reporting > 0 and val.n_precincts_reporting < val.n_precincts_total}.count
-    noresults = geos.select{|val| val.n_precincts_reporting == 0}.count
+    geos = geos_party_objects().values
+    reporting_precincts = geos.map{|g| g[:n_precincts_reporting]}.reject(&:nil?).reduce(0, :+)
+    total_precincts = geos.map{|g| g[:n_precincts_total]}.reject(&:nil?).reduce(0, :+)
+    finished_geos = geos.select{|val| val[:n_precincts_total] == val[:n_precincts_reporting]}.count
+    unfinished_geos = geos.select{|val| val[:n_precincts_reporting] > 0 and val[:n_precincts_reporting] < val[:n_precincts_total]}.count
+    noresults = geos.select{|val| val[:n_precincts_reporting] == 0}.count
     reporting_str = if total_precincts.nil? || total_precincts == 0
       'N/A'
     elsif reporting_precincts == total_precincts
@@ -47,28 +46,29 @@ module PrimariesWidgetsView
   def candidate_objects_by_race
     result = {}
     race_day.races.each do |race|
-      data = (result[race.race_day_id] ||= {"candidates" => {"Dem" => {}, "GOP" => {}}})
+      data = (result[race.race_day_id] ||= {:candidates => {:Dem => [], :GOP => []}})
       race.candidate_races.each{|cd|
         candidate_pct = cd.percent_vote
         candidate_votes = cd.n_votes
-        data["candidates"][race.party_id][cd.candidate_id] = {votes: candidate_votes, pct: candidate_pct}
+        data[:candidates][race.party_id.to_sym].push( {votes: candidate_votes, pct: candidate_pct, name: cd.candidate.name} )
       }
-      leader = race.candidate_races.sort_by(&:n_votes).reverse.first
-      data["leader_#{race.party_id}"] = ((leader.n_votes != 0) ? leader.candidate_id : -1)
     end
     result
   end
 
   def geos_party_objects
     ids = {}
-    #race_day.county_races.each for days other than NH
+    #race_day.county_races.each for days other than NH, also should have a dict for each race
     race_day.race_subcounties.each do |cp|
       key = cp.geo_id.to_s
+      party = ((cp.race_id.include? "GOP") ? :GOP : :Dem)
       candidates = race_day.candidate_race_subcounties.select{|cr_sub| cr_sub.geo_id == key}.sort_by(&:n_votes).reverse
-      leader = (candidates.first ? {:candidate_id => candidates.first.id, :n_votes => candidates.first.n_votes} : {:candidate_id => -1, :n_votes => -1})
-      obj = (ids[key] ||= { "n_precincts_total" => 0, "total_n_precincts_reporting" => 0, "leader" => leader})
-      obj["total_n_precincts_reporting"] += cp.n_precincts_reporting
-      obj["n_precincts_total"] += cp.n_precincts_total
+      leader = (candidates.first ? {:candidate_id => candidates.first.id, :n_votes => candidates.first.n_votes } : nil)
+      obj = (ids[key] ||= { :GOP => {}, :Dem => {}, :n_precincts_total => 0, :n_precincts_reporting => 0})
+      obj[:n_precincts_reporting] += cp.n_precincts_reporting
+      obj[:n_precincts_total] += cp.n_precincts_total
+      obj[party][:n_precincts_reporting] = cp.n_precincts_reporting
+      obj[party][:n_precincts_total] = cp.n_precincts_total
       ids[key] = obj
     end
     ids

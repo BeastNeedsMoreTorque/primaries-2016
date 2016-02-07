@@ -101,10 +101,10 @@ $party-container-height: 100px;
 				background: $widgetLightBlue;
 			}
 			.container .unfinished {
-				@include no-results-swatch;
-				background-color: #eee;
+				background-color: #ddd;
 			}
 			.container .no-results {
+				@include no-results-swatch;
 				background-color: #eee;
 			}
 		}
@@ -118,10 +118,10 @@ $party-container-height: 100px;
 				background: $widgetLightRed;
 			}
 			.container .unfinished {
-				background-color: #eee;
-				@include no-results-swatch;
+				background-color: #ddd;
 			}
 			.container .no-results {
+				@include no-results-swatch;
 				background-color: #eee;
 			}
 		}
@@ -176,11 +176,10 @@ $party-container-height: 100px;
 				background-color: #999;
 			}
 			.unfinished {
-				background-color: #eee;
-				@include no-results-swatch;
+				background-color: #ddd;
 			}
 			.no-results {
-				background-color: #eee;
+				@include no-results-swatch;
 			}
 		}
 	}

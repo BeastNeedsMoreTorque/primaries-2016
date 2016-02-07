@@ -42,7 +42,7 @@
               %div
                 %span#no-result-geos= "#{precinct_stats[:geos_noresults]} W/O RESULTS"
         .map-container
-          .map
+          .map.progress
             != map_svg('states/NH') 
       -race_day.state_party_races.first[1].each do |party, race, _|
         .party-container{class: party.id}
