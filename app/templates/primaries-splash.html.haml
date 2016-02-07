@@ -45,8 +45,8 @@
           .map.progress
             != map_svg('states/NH') 
       -race_day.state_party_races.first[1].each do |party, race, _|
-        .party-container{class: party.id}
-          .candidate-row-container{class: party.id}
+        .party-container{class: party.id.downcase}
+          .candidate-row-container{class: party.id.downcase}
             .leading-candidate-img
               %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
             .leading-candidate-delegates.left
@@ -54,7 +54,7 @@
                 %span= party.adjective.upcase
                 %span CANDIDATES
                 %span Total Votes
-          .candidate-position-listing
+          .candidate-position-listing{class: party.id.downcase}
             - race.candidate_races[0..2].each do |candidate_race|
               - candidate = candidate_race.candidate
               %table.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
@@ -64,36 +64,27 @@
                     %td.n-votes= format_int(candidate_race.n_votes)
                     -if format_percent_or_nil(candidate_race.percent_vote) != 'N/A'
                       %td.n-votes-pct= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
-            -if party.id == "GOP"
-              .see-all-candidates
-                %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
+          -if party.id == "GOP"
+            .see-all-candidates
+              %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
         .map-container{class: "#{party.id.downcase}"}
           .map
             != map_svg('states/NH')
-          -if race.candidate_races.first.n_votes != 0
-            .legend
-              .container
-                .leading
-                %div
-                  %span= "#{race.candidate_races.first.candidate.name.upcase} LEADS"
-              .container
-                .trailing
-                %div
-                  %span= "#{race.candidate_races.first.candidate.name.upcase} TRAILS"
-              .container
-                .unfinished
-                %div
-                  %span= "NOT FINISHED REPORTING"
-              .container
-                .no-results
-                %div
-                  %span= "W/O RESULTS"
-          -else
-            .legend
-              .container
-                .no-results
-                %div
-                  %span= "W/O RESULTS"
+          .legend
+            .container
+              .leading
+              %div
+                %span.name= "#{race.candidate_races.first.candidate.name.upcase}"
+                %span= " LEADS"
+            .container
+              .trailing
+              %div
+                %span.name= "#{race.candidate_races.first.candidate.name.upcase}"
+                %span= " TRAILS"
+            .container
+              .no-results
+              %div
+                %span= "W/O RESULTS"
                 
 
 

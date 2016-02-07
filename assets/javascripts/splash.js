@@ -26,7 +26,7 @@ $(function() {
     svg.insertBefore(defs, svg.firstChild);
   }
 
-  function fillSvg(data){
+  function fillSvg(data, leaders){
     var pattern_id = 'progress-map-pattern-no-results';
     $('.map svg').each(function() {
       add_no_results_yet_pattern_to_svg(this, pattern_id);
@@ -43,43 +43,68 @@ $(function() {
       }else if(obj && obj['n_precincts_reporting'] == obj['n_precincts_total']){
         $ele.css({fill: "#999"});
       }else{
-        $ele.css({fill: "url(#progress-map-pattern-no-results)"})
-        console.log('undefined result', fips, obj)
+        $ele.css({fill: "#eee"});
+        //console.log('undefined result', fips, obj)
       }
     });
 
-    var pattern_id = 'progress-map-pattern-no-results';
-    $('.map.progress svg').each(function() {
-      add_no_results_yet_pattern_to_svg(this, pattern_id);
-    });
+    for(fips in data){
+      obj = data[fips];
+      var $ele_gop = $(".map-container.gop .map svg .subcounties *[data-geo-id='"+ fips +"'");
+      var $ele_dem = $(".map-container.gop .map svg .subcounties *[data-geo-id='"+ fips +"'");
+
+      if(obj.GOP.leader.n_votes > 0)
+        //console.log(obj, leaders.GOP)
+
+      if(obj.GOP.leader.n_votes > 0 && obj.GOP.leader.id == leaders.GOP.id){
+        $ele_gop.css({"fill": "#bc5c5c"})
+      }else if(obj.GOP.leader.n_votes > 0 && obj.GOP.leader.id != leaders.GOP.id){
+        $ele_gop.css({"fill": "#f5cfcf"})
+      }
+
+      if(obj.Dem.leader.n_votes > 0 && obj.Dem.leader.id == leaders.Dem.id){
+        $ele_gop.css({"fill": "#5c6b95"})
+      }else if(obj.Dem.leader.n_votes > 0 && obj.Dem.leader.id != leaders.Dem.id){
+        $ele_gop.css({"fill": "#d1e0fa"})
+      }
+
+    }
 
   }
 
   function updateCandidates(data, tense){
-    $(".leader").removeClass("leader");
+    $(".party-container.gop .candidate-position-listing table.candidate").remove();
+    $(".party-container.dem .candidate-position-listing table.candidate").remove();
 
-    for (key in data) {
-      var candidates = data[key];
-      if (candidates[0] && candidates[0].n_votes) {
-        $(".candidate[data-candidate-id="+candidates[0].id+"]").addClass("leader");
-      }
-
-      for (candidate_id in data[key]) {
-        var n_votes = data[key][candidate_id].votes;
-        $(".candidate[data-candidate-id="+candidate_id+"] .n-votes").text(format_int(n_votes || 0));
-      }
-    }
+    ["Dem", "GOP"].forEach(function(party){
+      data.candidates[party].forEach(function(c, i){
+        var row = "" +
+                  "<table class='candidate "+ (i==0 ? 'leader' : '') +"' data-candidate-id='"+ c.id +"'>" +
+                    "<tbody>" +
+                      "<tr>" + 
+                        "<td class='candidate-name'>" + c.name + "</td>" +
+                        "<td class='n-votes'>" + c.votes + "</td>" +
+                        "<td class='n-votes-pct'>" + c.pct.toFixed(1) + "%</td>" +
+                      "</tr>" +
+                    "</tbody>" +
+                  "</table>";
+        if(i < 3)
+          $(".party-container."+party.toLowerCase()+" .candidate-position-listing").append(row);
+      });
+    })
   }
 
   function getData(){
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
+      
       var tense = json["when_race_day_happens"];
       $("body").removeClass().addClass("race-day-" + tense);
-     
+    
+      console.log(json)
 
-      fillSvg(json["geos"]);
+      fillSvg(json.geos, json.candidates.leaders);
 
-      //updateCandidates(json["candidates"], tense);
+      updateCandidates(json["candidates"]);
     })
     .fail(function() { console.warn('Failed to load', this); })
     .always(function() { window.setTimeout(getData, 30000); });
