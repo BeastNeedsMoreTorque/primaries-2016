@@ -88,6 +88,8 @@ $(function() {
                       "</tr>" +
                     "</tbody>" +
                   "</table>";
+        if(i == 0)
+          $(".map-container."+party.toLowerCase()+" .legend span.name").html(c.name)
         if(i < 3)
           $(".party-container."+party.toLowerCase()+" .candidate-position-listing").append(row);
       });
