@@ -96,17 +96,24 @@ $(function() {
     })
   }
 
+  function updatePrecinctStats(data){
+    $("#precincts-reporting-val").html(data.reporting_precincts_pct_str);
+    $("#finished-geos-val").html(data.geos_finished);
+    $("#unfinished-geos").html(data.geos_unfinished);
+    $("#no-result-geos").html(data.geos_noresults);
+  }
+
   function getData(){
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
       
       var tense = json["when_race_day_happens"];
       $("body").removeClass().addClass("race-day-" + tense);
     
-      console.log(json)
-
       fillSvg(json.geos, json.candidates.leaders);
 
-      updateCandidates(json["candidates"]);
+      updateCandidates(json.candidates);
+
+      updatePrecinctStats(json.precincts);
     })
     .fail(function() { console.warn('Failed to load', this); })
     .always(function() { window.setTimeout(getData, 30000); });

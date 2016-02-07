@@ -32,15 +32,18 @@
             .container
               .finished
               %div
-                %span#finished-geos-val= "#{precinct_stats[:geos_finished]} FINISHED"
+                %span#finished-geos-val= "#{precinct_stats[:geos_finished]}"
+                %span= " FINISHED"
             .container
               .unfinished
               %div
-                %span#unfinished-geos= "#{precinct_stats[:geos_unfinished]} NOT FINISHED"
+                %span#unfinished-geos= "#{precinct_stats[:geos_unfinished]}"
+                %span= " NOT FINISHED"
             .container
               .no-results
               %div
-                %span#no-result-geos= "#{precinct_stats[:geos_noresults]} W/O RESULTS"
+                %span#no-result-geos= "#{precinct_stats[:geos_noresults]}"
+                %span= " W/O RESULTS"
         .map-container
           .map.progress
             != map_svg('states/NH') 
