@@ -9,11 +9,11 @@ body.race-day .race {
 
   .race-status {
     text-align: center;
+    padding: .2rem 1rem;
+    margin: .2rem auto;
 
     .status-past, .status-present, .status-future {
       display: none;
-      padding: .5rem 1rem;
-      margin: .5rem auto;
     }
 
     .status-past, .status-present-text, .status-future {
@@ -32,8 +32,8 @@ body.race-day .race {
       }
     }
 
-    .status-present-text {
-      margin: .5rem auto;
+    .status-p {
+      margin: .2rem auto;
     }
   }
 
