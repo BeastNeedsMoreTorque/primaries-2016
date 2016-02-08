@@ -18,12 +18,15 @@ $party-container-height: 100px;
 }
 
 .tease-link {
-  margin-top: 10px;
+  a {
+		font-weight: normal;
+  }
+
 }
 
 .legend {
-	font-size: 11px;
 	.container {
+		font-size: 12px;
 		display: inline-flex;
     display: -webkit-inline-flex;
 		text-align: left;
@@ -44,7 +47,7 @@ $party-container-height: 100px;
 		}
 	}
 
-  padding: 0 .75rem;
+  //padding: 0 .75rem;
   text-align: center;
   display: -webkit-flex;
   display: flex;
@@ -127,72 +130,6 @@ $party-container-height: 100px;
 		}
 	}
 }
-
-.race-progress-container {
-	width: 50rem;
-	position: relative;
-	.legend-labels-container {
-		z-index: 99;
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 160px;
-
-
-		.reporting {
-			font-weight: bold;
-			font-size: .9rem;
-			text-align: center;
-			margin: 10px 0 10px 0;
-		}
-
-		.updating {
-			font-size: .8rem;
-			background: #eee;
-			padding: 3px;	
-			width: 130px;
-			margin: 10px 0 10px 0;
-			margin: 0 auto;
-		}
-
-		.tease-link {
-			background: #fff;
-			margin: 10px 0 10px 0;
-		}
-		
-		.legend {
-			margin: 10px 0 10px 0;
-			font-size: .9rem;
-			.label {
-				font-weight: bold;
-				margin-bottom: 5px;
-			}
-			.container div:first-child {
-				width: .9rem;
-				height: .9rem;
-			}
-
-			.finished {
-				background-color: #999;
-			}
-			.unfinished {
-				background-color: #ddd;
-			}
-			.no-results {
-				@include no-results-swatch;
-				background-color: #eee;
-			}
-		}
-	}
-	.map-container {
-		position: absolute;
-		right: 0;	
-		width: 8rem;
-		.map {
-		}
-	}
-}
-
 
 .parties-container {
 	width: 100%;
@@ -318,7 +255,7 @@ $party-container-height: 100px;
 }
 
 .party-container {
-	width: 35rem;
+	width: 33rem;
 	&:first-child {
 		margin-top: 5px;
 	}
@@ -347,4 +284,24 @@ $party-container-height: 100px;
 			color: #fff;
 		}
 	}
+}
+
+.map-precincts-container {
+	padding: 10px;
+	.precincts {
+		font-size: 14px;
+		padding-bottom: 3px;
+		margin-bottom: 3px;
+		border-bottom: 1px solid black;
+	}
+	.map-container {
+		flex-direction: row;
+		-webkit-flex-direction: row;
+		.map {
+			height: 12.5rem;
+		}
+	}
+	@include status-indicator
+	.status-present { display: inline-block !important; }
+
 }

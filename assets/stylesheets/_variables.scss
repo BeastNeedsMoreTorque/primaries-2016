@@ -107,6 +107,38 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   }
 }
 
+@mixin status-indicator {
+  .race-status {
+    text-align: center;
+
+    .status-past, .status-present, .status-future {
+      display: none;
+      padding: .5rem 1rem;
+      margin: .5rem auto;
+    }
+
+    .status-past, .status-present-text, .status-future {
+      font-style: italic;
+    }
+
+    .refresh-flag {
+      padding: 2px 8px;
+      margin: 0;
+      background: $red;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      img {
+        width: 15px;
+      }
+    }
+
+    .status-present-text {
+      margin: .5rem auto;
+    }
+  }
+}
+
 @mixin tease-link {
 
   display: -webkit-flex;
@@ -116,7 +148,7 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   border: 1px solid #cdcdcd;
   border-radius: 5px;
   a {
-    font-weight: bold;
+    //font-weight: bold;
     width: 100%;
     padding: 10px;
     text-decoration: none;

@@ -16,32 +16,6 @@
         %h1.main-hed.when-future= "HAPPENING TONIGHT: #{race_day.title}"
       .line
     .flex-container
-      .race-progress-container.flex-container
-        .legend-labels-container
-          .reporting
-            %span#precincts-reporting-val= "#{precinct_stats[:reporting_precincts_pct_str]}"
-            %span= " OF PRECINCTS REPORTING"
-          .updating
-            %span= "UPDATING IN "
-            %img{src: image_path("refresh.svg")}
-            %span.timer= "0:30"
-          .tease-link
-            %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See results
-          .legend
-            .label= "Towns reporting"
-            .container
-              .finished
-              %div
-                %span#finished-geos-val= "#{precinct_stats[:geos_finished]}"
-                %span= " Finished"
-            .container
-              .unfinished
-              %div
-                %span#unfinished-geos= "#{precinct_stats[:geos_unfinished]}"
-                %span= " Not finished"
-        .map-container
-          .map.progress
-            != map_svg('states/NH') 
       -race_day.state_party_races.first[1].each do |party, race, _|
         .party-container{class: party.id.downcase}
           .candidate-row-container{class: party.id.downcase}
@@ -65,24 +39,36 @@
           -if party.id == "GOP"
             .see-all-candidates
               %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
-        .map-container{class: "#{party.id.downcase}"}
-          .map
-            != map_svg('states/NH')
-          .legend
-            .container
-              .leading
-              %div
-                %span.name= "#{race.candidate_races.first.candidate.name.upcase}"
-                %span= " leads"
-            .container
-              .trailing
-              %div
-                %span.name= "#{race.candidate_races.first.candidate.name.upcase}"
-                %span= " trails"
-            .container
-              .no-results
-              %div
-                %span= "No results"
+
+        .map-precincts-container 
+          .precincts
+            %span.precincts-val= "N%"
+            %span= " OF PRECINCTS REPORTING"
+          .map-container.flex-container{class: "#{party.id.downcase}"}
+            .map
+              != map_svg('states/NH')
+            .legend
+              .race-status
+                .status-present
+                  %p.refresh-flag
+                    %img{src: image_path("refresh.svg")}
+                    0:TK
+              .container
+                .leading
+                %div
+                  %span.name= "#{race.candidate_races.first.candidate.name}"
+                  %span= " leads"
+              .container
+                .trailing
+                %div
+                  %span.name= "#{race.candidate_races.first.candidate.name}"
+                  %span= " trails"
+              .container
+                .no-results
+                %div
+                  %span= "No results"
+              %p.tease-link.when-present
+                %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See results
                 
 
 
