@@ -11,13 +11,13 @@
 # This is a bit hack-y: we're communicating with the production server via git
 # commits. At this phase of development, it seems right.
 module ServerSchedule
-  TimeoutInS = 3600 # Once an hour, update Pollster
+  TimeoutInS = 20 # Once an hour, update Pollster
 
   # WARNING: Changing this to true? Deploy to staging first, then production.
   RefreshDelegates = true
 
   # WARNING: Adding a date? Deploy to staging first, then production.
-  RefreshPrimariesRaceDays = [ '2016-02-01']
+  RefreshPrimariesRaceDays = [ '2016-02-09']
 
   # WARNING: Changing this to true? Deploy to staging first, then production.
   RefreshPollsterPrimaries = true
