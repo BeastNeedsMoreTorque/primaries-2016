@@ -44,7 +44,7 @@
                 SDEs *
               - else
                 %span.frontrunner-unit.when-present.when-past Votes 
-            %span.frontrunner-num.pct.when-present.when-past= "#{format_percent_or_nil(leader.percent_vote)}%"
+            .frontrunner-num.pct.when-present.when-past= "#{format_percent_or_nil(leader.percent_vote)}%"
 
   - if race_day.races.any?(&:n_votes_is_really_n_sdes)
     %p.source.sde.when-present.when-past
