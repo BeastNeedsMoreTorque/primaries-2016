@@ -55,8 +55,8 @@ function add_tooltips() {
   function n_precincts_reporting_text(reporting, total) {
     if (total == 0) {
       return 'There are no precincts here';
-    } else if (reporting == total) {
-      return n_precincts_text(reporting) + ' reporting (' + Math.round(100 * reporting / total) + '%)';
+    } else {
+      return reporting + ' of ' + n_precincts_text(total) + ' reporting (' + Math.round(100 * reporting / total) + '%)';
     }
   }
 
