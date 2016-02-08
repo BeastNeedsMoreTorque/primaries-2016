@@ -36,6 +36,12 @@ $party-container-height: 100px;
 		  width: 10px;
 		  height: 10px;
 		  margin-right: 3px;
+		  border: 1px solid black;
+	  }
+	  .container {
+	  	.no-results {
+	  		fill: #fff;
+	  	}
 	  }
 	}
 }
@@ -74,14 +80,20 @@ $party-container-height: 100px;
 		  g path {
 		    stroke: white;
 		    stroke-width: 15; // divided by 10, then squished
-		    fill: #eee;
 		    &.has-results {
 		    	fill: #999;
 		    }
+  	  	&.no-results {
+		  		fill: #fff;
+		  	}
+
 		  }
 
-		  .no-results {
-		  	@include no-results-swatch;
+	    path.mesh {
+		    fill: none;
+		    stroke: #eee;
+		    stroke-width: 10; // divided by 10
+		    pointer-events: none; // so it doesn't cause mouseleave
 		  }
 
 	    text {
@@ -106,10 +118,6 @@ $party-container-height: 100px;
 			.container .unfinished {
 				background-color: #ddd;
 			}
-			.container .no-results {
-				@include no-results-swatch;
-				background-color: #eee;
-			}
 		}
 	}
 	&.gop {
@@ -122,10 +130,6 @@ $party-container-height: 100px;
 			}
 			.container .unfinished {
 				background-color: #ddd;
-			}
-			.container .no-results {
-				@include no-results-swatch;
-				background-color: #eee;
 			}
 		}
 	}
@@ -231,10 +235,12 @@ $party-container-height: 100px;
 				&.n-votes {
 					width: 3.5rem;
 					text-align: right;
+					min-width: 50px;
 				}
 				&.n-votes-pct {
 					text-align: right;
 					width: 2rem;
+					min-width: 30px;
 				}
 			}
 		}
@@ -260,13 +266,6 @@ $party-container-height: 100px;
 
 }
 
-.dem .candidate {
-  border-color: $widgetLightBlue;
-}
-
-.gop .candidate {
-  border-color: $widgetLightRed;
-}
 
 .party-container {
 

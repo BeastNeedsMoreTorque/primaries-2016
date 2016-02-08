@@ -36,6 +36,8 @@
                     %td.n-votes= format_int(candidate_race.n_votes)
                     -if format_percent_or_nil(candidate_race.percent_vote) != 'N/A'
                       %td.n-votes-pct= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
+                    -else
+                      %td.n-votes-pct= ""
           -if party.id == "GOP"
             .see-all-candidates
               %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
@@ -56,12 +58,12 @@
                   %p.refresh-flag
                     %img{src: image_path("refresh.svg")}
                     0:TK
-              .container
+              .container{class: ((race.candidate_races.first.n_votes == 0) ? 'hidden' : '')}
                 .leading
                 %div
                   %span.name= "#{race.candidate_races.first.candidate.name}"
                   %span= " leads"
-              .container
+              .container{class: ((race.candidate_races.first.n_votes == 0) ? 'hidden' : '')}
                 .trailing
                 %div
                   %span.name= "#{race.candidate_races.first.candidate.name}"
