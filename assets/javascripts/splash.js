@@ -85,7 +85,7 @@ $(function() {
                       "<tr>" + 
                         "<td class='candidate-name'>" + c.name + "</td>" +
                         "<td class='n-votes'>" + c.votes + "</td>" +
-                        "<td class='n-votes-pct'>" + c.pct.toFixed(1) + "%</td>" +
+                        "<td class='n-votes-pct'>" + (c.pct ? c.pct.toFixed(1) : "0.0") + "%</td>" +
                       "</tr>" +
                     "</tbody>" +
                   "</table>";
