@@ -78,6 +78,7 @@ $(function() {
 
     ["Dem", "GOP"].forEach(function(party){
       data.candidates[party].forEach(function(c, i){
+        console.log(c.pct)
         var row = "" +
                   "<table class='candidate "+ (i==0 ? 'leader' : '') +"' data-candidate-id='"+ c.id +"'>" +
                     "<tbody>" +
