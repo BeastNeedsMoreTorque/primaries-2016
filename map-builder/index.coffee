@@ -244,53 +244,64 @@ topojsonize = (features) ->
 
 compress_svg_path = (path) ->
   # First, round to one decimal and multiply by 10
+  #
+  # Do this while we're still dealing with absolute coordinates.
   path = path.replace(/\.(\d)\d+/g, (__, one_decimal) -> one_decimal)
 
-  # Now, convert absolute coordinates to relative ones.
-  throw 'Unexpected character in path' if /[^MLZ,\.0-9]/.test(path)
+  last_point = null
+  last_instruction = null
+  out = [] # Array of String instructions with coordinates
 
-  rings = path.split(/Z/g).filter((s) -> s.length > 0) # Each ring ends with "Z"
+  next_instruction_index = 0
+  instr_regex = /([a-zA-Z ])(?:(\d+),(\d+))?/g
 
-  compressed_rings = rings.map (ring) ->
-    throw 'Ring did not start with "M"' if ring[0] != 'M'
+  while (match = instr_regex.exec(path)) != null
+    if next_instruction_index != instr_regex.lastIndex - match[0].length
+      throw "Found a non-instruction at position #{next_instruction_index} of path #{path}. Next instruction was at position #{instr_regex.lastIndex}. Aborting."
+    next_instruction_index = instr_regex.lastIndex
 
-    point_strings = ring.slice(1).split(/L/g) # "1,2" pairs
+    switch match[1]
+      when 'Z'
+        last_instruction = 'Z'
+        last_point = null
+        out.push('Z')
 
-    parse_point_string = (s) -> s.split(',').map((x) -> +x)
+      when 'M'
+        point = [ +match[2], +match[3] ]
 
-    point = parse_point_string(point_strings.shift())
+        last_point = point
+        last_instruction = 'M'
+        out.push("M#{point[0]},#{point[1]}")
 
-    commands = [ "M#{point[0]},#{point[1]}" ]
+      when 'L'
+        if !last_point?
+          throw 'Got an L instruction without a previous point. Aborting.'
 
-    # We'll try to put " " instead of "l" for lineto, to make the path easier
-    # to read.
-    last_instruction_was_l = false
+        point = [ parseInt(match[2]), parseInt(match[3]) ]
+        dx = point[0] - last_point[0]
+        dy = point[1] - last_point[1]
 
-    for point_string in point_strings
-      point2 = parse_point_string(point_string)
+        if dx != 0 || dy != 0
+          if dx == 0
+            last_instruction = 'v'
+            out.push("v#{dy}")
+          else if dy == 0
+            last_instruction = 'h'
+            out.push("h#{dx}")
+          else
+            instruction = if last_instruction == 'l' then ' ' else 'l'
+            last_instruction = 'l'
+            out.push("#{instruction}#{dx},#{dy}")
 
-      dx = point2[0] - point[0]
-      dy = point2[1] - point[1]
+        last_point = point
 
-      continue if dx == 0 && dy == 0
-
-      if dx == 0
-        commands.push("v#{dy}")
-        last_instruction_was_l = false
-      else if dy == 0
-        commands.push("h#{dx}")
-        last_instruction_was_l = false
       else
-        commands.push("#{last_instruction_was_l && ' ' || 'l'}#{dx},#{dy}")
-        last_instruction_was_l = true
+        throw "Need to handle SVG instruction #{match[0]}. Aborting."
 
-      point = point2
+  if next_instruction_index != path.length
+    throw "Unhandled SVG instruction at end of path: #{path.slice(next_instruction_index)}"
 
-    commands.push('Z')
-
-    commands.join('')
-
-  compressed_rings.join('')
+  out.join('')
 
 distance2 = (p1, p2) ->
   dx = p2[0] - p1[0]
@@ -298,10 +309,19 @@ distance2 = (p1, p2) ->
   dx * dx + dy * dy
 
 # Returns a <path class="state">
-render_state_path = (path, topology, features) ->
+render_state_path = (path, topology) ->
   d = path(topojson.mesh(topology, topology.objects.counties, (a, b) -> a == b))
   d = compress_svg_path(d)
   '  <path class="state" transform="scale(0.1)" d="' + d + '"/>'
+
+render_mesh_path = (path, topology, features) ->
+  d = path(topojson.mesh(topology, features, (a, b) -> a != b))
+  if d
+    d = compress_svg_path(d)
+    '  <path class="mesh" transform="scale(0.1)" d="' + d + '"/>'
+  else
+    # DC, for instance, has no mesh
+    ''
 
 # Returns a <g class="counties"> full of <path data-fips-int="...">s
 render_counties_g = (path, topology, geometries) ->
@@ -321,14 +341,15 @@ render_counties_g = (path, topology, geometries) ->
 # Tries to intersect original (a GeoJSON Geometry) with jsts_geometry. If
 # there's an error, or the result is null, returns original.
 intersect_or_original = (original_geojson, jsts_geometry) ->
+  return original_geojson
   reader = new jsts.io.GeoJSONReader()
-  parser = new jsts.io.GeoJSONParser()
+  writer = new jsts.io.GeoJSONWriter()
 
   try
     original_geometry = reader.read(JSON.stringify(original_geojson))
       .buffer(0) # make valid
     intersection_geometry = jsts_geometry.intersection(original_geometry)
-    ret = parser.write(intersection_geometry)
+    ret = writer.write(intersection_geometry)
     if ret.type == 'GeometryCollection' && ret.geometries.length == 0
       original_geojson
     else if ret.type == 'Point'
@@ -351,8 +372,7 @@ render_subcounties_g = (path, topology, geometries) ->
 
   for geometry in geometries when geometry.properties.geo_id.slice(5) != '00000' # geo-id 3301500000 in NH is water
     feature = topojson.feature(topology, geometry)
-    feature.geometry = intersect_or_original(feature.geometry, counties_geometry)
-    d = path(feature)
+    d = path(intersect_or_original(feature.geometry, counties_geometry))
     d = compress_svg_path(d)
     ret.push("    <path data-geo-id=\"#{+geometry.properties.geo_id}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
 
@@ -407,9 +427,12 @@ render_state_svg = (state_code, features, callback) ->
   ]
 
   data.push(render_state_path(path, topology, topology.objects.counties))
-  data.push(render_counties_g(path, topology, topology.objects.counties.geometries))
   if topology.objects.subcounties?.geometries?.length
     data.push(render_subcounties_g(path, topology, topology.objects.subcounties.geometries))
+    data.push(render_mesh_path(path, topology, topology.objects.subcounties))
+  else
+    data.push(render_counties_g(path, topology, topology.objects.counties.geometries))
+    data.push(render_mesh_path(path, topology, topology.objects.counties))
   if topology.objects.cities.geometries.length
     data.push(render_cities_g(topology, topology.objects.cities.geometries))
 
