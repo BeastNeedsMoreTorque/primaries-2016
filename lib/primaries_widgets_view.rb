@@ -54,25 +54,38 @@ module PrimariesWidgetsView
     result
   end
 
+  # { geo_id -> { n_precincts_reporting, n_precincts_total, Dem -> { n_precincts_reporting, n_precincts_total, leader -> { candidate_id, n_votes } } } }
   def geos_party_objects
-    ids = {}
-    #race_day.county_races.each for days other than NH, also should have a dict for each race
-    dems = ['1746', '1445']
-    race_day.race_subcounties.each do |cp|
-      key = cp.geo_id.to_s
-      party = ((cp.race_id.include? "GOP") ? :GOP : :Dem)
-      candidates = race_day.candidate_race_subcounties.select{|cr_sub| cr_sub.geo_id.to_s == key}.sort_by(&:n_votes).reverse
-      candidates = ((cp.race_id.include? "GOP") ? candidates.select{|c| not dems.include? c.candidate_id} : candidates.select{|c| dems.include? c.candidate_id})
-      leader = (candidates.first ? {:candidate_id => candidates.first.candidate_id, :n_votes => candidates.first.n_votes } : nil)
-      obj = (ids[key] ||= { :GOP => {}, :Dem => {}, :n_precincts_total => 0, :n_precincts_reporting => 0})
-      obj[:n_precincts_reporting] += cp.n_precincts_reporting
-      obj[:n_precincts_total] += cp.n_precincts_total
-      obj[party][:n_precincts_reporting] = cp.n_precincts_reporting
-      obj[party][:n_precincts_total] = cp.n_precincts_total
-      obj[party][:leader] = leader
-      ids[key] = obj
-    end
-    ids
-  end
+    ret = {}
 
+    race_day.race_subcounties.each do |rs|
+      geo_id = rs.geo_id
+      party_id = rs.party_id
+
+      geo_obj = ret[geo_id] ||= {
+        n_precincts_reporting: 0,
+        n_precincts_total: 0,
+        'Dem' => { n_precincts_reporting: 0, n_precincts_total: 0, leader: { candidate_id: nil, n_votes: 0 } },
+        'GOP' => { n_precincts_reporting: 0, n_precincts_total: 0, leader: { candidate_id: nil, n_votes: 0 } }
+      }
+
+      geo_obj[:n_precincts_reporting] += rs.n_precincts_reporting
+      geo_obj[:n_precincts_total] += rs.n_precincts_total
+      geo_obj[party_id][:n_precincts_reporting] += rs.n_precincts_reporting
+      geo_obj[party_id][:n_precincts_total] += rs.n_precincts_total
+    end
+
+    race_day.candidate_race_subcounties.each do |crs|
+      geo_id = crs.geo_id
+      party_id = crs.party_id
+
+      leader_obj = ret[geo_id][party_id][:leader]
+      if crs.n_votes > leader_obj[:n_votes]
+        leader_obj[:candidate_id] = crs.candidate_id
+        leader_obj[:n_votes] = crs.n_votes
+      end
+    end
+
+    ret
+  end
 end

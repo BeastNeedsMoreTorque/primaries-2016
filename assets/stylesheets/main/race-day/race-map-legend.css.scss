@@ -19,8 +19,10 @@
     padding: .5rem .5rem 0;
   }
 
+  &.has-candidate-wins .candidate-wins,
   &.has-candidate-leads .candidate-leads,
   &.has-candidate-trails .candidate-trails,
+  &.has-candidate-loses .candidate-loses,
   &.has-no-results .no-results {
     display: -webkit-flex;
     display: flex;
