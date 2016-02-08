@@ -40,9 +40,12 @@
             .see-all-candidates
               %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
 
-        .map-precincts-container 
+        .map-precincts-container{class: "#{party.id.downcase}"}
           .precincts
-            %span.precincts-val= "N%"
+            -if party.id == "Dem"
+              %span.precincts-val= "#{precinct_stats[:reporting_precincts_pct_str_dem]}"
+            -else
+              %span.precincts-val= "#{precinct_stats[:reporting_precincts_pct_str_gop]}"
             %span= " OF PRECINCTS REPORTING"
           .map-container.flex-container{class: "#{party.id.downcase}"}
             .map
