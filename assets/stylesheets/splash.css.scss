@@ -288,6 +288,9 @@ $party-container-height: 100px;
 
 .map-precincts-container {
 	padding: 10px;
+	&:last-child {
+		padding-right: 0;
+	}
 	.precincts {
 		font-size: 14px;
 		padding-bottom: 3px;

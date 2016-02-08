@@ -6,14 +6,8 @@ module PrimariesWidgetsView
 
   def race_day; @race_day ||= database.race_days.find(race_date_str); end
 
-  def precinct_stats
-    geos = geos_party_objects().values
-    reporting_precincts = geos.map{|g| g[:n_precincts_reporting]}.reject(&:nil?).reduce(0, :+)
-    total_precincts = geos.map{|g| g[:n_precincts_total]}.reject(&:nil?).reduce(0, :+)
-    finished_geos = geos.select{|val| val[:n_precincts_total] == val[:n_precincts_reporting]}.count
-    unfinished_geos = geos.select{|val| val[:n_precincts_reporting] > 0 and val[:n_precincts_reporting] < val[:n_precincts_total]}.count
-    noresults = geos.select{|val| val[:n_precincts_reporting] == 0}.count
-    reporting_str = if total_precincts.nil? || total_precincts == 0
+  def get_precincts_reporting_str(reporting_precincts, total_precincts)
+    if total_precincts.nil? || total_precincts == 0
       'N/A'
     elsif reporting_precincts == total_precincts
       '100%'
@@ -25,6 +19,25 @@ module PrimariesWidgetsView
         "#{pct_reporting.round}%"
       end
     end
+  end
+
+  def precinct_stats
+    geos = geos_party_objects().values
+    reporting_precincts = geos.map{|g| g[:n_precincts_reporting]}.reject(&:nil?).reduce(0, :+)
+    total_precincts = geos.map{|g| g[:n_precincts_total]}.reject(&:nil?).reduce(0, :+)
+    finished_geos = geos.select{|val| val[:n_precincts_total] == val[:n_precincts_reporting]}.count
+    unfinished_geos = geos.select{|val| val[:n_precincts_reporting] > 0 and val[:n_precincts_reporting] < val[:n_precincts_total]}.count
+    noresults = geos.select{|val| val[:n_precincts_reporting] == 0}.count
+    reporting_str = get_precincts_reporting_str(reporting_precincts, total_precincts)
+    pct_reporting = (reporting_precincts.to_f / total_precincts.to_f) * 100.0
+
+    gop_reporting = race_day.race_subcounties.select{|rsc| rsc.party_id == "GOP"}.map{|rsc| rsc.n_precincts_reporting}.reduce(0, :+)
+    gop_total = race_day.race_subcounties.select{|rsc| rsc.party_id == "GOP"}.map{|rsc| rsc.n_precincts_total}.reduce(0, :+)
+    gop_reporting_str = get_precincts_reporting_str(gop_reporting, gop_total)
+
+    dem_reporting = race_day.race_subcounties.select{|rsc| rsc.party_id == "Dem"}.map{|rsc| rsc.n_precincts_reporting}.reduce(0, :+)
+    dem_total = race_day.race_subcounties.select{|rsc| rsc.party_id == "Dem"}.map{|rsc| rsc.n_precincts_total}.reduce(0, :+)
+    dem_reporting_str = get_precincts_reporting_str(gop_reporting, gop_total)
 
     {
       geos_total: geos.count,
@@ -34,7 +47,9 @@ module PrimariesWidgetsView
       reporting_precincts_sofar: reporting_precincts,
       reporting_precincts_total: total_precincts,
       reporting_precincts_pct_raw: pct_reporting,
-      reporting_precincts_pct_str: reporting_str
+      reporting_precincts_pct_str: reporting_str,
+      reporting_precincts_pct_str_gop: gop_reporting_str,
+      reporting_precincts_pct_str_dem: dem_reporting_str
     }
   end
 

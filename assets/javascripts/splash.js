@@ -27,6 +27,7 @@ $(function() {
   }
 
   function fillSvg(data, leaders){
+    /*
     var pattern_id = 'progress-map-pattern-no-results';
     $('.map svg').each(function() {
       add_no_results_yet_pattern_to_svg(this, pattern_id);
@@ -44,9 +45,10 @@ $(function() {
         $ele.css({fill: "#999"});
       }else{
         $ele.css({fill: "#eee"});
-        //console.log('undefined result', fips, obj)
       }
     });
+
+  */
 
     for(fips in data){
       obj = data[fips];
@@ -97,10 +99,8 @@ $(function() {
   }
 
   function updatePrecinctStats(data){
-    $("#precincts-reporting-val").html(data.reporting_precincts_pct_str);
-    $("#finished-geos-val").html(data.geos_finished);
-    $("#unfinished-geos").html(data.geos_unfinished);
-    $("#no-result-geos").html(data.geos_noresults);
+    $(".map-precincts-container.dem .precincts-val").html(data.reporting_precincts_pct_str_dem);
+    $(".map-precincts-container.gop .precincts-val").html(data.reporting_precincts_pct_str_gop);
   }
 
   function getData(){
