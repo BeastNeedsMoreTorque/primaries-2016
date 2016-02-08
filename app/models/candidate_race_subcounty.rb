@@ -1,10 +1,11 @@
 CandidateRaceSubcounty = RubyImmutableStruct.new(:database, :candidate_id, :race_id, :geo_id, :n_votes) do
   include Comparable
 
-  attr_reader(:id)
+  attr_reader(:id, :party_id)
 
   def after_initialize
     @id = "#{@candidate_id}-#{@race_id}, #{@geo_id}"
+    @party_id = @race_id[11..13]
   end
 
   def <=>(rhs)
