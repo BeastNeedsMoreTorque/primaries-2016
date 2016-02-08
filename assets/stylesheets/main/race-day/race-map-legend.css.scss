@@ -31,6 +31,8 @@
 
   .swatch {
     display: inline-block;
+    box-sizing: border-box; // for "no-results" white
+    border: 1px solid white;
     width: 1rem;
     height: 1rem;
     margin-right: .2rem;
@@ -42,18 +44,31 @@
   }
 
   .no-results .swatch {
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="%23ddd"/><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1" stroke="%23fff"/></svg>');
+    background: white;
+    border: 1px solid $tableBorderColor;
   }
 
   .candidate-trails .swatch {
+    background: $undecided url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1" stroke="white"/></svg>');
+  }
+
+  .candidate-loses .swatch {
     background: $undecided;
   }
 
-  &[data-party-id=Dem] .candidate-leads .swatch {
+  &[data-party-id=Dem] .candidate-wins .swatch {
     background: $strongDem;
   }
 
-  &[data-party-id=GOP] .candidate-leads .swatch {
+  &[data-party-id=GOP] .candidate-wins .swatch {
     background: $strongGOP;
+  }
+
+  &[data-party-id=Dem] .candidate-leads .swatch {
+    background: $strongDem url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1" stroke="white"/></svg>');
+  }
+
+  &[data-party-id=GOP] .candidate-leads .swatch {
+    background: $strongGOP url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1" stroke="white"/></svg>');
   }
 }

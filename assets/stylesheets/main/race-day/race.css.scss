@@ -7,7 +7,35 @@ body.race-day .race {
     text-align: center;
   }
 
-  @include status-indicator;
+  .race-status {
+    text-align: center;
+    padding: .2rem 1rem;
+    margin: .2rem auto;
+
+    .status-past, .status-present, .status-future {
+      display: none;
+    }
+
+    .status-past, .status-present-text, .status-future {
+      font-style: italic;
+    }
+
+    .refresh-flag {
+      padding: 2px 8px;
+      margin: 0;
+      background: $red;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      img {
+        width: 15px;
+      }
+    }
+
+    .status-p {
+      margin: .2rem auto;
+    }
+  }
 
   // Show the current status
   &.past .race-status .status-past,
