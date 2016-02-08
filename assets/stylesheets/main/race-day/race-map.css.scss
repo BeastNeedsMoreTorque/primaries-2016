@@ -11,19 +11,21 @@
     stroke: #ddd;
     stroke-width: 10; // divided by 10
     fill: #fff;
+    pointer-events: none; // so it doesn't cause mouseleave
   }
 
-  g.counties path, g.subcounties path {
-    stroke: white;
+  path.mesh {
+    fill: none;
+    stroke: #eee;
     stroke-width: 10; // divided by 10
-    fill: #eee;
+    pointer-events: none; // so it doesn't cause mouseleave
+  }
 
-    &.hover {
-      stroke: black;
-      stroke-width: 20; // divided by 10
-      fill: rgba(255, 255, 255, 0.2);
-      pointer-events: none; // so it doesn't cause mouseleave
-    }
+  path.hover {
+    stroke: black;
+    stroke-width: 20; // divided by 10
+    fill: rgba(255, 255, 255, 0.2);
+    pointer-events: none; // so it doesn't cause mouseleave
   }
 
   g.subcounties path {
@@ -130,40 +132,36 @@
 }
 
 .race[data-party-id=Dem] svg {
-  g.counties, g.subcounties {
-    path.candidate-wins, path.candidate-leads {
-      fill: $strongDem;
-    }
+  path.candidate-wins, path.candidate-leads {
+    fill: $strongDem;
+  }
 
-    path.candidate-loses, path.candidate-trails {
-      background: $undecided;
-    }
+  path.candidate-loses, path.candidate-trails {
+    fill: $undecided;
+  }
 
-    //path.candidate-leads will be changed in JS to use a <pattern>
-    //path.candidate-trails will be changed in JS to use a <pattern>
+  //path.candidate-leads will be changed in JS to use a <pattern>
+  //path.candidate-trails will be changed in JS to use a <pattern>
 
-    path.no-results {
-      fill: white;
-    }
+  path.no-results {
+    fill: white;
   }
 }
 
 .race[data-party-id=GOP] svg {
-  g.counties, g.subcounties {
-    path.candidate-wins, path.candidate-leads {
-      fill: $strongGOP;
-    }
+  path.candidate-wins, path.candidate-leads {
+    fill: $strongGOP;
+  }
 
-    path.candidate-loses, path.candidate-loses {
-      background: #eee;
-    }
+  path.candidate-loses, path.candidate-trails {
+    fill: $undecided;
+  }
 
-    //path.candidate-leads will be changed in JS to use a <pattern>
-    //path.candidate-trails will be changed in JS to use a <pattern>
+  //path.candidate-leads will be changed in JS to use a <pattern>
+  //path.candidate-trails will be changed in JS to use a <pattern>
 
-    path.no-results {
-      fill: white;
-    }
+  path.no-results {
+    fill: white;
   }
 }
 
