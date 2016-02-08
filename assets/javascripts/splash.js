@@ -63,9 +63,9 @@ $(function() {
       }
 
       if(obj.Dem.leader.n_votes > 0 && obj.Dem.leader.id == leaders.Dem.id){
-        $ele_gop.css({"fill": "#5c6b95"})
+        $ele_dem.css({"fill": "#5c6b95"})
       }else if(obj.Dem.leader.n_votes > 0 && obj.Dem.leader.id != leaders.Dem.id){
-        $ele_gop.css({"fill": "#d1e0fa"})
+        $ele_dem.css({"fill": "#d1e0fa"})
       }
 
     }
