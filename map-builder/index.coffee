@@ -1,6 +1,7 @@
 d3 = require('d3')
 fs = require('fs')
 topojson = require('topojson')
+jsts = require('jsts')
 
 require('d3-geo-projection')(d3)
 
@@ -219,6 +220,7 @@ topojsonize = (features) ->
     'preserve-attached': false
     'property-transform': (d) ->
       p = d.properties
+
       state_code: p.STATE
       fips_string: p.ADMIN_FIPS # counties only
       geo_id: p.GEOID # subcounties only
@@ -316,12 +318,41 @@ render_counties_g = (path, topology, geometries) ->
   ret.push('  </g>')
   ret.join('\n')
 
+# Tries to intersect original (a GeoJSON Geometry) with jsts_geometry. If
+# there's an error, or the result is null, returns original.
+intersect_or_original = (original_geojson, jsts_geometry) ->
+  reader = new jsts.io.GeoJSONReader()
+  parser = new jsts.io.GeoJSONParser()
+
+  try
+    original_geometry = reader.read(JSON.stringify(original_geojson))
+      .buffer(0) # make valid
+    intersection_geometry = jsts_geometry.intersection(original_geometry)
+    ret = parser.write(intersection_geometry)
+    if ret.type == 'GeometryCollection' && ret.geometries.length == 0
+      original_geojson
+    else if ret.type == 'Point'
+      original_geojson
+    else
+      ret
+  catch e
+    console.warn(e)
+    original_geojson
+
 # Returns a <g class="subcounties"> full of <path data-geo-id="...">s
 render_subcounties_g = (path, topology, geometries) ->
+  counties = topojson.merge(topology, topology.objects.counties.geometries)
+
+  reader = new jsts.io.GeoJSONReader()
+  counties_geometry = reader.read(JSON.stringify(counties))
+    .buffer(0) # make valid
+
   ret = [ '  <g class="subcounties" transform="scale(0.1)">' ]
 
-  for geometry in geometries
-    d = path(topojson.feature(topology, geometry))
+  for geometry in geometries when geometry.properties.geo_id.slice(5) != '00000' # geo-id 3301500000 in NH is water
+    feature = topojson.feature(topology, geometry)
+    feature.geometry = intersect_or_original(feature.geometry, counties_geometry)
+    d = path(feature)
     d = compress_svg_path(d)
     ret.push("    <path data-geo-id=\"#{+geometry.properties.geo_id}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
 
