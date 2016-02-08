@@ -20,11 +20,11 @@
       %div.container
         %p.intro.when-future= "Anti-establishment candidates Bernie Sanders and Donald Trump are leading in New Hampshire polls. HuffPost will have live results on Feb. 9 when residents cast their votes."
         %p.tease-link.when-future
-          %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See The Election Calendar
+          %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See the election calendar
         %p.tease-link.when-present
-          %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See Live Updates
+          %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See live updates
         %p.tease-link.when-past
-          %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See Upcoming Races
+          %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See upcoming races
         - race_day.state_party_races.first[1].each do |party, race, _|#TODO: Look at all races for multi race days!
           - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
           .party-container
