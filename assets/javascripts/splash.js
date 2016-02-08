@@ -111,7 +111,7 @@ $(function() {
     
       fillSvg(json.geos, json.candidates.leaders);
 
-      updateCandidates(json.candidates);
+      //updateCandidates(json.candidates);
 
       updatePrecinctStats(json.precincts);
     })

@@ -204,46 +204,60 @@ $party-container-height: 100px;
 }
 
 .candidate-position-listing {
-	height: 100%;
   border-top: 4px solid transparent;
 	@include vertical-center-column-flex;
   padding: 10px;
 
   table {
   	width: 100%;
-  	.candidate-name {
-  		width: 40%;
-  	}
+    border-collapse: collapse;
+
+		.candidate {
+	    font-weight: bold;
+			background: #fff;
+			font-size: 13px;
+	    line-height: 15px;
+
+	    &.winner .candidate-name::after {
+	      content: ' ✓';
+	    }
+	  	.candidate-name {
+	  	}
+		}
+
+		tr {
+			td {
+				padding: 4px;
+				&.n-votes {
+					width: 3.5rem;
+					text-align: right;
+				}
+				&.n-votes-pct {
+					text-align: right;
+					width: 2rem;
+				}
+			}
+		}
   }
 
   &.dem {
 	  background-color: $widgetLightBlue;
+		table {
+			tr {
+		    border-bottom: 6px solid $widgetLightBlue;
+			}
+		}	  
   }
   &.gop {
 	  background-color: $widgetLightRed;
+		table {
+			tr {
+		    border-bottom: 6px solid $widgetLightRed;
+			}
+		}	  
   }
 
-	.candidate {
-    font-weight: bold;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-    flex: 0 0 auto;
-    -webkit-flex: 0 0 auto;
-    box-sizing: border-box;
 
-		background: #fff;
-    padding: 4px;
-    border: 0 solid transparent;
-    border-bottom-width: 6px;
-		font-size: 13px;
-    line-height: 15px;
-
-    &.winner .candidate-name::after {
-      content: ' ✓';
-    }
-	}
 }
 
 .dem .candidate {
@@ -255,7 +269,10 @@ $party-container-height: 100px;
 }
 
 .party-container {
-	width: 33rem;
+
+	flex-shrink: 0;
+	-webkit-flex-shrink: 0;
+
 	&:first-child {
 		margin-top: 5px;
 	}
