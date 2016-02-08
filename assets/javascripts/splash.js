@@ -55,7 +55,7 @@ $(function() {
 
       if(obj.GOP.leader.n_votes > 0)
         //console.log(obj, leaders.GOP)
-
+      console.log(obj.GOP.leader.id, leaders.GOP.id)
       if(obj.GOP.leader.n_votes > 0 && obj.GOP.leader.id == leaders.GOP.id){
         $ele_gop.css({"fill": "#bc5c5c"})
       }else if(obj.GOP.leader.n_votes > 0 && obj.GOP.leader.id != leaders.GOP.id){

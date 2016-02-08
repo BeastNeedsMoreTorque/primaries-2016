@@ -65,8 +65,8 @@ module PrimariesWidgetsView
       geo_obj = ret[geo_id] ||= {
         n_precincts_reporting: 0,
         n_precincts_total: 0,
-        'Dem' => { n_precincts_reporting: 0, n_precincts_total: 0, leader: { candidate_id: nil, n_votes: 0 } },
-        'GOP' => { n_precincts_reporting: 0, n_precincts_total: 0, leader: { candidate_id: nil, n_votes: 0 } }
+        'Dem' => { n_precincts_reporting: 0, n_precincts_total: 0, leader: { id: nil, n_votes: 0 } },
+        'GOP' => { n_precincts_reporting: 0, n_precincts_total: 0, leader: { id: nil, n_votes: 0 } }
       }
 
       geo_obj[:n_precincts_reporting] += rs.n_precincts_reporting
@@ -81,7 +81,7 @@ module PrimariesWidgetsView
 
       leader_obj = ret[geo_id][party_id][:leader]
       if crs.n_votes > leader_obj[:n_votes]
-        leader_obj[:candidate_id] = crs.candidate_id
+        leader_obj[:id] = crs.candidate_id
         leader_obj[:n_votes] = crs.n_votes
       end
     end
