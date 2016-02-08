@@ -27,6 +27,7 @@ h2.sub a {
   }
 }
 
+
 .primary-right-rail {
   margin: 0 auto;
 
@@ -52,6 +53,7 @@ h2.sub a {
 
   .footnotes {
     @include footnotes;
+    margin-top: 5px;
   }
 
   .race-name{
