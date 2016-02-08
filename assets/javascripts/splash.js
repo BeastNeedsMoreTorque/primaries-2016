@@ -72,26 +72,27 @@ $(function() {
   }
 
   function updateCandidates(data, tense){
-    $(".party-container.gop .candidate-position-listing table.candidate").remove();
-    $(".party-container.dem .candidate-position-listing table.candidate").remove();
+    $(".party-container.gop .candidate-position-listing table").remove();
+    $(".party-container.dem .candidate-position-listing table").remove();
 
     ["Dem", "GOP"].forEach(function(party){
+      var table = "" +
+                  "<table>" +
+                    "<tbody>";
       data.candidates[party].forEach(function(c, i){
         var row = "" +
-                  "<table class='candidate "+ (i==0 ? 'leader' : '') +"' data-candidate-id='"+ c.id +"'>" +
-                    "<tbody>" +
-                      "<tr>" + 
-                        "<td class='candidate-name'>" + c.name + "</td>" +
-                        "<td class='n-votes'>" + format_int(c.votes) + "</td>" +
-                        "<td class='n-votes-pct'>" + (c.pct ? c.pct.toFixed(1) : "0.0") + "%</td>" +
-                      "</tr>" +
-                    "</tbody>" +
-                  "</table>";
+                  "<tr class='candidate "+ (i==0 ? 'leader' : '') +"' data-candidate-id='"+ c.id +"'>" + 
+                    "<td class='candidate-name'>" + c.name + "</td>" +
+                    "<td class='n-votes'>" + format_int(c.votes) + "</td>" +
+                    "<td class='n-votes-pct'>" + (c.pct ? c.pct.toFixed(1) : "0.0") + "%</td>" +
+                  "</tr>";
         if(i == 0)
           $(".map-container."+party.toLowerCase()+" .legend span.name").html(c.name)
         if(i < 3)
-          $(".party-container."+party.toLowerCase()+" .candidate-position-listing").append(row);
+          table += row;
       });
+      table += "</tbody></table>";
+      $(".party-container."+party.toLowerCase()+" .candidate-position-listing").append(table);
     })
   }
 

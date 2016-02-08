@@ -26,24 +26,19 @@
             %img{src: image_path("refresh.svg")}
             %span.timer= "0:30"
           .tease-link
-            %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See Results
+            %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See results
           .legend
-            .label= "TOWNS REPORTING"
+            .label= "Towns reporting"
             .container
               .finished
               %div
                 %span#finished-geos-val= "#{precinct_stats[:geos_finished]}"
-                %span= " FINISHED"
+                %span= " Finished"
             .container
               .unfinished
               %div
                 %span#unfinished-geos= "#{precinct_stats[:geos_unfinished]}"
-                %span= " NOT FINISHED"
-            .container
-              .no-results
-              %div
-                %span#no-result-geos= "#{precinct_stats[:geos_noresults]}"
-                %span= " W/O RESULTS"
+                %span= " Not finished"
         .map-container
           .map.progress
             != map_svg('states/NH') 
@@ -56,13 +51,13 @@
               .frontrunner-lbl
                 %span= party.adjective.upcase
                 %span CANDIDATES
-                %span Total Votes
+                %span Total votes
           .candidate-position-listing{class: party.id.downcase}
-            - race.candidate_races[0..2].each do |candidate_race|
-              - candidate = candidate_race.candidate
-              %table.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
-                %tbody
-                  %tr
+            %table
+              %tbody
+                - race.candidate_races[0..2].each do |candidate_race|
+                  - candidate = candidate_race.candidate
+                  %tr.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
                     %td.candidate-name= candidate.name
                     %td.n-votes= format_int(candidate_race.n_votes)
                     -if format_percent_or_nil(candidate_race.percent_vote) != 'N/A'
@@ -78,16 +73,16 @@
               .leading
               %div
                 %span.name= "#{race.candidate_races.first.candidate.name.upcase}"
-                %span= " LEADS"
+                %span= " leads"
             .container
               .trailing
               %div
                 %span.name= "#{race.candidate_races.first.candidate.name.upcase}"
-                %span= " TRAILS"
+                %span= " trails"
             .container
               .no-results
               %div
-                %span= "W/O RESULTS"
+                %span= "No results"
                 
 
 

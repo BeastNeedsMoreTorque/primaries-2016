@@ -44,7 +44,7 @@
                 SDEs *
               - else
                 %span.frontrunner-unit.when-present.when-past Votes 
-            %span.frontrunner-num.pct.when-present.when-past= "#{format_percent_or_nil(leader.percent_vote)}%"
+            .frontrunner-num.pct.when-present.when-past= "#{format_percent_or_nil(leader.percent_vote)}%"
 
   - if race_day.races.any?(&:n_votes_is_really_n_sdes)
     %p.source.sde.when-present.when-past
@@ -52,11 +52,11 @@
       who will attend the state-wide party convention.
 
   .tease-link.when-past
-    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See Results"
+    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See results"
   .tease-link.when-present
-    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See Live Results"
+    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See live results"
   .tease-link.when-future
-    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See All Candidates"
+    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See all candidates"
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
