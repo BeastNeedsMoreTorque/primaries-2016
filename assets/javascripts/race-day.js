@@ -554,16 +554,16 @@ function poll_results() {
       var party_id = this.getAttribute('data-party-id');
       var state_code = this.getAttribute('data-state-code');
 
-      var $ndwc = $('.n-delegates-without-candidates', this);
+      var $ndwc = $('.n-delegates-with-candidates', this);
 
       var these_els = els[party_id + '-' + state_code] = {
         race: $(this),
         n_reporting: $('.metadata .n-reporting', this),
         n_total: $('.metadata .n-total', this),
-        n_delegates_without_candidates: {
+        n_delegates_with_candidates: {
           dots_without_candidates: $ndwc.find('.dots .without-candidates', this),
           dots_with_candidates: $ndwc.find('.dots .with-candidates', this),
-          int_without_candidates: $ndwc.find('.n-delegates-without-candidates-int', this),
+          int_with_candidates: $ndwc.find('.n-delegates-with-candidates-int', this),
           int_total: $ndwc.find('.n-delegates-int', this)
         },
         last_updated: $('.metadata .last-updated time', this.parentNode)
@@ -636,7 +636,7 @@ function poll_results() {
       var has_delegate_counts = arr[4] == 'true';
       var last_updated = new Date(arr[5]);
       var when_race_happens = arr[6]; // 'past', 'present' or 'future'
-      var n_delegates_without_candidates = +arr[7];
+      var n_delegates_with_candidates = +arr[7];
       var n_delegates = +arr[8];
 
       var key = party_id + '-' + state_code;
@@ -651,10 +651,10 @@ function poll_results() {
         if (!isNaN(last_updated.getFullYear())) {
           elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();
         }
-        var dels = elems.n_delegates_without_candidates;
-        dels.dots_without_candidates.text(new Array(n_delegates_without_candidates).fill("\u200b•").join(''));
-        dels.dots_with_candidates.text(new Array(n_delegates - n_delegates_without_candidates).fill("\u200b•").join(''));
-        dels.int_without_candidates.text(format_int(n_delegates_without_candidates));
+        var dels = elems.n_delegates_with_candidates;
+        dels.dots_without_candidates.text(new Array(n_delegates - n_delegates_with_candidates).fill("\u200b•").join(''));
+        dels.dots_with_candidates.text(new Array(n_delegates_with_candidates).fill("\u200b•").join(''));
+        dels.int_with_candidates.text(format_int(n_delegates_with_candidates));
         dels.int_total.text(format_int(n_delegates));
       }
     });

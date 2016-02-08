@@ -69,8 +69,8 @@ class RaceDayResultsView < BaseView
   end
 
   def race_csv
-    header = "party_id,state_code,n_precincts_reporting,n_precincts_total,has_delegate_counts,last_updated,when_race_happens,n_delegates_without_candidates,n_delegates\n"
-    data = race_day.races.map{ |r| "#{r.party_id},#{r.state_code},#{r.n_precincts_reporting},#{r.n_precincts_total},#{r.has_delegate_counts},#{r.last_updated},#{r.when_race_happens},#{r.n_delegates_without_candidates},#{r.n_delegates}" }.join("\n")
+    header = "party_id,state_code,n_precincts_reporting,n_precincts_total,has_delegate_counts,last_updated,when_race_happens,n_delegates_with_candidates,n_delegates\n"
+    data = race_day.races.map{ |r| "#{r.party_id},#{r.state_code},#{r.n_precincts_reporting},#{r.n_precincts_total},#{r.has_delegate_counts},#{r.last_updated},#{r.when_race_happens},#{r.n_delegates_with_candidates},#{r.n_delegates}" }.join("\n")
     header + data
   end
 

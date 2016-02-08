@@ -108,13 +108,17 @@ body.race-day .race {
   .n-delegates {
     line-height: 1.4rem;
 
-    .dots-Dem .with-candidates,
-    .dots-GOP .with-candidates {
-      opacity: .35;
+    .dots-Dem .with-candidates{
+      color: $strongDem;
     }
 
-    .dots-Dem { color: $strongDem; }
-    .dots-GOP { color: $strongGOP; }
+    .dots-GOP .with-candidates {
+      color: $strongGOP;
+    }
+
+    .without-candidates {
+      opacity: .35;
+    }
 
     .dots {
       font-size: 1rem;

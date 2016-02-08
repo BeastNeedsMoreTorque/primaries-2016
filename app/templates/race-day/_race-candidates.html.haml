@@ -41,10 +41,10 @@
 
 .n-delegates.n-delegates-without-candidates
   .dots{class: "dots-#{race.party_id}"}
-    %span.without-candidates>= "\u200b•" * race.n_delegates_without_candidates
-    %span.with-candidates= "\u200b•" * race.n_delegates_with_candidates
+    %span.with-candidates>= "\u200b•" * race.n_delegates_with_candidates
+    %span.without-candidates= "\u200b•" * race.n_delegates_without_candidates
   %p
-    %span.n-delegates-without-candidates-int= format_int(race.n_delegates_without_candidates)
+    %span.n-delegates-with-candidates-int= format_int(race.n_delegates_with_candidates)
     of
     %span.n-delegates-int= format_int(race.n_delegates)
     delegates accounted for in #{race.state_name}.
