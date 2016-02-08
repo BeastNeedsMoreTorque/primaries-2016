@@ -58,11 +58,11 @@
                 %span CANDIDATES
                 %span Total Votes
           .candidate-position-listing{class: party.id.downcase}
-            - race.candidate_races[0..2].each do |candidate_race|
-              - candidate = candidate_race.candidate
-              %table.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
-                %tbody
-                  %tr
+            %table
+              %tbody
+                - race.candidate_races[0..2].each do |candidate_race|
+                  - candidate = candidate_race.candidate
+                  %tr.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
                     %td.candidate-name= candidate.name
                     %td.n-votes= format_int(candidate_race.n_votes)
                     -if format_percent_or_nil(candidate_race.percent_vote) != 'N/A'

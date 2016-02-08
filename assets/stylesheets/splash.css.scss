@@ -272,6 +272,13 @@ $party-container-height: 100px;
 	@include vertical-center-column-flex;
   padding: 10px;
 
+  table {
+  	width: 100%;
+  	.candidate-name {
+  		width: 40%;
+  	}
+  }
+
   &.dem {
 	  background-color: $widgetLightBlue;
   }
@@ -288,17 +295,7 @@ $party-container-height: 100px;
     flex: 0 0 auto;
     -webkit-flex: 0 0 auto;
     box-sizing: border-box;
-    width: 100%;
-    tbody {
-    	width: 100%;
-    	max-width: 200px;
-    	.candidate-name {
-    		width: 100%;
-    	}
-    	.n-votes {
-    		padding: 0 3px 0 3px;
-    	}
-    }
+
 		background: #fff;
     padding: 4px;
     border: 0 solid transparent;
