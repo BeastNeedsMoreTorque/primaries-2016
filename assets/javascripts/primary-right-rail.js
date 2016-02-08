@@ -8,7 +8,6 @@ $(function() {
         $("tr[data-candidate-id='"+leader.id+"']").addClass("leader");
       for(candidate_id in sorted){
         candidate = sorted[candidate_id];
-        console.log(candidate, $("tr[data-candidate-id='"+candidate_id+"'] .n-votes"))
         $("tr[data-candidate-id='"+candidate.id+"'] .n-votes").text(format_int(candidate.votes || 0));
         $("tr[data-candidate-id='"+candidate.id+"'] .n-votes-pct").text(format_percent(candidate.pct || 0));
       }
