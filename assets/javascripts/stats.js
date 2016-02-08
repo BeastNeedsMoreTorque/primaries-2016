@@ -34,6 +34,18 @@ s.src = "http://o.aolcdn.com/os_merge/?file=/aol/beacon.min.js&file=/aol/omnitur
 d.getElementsByTagName('head')[0].appendChild(s);
 })(document);
 
+document.body.innerHTML += '<div id="parsely-root" style="display:none;"><span id="parsely-cfg" data-parsely-site="huffingtonpost.com"></span></div>';
+
+(function(s, p, d) {
+  var h=d.location.protocol, i=p+"-"+s,
+      e=d.getElementById(i), r=d.getElementById(p+"-root"),
+      u=h==="https:"?"d1z2jf7jlzjs58.cloudfront.net"
+      :"static."+p+".com";
+  if (e) return;
+  e = d.createElement(s); e.id = i; e.async = true;
+  e.src = h+"//"+u+"/p.js"; r.appendChild(e);
+})("script", "parsely", document);
+
 
 // Workaround so Omniture tracking code doesn't crash on pages w/ SVG
 if (typeof SVGAnimatedString !== 'undefined') {
