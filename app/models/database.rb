@@ -1,4 +1,5 @@
 require 'date'
+require 'time'
 require 'set'
 
 require_relative '../../lib/api_sources'
@@ -44,7 +45,8 @@ require_relative '../sources/sheets_source'
 # The Database contains every Collection we use -- e.g., `candidates`, `states`
 # -- plus the rendering date.
 class Database
-  LastDate = Date.parse(ENV['LAST_DATE'] || '2016-02-09') # because we haven't coded+tested everything yet
+  LastDate = Date.parse(ENV['LAST_DATE'] || '2016-02-09')
+  Now = Time.parse(ENV['NOW'] || Time.now.iso8601)
 
   CollectionNames = %w(
     candidates
@@ -63,11 +65,11 @@ class Database
   )
 
   attr_reader(*CollectionNames)
-  attr_reader(:today)
+  attr_reader(:now)
   attr_reader(:last_date)
   attr_reader(:copy)
 
-  def initialize(copy_source, sheets_source, geo_ids_source, ap_del_super, ap_election_days, pollster_source, today, last_date)
+  def initialize(copy_source, sheets_source, geo_ids_source, ap_del_super, ap_election_days, pollster_source, now, last_date)
     @parties = load_parties(sheets_source.parties, ap_del_super.parties)
     @states = load_states(sheets_source.states)
     @party_states = load_party_states(sheets_source.party_states, pollster_source.party_states)
@@ -82,7 +84,7 @@ class Database
     @races = load_races(sheets_source.races, copy_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
     @race_days = load_race_days(sheets_source.race_days, copy_source.race_days, LastDate)
 
-    @today = today
+    @now = now
     @last_date = last_date
     @copy = copy_source.raw_data
   end
@@ -107,7 +109,7 @@ class Database
       ap_del_super,
       ap_election_days,
       pollster_source,
-      Date.today,
+      Now,
       LastDate
     )
   end
@@ -142,7 +144,7 @@ class Database
     load_pollster_source(parties, races, LastDate)
   end
 
-  def load_candidates(copy_candidates, ap_del_super_candidates, pollster_candidates)
+  def load_candidates(sheet_candidates, ap_del_super_candidates, pollster_candidates)
     last_name_to_candidate_id = {}
     candidate_id_to_del_super_candidate = {}
     for del_super_candidate in ap_del_super_candidates
@@ -158,22 +160,22 @@ class Database
       end
     end
 
-    candidates = copy_candidates.map do |copy_candidate|
-      del_super_candidate = candidate_id_to_del_super_candidate[copy_candidate.id]
-      pollster_candidate = candidate_id_to_pollster_candidate[copy_candidate.id]
+    candidates = sheet_candidates.map do |sheet_candidate|
+      del_super_candidate = candidate_id_to_del_super_candidate[sheet_candidate.id]
+      pollster_candidate = candidate_id_to_pollster_candidate[sheet_candidate.id]
 
       Candidate.new(
         self,
-        copy_candidate.id,
-        copy_candidate.party_id,
-        copy_candidate.full_name,
-        del_super_candidate.last_name,
-        del_super_candidate.n_delegates,
-        del_super_candidate.n_unpledged_delegates,
+        sheet_candidate.id,
+        sheet_candidate.party_id,
+        sheet_candidate.full_name,
+        sheet_candidate.last_name,
+        del_super_candidate ? del_super_candidate.n_delegates : 0,
+        del_super_candidate ? del_super_candidate.n_unpledged_delegates : 0,
         pollster_candidate ? pollster_candidate.poll_percent : nil,
         pollster_candidate ? pollster_candidate.sparkline : nil,
         pollster_candidate ? pollster_candidate.last_updated : nil,
-        copy_candidate.dropped_out_date_or_nil
+        sheet_candidate.dropped_out_date_or_nil
       )
     end
 
@@ -365,6 +367,7 @@ class Database
         sheets_race.party_id,
         sheets_race.state_code,
         sheets_race.race_type,
+        sheets_race.expect_results_time,
         copy_race ? copy_race.text : '',
         ap_race ? ap_race.n_precincts_reporting : nil,
         ap_race ? ap_race.n_precincts_total : nil,

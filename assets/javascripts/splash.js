@@ -52,8 +52,8 @@ $(function() {
 
     for(fips in data){
       obj = data[fips];
-      var $ele_gop = $(".map-container.gop .map svg .subcounties *[data-geo-id='"+ fips +"'");
-      var $ele_dem = $(".map-container.dem .map svg .subcounties *[data-geo-id='"+ fips +"'");
+      var $ele_gop = $(".map-container.gop .map svg .subcounties *[data-geo-id='"+ fips +"']");
+      var $ele_dem = $(".map-container.dem .map svg .subcounties *[data-geo-id='"+ fips +"']");
 
       if(obj.GOP.leader.n_votes > 0)
         //console.log(obj, leaders.GOP)
@@ -102,24 +102,28 @@ $(function() {
     $(".map-precincts-container.dem .precincts-val").html(data.reporting_precincts_pct_str_dem);
     $(".map-precincts-container.gop .precincts-val").html(data.reporting_precincts_pct_str_gop);
   }
-
+  var counter = new Countdown();
   function getData(){
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
-      console.log(json) 
       var tense = json["when_race_day_happens"];
+      if(tense == 'future')
+        return;
+      
       $("body").removeClass().addClass("race-day-" + tense);
     
       fillSvg(json.geos, json.candidates.leaders);
 
-      //updateCandidates(json.candidates);
+      updateCandidates(json.candidates);
 
       updatePrecinctStats(json.precincts);
+
+      counter.count();
     })
     .fail(function() { console.warn('Failed to load', this); })
     .always(function() { window.setTimeout(getData, 30000); });
   }
 
-  //$("svg").position_svg_cities();
+  $("svg").position_svg_cities();
   $("svg .subcounties path").addClass("no-results")
   getData();
 });

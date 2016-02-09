@@ -670,11 +670,14 @@ function poll_results() {
   on_database_change.push(update_race_tables_from_database);
   on_database_change.push(update_races_from_database);
 
+
+  var counter = new Countdown();
   $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {
     handle_poll_results(json);
+    counter.count();
   })
-    .fail(function() { console.warn('Failed to load ' + json_url, this); })
-    .always(function() { window.setTimeout(poll_results, interval_ms); });
+  .fail(function() { console.warn('Failed to load ' + json_url, this); })
+  .always(function() { window.setTimeout(poll_results, interval_ms); });
 }
 
 /**

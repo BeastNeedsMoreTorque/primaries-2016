@@ -19,6 +19,7 @@ module Assets
       ellipsize_table.js
       polyfill_array_fill.js
       position_svg_cities.js
+      countdown.js
       state-race-days.js
       race-day.js
       all-primaries.js
@@ -26,6 +27,7 @@ module Assets
     ),
     'splash.js' => %w(
       vendor/jquery-2.2.0.js
+      countdown.js
       format_int.js
       position_svg_cities.js
       splash.js

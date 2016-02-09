@@ -5,6 +5,7 @@ Race = RubyImmutableStruct.new(
   :party_id,
   :state_code,
   :race_type,
+  :expect_results_time,
   :text,
   :n_precincts_reporting,
   :n_precincts_total,
@@ -124,6 +125,10 @@ Race = RubyImmutableStruct.new(
   def when_race_happens
     if ap_says_its_over
       'past'
+    elsif !expect_results_time.nil? && !database_or_nil.nil? && database_or_nil.now < expect_results_time
+      # In NH, some results come in at midnight but they're more confusing than
+      # anything else. Hide them.
+      'future'
     elsif !n_precincts_reporting.nil? && n_precincts_reporting > 0
       if n_precincts_reporting < n_precincts_total
         'present'

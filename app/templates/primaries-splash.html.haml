@@ -33,37 +33,39 @@
                   - candidate = candidate_race.candidate
                   %tr.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
                     %td.candidate-name= candidate.name
-                    %td.n-votes= format_int(candidate_race.n_votes)
+                    %td.n-votes.when-present.when-past= format_int(candidate_race.n_votes)
                     -if format_percent_or_nil(candidate_race.percent_vote) != 'N/A'
-                      %td.n-votes-pct= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
+                      %td.n-votes-pct.when-present.when-past= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
                     -else
-                      %td.n-votes-pct= ""
+                      %td.n-votes-pct.when-present.when-past= ""
           -if party.id == "GOP"
             .see-all-candidates
               %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
 
         .map-precincts-container{class: "#{party.id.downcase}"}
-          .precincts
+          .precincts.when-present.when-past
             -if party.id == "Dem"
               %span.precincts-val= "#{precinct_stats[:reporting_precincts_pct_str_dem]}"
             -else
               %span.precincts-val= "#{precinct_stats[:reporting_precincts_pct_str_gop]}"
             %span= " OF PRECINCTS REPORTING"
+          .precincts.when-future
+            %span= "Results coming 7:00 p.m. EST"
           .map-container.flex-container{class: "#{party.id.downcase}"}
             .map
               != map_svg('states/NH')
             .legend
-              .race-status
+              .race-status.when-present
                 .status-present
                   %p.refresh-flag
                     %img{src: image_path("refresh.svg")}
-                    0:TK
-              .container{class: ((race.candidate_races.first.n_votes == 0) ? 'hidden' : '')}
+                    %span= "0:30"
+              .container.when-present.when-past
                 .leading
                 %div
                   %span.name= "#{race.candidate_races.first.candidate.name}"
                   %span= " leads"
-              .container{class: ((race.candidate_races.first.n_votes == 0) ? 'hidden' : '')}
+              .container.when-present.when-past
                 .trailing
                 %div
                   %span.name= "#{race.candidate_races.first.candidate.name}"
@@ -72,7 +74,7 @@
                 .no-results
                 %div
                   %span= "No results"
-              %p.tease-link.when-present
+              %p.tease-link
                 %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See results
                 
 
