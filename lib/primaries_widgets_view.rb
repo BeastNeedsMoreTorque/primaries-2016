@@ -63,7 +63,7 @@ module PrimariesWidgetsView
         candidate_votes = cd.n_votes
         data[:candidates][race.party_id.to_sym].push( {votes: candidate_votes, pct: candidate_pct, name: cd.candidate.name, id: cd.candidate.id} )
       }
-      leader = race.candidate_races.sort_by(&:n_votes).reverse.first
+      leader = race.candidate_races.first
       data[:leaders][race.party_id.to_sym] = {:id => leader.candidate.id, :name => leader.candidate.name}
     end
     result
