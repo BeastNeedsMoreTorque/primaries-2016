@@ -26,28 +26,36 @@ $(function() {
     svg.insertBefore(defs, svg.firstChild);
   }
 
-  function fillSvg(data, leaders){
-    for (var fips in data) {
-      var obj = data[fips];
-      var $ele_gop = $(".map-container.gop .map svg .subcounties *[data-geo-id='"+ fips +"']");
-      var $ele_dem = $(".map-container.dem .map svg .subcounties *[data-geo-id='"+ fips +"']");
+  function fillSvg(data, leaders) {
+    var colors = {
+      Dem: { lead: '#5c6b95', trail: '#d1e0fa' },
+      GOP: { lead: '#bc5c5c', trail: '#f5cfcf' }
+    };
 
-      if(obj.GOP.leader.n_votes > 0)
-        //console.log(obj, leaders.GOP)
-      if(obj.GOP.leader.n_votes > 0 && obj.GOP.leader.id == leaders.GOP.id){
-        $ele_gop.css({"fill": "#bc5c5c"})
-      }else if(obj.GOP.leader.n_votes > 0 && obj.GOP.leader.id != leaders.GOP.id){
-        $ele_gop.css({"fill": "#f5cfcf"})
-      }
+    [ 'Dem', 'GOP' ].forEach(function(party_id) {
+      var party_id_lower = party_id.toLowerCase();
+      var $svg = $('.map-container.' + party_id_lower + ' svg');
 
-      if(obj.Dem.leader.n_votes > 0 && obj.Dem.leader.id == leaders.Dem.id){
-        $ele_dem.css({"fill": "#5c6b95"})
-      }else if(obj.Dem.leader.n_votes > 0 && obj.Dem.leader.id != leaders.Dem.id){
-        $ele_dem.css({"fill": "#d1e0fa"})
-      }
+      $svg.find('g.counties path, g.subcounties path').each(function() {
+        var geo_id = this.hasAttribute('data-fips-int') ? this.getAttribute('data-fips-int') : this.getAttribute('data-geo-id');
+        var geo_leader = data[geo_id] ? data[geo_id][party_id].leader : null;
 
-    }
+        if (geo_leader == null) return;
 
+        if (geo_leader.n_votes > 0) {
+          // Some precincts are reporting. Color the map. (It will never become
+          // uncolored after this.)
+
+          var leader = leaders[party_id];
+
+          if (geo_leader.id == leader.id) {
+            this.setAttribute('fill', colors[party_id].lead);
+          } else {
+            this.setAttribute('fill', colors[party_id].trail);
+          }
+        }
+      });
+    });
   }
 
   function updateCandidates(data, tense){
