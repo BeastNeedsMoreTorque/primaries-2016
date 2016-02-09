@@ -202,7 +202,7 @@ $party-container-height: 100px;
 }
 
 .candidate-position-listing {
-  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
   display: -webkit-flex;
   display: flex; //allows divs to stack next to each other
   -webkit-flex-direction: column;
