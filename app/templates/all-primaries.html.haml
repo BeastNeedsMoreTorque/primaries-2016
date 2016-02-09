@@ -6,11 +6,20 @@
 
   != render(partial: 'share-buttons')
 
-  %a.teaser{href: '/2016/primaries/2016-02-09'}
-    %span.label Up Next
-    %span.teaser-inner
-      %span.detail New Hampshire Primaries
-      %span.callout See preview &raquo;
+  - if focus_race_day
+    %a.teaser{href: "/2016/primaries/#{focus_race_day.id}", class: focus_race_day.when_race_day_happens}
+      %span.label
+        - if focus_race_day.present?
+          Happening Now
+        - else
+          Up Next
+      %span.teaser-inner
+        %span.detail= focus_race_day.title
+        %span.callout
+          - if focus_race_day.present?
+            Live results &raquo;
+          - else
+            See preview &raquo;
 
   %h3.section-hed Who&rsquo;s Ahead?
   .pollster-tables

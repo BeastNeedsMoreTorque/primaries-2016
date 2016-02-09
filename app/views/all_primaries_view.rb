@@ -14,6 +14,10 @@ class AllPrimariesView < BaseView
   def updated_dt; nil; end
   def pubbed_dt; copy['primaries']['landing-page']['pubbed_dt']; end
 
+  def focus_race_day
+    @focus_race_day ||= database.race_days.all.find { |rd| rd.present? || rd.future? }
+  end
+
   def dem_candidates; database.candidates.select{ |cd| cd.party_id == 'Dem'}; end
   def gop_candidates; database.candidates.select{ |cd| cd.party_id == 'GOP'}; end
 

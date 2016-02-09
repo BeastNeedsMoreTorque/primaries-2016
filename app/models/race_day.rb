@@ -83,4 +83,8 @@ RaceDay = RubyImmutableStruct.new(:database_or_nil, :id, :enabled, :title, :body
       "future"
     end
   end
+
+  def present?; when_race_day_happens == 'present'; end
+  def past?; when_race_day_happens == 'past'; end
+  def future?; when_race_day_happens == 'future'; end
 end
