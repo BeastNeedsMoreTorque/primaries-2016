@@ -7,6 +7,10 @@
     max-width: 100%;
   }
 
+  path {
+    fill: white; // avoid a flash of black while loading CSS classes for counties/subcounties
+  }
+
   path.state {
     stroke: #ddd;
     stroke-width: 10; // divided by 10
