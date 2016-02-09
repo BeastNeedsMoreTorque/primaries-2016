@@ -11,7 +11,7 @@
 # This is a bit hack-y: we're communicating with the production server via git
 # commits. At this phase of development, it seems right.
 module ServerSchedule
-  TimeoutInS = 40
+  TimeoutInS = 20
 
   # WARNING: Changing this to true? Deploy to staging first, then production.
   RefreshDelegates = true
