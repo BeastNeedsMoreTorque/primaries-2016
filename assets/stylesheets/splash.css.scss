@@ -96,9 +96,9 @@ $party-container-height: 100px;
 	    pointer-events: none; // so it doesn't cause mouseleave
 	  }
 
-	  g.subcounties path {
-	    stroke-width: 5; // divided by 10
-	    fill: #fff;
+	  g.subcounties path:not([fill]) {
+      // Avoid flash of unstyled map
+	    fill: white;
 	  }
 
 	  g.cities {
