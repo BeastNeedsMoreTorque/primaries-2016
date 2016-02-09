@@ -19,10 +19,10 @@ $party-container-height: 100px;
 }
 
 .tease-link {
+  margin: 0;
   a {
 		font-weight: normal;
   }
-
 }
 
 .hidden {
@@ -86,8 +86,6 @@ $party-container-height: 100px;
 	}
 
 	.map {
-
-
 		svg {
 			width: 100%;
 		  height: 100%;
@@ -133,8 +131,6 @@ $party-container-height: 100px;
 	    @include svg-city-label();
 	    font-size: 21px;
 	  }
-
-
 	}
 
 	&.dem {
