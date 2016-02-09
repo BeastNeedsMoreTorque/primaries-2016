@@ -314,8 +314,34 @@ render_state_path = (path, topology) ->
   d = compress_svg_path(d)
   '  <path class="state" transform="scale(0.1)" d="' + d + '"/>'
 
-render_mesh_path = (path, topology, features) ->
-  d = path(topojson.mesh(topology, features, (a, b) -> a != b))
+render_counties_mesh_path = (path, topology) ->
+  mesh = topojson.mesh(topology, topology.objects.counties, (a, b) -> a != b)
+  d = path(mesh)
+  if d
+    d = compress_svg_path(d)
+    '  <path class="mesh" transform="scale(0.1)" d="' + d + '"/>'
+  else
+    # DC, for instance, has no mesh
+    ''
+
+render_subcounties_mesh_path = (path, topology) ->
+  reader = new jsts.io.GeoJSONReader()
+  counties = topojson.merge(topology, topology.objects.counties.geometries)
+  counties_geometry = reader.read(JSON.stringify(counties))
+    .buffer(0) # make valid
+
+  subcounties = topojson.feature(topology, topology.objects.subcounties)
+  mesh_features = { type: 'FeatureCollection', features: [] }
+
+  for feature in subcounties.features
+    geometry = intersect_or_null(feature.geometry, counties_geometry)
+    if geometry?
+      mesh_features.features.push(type: 'Feature', properties: {}, geometry: geometry)
+
+  mesh_topology = topojson.topology(mesh_features: mesh_features)
+  mesh = topojson.mesh(mesh_topology, mesh_topology.objects.mesh_features, (a, b) -> a != b)
+
+  d = path(mesh)
   if d
     d = compress_svg_path(d)
     '  <path class="mesh" transform="scale(0.1)" d="' + d + '"/>'
@@ -341,7 +367,9 @@ render_counties_g = (path, topology, geometries) ->
 # Tries to intersect original (a GeoJSON Geometry) with jsts_geometry. If
 # there's an error, or the result is null, returns original.
 intersect_or_original = (original_geojson, jsts_geometry) ->
-  return original_geojson
+  intersect_or_null(original_geojson, jsts_geometry) || original_geojson
+
+intersect_or_null = (original_geojson, jsts_geometry) ->
   reader = new jsts.io.GeoJSONReader()
   writer = new jsts.io.GeoJSONWriter()
 
@@ -351,16 +379,28 @@ intersect_or_original = (original_geojson, jsts_geometry) ->
     intersection_geometry = jsts_geometry.intersection(original_geometry)
     ret = writer.write(intersection_geometry)
     if ret.type == 'GeometryCollection' && ret.geometries.length == 0
-      original_geojson
+      null
     else if ret.type == 'Point'
-      original_geojson
+      null
     else
       ret
   catch e
     console.warn(e)
-    original_geojson
+    null
 
 # Returns a <g class="subcounties"> full of <path data-geo-id="...">s
+#
+# This is hard. The subcounty geo data includes water, so we need to intersect
+# it with the *county* geo data, which is correct. But we don't have a tool that
+# would intersect the mesh (a MultiLineString) with the counties (a
+# GeometryCollection or, merged, a MultiPolygon).
+#
+# So we do this:
+#
+# 1. Merge the counties to create a MultiPolygon.
+# 2. Iterate over all subcounties, intersecting with the MultiPolygon and adding
+#    results to a new FeatureCollection.
+# 3. Use Topojson to create a mesh from the new FeatureCollection.
 render_subcounties_g = (path, topology, geometries) ->
   counties = topojson.merge(topology, topology.objects.counties.geometries)
 
@@ -429,10 +469,10 @@ render_state_svg = (state_code, features, callback) ->
   data.push(render_state_path(path, topology, topology.objects.counties))
   if topology.objects.subcounties?.geometries?.length
     data.push(render_subcounties_g(path, topology, topology.objects.subcounties.geometries))
-    data.push(render_mesh_path(path, topology, topology.objects.subcounties))
+    data.push(render_subcounties_mesh_path(path, topology))
   else
     data.push(render_counties_g(path, topology, topology.objects.counties.geometries))
-    data.push(render_mesh_path(path, topology, topology.objects.counties))
+    data.push(render_counties_mesh_path(path, topology))
   if topology.objects.cities.geometries.length
     data.push(render_cities_g(topology, topology.objects.cities.geometries))
 
