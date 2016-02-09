@@ -8,6 +8,10 @@ $splash-ele-bg: #eee;
 
 $party-container-height: 100px;
 
+body {
+  margin: 0;
+}
+
 .flex-container {
 	display: flex;
 	flex-flow: row;
