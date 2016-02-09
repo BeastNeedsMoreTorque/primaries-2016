@@ -64,9 +64,10 @@ function add_tooltips() {
     $tooltip.find('h4').text(county_name);
 
     if (n_total) {
+      $tooltip.find('table').show();
       $tooltip.find('span.n-reporting').text(format_int(n_reporting));
       $tooltip.find('span.n-total').text(format_int(n_total));
-      $tooltip.find('p.precincts').text(n_precincts_reporting_text(n_reporting, n_total));
+      $tooltip.find('p.precincts').text(n_precincts_reporting_text(n_reporting, n_total)).removeClass('no-precincts-note');
       $tooltip.toggleClass('opened-from-touch', is_from_touch);
 
       var $tbody = $tooltip.find('tbody').empty();
@@ -82,7 +83,8 @@ function add_tooltips() {
           $tbody.append($tr);
         });
     } else {
-      $tooltip.find('table').html('<p class="no-precincts-note">No polling places</p>');
+      $tooltip.find('table').hide();
+      $tooltip.find('p.precincts').text('No polling places').addClass('no-precincts-note');
     }
   }
 
