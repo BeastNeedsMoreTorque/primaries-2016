@@ -27,7 +27,7 @@
                   %span.n-delegates-int= format_int(race.n_delegates)
                   %div{'class': "dots dots-#{race.party_id.downcase}"}
                     -# That's a zero-width space (zwsp) between each dot, so they can wrap
-                    = "\u200b•" * race.n_delegates
+                    = "•" * race.n_delegates
         - if !race.enabled?
           %td.disabled-button
         - else

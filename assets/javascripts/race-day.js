@@ -610,7 +610,7 @@ function poll_results() {
         $(elems.tr).toggleClass('winner', winner);
         elems.n_votes.text(format_int(n_votes));
         elems.percent_vote.text(format_percent(percent_vote));
-        elems.n_delegates_dots.text(new Array(n_delegates).fill("\u200b•").join(''));
+        elems.n_delegates_dots.text(new Array(n_delegates).fill("•").join(''));
         elems.n_delegates_int.text(format_int(n_delegates));
       }
     });
@@ -653,8 +653,8 @@ function poll_results() {
           elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();
         }
         var dels = elems.n_delegates_with_candidates;
-        dels.dots_without_candidates.text(new Array(n_delegates - n_delegates_with_candidates).fill("\u200b•").join(''));
-        dels.dots_with_candidates.text(new Array(n_delegates_with_candidates).fill("\u200b•").join(''));
+        dels.dots_without_candidates.text(new Array(n_delegates - n_delegates_with_candidates).fill("•").join(''));
+        dels.dots_with_candidates.text(new Array(n_delegates_with_candidates).fill("•").join(''));
         dels.int_with_candidates.text(format_int(n_delegates_with_candidates));
         dels.int_total.text(format_int(n_delegates));
       }

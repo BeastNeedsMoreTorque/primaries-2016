@@ -112,6 +112,9 @@
     display: inline-block;
     line-height: .4;
     max-width: 12em;
+    word-break: break-all;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .dots-dem {
@@ -164,6 +167,7 @@
   .both-tables {
     margin: 2rem 0 1rem;
     -webkit-perspective: 1000rem;
+    -ms-perspective: 1000rem;
     perspective: 1000rem;
     overflow: hidden; // Otherwise the backface can push the page beyond the footer
 
@@ -180,6 +184,7 @@
 
     .flipper>* {
       -webkit-backface-visibility: hidden; // https://trello.com/c/rONHJUbe/88-mobile-schedule-table-has-overlapping-elements-text
+      -ms-backface-visibility: hidden;
       backface-visibility: hidden;
       transform: rotateY(180deg);
     }
