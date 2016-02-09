@@ -52,8 +52,8 @@ $(function() {
 
     for(fips in data){
       obj = data[fips];
-      var $ele_gop = $(".map-container.gop .map svg .subcounties *[data-geo-id='"+ fips +"'");
-      var $ele_dem = $(".map-container.dem .map svg .subcounties *[data-geo-id='"+ fips +"'");
+      var $ele_gop = $(".map-container.gop .map svg .subcounties *[data-geo-id='"+ fips +"']");
+      var $ele_dem = $(".map-container.dem .map svg .subcounties *[data-geo-id='"+ fips +"']");
 
       if(obj.GOP.leader.n_votes > 0)
         //console.log(obj, leaders.GOP)
