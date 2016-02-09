@@ -39,8 +39,6 @@ $party-container-height: 100px;
 }
 
 .legend {
-	min-width: 120px;
-
 	.container {
 		font-size: 12px;
 		display: inline-flex;
@@ -273,15 +271,16 @@ $party-container-height: 100px;
 		tr {
 			td {
 				padding: 4px;
+        &.candidate-name {
+          width: 4rem;
+        }
 				&.n-votes {
 					width: 3.5rem;
 					text-align: right;
-					min-width: 50px;
 				}
 				&.n-votes-pct {
-					text-align: right;
 					width: 2rem;
-					min-width: 30px;
+					text-align: right;
 				}
 			}
 		}
@@ -303,27 +302,12 @@ $party-container-height: 100px;
 			}
 		}	  
   }
-
-
 }
-
 
 .party-container {
   min-width: 160px;
 	flex-shrink: 0;
 	-webkit-flex-shrink: 0;
-
-	&:first-child {
-		margin-top: 5px;
-	}
-
-	position: relative;
-
-	.sde {
-		&:hover {
-			cursor: pointer;
-		}
-	}
 
 	&.dem {
 		background-color: $widgetLightBlue;
