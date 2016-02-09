@@ -29,6 +29,7 @@ $party-container-height: 100px;
 }
 
 .legend {
+	min-width: 120px;
 	.container {
 		font-size: 12px;
 		display: inline-flex;
@@ -288,7 +289,7 @@ $party-container-height: 100px;
 
 
 .party-container {
-
+  min-width: 160px;
 	flex-shrink: 0;
 	-webkit-flex-shrink: 0;
 

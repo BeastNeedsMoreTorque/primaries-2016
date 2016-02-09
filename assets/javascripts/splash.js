@@ -105,8 +105,9 @@ $(function() {
   var counter = new Countdown();
   function getData(){
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
-      console.log('getting data') 
       var tense = json["when_race_day_happens"];
+      if(tense == 'future')
+        return;
       
       $("body").removeClass().addClass("race-day-" + tense);
     
