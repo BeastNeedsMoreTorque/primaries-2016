@@ -217,12 +217,12 @@ $party-container-height: 100px;
   table {
   	width: 100%;
     border-collapse: collapse;
+    font-size: .8rem;
+    line-height: 1.2;
 
 		.candidate {
 	    font-weight: bold;
 			background: #fff;
-			font-size: 13px;
-	    line-height: 15px;
 
 	    &.winner .candidate-name::after {
 	      content: ' ✓';
@@ -233,14 +233,17 @@ $party-container-height: 100px;
 
 		tr {
 			td {
-				padding: 4px;
+				padding: 5px 4px 3px;
+
         &.candidate-name {
           width: 4rem;
         }
+
 				&.n-votes {
 					width: 3.5rem;
 					text-align: right;
 				}
+
 				&.n-votes-pct {
 					width: 2rem;
 					text-align: right;
@@ -268,7 +271,6 @@ $party-container-height: 100px;
 }
 
 .party-container {
-  min-width: 160px;
 	flex-shrink: 0;
 	-webkit-flex-shrink: 0;
 
@@ -300,7 +302,7 @@ $party-container-height: 100px;
 	}
 
 	.precincts {
-		font-size: 14px;
+    font-size: .9rem;
 		padding-bottom: 3px;
 		margin-bottom: 3px;
 		border-bottom: 1px solid black;
