@@ -1,7 +1,9 @@
 @import '_variables';
 @import '_spin-animation';
 
+@include precincts-reporting-conditionals;
 @include tense-conditionals;
+
 $splash-ele-bg: #eee;
 
 $party-container-height: 100px;
@@ -36,28 +38,29 @@ $party-container-height: 100px;
   flex-direction: column;
   -webkit-justify-content: space-around;
   justify-content: space-around;
+
+  white-space: nowrap;
 }
 
 .legend {
-	.container {
-		font-size: 12px;
-		display: inline-flex;
-    display: -webkit-inline-flex;
-		text-align: left;
-		width: 100%;
-		margin-bottom: 3px;
-		div:first-child {
-		  width: 10px;
-		  height: 10px;
-		  margin-right: 3px;
-		  border: 1px solid black;
-	  }
-	  .container {
-	  	.no-results {
-	  		fill: #fff;
-	  	}
-	  }
-	}
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: .75rem;
+  line-height: 1;
+
+  li {
+    padding: .2rem 0;
+  }
+
+  .swatch {
+    display: inline-block;
+    width: .7rem;
+    height: .7rem;
+    border: 1px solid #cdcdcd;
+    background: white;
+    vertical-align: middle;
+  }
 }
 
 .map-container {
@@ -116,27 +119,21 @@ $party-container-height: 100px;
 
 	&.dem {
 		.legend {
-			.container .leading {
+			.swatch.leading {
 				background: $strongDem;
 			}
-			.container .trailing {
+      .swatch.trailing {
 				background: $widgetLightBlue;
-			}
-			.container .unfinished {
-				background-color: #ddd;
 			}
 		}
 	}
 	&.gop {
 		.legend {
-			.container .leading {
+      .swatch.leading {
 				background: $strongGOP;
 			}
-			.container .trailing {
+      .swatch.trailing {
 				background: $widgetLightRed;
-			}
-			.container .unfinished {
-				background-color: #ddd;
 			}
 		}
 	}
@@ -293,6 +290,8 @@ $party-container-height: 100px;
 
 .map-precincts-container {
 	padding: 10px 10px 0;
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
 
 	&:last-child {
 		padding-right: 0;
@@ -306,9 +305,14 @@ $party-container-height: 100px;
 	}
 
 	.map-container {
+    -webkit-display: flex;
+    display: flex;
 		flex-direction: row;
 		-webkit-flex-direction: row;
+
 		.map {
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
 			height: 200px;
 		}
 	}

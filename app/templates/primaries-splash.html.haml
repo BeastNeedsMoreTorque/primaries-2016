@@ -33,16 +33,16 @@
                   - candidate = candidate_race.candidate
                   %tr.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
                     %td.candidate-name= candidate.name
-                    %td.n-votes.when-present.when-past= format_int(candidate_race.n_votes)
+                    %td.n-votes.when-precincts-reporting= format_int(candidate_race.n_votes)
                     -if format_percent_or_nil(candidate_race.percent_vote) != 'N/A'
-                      %td.n-votes-pct.when-present.when-past= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
+                      %td.n-votes-pct.when-no-precincts-reporting= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
                     -else
-                      %td.n-votes-pct.when-present.when-past= ""
+                      %td.n-votes-pct.when-no-precincts-reporting= ""
           -if party.id == "GOP"
             .see-all-candidates
               %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
 
-        .map-precincts-container{class: "#{party.id.downcase}"}
+        .map-precincts-container{class: "#{party.id.downcase} #{race.n_precincts_reporting > 0 ? '' : 'no-'}precincts-reporting"}
           .precincts.when-present.when-past
             -if party.id == "Dem"
               %span.precincts-val= "#{precinct_stats[:reporting_precincts_pct_str_dem]}"
@@ -57,21 +57,18 @@
             .legend-and-status
               .race-status.when-present
                 %button.refresh 0:30
-              .legend
-                .container{class: ((race.candidate_races.first.n_votes == 0) ? 'hidden' : '')}
-                  .leading
-                  %div
-                    %span.name= "#{race.candidate_races.first.candidate.name}"
-                    %span= " leads"
-                .container.when-present.when-past
-                  .trailing
-                  %div
-                    %span.name= "#{race.candidate_races.first.candidate.name}"
-                    %span= " trails"
-                .container
-                  .no-results
-                  %div
-                    %span= "No results"
+              %ul.legend.when-precincts-reporting
+                %li
+                  %span.swatch.leading
+                  %span.name= race.candidate_races.first.candidate.name
+                  leads
+                %li
+                  %span.swatch.trailing
+                  %span.name= race.candidate_races.first.candidate.name
+                  trails
+                %li
+                  %span.swatch.no-results
+                  No results
               %p.tease-link
                 %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"} See results
 

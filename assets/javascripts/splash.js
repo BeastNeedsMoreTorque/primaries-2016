@@ -27,31 +27,8 @@ $(function() {
   }
 
   function fillSvg(data, leaders){
-    /*
-    var pattern_id = 'progress-map-pattern-no-results';
-    $('.map svg').each(function() {
-      add_no_results_yet_pattern_to_svg(this, pattern_id);
-    });
-
-    $(".map svg .subcounties").children().each(function(ele){
-      fips = this.getAttribute("data-geo-id");
-      obj = data[fips];
-      var $ele = $(".map svg .subcounties *[data-geo-id='"+ fips +"'");
-      if(obj && obj['n_precincts_reporting'] == 0){
-        $ele.css({fill: "url(#progress-map-pattern-no-results)"})
-      }else if(obj && obj['n_precincts_reporting'] > 0 && obj['n_precincts_reporting'] < obj['n_precincts_total']) {
-        $ele.css({fill: "#ddd"});
-      }else if(obj && obj['n_precincts_reporting'] == obj['n_precincts_total']){
-        $ele.css({fill: "#999"});
-      }else{
-        $ele.css({fill: "#eee"});
-      }
-    });
-
-  */
-
-    for(fips in data){
-      obj = data[fips];
+    for (var fips in data) {
+      var obj = data[fips];
       var $ele_gop = $(".map-container.gop .map svg .subcounties *[data-geo-id='"+ fips +"']");
       var $ele_dem = $(".map-container.dem .map svg .subcounties *[data-geo-id='"+ fips +"']");
 
@@ -99,16 +76,22 @@ $(function() {
   }
 
   function updatePrecinctStats(data){
-    $(".map-precincts-container.dem .precincts-val").html(data.reporting_precincts_pct_str_dem);
-    $(".map-precincts-container.gop .precincts-val").html(data.reporting_precincts_pct_str_gop);
+    [ 'dem', 'gop' ].forEach(function(party_id_lower) {
+      $container = $('.map-precincts-container.' + party_id_lower);
+      var str = data['reporting_precincts_pct_str_' + party_id_lower];
+      var reporting = str != 'N/A';
+
+      $container.find('.precincts-val').text(str);
+      $container
+        .toggleClass('no-precincts-reporting', !reporting)
+        .toggleClass('precincts-reporting', reporting);
+    });
   }
 
   function do_poll(callback) {
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
       var tense = json["when_race_day_happens"];
-      if(tense == 'future')
-        return;
-      
+
       $("body").removeClass('race-day-past race-day-present race-day-future').addClass("race-day-" + tense);
 
       fillSvg(json.geos, json.candidates.leaders);

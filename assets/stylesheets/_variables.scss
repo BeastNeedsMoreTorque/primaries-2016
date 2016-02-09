@@ -54,6 +54,13 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   .tease-link { @include tease-link(); }
 }
 
+@mixin precincts-reporting-conditionals {
+  .no-precincts-reporting .when-precincts-reporting,
+  .precincts-reporting .when-no-precincts-reporting {
+    display: none;
+  }
+}
+
 @mixin tense-conditionals {
   .race-day-past {
     .when-future:not(.when-past),
