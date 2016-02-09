@@ -38,6 +38,8 @@ $party-container-height: 100px;
   flex-direction: column;
   -webkit-justify-content: space-around;
   justify-content: space-around;
+  -webkit-flex: 0 0 auto;
+  flex: 0 0 auto;
 
   white-space: nowrap;
 }
@@ -305,7 +307,7 @@ $party-container-height: 100px;
 	}
 
 	.map-container {
-    -webkit-display: flex;
+    display: -webkit-flex;
     display: flex;
 		flex-direction: row;
 		-webkit-flex-direction: row;
