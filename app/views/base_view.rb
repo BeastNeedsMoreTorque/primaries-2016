@@ -12,7 +12,6 @@ class BaseView
     @database = database
   end
 
-  def today; database.today; end
   def last_date; database.last_date; end
   def copy; database.copy; end
 
