@@ -2,13 +2,13 @@
   %h3.race-name= race.title
   .race-status
     .status-past
-      %p.status-p All precincts reporting
-      %p.status-p
+      %p All precincts reporting
+      %p
         Last updated:
         %time{datetime: format_datetime(race.last_updated)}
     .status-present
       %button.refresh 0:30
-      %p.status-p #{race.n_precincts_reporting} of #{race.n_precincts_total} precincts reporting
+      %p.n-precincts-reporting &nbsp;
     .status-future
       - if race_day.today? && !race.expect_results_time.nil?
         %p= "Coming #{race.expect_results_time.to_datetime.new_offset('Eastern').strftime('%l:%M %P %Z').sub('m', '.m.').sub('-05:00', 'EST').sub('-04:00', 'EDT')}"

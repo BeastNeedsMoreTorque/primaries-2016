@@ -10,32 +10,25 @@ body.race-day .race {
   .race-status {
     text-align: center;
     padding: .2rem 1rem;
-    margin: .2rem auto;
 
     .status-past, .status-present, .status-future {
       display: none;
-    }
-
-    .status-past, .status-present-text, .status-future {
-      font-style: italic;
     }
 
     button.refresh {
       @include refresh-button();
     }
 
-    .status-p {
+    p {
+      font-style: italic;
       margin: .2rem auto;
     }
   }
 
   // Show the current status
   &.past .race-status .status-past,
-  &.future .race-status .status-future { display: inline-block; }
-
-  &.present .race-status .status-present {
-    display: block;
-  }
+  &.future .race-status .status-future,
+  &.present .race-status .status-present { display: block; }
 
   .race-name {
     margin: 5px 0 15px;

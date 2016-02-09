@@ -8,6 +8,18 @@ var database = {
 };
 var on_database_change = []; // Array of zero-argument callbacks
 
+function n_precincts_text(n) {
+  return n == 1 ? '1 precinct' : (n + ' precincts');
+}
+
+function n_precincts_reporting_text(reporting, total) {
+  if (total == 0) {
+    return 'There are no precincts here';
+  } else {
+    return reporting + ' of ' + n_precincts_text(total) + ' reporting (' + Math.round(100 * reporting / total) + '%)';
+  }
+}
+
 /**
  * Returns a list of { id, name, n_votes } from a <table class="candidates">.
  */
@@ -47,18 +59,6 @@ function add_tooltips() {
       '<p class="precincts"></p>' +
     '</div></div>');
   var svg_hover_path = null;
-
-  function n_precincts_text(n) {
-    return n == 1 ? '1 precinct' : (n + ' precincts');
-  }
-
-  function n_precincts_reporting_text(reporting, total) {
-    if (total == 0) {
-      return 'There are no precincts here';
-    } else {
-      return reporting + ' of ' + n_precincts_text(total) + ' reporting (' + Math.round(100 * reporting / total) + '%)';
-    }
-  }
 
   function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, is_from_touch) {
     $tooltip.find('h4').text(county_name);
@@ -557,15 +557,14 @@ function poll_results() {
 
       var these_els = els[party_id + '-' + state_code] = {
         race: $(this),
-        n_reporting: $('.metadata .n-reporting', this),
-        n_total: $('.metadata .n-total', this),
+        n_precincts: $('.race-status .n-precincts-reporting', this),
+        last_updated: $('.race-status time', this),
         n_delegates_with_candidates: {
           dots_without_candidates: $ndwc.find('.dots .without-candidates', this),
           dots_with_candidates: $ndwc.find('.dots .with-candidates', this),
           int_with_candidates: $ndwc.find('.n-delegates-with-candidates-int', this),
           int_total: $ndwc.find('.n-delegates-int', this)
         },
-        last_updated: $('.metadata .last-updated time', this.parentNode)
       };
     });
   }
@@ -645,8 +644,7 @@ function poll_results() {
         elems.race.removeClass('past present future');
         elems.race.addClass(when_race_happens);
         elems.race.toggleClass('has-delegate-counts', has_delegate_counts);
-        elems.n_reporting.text(format_int(n_reporting));
-        elems.n_total.text(format_int(n_total));
+        elems.n_precincts.text(n_precincts_reporting_text(n_reporting, n_total));
         if (!isNaN(last_updated.getFullYear())) {
           elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();
         }
