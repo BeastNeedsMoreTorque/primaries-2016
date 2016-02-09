@@ -105,6 +105,7 @@ $(function() {
 
   function getData(){
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
+      _start_countdown();
       console.log(json) 
       var tense = json["when_race_day_happens"];
       $("body").removeClass().addClass("race-day-" + tense);
@@ -119,7 +120,7 @@ $(function() {
     .always(function() { window.setTimeout(getData, 30000); });
   }
 
-  //$("svg").position_svg_cities();
+  $("svg").position_svg_cities();
   $("svg .subcounties path").addClass("no-results")
   getData();
 });
