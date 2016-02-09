@@ -102,28 +102,27 @@ $(function() {
     $(".map-precincts-container.dem .precincts-val").html(data.reporting_precincts_pct_str_dem);
     $(".map-precincts-container.gop .precincts-val").html(data.reporting_precincts_pct_str_gop);
   }
-  var counter = new Countdown();
-  function getData(){
+
+  function do_poll(callback) {
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
       var tense = json["when_race_day_happens"];
       if(tense == 'future')
         return;
       
-      $("body").removeClass().addClass("race-day-" + tense);
-    
+      $("body").removeClass('race-day-past race-day-present race-day-future').addClass("race-day-" + tense);
+
       fillSvg(json.geos, json.candidates.leaders);
 
       updateCandidates(json.candidates);
-
       updatePrecinctStats(json.precincts);
-
-      counter.count();
     })
-    .fail(function() { console.warn('Failed to load', this); })
-    .always(function() { window.setTimeout(getData, 30000); });
+      .fail(function() { console.warn('Failed to load', this); })
+      .always(callback);
   }
 
   $("svg").position_svg_cities();
-  $("svg .subcounties path").addClass("no-results")
-  getData();
+
+  $('button.refresh')
+    .countdown(30, do_poll)
+    .click(); // start right away
 });

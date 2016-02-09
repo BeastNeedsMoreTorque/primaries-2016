@@ -20,16 +20,8 @@ body.race-day .race {
       font-style: italic;
     }
 
-    .refresh-flag {
-      padding: 2px 8px;
-      margin: 0;
-      background: $red;
-      color: white;
-      font-weight: bold;
-      text-transform: uppercase;
-      img {
-        width: 15px;
-      }
+    button.refresh {
+      @include refresh-button();
     }
 
     .status-p {
@@ -43,9 +35,6 @@ body.race-day .race {
 
   &.present .race-status .status-present {
     display: block;
-    .refresh-flag {
-      display: inline-block;
-    }
   }
 
   .race-name {

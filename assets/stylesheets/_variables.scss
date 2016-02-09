@@ -25,7 +25,7 @@ $widgetLightRed: lighten($widgetRed, 45%);
 $widgetLightBlue: lighten($widgetBlue, 45%);
 
 @mixin no-results-swatch {
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="%23ddd"/><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1" stroke="%23fff"/></svg>');
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="%23ddd"/><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1" stroke="white"/></svg>');
 }
 
 @mixin vertical-center-flex {
@@ -121,16 +121,8 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
       font-style: italic;
     }
 
-    .refresh-flag {
-      padding: 2px 8px;
-      margin: 0;
-      background: $red;
-      color: white;
-      font-weight: bold;
-      text-transform: uppercase;
-      img {
-        width: 15px;
-      }
+    button.refresh {
+      @include refresh-button();
     }
 
     .status-present-text {
@@ -333,4 +325,36 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   &.foreground {
     fill: #333;
   }
+}
+
+@mixin refresh-button {
+  &::before {
+    content: ' ';
+    background: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 78 78"><path fill="white" d="M38.912,56.98c-8.401,0-15.414-5.893-17.157-13.777h11.347L16.5,18.777L-0.093,43.203h11.335 c1.862,13.641,13.524,24.172,27.677,24.172c4.7,0,9.117-1.174,13-3.221L44,56.23C42.384,56.715,40.686,56.98,38.912,56.98zM66.486,34.896c-2.153-13.299-13.658-23.461-27.566-23.468c-4.692,0-9.117,1.177-13,3.222l7.92,7.919 c1.608-0.488,3.321-0.754,5.088-0.754c8.157,0,14.984,5.558,16.98,13.082H44.764l16.601,24.431l16.597-24.431H66.486z"/></svg>');
+    vertical-align: middle;
+    background-size: 100% 100%;
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-right: .35rem;
+  }
+
+  &.clicked::before {
+    animation: spin 1s infinite linear;
+  }
+
+  &:hover {
+    border-color: $muted;
+  }
+
+  cursor: pointer;
+  border: 2px solid transparent;
+  padding: .1rem .5rem .15rem;
+  margin: 0;
+  background: $red;
+  color: white;
+  font: inherit;
+  font-weight: bold;
+  line-height: 1;
+  vertical-align: middle;
 }

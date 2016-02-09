@@ -1,0 +1,8 @@
+@keyframes spin {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-0.001deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(360.001deg);
+  }
+}

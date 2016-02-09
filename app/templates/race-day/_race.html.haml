@@ -7,9 +7,7 @@
         Last updated:
         %time{datetime: format_datetime(race.last_updated)}
     .status-present
-      %p.refresh-flag
-        %img{src: image_path("refresh.svg")}
-        %span= "0:00"
+      %button.refresh 0:30
       %p.status-p #{race.n_precincts_reporting} of #{race.n_precincts_total} precincts reporting
     .status-future
       - if race_day.today? && !race.expect_results_time.nil?

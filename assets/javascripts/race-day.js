@@ -519,9 +519,6 @@ function color_counties() {
 }
 
 function poll_results() {
-  var interval_ms = 30000;
-  var json_url = window.location.toString().split('#')[0] + '.json';
-
   var els_by_candidate_id_and_state_code = null; // Maps "123-CA" to { n_votes, n_delegates, tr }.
   function ensure_els_by_candidate_id_and_state_code_is_populated() {
     if (els_by_candidate_id_and_state_code) return;
@@ -670,14 +667,17 @@ function poll_results() {
   on_database_change.push(update_race_tables_from_database);
   on_database_change.push(update_races_from_database);
 
+  function do_poll(callback) {
+    var json_url = window.location.toString().split('#')[0] + '.json';
 
-  var counter = new Countdown();
-  $.getJSON(window.location.toString().split('#')[0] + '.json', function(json) {
-    handle_poll_results(json);
-    counter.count();
-  })
-  .fail(function() { console.warn('Failed to load ' + json_url, this); })
-  .always(function() { window.setTimeout(poll_results, interval_ms); });
+    $.getJSON(json_url, handle_poll_results)
+      .fail(function() { console.warn('Failed to load ' + json_url, this); })
+      .always(callback);
+  }
+
+  $('button.refresh')
+    .countdown(30, do_poll)
+    .click(); // poll immediately on page load
 }
 
 /**

@@ -53,14 +53,11 @@
             %span= "Results coming 7:00 p.m. EST"
           .map-container.flex-container{class: "#{party.id.downcase}"}
             .map
-              != map_svg('states/NH')
+              != map_svg("states/#{race.state_code}")
             .legend
               .race-status.when-present
-                .status-present
-                  %p.refresh-flag
-                    %img{src: image_path("refresh.svg")}
-                    %span= "0:30"
-              .container.when-present.when-past
+                %button.refresh 0:30
+              .container{class: ((race.candidate_races.first.n_votes == 0) ? 'hidden' : '')}
                 .leading
                 %div
                   %span.name= "#{race.candidate_races.first.candidate.name}"
@@ -75,9 +72,7 @@
                 %div
                   %span= "No results"
               %p.tease-link
-                %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See results
-                
-
+                %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.party_id}-#{race.state_code}"} See results
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script
