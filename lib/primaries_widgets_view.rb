@@ -1,10 +1,7 @@
 require_relative '../app/models/race_day'
 
 module PrimariesWidgetsView
-
-  def race_date_str; @race_date_str = "2016-02-09"; end;
-
-  def race_day; @race_day ||= database.race_days.find(race_date_str); end
+  def race_day; @race_day ||= database.race_days.find('2016-02-09'); end
 
   def get_precincts_reporting_str(reporting_precincts, total_precincts)
     if total_precincts.nil? || total_precincts == 0
