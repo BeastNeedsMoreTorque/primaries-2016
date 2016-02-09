@@ -142,7 +142,7 @@ class Database
     load_pollster_source(parties, races, LastDate)
   end
 
-  def load_candidates(copy_candidates, ap_del_super_candidates, pollster_candidates)
+  def load_candidates(sheet_candidates, ap_del_super_candidates, pollster_candidates)
     last_name_to_candidate_id = {}
     candidate_id_to_del_super_candidate = {}
     for del_super_candidate in ap_del_super_candidates
@@ -158,22 +158,22 @@ class Database
       end
     end
 
-    candidates = copy_candidates.map do |copy_candidate|
-      del_super_candidate = candidate_id_to_del_super_candidate[copy_candidate.id]
-      pollster_candidate = candidate_id_to_pollster_candidate[copy_candidate.id]
+    candidates = sheet_candidates.map do |sheet_candidate|
+      del_super_candidate = candidate_id_to_del_super_candidate[sheet_candidate.id]
+      pollster_candidate = candidate_id_to_pollster_candidate[sheet_candidate.id]
 
       Candidate.new(
         self,
-        copy_candidate.id,
-        copy_candidate.party_id,
-        copy_candidate.full_name,
-        del_super_candidate ? del_super_candidate.last_name : nil,
-        del_super_candidate ? del_super_candidate.n_delegates : nil,
-        del_super_candidate ? del_super_candidate.n_unpledged_delegates : nil,
+        sheet_candidate.id,
+        sheet_candidate.party_id,
+        sheet_candidate.full_name,
+        sheet_candidate.last_name,
+        del_super_candidate ? del_super_candidate.n_delegates : 0,
+        del_super_candidate ? del_super_candidate.n_unpledged_delegates : 0,
         pollster_candidate ? pollster_candidate.poll_percent : nil,
         pollster_candidate ? pollster_candidate.sparkline : nil,
         pollster_candidate ? pollster_candidate.last_updated : nil,
-        copy_candidate.dropped_out_date_or_nil
+        sheet_candidate.dropped_out_date_or_nil
       )
     end
 
