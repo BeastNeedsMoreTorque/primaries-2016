@@ -17,7 +17,7 @@ module ServerSchedule
   RefreshDelegates = true
 
   # WARNING: Adding a date? Deploy to staging first, then production.
-  RefreshPrimariesRaceDays = []
+  RefreshPrimariesRaceDays = [ '2016-02-09' ]
 
   # WARNING: Changing this to true? Deploy to staging first, then production.
   RefreshPollsterPrimaries = true
