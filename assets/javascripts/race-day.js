@@ -62,23 +62,28 @@ function add_tooltips() {
 
   function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, is_from_touch) {
     $tooltip.find('h4').text(county_name);
-    $tooltip.find('span.n-reporting').text(format_int(n_reporting));
-    $tooltip.find('span.n-total').text(format_int(n_total));
-    $tooltip.find('p.precincts').text(n_precincts_reporting_text(n_reporting, n_total));
-    $tooltip.toggleClass('opened-from-touch', is_from_touch);
 
-    var $tbody = $tooltip.find('tbody').empty();
+    if (n_total) {
+      $tooltip.find('span.n-reporting').text(format_int(n_reporting));
+      $tooltip.find('span.n-total').text(format_int(n_total));
+      $tooltip.find('p.precincts').text(n_precincts_reporting_text(n_reporting, n_total));
+      $tooltip.toggleClass('opened-from-touch', is_from_touch);
 
-    candidates
-      .sort(function(a, b) { return b.n_votes - a.n_votes || a.name.localeCompare(b.name); })
-      .forEach(function(candidate) {
-        $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td><td class="percent-vote"></td></tr>')
-          .toggleClass('highlight-on-map', candidate.highlighted);
-        $tr.find('.candidate').text(candidate.name);
-        $tr.find('.n-votes').text(format_int(candidate.n_votes));
-        $tr.find('.percent-vote').text(n_votes_in_county ? format_percent(100 * candidate.n_votes / n_votes_in_county) : 0);
-        $tbody.append($tr);
-      });
+      var $tbody = $tooltip.find('tbody').empty();
+
+      candidates
+        .sort(function(a, b) { return b.n_votes - a.n_votes || a.name.localeCompare(b.name); })
+        .forEach(function(candidate) {
+          $tr = $('<tr><td class="candidate"></td><td class="n-votes"></td><td class="percent-vote"></td></tr>')
+            .toggleClass('highlight-on-map', candidate.highlighted);
+          $tr.find('.candidate').text(candidate.name);
+          $tr.find('.n-votes').text(format_int(candidate.n_votes));
+          $tr.find('.percent-vote').text(n_votes_in_county ? format_percent(100 * candidate.n_votes / n_votes_in_county) : 0);
+          $tbody.append($tr);
+        });
+    } else {
+      $tooltip.find('table').html('<p class="no-precincts-note">No polling places</p>');
+    }
   }
 
   function position_tooltip_near_svg_path(svg_path) {
@@ -182,7 +187,9 @@ function add_tooltips() {
       $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
       position_tooltip_near_svg_path(svg_path);
     } else {
-      console.warn('Could not find data for tooltip');
+      update_tooltip(geo_name);
+      $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
+      position_tooltip_near_svg_path(svg_path);
     }
   }
 

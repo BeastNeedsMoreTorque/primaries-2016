@@ -129,6 +129,12 @@
       margin: .5rem 1rem;
     }
   }
+
+  .no-precincts-note {
+    margin: 0;
+    padding: 0 0.5rem;
+    font-style: italic;
+  }
 }
 
 .race-tooltip.opened-from-touch a.close {
