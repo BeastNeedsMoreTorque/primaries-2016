@@ -109,8 +109,8 @@ $party-container-height: 100px;
 	  }
 
 	  text {
+	    font-size: 20px;
 	    @include svg-city-label();
-	    font-size: 21px;
 	  }
 	}
 
