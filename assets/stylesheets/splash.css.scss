@@ -14,7 +14,7 @@ $party-container-height: 100px;
 }
 
 .primary-splash-banner {
-  @include desktop-splash-base;
+  @include widget-base();
   max-width: 945px;
 }
 
@@ -61,29 +61,10 @@ $party-container-height: 100px;
 }
 
 .map-container {
-	&.dem, &.gop {
-		.map {
-			height: 170px;
-		}
-	}
-
-  //padding: 0 .75rem;
-  text-align: center;
   display: -webkit-flex;
   display: flex;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  -webkit-justify-content: center;
-  justify-content: center;
-
-	h3,h5 {
-		margin: 0;
-		text-align: center;
-	}
-
-	img {
-		width: 100%;
-	}
+  -webkit-flex-direction: row;
+  flex-direction: row;
 
 	.map {
 		svg {
@@ -161,17 +142,8 @@ $party-container-height: 100px;
 	}
 }
 
-.parties-container {
-	width: 100%;
-	display: flex;
-	flex-flow: column;
-	display: -webkit-flex;
-  -webkit-flex-direction: column;
-}
-
-
 .candidate-row-container {
-	padding: 10px 0 10px 0;
+	padding: 10px 0;
 	display: flex;
 	flex-flow: column;
 	display: -webkit-flex;
@@ -187,10 +159,6 @@ $party-container-height: 100px;
   &.dem {
 	  background-color: $widgetBlue;
   }
-}
-
-.leading-candidate-img {
-
 }
 
 .leading-candidate-delegates {
@@ -324,7 +292,7 @@ $party-container-height: 100px;
 }
 
 .map-precincts-container {
-	padding: 10px;
+	padding: 10px 10px 0;
 
 	&:last-child {
 		padding-right: 0;
@@ -341,7 +309,7 @@ $party-container-height: 100px;
 		flex-direction: row;
 		-webkit-flex-direction: row;
 		.map {
-			height: 12.5rem;
+			height: 200px;
 		}
 	}
 

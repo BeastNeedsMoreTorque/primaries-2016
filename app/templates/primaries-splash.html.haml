@@ -51,7 +51,7 @@
             %span= " OF PRECINCTS REPORTING"
           .precincts.when-future
             %span= "Results coming 7:00 p.m. EST"
-          .map-container.flex-container{class: "#{party.id.downcase}"}
+          .map-container{class: "#{party.id.downcase}"}
             .map
               != map_svg("states/#{race.state_code}")
             .legend-and-status
@@ -73,7 +73,7 @@
                   %div
                     %span= "No results"
               %p.tease-link
-                %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.party_id}-#{race.state_code}"} See results
+                %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"} See results
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script

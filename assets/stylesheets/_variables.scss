@@ -237,10 +237,6 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   }
 }
 
-@mixin desktop-splash-base {
-	@include widget-base;
-}
-
 @mixin mobile-ad-base {
 	@include widget-base;
 }
