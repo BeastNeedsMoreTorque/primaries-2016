@@ -19,6 +19,7 @@ module Assets
       ellipsize_table.js
       polyfill_array_fill.js
       position_svg_cities.js
+      countdown.js
       state-race-days.js
       race-day.js
       all-primaries.js

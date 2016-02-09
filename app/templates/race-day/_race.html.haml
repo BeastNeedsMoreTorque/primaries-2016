@@ -9,7 +9,7 @@
     .status-present
       %p.refresh-flag
         %img{src: image_path("refresh.svg")}
-        0:TK
+        %span= "0:00"
       %p.status-p #{race.n_precincts_reporting} of #{race.n_precincts_total} precincts reporting
     %p.status-future Coming #{race_day.date.strftime('%B %-d, %Y')}
   %p.text= race.text # may be nil, but we still put the <p> so we can line up the Dem and GOP <p>s
