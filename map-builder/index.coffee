@@ -334,7 +334,7 @@ render_subcounties_mesh_path = (path, topology) ->
   mesh_features = { type: 'FeatureCollection', features: [] }
 
   for feature in subcounties.features
-    geometry = intersect_or_null(feature.geometry, counties_geometry)
+    geometry = intersect_or_original(feature.geometry, counties_geometry)
     if geometry?
       mesh_features.features.push(type: 'Feature', properties: {}, geometry: geometry)
 
