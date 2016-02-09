@@ -316,6 +316,7 @@ $party-container-height: 100px;
       -webkit-flex: 1 1 auto;
       flex: 1 1 auto;
 			height: 200px;
+      width: 100px; // IE 11+Edge make it too wide otherwise
 		}
 	}
 
