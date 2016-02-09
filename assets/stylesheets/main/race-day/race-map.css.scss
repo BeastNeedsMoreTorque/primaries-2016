@@ -169,14 +169,13 @@
   }
 }
 
-.race.future .party-state-map {
+.race.no-precincts-reporting .party-state-map {
   g.counties, g.subcounties {
     display: none;
   }
 }
 
-.race.present .party-state-map path.state,
-.race.past .party-state-map path.state {
+.race.precincts-reporting .party-state-map path.state {
   stroke-width: 20px; // The inner half will be hidden by county borders
   stroke: #666;
 }

@@ -160,18 +160,13 @@ body.race-day .race {
 
 body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates { display: none; }
 
-body.race-day .race.present table.candidates td,
-body.race-day .race.past table.candidates td {
-  cursor: pointer;
-}
-
-body.race-day .race.future {
+body.race-day .race.no-precincts-reporting {
   .n-votes, .percent-vote { display: none; }
   .poll-last-updated.some-precincts-reporting { display: none; }
 }
 
-body.race-day .race.past,
-body.race-day .race.present {
+body.race-day .race.precincts-reporting {
+  table.candidates td { cursor: pointer; }
   .pollster { display: none; }
   .poll-last-updated.no-precincts-reporting { display: none; }
 }

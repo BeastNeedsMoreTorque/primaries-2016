@@ -641,9 +641,13 @@ function poll_results() {
 
       var elems = els_by_party_id_and_state_code[key];
       if (elems) {
-        elems.race.removeClass('past present future');
-        elems.race.addClass(when_race_happens);
-        elems.race.toggleClass('has-delegate-counts', has_delegate_counts);
+        elems.race
+          .removeClass('past present future')
+          .addClass(when_race_happens)
+          .removeClass('no-precincts-reporting precincts-reporting')
+          .addClass(n_reporting > 0 ? 'precincts-reporting' : 'no-precincts-reporting')
+          .toggleClass('has-delegate-counts', has_delegate_counts);
+
         elems.n_precincts.text(n_precincts_reporting_text(n_reporting, n_total));
         if (!isNaN(last_updated.getFullYear())) {
           elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();
