@@ -54,7 +54,7 @@
               != map_svg('states/NH')
             .legend
               .race-status
-                .status-present
+                .status-present{class: ((race.candidate_races.first.n_votes == 0) ? 'hidden' : '')}
                   %p.refresh-flag
                     %img{src: image_path("refresh.svg")}
                     %span= "0:30"
