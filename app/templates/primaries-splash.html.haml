@@ -54,23 +54,24 @@
           .map-container.flex-container{class: "#{party.id.downcase}"}
             .map
               != map_svg("states/#{race.state_code}")
-            .legend
+            .legend-and-status
               .race-status.when-present
                 %button.refresh 0:30
-              .container{class: ((race.candidate_races.first.n_votes == 0) ? 'hidden' : '')}
-                .leading
-                %div
-                  %span.name= "#{race.candidate_races.first.candidate.name}"
-                  %span= " leads"
-              .container.when-present.when-past
-                .trailing
-                %div
-                  %span.name= "#{race.candidate_races.first.candidate.name}"
-                  %span= " trails"
-              .container
-                .no-results
-                %div
-                  %span= "No results"
+              .legend
+                .container{class: ((race.candidate_races.first.n_votes == 0) ? 'hidden' : '')}
+                  .leading
+                  %div
+                    %span.name= "#{race.candidate_races.first.candidate.name}"
+                    %span= " leads"
+                .container.when-present.when-past
+                  .trailing
+                  %div
+                    %span.name= "#{race.candidate_races.first.candidate.name}"
+                    %span= " trails"
+                .container
+                  .no-results
+                  %div
+                    %span= "No results"
               %p.tease-link
                 %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.party_id}-#{race.state_code}"} See results
 

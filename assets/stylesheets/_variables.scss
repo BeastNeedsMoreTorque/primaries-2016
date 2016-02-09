@@ -36,42 +36,6 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 	height: 100%;
 }
 
-@mixin vertical-center-column-flex {
-  display: -webkit-flex;
-  display: flex; //allows divs to stack next to each other
-  -webkit-flex-direction: column;
-  flex-direction: column; //orders top to bottom
-  -webkit-flex-wrap: wrap;
-  flex-wrap: wrap; //wraps left to right
-  -webkit-justify-content: center;
-  justify-content: center; //centers vertically if there is not a full column
-  -webkit-align-content: start;
-  align-content: start;
-}
-
-@mixin left-column-flex {
-	display: flex;
-	display: -webkit-flex;
-
-	flex-flow: column;
-  -webkit-flex-direction: column;
-
-	-webkit-flex-wrap: wrap;
-  flex-wrap: wrap;
-
- 	-webkit-justify-content: flex-start;
-  justify-content: flex-start;
-
-  -webkit-align-content: flex-start;
-  align-content: flex-start;
-}
-
-@mixin clearfix {
-	.clearfix {
-	  overflow: auto;
-	}
-}
-
 @mixin body-copy {
 	margin: 0;
 	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
@@ -104,30 +68,6 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   .race-day-future {
     .when-past:not(.when-future),
     .when-present:not(.when-future) { display: none; }
-  }
-}
-
-@mixin status-indicator {
-  .race-status {
-    text-align: center;
-
-    .status-past, .status-present, .status-future {
-      display: none;
-      padding: .5rem 1rem;
-      margin: .5rem auto;
-    }
-
-    .status-past, .status-present-text, .status-future {
-      font-style: italic;
-    }
-
-    button.refresh {
-      @include refresh-button();
-    }
-
-    .status-present-text {
-      margin: .5rem auto;
-    }
   }
 }
 
