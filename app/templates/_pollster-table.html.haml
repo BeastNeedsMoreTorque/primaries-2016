@@ -9,7 +9,7 @@
         %th.pollster National Polls
     %tbody
       - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
-      - for candidate in party.candidates.sort_by{|c| -(c.poll_percent || 0)}
+      - for candidate in party.candidates
         %tr{class: (n_unellipsized <= 0 ? 'ellipsized' : '') + ' ' + (candidate.dropped_out? ? 'dropped-out' : '')}
           %td.candidate
             %img{src: image_path("#{candidate.slug}.png"), alt: ''}
