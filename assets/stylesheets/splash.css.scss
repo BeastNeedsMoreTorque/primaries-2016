@@ -231,8 +231,6 @@ body {
 	    &.winner .candidate-name::after {
 	      content: ' ✓';
 	    }
-	  	.candidate-name {
-	  	}
 		}
 
 		tr {
@@ -240,7 +238,7 @@ body {
 				padding: 5px 4px 3px;
 
         &.candidate-name {
-          width: 4rem;
+          width: 4.5rem;
         }
 
 				&.n-votes {

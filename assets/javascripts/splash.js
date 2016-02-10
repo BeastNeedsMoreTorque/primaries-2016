@@ -68,7 +68,7 @@ $(function() {
                     "<tbody>";
       data.candidates[party].forEach(function(c, i){
         var row = "" +
-                  "<tr class='candidate "+ (i==0 ? 'leader' : '') +"' data-candidate-id='"+ c.id +"'>" + 
+                  "<tr class='candidate "+ (i==0 ? 'leader' : '') + ' ' + (c.winner ? 'winner' : '') + "' data-candidate-id='"+ c.id +"'>" + 
                     "<td class='candidate-name'>" + c.name + "</td>" +
                     "<td class='n-votes'>" + format_int(c.votes) + "</td>" +
                     "<td class='n-votes-pct'>" + (c.pct ? c.pct.toFixed(1) : "0.0") + "%</td>" +
