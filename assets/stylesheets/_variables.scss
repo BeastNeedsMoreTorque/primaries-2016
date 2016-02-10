@@ -154,6 +154,8 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 
   .sparkline {
     vertical-align: middle;
+    width: 3rem;
+    height: 1rem;
   }
 
   .sparkline + .percent {
@@ -217,7 +219,7 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 
 
 @mixin ellipsized-table {
-  tr.ellipsized {
+  &.ellipsized tr.ellipsized {
     display: none;
   }
 

@@ -45,6 +45,15 @@
       padding-right: 0; // get a bit more space, for mobile
       font-weight: bold;
     }
+
+    td.pollster .sparkline {
+      // We'd like for the Polls column to have a fixed width, so that columns
+      // aren't rearranged when we expand the table. However, we can't set a
+      // fixed width on the td.pollster because td.candidate's width: 100% has
+      // priority over that. Instead, let's set fixed width on td.pollster's
+      // contents.
+      padding-left: 1.5rem;
+    }
   }
 
   tr.dropped-out {
