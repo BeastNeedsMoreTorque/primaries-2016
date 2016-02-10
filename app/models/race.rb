@@ -1,6 +1,6 @@
 # Could almost be called PartyState. Gives the votes/delegates of a state.
 Race = RubyImmutableStruct.new(
-  :database_or_nil,
+  :database,
   :race_day_id,
   :party_id,
   :state_code,
@@ -33,21 +33,17 @@ Race = RubyImmutableStruct.new(
     @id = "#{race_day_id}-#{party_id}-#{state_code}"
     @party_state_id = "#{@party_id}-#{@state_code}"
 
-    if !database_or_nil.nil?
-      database = database_or_nil
+    @party_state = database.party_states.find!(@party_state_id)
+    @candidate_races = database.candidate_races.find_all_by_race_id(@id)
+    @candidate_states = @candidate_races.map(&:candidate_state) # via candidate-races to nix dropped-out candidates
+    @candidate_states.uniq!
+    @candidate_states.compact!
+    @candidate_county_races = database.candidate_county_races.find_all_by_race_id(@id) || []
+    @candidate_race_subcounties = database.candidate_race_subcounties.find_all_by_race_id(@id) || []
+    @county_races = database.county_races.find_all_by_race_id(@id) || []
+    @race_subcounties = database.race_subcounties.find_all_by_race_id(@id) || []
 
-      @party_state = database.party_states.find!(@party_state_id)
-      @candidate_races = database.candidate_races.find_all_by_race_id(@id)
-      @candidate_states = @candidate_races.map(&:candidate_state) # via candidate-races to nix dropped-out candidates
-      @candidate_states.uniq!
-      @candidate_states.compact!
-      @candidate_county_races = database.candidate_county_races.find_all_by_race_id(@id) || []
-      @candidate_race_subcounties = database.candidate_race_subcounties.find_all_by_race_id(@id) || []
-      @county_races = database.county_races.find_all_by_race_id(@id) || []
-      @race_subcounties = database.race_subcounties.find_all_by_race_id(@id) || []
-
-      @n_delegates_with_candidates = @candidate_states.map(&:n_delegates).reduce(0, :+)
-    end
+    @n_delegates_with_candidates = @candidate_states.map(&:n_delegates).reduce(0, :+)
   end
 
   def n_votes_is_really_n_sdes
@@ -69,11 +65,11 @@ Race = RubyImmutableStruct.new(
     end
   end
 
-  def party; database_or_nil.parties.find!(party_id); end
+  def party; database.parties.find!(party_id); end
   def party_name; party.name; end
   def party_adjective; party.adjective; end
-  def race_day; database_or_nil.race_days.find!(race_day_id); end
-  def state; database_or_nil.states.find!(state_code); end
+  def race_day; database.race_days.find!(race_day_id); end
+  def state; database.states.find!(state_code); end
   def state_fips_int; state.fips_int; end
   def state_name; state.name; end
   def date; race_day.date; end
@@ -125,7 +121,7 @@ Race = RubyImmutableStruct.new(
   def when_race_happens
     if ap_says_its_over
       'past'
-    elsif !expect_results_time.nil? && !database_or_nil.nil? && database_or_nil.now < expect_results_time
+    elsif !expect_results_time.nil? && database.now < expect_results_time
       # In NH, some results come in at midnight but they're more confusing than
       # anything else. Hide them.
       'future'

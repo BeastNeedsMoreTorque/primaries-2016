@@ -1,7 +1,7 @@
 require 'date'
 require 'set'
 
-RaceDay = RubyImmutableStruct.new(:database_or_nil, :id, :enabled, :title, :body, :tweet, :pubbed_dt, :updated_dt_or_nil) do
+RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :tweet, :pubbed_dt, :updated_dt_or_nil) do
   attr_reader(:date)
 
   # All Races on this day
@@ -33,41 +33,39 @@ RaceDay = RubyImmutableStruct.new(:database_or_nil, :id, :enabled, :title, :body
   def after_initialize
     @date = Date.parse(id)
 
-    if database_or_nil
-      @races = database_or_nil.races
-        .select{ |r| r.race_day_id == id }
-        .sort_by! { |r| "#{r.state_name} #{r.party_name}" }
+    @races = database.races
+      .select{ |r| r.race_day_id == id }
+      .sort_by! { |r| "#{r.state_name} #{r.party_name}" }
 
-      @states = races.map(&:state).uniq.sort_by(&:name)
+    @states = races.map(&:state).uniq.sort_by(&:name)
 
-      @state_party_races = states.map do |state|
-        [
-          state,
-          database_or_nil.parties.map do |party|
-            [
-              party,
-              database_or_nil.races.find("#{@id}-#{party.id}-#{state.code}"),
-              database_or_nil.races.find_all_by_party_state_id("#{party.id}-#{state.code}")
-                .reject { |r| r.race_day_id == id }
-            ]
-          end
-        ]
-      end
-
-      @candidate_races = races.flat_map(&:candidate_races)
-      @candidate_states = races.flat_map(&:candidate_states)
-      @candidate_county_races = races.flat_map(&:candidate_county_races)
-      @candidate_race_subcounties = races.flat_map(&:candidate_race_subcounties)
-      @county_races = races.flat_map(&:county_races)
-      @race_subcounties = races.flat_map(&:race_subcounties)
+    @state_party_races = states.map do |state|
+      [
+        state,
+        database.parties.map do |party|
+          [
+            party,
+            database.races.find("#{@id}-#{party.id}-#{state.code}"),
+            database.races.find_all_by_party_state_id("#{party.id}-#{state.code}")
+              .reject { |r| r.race_day_id == id }
+          ]
+        end
+      ]
     end
+
+    @candidate_races = @races.flat_map(&:candidate_races)
+    @candidate_states = @races.flat_map(&:candidate_states)
+    @candidate_county_races = @races.flat_map(&:candidate_county_races)
+    @candidate_race_subcounties = @races.flat_map(&:candidate_race_subcounties)
+    @county_races = @races.flat_map(&:county_races)
+    @race_subcounties = @races.flat_map(&:race_subcounties)
   end
 
   def disabled?; !@enabled; end
   def enabled?; @enabled; end
 
   def today?
-    !database_or_nil.nil? && database_or_nil.now.to_datetime.new_offset('Eastern').to_date.to_s == id
+    database.now.to_datetime.new_offset('Eastern').to_date.to_s == id
   end
 
   # "past" when all races have finished reporting

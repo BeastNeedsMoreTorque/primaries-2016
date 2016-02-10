@@ -2,19 +2,16 @@
 #
 # See also CandidateRace. They aren't the same thing: there can be two races
 # in one state with the same candidate.
-CandidateState = RubyImmutableStruct.new(:database_or_nil, :candidate_id, :state_code, :n_delegates, :poll_percent, :poll_sparkline) do
+CandidateState = RubyImmutableStruct.new(:database, :candidate_id, :state_code, :n_delegates, :poll_percent, :poll_sparkline) do
   include Comparable
 
   attr_reader(:id, :candidate, :party_id, :state)
 
   def after_initialize
     @id = "#{candidate_id}-#{state_code}"
-
-    if database_or_nil
-      @candidate = database_or_nil.candidates.find!(candidate_id)
-      @party_id = @candidate.party_id
-      @state = database_or_nil.states.find!(state_code)
-    end
+    @candidate = database.candidates.find!(candidate_id)
+    @party_id = @candidate.party_id
+    @state = database.states.find!(state_code)
   end
 
   def candidate_last_name; candidate.name; end
