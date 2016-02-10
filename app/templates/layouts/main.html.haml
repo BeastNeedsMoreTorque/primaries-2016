@@ -17,8 +17,9 @@
 
     - if meta[:social_image_url] =~ /^https?:\/\//
       %meta{property: 'og:image', content: meta[:social_image_url]}
+      %meta{name: 'twitter:image', content: meta[:social_image_url]}
     - else
-      / og:image omitted because meta[:social_image_url] is a relative URL
+      / og:image and twitter:image omitted because meta[:social_image_url] is a relative URL
 
     %meta{property: 'article:publisher', content: 'HuffingtonPost'}
     %meta{property: 'article:author', content: meta[:author]}
