@@ -1,15 +1,22 @@
 $(function() {
   function updateCandidates(data, tense){
     $(".leader").removeClass("leader");
-    for(party in data['candidates']){
-      sorted = data.candidates[party];
-      leader = data.leaders[party];
-      if(tense !== 'future')
+    $('.winner').removeClass('winner');
+
+    for (var party in data['candidates']) {
+      var sorted = data.candidates[party];
+      var leader = data.leaders[party];
+
+      if(tense !== 'future') {
         $("tr[data-candidate-id='"+leader.id+"']").addClass("leader");
-      for(candidate_id in sorted){
-        candidate = sorted[candidate_id];
-        $("tr[data-candidate-id='"+candidate.id+"'] .n-votes").text(format_int(candidate.votes || 0));
-        $("tr[data-candidate-id='"+candidate.id+"'] .n-votes-pct").text(format_percent(candidate.pct || 0));
+      }
+
+      for (var i in sorted) {
+        var candidate = sorted[i];
+        var $tr = $('tr[data-candidate-id=' + candidate.id + ']);
+        $tr.find('.n-votes').text(format_int(candidate.votes || 0));
+        $tr.find('.n-votes-pct').text(format_int(candidate.pct || 0));
+        $tr.toggleClass('winner', candidate.winner);
       }
     }
   }
