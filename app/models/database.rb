@@ -45,7 +45,7 @@ require_relative '../sources/sheets_source'
 # The Database contains every Collection we use -- e.g., `candidates`, `states`
 # -- plus the rendering date.
 class Database
-  LastDate = Date.parse(ENV['LAST_DATE'] || '2016-02-09')
+  LastDate = Date.parse(ENV['LAST_DATE'] || '2016-02-28')
   Now = Time.parse(ENV['NOW'] || Time.now.iso8601)
 
   CollectionNames = %w(

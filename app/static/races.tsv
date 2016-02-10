@@ -3,10 +3,10 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-02-01	GOP	IA	Caucus			
 2016-02-09	Dem	NH	Primary	2016-02-10T00:00:00Z		Sanders
 2016-02-09	GOP	NH	Primary	2016-02-10T00:00:00Z		Trump
-2016-02-20	Dem	NV				
-2016-02-20	GOP	SC				
-2016-02-23	GOP	NV				
-2016-02-27	Dem	SC				
+2016-02-20	Dem	NV	Caucus			
+2016-02-20	GOP	SC	Primary			
+2016-02-23	GOP	NV	Caucus			
+2016-02-27	Dem	SC	Primary			
 2016-03-01	Dem	AL				
 2016-03-01	GOP	AL				
 2016-03-01	GOP	AK				

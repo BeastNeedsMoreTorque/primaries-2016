@@ -47,7 +47,7 @@ function format_datetime(date) {
 
 function extract_date(el) {
   var datetime_string = el.getAttribute('datetime');
-  if (!datetime_string) throw new Error('Tried to render_time() without a datetime attribute on element');
+  if (!datetime_string) return null; // nothing to render
 
   var date = new Date(datetime_string);
   if (isNaN(date.valueOf())) throw new Error('Invalid datetime string: ' + datetime_string);
@@ -57,12 +57,14 @@ function extract_date(el) {
 
 function render_time() {
   var date = extract_date(this);
+  if (!date) return;
   var string = format_time(date);
   $(this).text(string);
 }
 
 function render_datetime() {
   var date = extract_date(this);
+  if (!date) return;
   var string = format_datetime(date);
   $(this).text(string);
 }
