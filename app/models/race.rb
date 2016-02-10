@@ -123,8 +123,6 @@ Race = RubyImmutableStruct.new(
   # * 'present': voting has finished; results are not all in
   # * 'past': results are all in
   def when_race_happens
-    return 'present' if state_code == 'NH'
-
     if ap_says_its_over
       'past'
     elsif !expect_results_time.nil? && !database_or_nil.nil? && database_or_nil.now < expect_results_time
