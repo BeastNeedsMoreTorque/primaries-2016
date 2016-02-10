@@ -160,7 +160,7 @@ class Database
       end
     end
 
-    candidates = sheet_candidates.map do |sheet_candidate|
+    all = sheet_candidates.map do |sheet_candidate|
       del_super_candidate = candidate_id_to_del_super_candidate[sheet_candidate.id]
       pollster_candidate = candidate_id_to_pollster_candidate[sheet_candidate.id]
 
@@ -179,7 +179,9 @@ class Database
       )
     end
 
-    Candidates.new(candidates)
+    all.sort!
+
+    Candidates.new(all)
   end
 
   def load_candidate_county_races(sheets_candidates, sheets_races, ap_candidate_county_races)

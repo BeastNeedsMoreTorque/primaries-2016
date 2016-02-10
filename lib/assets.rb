@@ -70,6 +70,8 @@ module Assets
   StaticAssets = %w(
     javascripts/pym.min.js
     stylesheets/proxima-nova-condensed.css
+    images/Dem.png
+    images/GOP.svg
   )
 
   def self.build

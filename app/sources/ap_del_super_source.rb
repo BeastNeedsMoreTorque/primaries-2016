@@ -32,7 +32,7 @@ class ApDelSuperSource < Source
     for del in ap_del_super_json[:del]
       party_id = del[:pId]
 
-      parties << Party.new(party_id, del[:dVotes], del[:dNeed])
+      parties << Party.new(party_id, del[:dVotes].to_i, del[:dNeed].to_i)
 
       for del_state in del[:State]
         state_code = del_state[:sId]

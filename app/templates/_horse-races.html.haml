@@ -1,0 +1,14 @@
+.horse-races
+  - parties.each do |party|
+    .horse-race{class: "party-#{party.id}", 'data-n-delegates': party.n_delegates_total, 'data-n-delegates-needed': party.n_delegates_needed}
+      %h3= party.name
+      %ol.candidates
+        - party.candidates.reverse.each do |candidate|
+          %li.candidate{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, class: "#{candidate.dropped_out? ? 'dropped-out' : ''}"}
+            .info
+              .last-name= candidate.name
+              .n-delegates= format_int(candidate.n_delegates)
+            .visual
+              .background
+              .marker{style: "left: #{(candidate.n_delegates || 0).to_f / party.n_delegates_needed * 100}%"}
+                %img{src: image_path("#{candidate.slug}.png"), alt: ''}
