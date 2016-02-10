@@ -4,18 +4,20 @@
     %thead
       %tr
         %th.candidate Candidate
-        %th.pollster
-          .long-table-heading National Polling Average
+        %th.n-delegates
+          .long-table-heading Delegates
+        %th.pollster National Polls
     %tbody
       - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
-      - for candidate in party.candidates.sort_by{|c| -(c.poll_percent or 0)}
+      - for candidate in party.candidates.sort_by{|c| -(c.poll_percent || 0)}
         %tr{class: (n_unellipsized <= 0 ? 'ellipsized' : '') + ' ' + (candidate.dropped_out? ? 'dropped-out' : '')}
           %td.candidate
             %img{src: image_path("#{candidate.slug}.png"), alt: ''}
             = candidate.full_name
+          %td.n-delegates= candidate.n_delegates || 0
           %td.pollster
             - if candidate.dropped_out_date
-              .dropped-out= "dropped out #{format_date(candidate.dropped_out_date)}"
+              .dropped-out= "Withdrew #{format_date(candidate.dropped_out_date)}"
             - else
               - if candidate.poll_sparkline && !candidate.poll_sparkline.empty?
                 .sparkline!= candidate.poll_sparkline.to_svg
@@ -26,6 +28,6 @@
     .ellipsize-table-prompt
   .metadata.footnotes
     %p.pollster-note
-      Source:
+      Source: AP,
       %a{href: "//elections.huffingtonpost.com/pollster/2016-national-#{{ 'GOP' => 'gop', 'Dem' => 'democratic' }[party.id]}-primary"}
         HuffPost Pollster

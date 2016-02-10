@@ -28,6 +28,23 @@
   table {
     @include ellipsized-table;
     @include pollster-table;
+
+    th.n-delegates {
+      position: relative;
+
+      .long-table-heading {
+        position: absolute;
+        // Copy from <th>'s padding
+        top: 2px;
+        right: 0;
+      }
+    }
+
+    .n-delegates {
+      text-align: right;
+      padding-right: 0; // get a bit more space, for mobile
+      font-weight: bold;
+    }
   }
 
   tr.dropped-out {
@@ -39,6 +56,10 @@
 
     td {
       color: $muted;
+    }
+
+    .pollster {
+      font-weight: normal;
     }
   }
 
