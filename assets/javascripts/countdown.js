@@ -1,33 +1,37 @@
 function countdown($buttons, interval_s, callback_that_calls_a_callback) {
-  var remaining_s = null;
-  var timer_id = null; // if non-null, we're in "counting" state
+  var start_date = null; // Date we set timeout_id
+  var timeout_id = null; // if non-null, we're in "counting" state
 
   function tick() {
-    --remaining_s;
+    var now = new Date();
+
+    var remaining_s = Math.ceil(interval_s - (now - start_date) / 1000);
 
     if (remaining_s <= 0) {
       click();
     } else {
-      refresh_text();
+      refresh_text(remaining_s);
+      var delay = start_date - now + (interval_s - remaining_s + 1) * 1000;
+      if (delay < 10) delay = 10;
+      timeout_id = window.setTimeout(tick, delay);
     }
   }
 
   function start() {
     $buttons.removeClass('clicked').addClass('counting');
-    remaining_s = interval_s;
-    refresh_text();
+    refresh_text(interval_s);
 
-    timer_id = window.setInterval(tick, 1000);
+    start_date = new Date();
+    timeout_id = window.setTimeout(tick, 1000);
   }
 
   function click() {
-    if (!timer_id) return; // debounce
+    if (!timeout_id) return; // debounce
 
-    clearInterval(timer_id);
-    timer_id = null;
+    clearTimeout(timeout_id);
+    timeout_id = null;
 
-    remaining_s = 0;
-    refresh_text();
+    refresh_text(0);
     $buttons.removeClass('counting').addClass('clicked');
 
     var startDate = new Date();
@@ -43,7 +47,7 @@ function countdown($buttons, interval_s, callback_that_calls_a_callback) {
     callback_that_calls_a_callback(start_or_wait_for_spin);
   }
 
-  function refresh_text() {
+  function refresh_text(remaining_s) {
     var text = '0:' + (remaining_s < 10 ? '0' : '') + remaining_s;
     $buttons.text(text);
   }
