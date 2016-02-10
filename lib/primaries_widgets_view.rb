@@ -34,7 +34,7 @@ module PrimariesWidgetsView
 
     dem_reporting = race_day.race_subcounties.select{|rsc| rsc.party_id == "Dem"}.map{|rsc| rsc.n_precincts_reporting}.reduce(0, :+)
     dem_total = race_day.race_subcounties.select{|rsc| rsc.party_id == "Dem"}.map{|rsc| rsc.n_precincts_total}.reduce(0, :+)
-    dem_reporting_str = get_precincts_reporting_str(gop_reporting, gop_total)
+    dem_reporting_str = get_precincts_reporting_str(dem_reporting, dem_total)
 
     {
       geos_total: geos.count,
