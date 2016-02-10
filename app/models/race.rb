@@ -144,6 +144,8 @@ Race = RubyImmutableStruct.new(
   def past?; when_race_happens == 'past'; end
   def future?; when_race_happens == 'future'; end
 
+  def any_precincts_reporting?; (n_precincts_reporting || 0) > 0; end
+
   # e.g., 'Iowa Democratic Caucus'
   def title
     "#{state_name} #{party_adjective} #{race_type}"

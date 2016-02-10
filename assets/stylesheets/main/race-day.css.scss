@@ -25,22 +25,26 @@ body.race-day {
     display: -webkit-flex;
     flex-wrap: wrap;
     -webkit-flex-wrap: wrap;
+  }
 
-    li {
-      box-sizing: border-box;
-      display: block;
-      width: 100%;
-      flex: 0 0 auto;
-      -webkit-flex: 0 0 auto;
+  ul.party-state>li.party-state {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
 
-      @media (min-width: 650px) {
-        width: 50%;
-        &:first-child {
-          padding-right: 20px;
-        }
-        &:last-child {
-          padding-left: 20px;
-        }
+    // Make the inner ul.other-races stretch to full height
+    display: -webkit-flex;
+    display: flex;
+
+    @media (min-width: 650px) {
+      width: 50%;
+      &:first-child {
+        padding-right: 20px;
+      }
+      &:last-child {
+        padding-left: 20px;
       }
     }
   }

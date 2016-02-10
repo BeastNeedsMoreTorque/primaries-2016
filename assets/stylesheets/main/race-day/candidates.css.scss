@@ -138,7 +138,7 @@ body.race-day .race {
     }
   }
 
-  p.state-delegate-equivalents {
+  p.state-delegate-equivalents, p.poll-last-updated {
     font-size: .8rem;
     margin: .5rem 10px 1rem;
     color: $muted;
@@ -158,11 +158,9 @@ body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates { di
 
 body.race-day .race.no-precincts-reporting {
   .n-votes, .percent-vote { display: none; }
-  .poll-last-updated.some-precincts-reporting { display: none; }
 }
 
 body.race-day .race.precincts-reporting {
   table.candidates td { cursor: pointer; }
   .pollster { display: none; }
-  .poll-last-updated.no-precincts-reporting { display: none; }
 }
