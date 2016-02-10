@@ -13,7 +13,7 @@ $(function() {
 
       for (var i in sorted) {
         var candidate = sorted[i];
-        var $tr = $('tr[data-candidate-id=' + candidate.id + ']);
+        var $tr = $('tr[data-candidate-id=' + candidate.id + ']');
         $tr.find('.n-votes').text(format_int(candidate.votes || 0));
         $tr.find('.n-votes-pct').text(format_int(candidate.pct || 0));
         $tr.toggleClass('winner', candidate.winner);
