@@ -7,7 +7,6 @@ require_relative '../lib/env'
 require 'pstore'
 
 require_relative '../lib/paths'
-require_relative '../lib/with_airbrake'
 
 ShortAge = 5
 MaxAge = 365 * 86400 # 1yr
@@ -133,4 +132,4 @@ def main
   upload_pages
 end
 
-WithAirbrake.run { main }
+main
