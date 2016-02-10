@@ -40,7 +40,7 @@
     The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention.
 
 - if race.pollster_last_updated
-  %p.poll-last-updated.no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.pollster_last_updated)}\"></time>"
+  %p.poll-last-updated.when-no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.pollster_last_updated)}\"></time>"
 
 .n-delegates.n-delegates-with-candidates
   .dots{class: "dots-#{race.party_id}"}
