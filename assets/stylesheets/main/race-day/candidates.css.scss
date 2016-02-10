@@ -121,11 +121,7 @@ body.race-day .race {
     }
 
     .dots {
-      font-size: 1rem;
-      display: inline-block;
-      white-space: normal;
-      line-height: .4;
-      margin-top: -.25rem; // because line-height makes things weird
+      @include dots-inline-block();
       padding-right: .25rem;
     }
   }

@@ -109,12 +109,8 @@
   }
 
   .dots {
-    display: inline-block;
-    line-height: .4;
+    @include dots-inline-block();
     max-width: 12em;
-    word-break: break-all;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
   }
 
   .dots-dem {
