@@ -23,8 +23,9 @@
     %meta{property: 'article:publisher', content: 'HuffingtonPost'}
     %meta{property: 'article:author', content: meta[:author]}
 
-    %meta{property: 'twitter:card', content: 'summary_large_image'}
-    %meta{property: 'twitter:creator', content: meta[:author_twitter]}
+    %meta{name: 'twitter:card', content: 'summary_large_image'}
+    %meta{name: 'twitter:creator', content: meta[:author_twitter]}
+    %meta{name: 'twitter:title', content: meta[:page_title]}
 
     -# For our own benefit:
     %meta{property: 'suggested-tweet', content: meta[:twitter_desc]}
