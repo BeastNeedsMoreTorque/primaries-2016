@@ -7,48 +7,48 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-02-20	GOP	SC	Primary			
 2016-02-23	GOP	NV	Caucus			
 2016-02-27	Dem	SC	Primary			
-2016-03-01	Dem	AL				
-2016-03-01	GOP	AL				
-2016-03-01	GOP	AK				
-2016-03-01	Dem	AS				
-2016-03-01	Dem	AR				
-2016-03-01	GOP	AR				
-2016-03-01	Dem	CO				
-2016-03-01	Dem	DA				
-2016-03-01	Dem	GA				
-2016-03-01	GOP	GA				
-2016-03-01	Dem	MA				
-2016-03-01	GOP	MA				
-2016-03-01	Dem	MN				
-2016-03-01	GOP	MN				
-2016-03-01	Dem	OK				
-2016-03-01	GOP	OK				
-2016-03-01	Dem	TN				
-2016-03-01	GOP	TN				
-2016-03-01	Dem	TX				
-2016-03-01	GOP	TX				
-2016-03-01	Dem	VT				
-2016-03-01	GOP	VT				
-2016-03-01	Dem	VA				
-2016-03-01	GOP	VA				
-2016-03-01	GOP	WY				
-2016-03-05	Dem	KS				
-2016-03-05	GOP	KS				
-2016-03-05	GOP	KY				
-2016-03-05	Dem	LA				
-2016-03-05	GOP	LA				
-2016-03-05	GOP	ME				
-2016-03-05	Dem	NE				
-2016-03-06	Dem	ME				
-2016-03-06	GOP	PR				
-2016-03-08	GOP	HI				
-2016-03-08	GOP	ID				
-2016-03-08	Dem	MI				
-2016-03-08	GOP	MI				
-2016-03-08	Dem	MS				
-2016-03-08	GOP	MS				
-2016-03-12	GOP	DC				
-2016-03-12	GOP	GU				
+2016-03-01	Dem	AL	Primary			
+2016-03-01	GOP	AL	Primary			
+2016-03-01	GOP	AK	Caucus			
+2016-03-01	Dem	AS	Caucus			
+2016-03-01	Dem	AR	Primary			
+2016-03-01	GOP	AR	Primary			
+2016-03-01	Dem	CO	Caucus			
+2016-03-01	Dem	DA	Primary			
+2016-03-01	Dem	GA	Primary			
+2016-03-01	GOP	GA	Primary			
+2016-03-01	Dem	MA	Primary			
+2016-03-01	GOP	MA	Primary			
+2016-03-01	Dem	MN	Caucus			
+2016-03-01	GOP	MN	Caucus			
+2016-03-01	Dem	OK	Primary			
+2016-03-01	GOP	OK	Primary			
+2016-03-01	Dem	TN	Primary			
+2016-03-01	GOP	TN	Primary			
+2016-03-01	Dem	TX	Primary			
+2016-03-01	GOP	TX	Primary			
+2016-03-01	Dem	VT	Primary			
+2016-03-01	GOP	VT	Primary			
+2016-03-01	Dem	VA	Primary			
+2016-03-01	GOP	VA	Primary			
+2016-03-01	GOP	WY	Caucus			
+2016-03-05	Dem	KS	Caucus			
+2016-03-05	GOP	KS	Caucus			
+2016-03-05	GOP	KY	Caucus			
+2016-03-05	Dem	LA	Primary			
+2016-03-05	GOP	LA	Primary			
+2016-03-05	GOP	ME	Caucus			
+2016-03-05	Dem	NE	Caucus			
+2016-03-06	Dem	ME	Caucus			
+2016-03-06	GOP	PR	Primary			
+2016-03-08	GOP	HI	Caucus			
+2016-03-08	GOP	ID	Primary			
+2016-03-08	Dem	MI	Primary			
+2016-03-08	GOP	MI	Primary			
+2016-03-08	Dem	MS	Primary			
+2016-03-08	GOP	MS	Primary			
+2016-03-12	GOP	DC	Caucus			
+2016-03-12	GOP	GU	Convention			
 2016-03-12	Dem	MP				
 2016-03-12	GOP	WY				
 2016-03-15	Dem	FL				

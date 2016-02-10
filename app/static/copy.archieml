@@ -102,6 +102,14 @@ body: View election results from the New Hampshire primaries and see how each ca
 
 
 tweet: Sanders and Trump won the New Hampshire primaries. See maps at
+
+
+date: 2016-02-20
+title: Nevada (D) and South Carolina (R)
+
+
+date: 2016-03-01
+title: Super Tuesday
 [primaries.races]
 This is just for setting race text, given date, state and party.
 
