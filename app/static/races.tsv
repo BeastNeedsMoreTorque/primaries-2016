@@ -31,7 +31,6 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-01	GOP	VT	Primary			
 2016-03-01	Dem	VA	Primary			
 2016-03-01	GOP	VA	Primary			
-2016-03-01	GOP	WY	Caucus			
 2016-03-05	Dem	KS	Caucus			
 2016-03-05	GOP	KS	Caucus			
 2016-03-05	GOP	KY	Caucus			
@@ -63,13 +62,13 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-15	Dem	OH				
 2016-03-15	GOP	OH				
 2016-03-19	GOP	VI				
-2016-03-22	GOP	AS				
+2016-03-22	GOP	AS	Caucus			
 2016-03-22	Dem	AZ				
 2016-03-22	GOP	AZ				
 2016-03-22	Dem	ID				
 2016-03-22	Dem	UT				
 2016-03-22	GOP	UT				
-2016-03-26	Dem	AK				
+2016-03-26	Dem	AK	Caucus			
 2016-03-26	Dem	HI				
 2016-03-26	Dem	WA				
 2016-04-01	GOP	ND				

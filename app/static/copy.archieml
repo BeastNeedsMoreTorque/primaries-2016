@@ -129,6 +129,10 @@ party: GOP
 text: Republican voters in Iowa turned out in record numbers for the GOP caucus, showing strong support for Ted Cruz. Marco Rubio finished a close third despite lagging well behind Donald Trump in the polls. Other candidates, like Jeb Bush, failed to gain traction with voters.
 
 
+date: 2016-03-01
+state: DA
+party: Dem
+text: Democrats Abroad collect votes in polling stations around the world, starting March 1 and ending March 8.
 
 
 :ignore all text after this line

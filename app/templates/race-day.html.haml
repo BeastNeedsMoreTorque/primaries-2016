@@ -16,8 +16,8 @@
             %li.party-state{'data-party-id': party.id, 'data-state-code': state.code}
               - if !race.nil?
                 != render(partial: 'race-day/race', locals: { race: race })
-                - other_races.each do |other_race|
-                  != render(partial: 'race-day/other-race-below-race', locals: { race: other_race })
+                - if other_races.length > 0
+                  != render(partial: 'race-day/other-races-below-race', locals: { races: other_races })
               - elsif other_races.length > 0
                 != render(partial: 'race-day/other-races', locals: { races: other_races })
               - else

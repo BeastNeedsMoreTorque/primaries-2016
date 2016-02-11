@@ -1,0 +1,23 @@
+body.race-day div.no-races {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center;
+
+  p {
+    display: block;
+    text-align: center;
+    margin: 1rem;
+    padding: 2rem;
+    background: #f8f8f8;
+    border-radius: 1rem;
+    color: #666;
+    font-style: italic;
+  }
+}
