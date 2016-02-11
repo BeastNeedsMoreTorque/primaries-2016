@@ -70,6 +70,7 @@ module Assets
   StaticAssets = %w(
     javascripts/pym.min.js
     stylesheets/proxima-nova-condensed.css
+    images/horse.png
     images/Dem.png
     images/GOP.svg
   )

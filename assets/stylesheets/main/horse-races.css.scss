@@ -4,19 +4,11 @@
       content: ' ';
       display: block;
       position: absolute;
-      left: -1rem;
+      right: -.6rem;
       bottom: 0;
-      width: 2rem;
-
-      @if ($party_id == Dem) {
-        background: url("/2016/images/Dem.png") no-repeat;
-        transform: scaleX(-1);
-        height: 2rem;
-      } @else {
-        background: url("/2016/images/GOP.svg") no-repeat;
-        height: 1.75rem;
-      }
-
+      width: 5rem;
+      height: 2.6rem;
+      background: url("/2016/images/horse.png") no-repeat;
       background-size: 100%;
     }
   }
