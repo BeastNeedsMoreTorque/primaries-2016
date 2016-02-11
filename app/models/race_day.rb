@@ -85,4 +85,14 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
   def present?; when_race_day_happens == 'present'; end
   def past?; when_race_day_happens == 'past'; end
   def future?; when_race_day_happens == 'future'; end
+
+  def title
+    if @title
+      @title
+    elsif @races.length == 1
+      @races.first.title
+    else
+      raise "Need title for #{self.inspect}"
+    end
+  end
 end
