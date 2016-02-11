@@ -79,6 +79,8 @@ Race = RubyImmutableStruct.new(
   def pollster_slug; party_state.pollster_slug; end
   def pollster_last_updated; party_state.pollster_last_updated; end
 
+  def has_pollster_data?; !pollster_slug.nil?; end
+
   # True iff at least one candidate has a delegate -- pledged or unpledged
   def has_delegate_counts
     n_delegates_with_candidates != 0

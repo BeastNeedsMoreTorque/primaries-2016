@@ -10,7 +10,8 @@
           Votes
       %th.percent-vote= '%'
       %th.n-delegates Delegates
-      %th.pollster Polling Average 
+      - if race.has_pollster_data?
+        %th.pollster Polling Average 
   %tbody
     - race.candidate_races.each do |candidate_race|
       - candidate = candidate_race.candidate
@@ -24,10 +25,11 @@
           .n-delegates-inner
             %span.n-delegates-int= format_int(candidate_race.n_delegates)
             .dots{class: "dots-#{race.party_id}"}= "•" * candidate_race.n_delegates
-        %td.pollster
-          - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
-            .sparkline!= candidate_race.poll_sparkline.to_svg
-          %span.percent= format_percent_or_nil(candidate_race.poll_percent)
+        - if race.has_pollster_data?
+          %td.pollster
+            - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
+              .sparkline!= candidate_race.poll_sparkline.to_svg
+            %span.percent= format_percent_or_nil(candidate_race.poll_percent)
 
 - if race.n_votes_is_really_n_sdes
   %p.state-delegate-equivalents.when-past.when-present
