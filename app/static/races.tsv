@@ -49,7 +49,6 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-12	GOP	DC	Caucus			
 2016-03-12	GOP	GU	Convention			
 2016-03-12	Dem	MP				
-2016-03-12	GOP	WY				
 2016-03-15	Dem	FL				
 2016-03-15	GOP	FL				
 2016-03-15	Dem	IL				
@@ -75,7 +74,6 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-04-05	Dem	WI				
 2016-04-05	GOP	WI				
 2016-04-09	Dem	WY				
-2016-04-16	GOP	WY				
 2016-04-19	Dem	NY				
 2016-04-19	GOP	NY				
 2016-04-26	Dem	CT				
