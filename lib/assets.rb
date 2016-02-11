@@ -108,7 +108,7 @@ module Assets
   # digest_asset_path('images/clinton.png') -> '//asset_host/2016/images/clinton-abcdef.png'
   def self.digest_asset_path(path)
     if !@digest_asset_paths.include?(path)
-      raise "You requested image_path('#{name}'), but Assets did not compile #{name}."
+      raise "You requested image_path('#{path}'), but Assets did not compile #{path}."
     end
     "#{asset_host}/2016/#{@digest_asset_paths[path]}"
   end
