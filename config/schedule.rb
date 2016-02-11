@@ -1,24 +1,58 @@
-# Configure the production server.
-#
-# Every `TimeoutInS` seconds, the server will poll for:
-#
-# * Delegate counts (two AP API requests), if `RefreshDelegates` is true
-# * Race-day results (one AP API request per race day), one for each
-#   `YYYY-MM-DD`-format String in the `RefreshPrimariesRaceDays` Array
-# * Pollster results (two Pollster API requests) if `RefreshPollsterPrimaries`
-#   is true
+require_relative '../lib/schedule_methods'
+
+# Describes what the production server actually does.
 #
 # This is a bit hack-y: we're communicating with the production server via git
 # commits. At this phase of development, it seems right.
 module ServerSchedule
-  TimeoutInS = 3600
+  extend ScheduleMethods
 
-  # WARNING: Changing this to true? Deploy to staging first, then production.
-  RefreshDelegates = true
+  # Every TickIntervalInS seconds, we "tick". On a tick, something happens.
+  #
+  # After the task *finishes*, we start waiting for another tick. So if
+  # TickIntervalInS is 1s and have two "pollster" tasks lined up that take
+  # 10s, then the two "pollster" tasks will start 11s apart.
+  #
+  # (If we didn't wait until *after* the task finishes, we could end up
+  # bunching API requests together, which could exhaust our quota. Better too
+  # few requests than too many, because they're more likely to succeed.)
+  TickIntervalInS = 15*60
 
-  # WARNING: Adding a date? Deploy to staging first, then production.
-  RefreshPrimariesRaceDays = [ '2016-02-09' ]
+  # The list of ticks.
+  #
+  # The first tick happens immediately when the program starts. The next happens
+  # TickIntervalInS seconds afterwards. After the last item in the list, we wait
+  # TickIntervalInS seconds and start back at the beginning.
+  #
+  # Possible ticks:
+  #
+  # * del_super: Get the latest del_super report from AP. 2 API requests.
+  # * election_day('YYYY-MM-DD'): Update vote counts from AP. 1 API request.
+  # * pollster: Update all polls from Pollster. Takes a few seconds (there are
+  #             lots of HTTP requests), but there's no API request limit.
+  # * nothing: does nothing.
+  #
+  # Our limit is 10 API requests per minute.
+  Ticks = [
+    del_super,
+    election_day('2016-02-01'),
+    election_day('2016-02-09'),
+    pollster
+  ]
 
-  # WARNING: Changing this to true? Deploy to staging first, then production.
-  RefreshPollsterPrimaries = true
+  # On election night, do something like this:
+  #
+  # TickIntervalInS = 10
+  #
+  # Ticks = [
+  #   election_day('2016-03-01'),
+  #   election_day('2016-03-01'),
+  #   election_day('2016-03-01'),
+  #   election_day('2016-03-01'),
+  #   election_day('2016-03-01'),
+  #   del_super
+  # ]
+  #
+  # ... that will update votes five times per minute (average once per 12s) and
+  # delegate counts once a minute. Total: 7 API requests per minute.
 end
