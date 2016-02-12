@@ -8,6 +8,11 @@
   - if body
     %p.intro-copy= body
 
+  %span.state-selector-label Jump to state
+  %select.state-selector
+    - race_day.state_party_races.each do |state, party_races|
+      %option #{state.name}
+
   %ul.states
     - race_day.state_party_races.each do |state, party_races|
       %li.state
