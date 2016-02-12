@@ -30,3 +30,11 @@
                       - for dot_subgroup in dot_group.dot_subgroups
                         %span.dot-subgroup{'data-state-code': dot_subgroup.candidate_state.state_code}<>
                           = '•' * dot_subgroup.n_dots
+        %ul.state-delegates
+          - party_candidate_states.group_by(&:state).each do |state, candidate_states|
+            - party_state = candidate_states.first.party_state
+            %li{'data-state-code': state.code}
+              .state-code= state.code
+              .map!= map_svg("states/tiny/#{state.code}")
+              .n-delegates= party_state.n_delegates
+              -#.n-pledged-delegates= party_state.n_pledged_delegates

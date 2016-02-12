@@ -62,11 +62,51 @@ body.race-day .delegate-summary {
     }
   }
 
-  .party-delegate-summary[data-party-id=Dem] .n-delegates-dots {
-    color: $strongDem;
+  ul.state-delegates {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: center;
+    justify-content: center;
+    text-align: center;
+
+    li {
+      padding-top: .5rem;
+      width: 2.2rem;
+    }
+
+    .name {
+      display: none;
+    }
+
+    .map {
+      display: inline-block;
+    }
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
   }
 
-  .party-delegate-summary[data-party-id=GOP] .n-delegates-dots {
-    color: $strongGOP;
+  .party-delegate-summary[data-party-id=Dem] {
+    path {
+      fill: $strongDem;
+    }
+
+    .n-delegates-dots, .state-code {
+      color: $strongDem;
+    }
+  }
+
+  .party-delegate-summary[data-party-id=GOP] {
+    path {
+      fill: $strongGOP;
+    }
+
+    .n-delegates-dots, .state-code {
+      color: $strongGOP;
+    }
   }
 }
