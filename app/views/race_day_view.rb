@@ -40,6 +40,43 @@ class RaceDayView < BaseView
       .last
   end
 
+  DotsPerGroup = 25
+  DotGroup = RubyImmutableStruct.new(:dot_subgroups)
+  DotSubgroup = RubyImmutableStruct.new(:candidate_state, :n_dots)
+
+  # Turns a list of candidate_states into some DotGroups
+  def candidate_states_to_dot_groups(candidate_states)
+    ret = []
+
+    dot_group = DotGroup.new([])
+    dots_left_in_group = DotsPerGroup
+
+    candidate_states.each do |candidate_state|
+      dots_left_in_state = candidate_state.n_delegates
+
+      while dots_left_in_state > 0
+        dots_in_subgroup = [ dots_left_in_group, dots_left_in_state ].min
+
+        if dots_in_subgroup == 0
+          ret << dot_group
+          dot_group = DotGroup.new([])
+          dots_left_in_group = DotsPerGroup
+          # Loop again; dots_in_subgroup won't be 0
+        else
+          dot_group.dot_subgroups << DotSubgroup.new(candidate_state, dots_in_subgroup)
+          dots_left_in_group -= dots_in_subgroup
+          dots_left_in_state -= dots_in_subgroup
+        end
+      end
+    end
+
+    if dot_group.dot_subgroups.length > 0
+      ret << dot_group
+    end
+
+    ret
+  end
+
   # The race day immediately after the one we're focused on
   def next_race_day
     database.race_days

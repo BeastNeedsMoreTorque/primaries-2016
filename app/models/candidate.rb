@@ -4,6 +4,7 @@ Candidate = RubyImmutableStruct.new(:database, :id, :party_id, :full_name, :name
 
   def party; database.parties.find(party_id); end
   def slug; name.downcase.gsub(/[^\w]/, '-'); end
+  def last_name; name; end
 
   def <=>(rhs)
     # Sort by: first, not-dropped-out; else, dropped-out date descending

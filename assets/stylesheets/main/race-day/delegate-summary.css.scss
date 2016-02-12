@@ -1,0 +1,72 @@
+body.race-day .delegate-summary {
+  .party-delegate-summaries {
+    @include party-stuff-side-by-side-when-wide();
+  }
+
+  table.candidate-delegates {
+    white-space: nowrap;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 5px 10px;
+    }
+
+    th {
+      text-align: left;
+      border-bottom: 1px solid black;
+    }
+
+    td {
+      vertical-align: top;
+      border-bottom: 1px solid #ccc;
+    }
+
+    td.candidate {
+      width: 6rem;
+
+      img {
+        display: inline-block;
+        height: 2rem;
+        vertical-align: middle;
+        padding-right: .25rem;
+      }
+
+      span {
+        display: inline-block;
+        height: 2rem;
+        line-height: 2rem;
+      }
+    }
+
+    td.n-delegates-int {
+      width: 2rem;
+      height: 2rem;
+      padding-right: .25rem;
+      line-height: 2rem;
+      text-align: right;
+    }
+
+    td.n-delegates-dots {
+      width: 100%;
+      padding-top: .5rem;
+      white-space: normal;
+
+      .dot-group {
+        vertical-align: top;
+        display: inline-block;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        width: 1.75rem; height: 1.75rem; line-height: .35; // by trial-and-error
+      }
+    }
+  }
+
+  .party-delegate-summary[data-party-id=Dem] .n-delegates-dots {
+    color: $strongDem;
+  }
+
+  .party-delegate-summary[data-party-id=GOP] .n-delegates-dots {
+    color: $strongGOP;
+  }
+}

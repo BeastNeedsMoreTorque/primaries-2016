@@ -23,6 +23,7 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
 
   attr_reader(
     :candidate_county_races,
+    :candidate_race_days,
     :candidate_races,
     :candidate_states,
     :candidate_race_subcounties,
