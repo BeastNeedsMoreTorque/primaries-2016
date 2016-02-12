@@ -22,6 +22,7 @@ module Assets
       countdown.js
       state-race-days.js
       race-day.js
+      delegate-summary.js
       all-primaries.js
       social.js
     ),

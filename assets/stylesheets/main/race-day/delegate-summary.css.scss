@@ -74,6 +74,7 @@ body.race-day .delegate-summary {
     li {
       padding-top: .5rem;
       width: 2.2rem;
+      cursor: pointer;
     }
 
     .name {
@@ -107,6 +108,19 @@ body.race-day .delegate-summary {
 
     .n-delegates-dots, .state-code {
       color: $strongGOP;
+    }
+  }
+
+  .party-delegate-summary.state-highlighted {
+    .n-delegates-dots .dot-subgroup:not(.highlight) {
+      opacity: .5;
+      color: $muted;
+    }
+
+    ul.state-delegates li:not(.highlight) {
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1);
+      opacity: .5;
     }
   }
 }
