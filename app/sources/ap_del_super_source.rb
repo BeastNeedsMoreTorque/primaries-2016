@@ -1,5 +1,3 @@
-require_relative './source'
-
 require_relative '../models/candidate'
 require_relative '../models/candidate_state'
 require_relative '../models/party'
@@ -11,7 +9,7 @@ require_relative '../models/party'
 # * candidates: id, last_name, n_delegates, n_unpledged_delegates
 # * candidate_states: candidate_id, state_code, n_delegates
 # * parties: id, n_delegates_total, n_delegates_needed
-class ApDelSuperSource < Source
+class ApDelSuperSource
   Candidate = RubyImmutableStruct.new(:id, :party_id, :last_name, :n_delegates, :n_unpledged_delegates)
 
   CandidateState = RubyImmutableStruct.new(:candidate_id, :state_code, :n_delegates) do
@@ -23,6 +21,8 @@ class ApDelSuperSource < Source
   end
 
   Party = RubyImmutableStruct.new(:id, :n_delegates_total, :n_delegates_needed)
+
+  attr_reader(:candidates, :candidate_states, :parties)
 
   def initialize(ap_del_super_json)
     @candidates = candidates = []

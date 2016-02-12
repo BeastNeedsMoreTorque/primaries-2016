@@ -1,7 +1,5 @@
 require 'set'
 
-require_relative './source'
-
 # Data from AP's election_day results.
 #
 # Note that we write "ID" directly. Most of the Arrays returned contain
@@ -22,7 +20,7 @@ require_relative './source'
 # * subcounty_reporting_unit_ids (Set of Integers)
 # * race_subcounties: race_id, reporting_unit_id, n_votes, n_precincts_reporting, n_precincts_total
 # * races: id, party_id, state_code, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
-class ApElectionDaysSource < Source
+class ApElectionDaysSource
   CandidateRace = RubyImmutableStruct.new(:id, :candidate_id, :n_votes, :winner)
   CandidateCountyRace = RubyImmutableStruct.new(:candidate_id, :fips_int, :race_id, :n_votes)
   CandidateRaceSubcounty = RubyImmutableStruct.new(:candidate_id, :race_id, :reporting_unit_id, :n_votes)

@@ -1,5 +1,3 @@
-require_relative './source'
-
 require 'time'
 
 # Loads from Google Sheets
@@ -12,7 +10,7 @@ require 'time'
 # * races: race_day_id, party_id, state_code, race_type, ap_says_its_over, :huffpost_override_winner_last_name
 # * race_days: id
 # * states: fips_int, code, abbreviation, name
-class SheetsSource < Source
+class SheetsSource
   Candidate = RubyImmutableStruct.new(:id, :party_id, :full_name, :last_name, :dropped_out_date_or_nil)
 
   Party = RubyImmutableStruct.new(:id, :name, :adjective)
