@@ -214,7 +214,7 @@ project_features = (features, projection) ->
 topojsonize = (features) ->
   # Modeled after topojson's bin/topojson
   options =
-    'pre-quantization': 5000
+    'pre-quantization': 6000
     'post-quantization': 2000
     'coordinate-system': 'cartesian'
     'minimum-area': 5
@@ -273,7 +273,6 @@ topojsonize_tiny = (features) ->
   for feature in features.counties.features
     continue if !feature.geometry # MP has a null geometry
     geometry = feature.geometry
-    console.log(feature, geometry)
     switch geometry.type
       when 'Polygon' then polygons.push(geometry.coordinates)
       when 'MultiPolygon'
@@ -553,7 +552,6 @@ render_all_states = (callback) ->
     if pending_states.length > 0
       state_code = pending_states.shift()
       render_state_svg state_code, features_by_state[state_code], (err) ->
-      process.nextTick ->
         throw err if err
         render_tiny_state_svg state_code, features_by_state[state_code], (err) ->
           throw err if err
