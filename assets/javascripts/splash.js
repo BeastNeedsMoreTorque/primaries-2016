@@ -32,8 +32,8 @@ $(function() {
     var tr_strings = candidates_json.slice(0, 3).map(function(candidate_json) {
       return '<tr class="candidate ' + (candidate_json.leader ? 'leader' : '') + ' ' + (candidate_json.winner ? 'winner' : '') + '">'
         + '<td class="candidate-name">' + candidate_json.last_name + '</td>'
-        + '<td class="n-votes">' + format_int(candidate_json.n_votes) + '</td>'
-        + '<td class="n-votes-pct">' + format_percent(candidate_json.percent_vote) + '%</td>'
+        + '<td class="n-votes">' + format_int(candidate_json.n_votes || 0) + '</td>'
+        + '<td class="n-votes-pct">' + format_percent(candidate_json.percent_vote || 0) + '%</td>'
         + '</tr>';
     });
 

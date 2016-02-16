@@ -9,15 +9,17 @@
   %body{class: "race-day-#{race_day.when_race_day_happens}"}
     .primary-right-rail
       %div.header
-        %div.line
-        %div.hed
+        .line
+        .hed
           %h1.when-present Live Results
           %h1.when-past Results
           %h1.when-future Happening Soon
         %div.line
-      %h2
-        %a{target: '_blank', href: '/2016/primaries/2016-02-09'}= race_day.title
       .race-day
+        %h2
+          %a{target: '_blank', href: '/2016/primaries/2016-02-09'}= race_day.title
+        - if !race_day.today?
+          %h4.date= race_day.date.strftime('%B %-d')
         %p.intro= race_day.body
         %p.tease-link.when-future.when-past
           %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See the election calendar
@@ -41,8 +43,7 @@
               %tbody
                 - race.candidate_races.each do |candidate_race|
                   - candidate = candidate_race.candidate
-                  - is_leader = candidate_race.n_votes > 0 && candidate_race.n_votes == race.candidate_races.first.n_votes
-                  %tr{'data-candidate-id': candidate.id, class: "#{is_leader ? 'leader' : ''} #{candidate_race.winner? ? 'winner' : ''}"}
+                  %tr{'data-candidate-id': candidate.id, class: "#{candidate_race.leader? ? 'leader' : ''} #{candidate_race.winner? ? 'winner' : ''}"}
                     %td.candidate
                       %img{src: image_path("#{candidate.slug}.png"), alt: ''}
                       = candidate.full_name

@@ -43,7 +43,7 @@
               .see-all-candidates
                 %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
 
-          .map-precincts-container{class: "#{race.n_precincts_reporting > 0 ? '' : 'no-'}precincts-reporting"}
+          .map-precincts-container{class: "#{race.any_precincts_reporting? ? '' : 'no-'}precincts-reporting"}
             .precincts.when-present.when-past
               %span.precincts-val= race.pct_precincts_reporting
               of precincts reporting
@@ -67,7 +67,11 @@
                     %span.swatch.no-results
                     No results
                 %p.tease-link
-                  %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"} See results
+                  %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"}
+                    %span.when-future
+                      See preview
+                    %span.when-past.when-present
+                      See results
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script

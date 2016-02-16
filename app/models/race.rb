@@ -128,7 +128,7 @@ Race = RubyImmutableStruct.new(
       # In NH, some results come in at midnight but they're more confusing than
       # anything else. Hide them.
       'future'
-    elsif !n_precincts_reporting.nil? && n_precincts_reporting > 0
+    elsif any_precincts_reporting?
       if n_precincts_reporting < n_precincts_total
         'present'
       else
