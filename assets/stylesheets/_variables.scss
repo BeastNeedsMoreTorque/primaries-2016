@@ -164,7 +164,7 @@ $body-font-family: Source Sans Pro, Arial, Helvetica, sans-serif;
 
   .sparkline + .percent {
     display: inline-block;
-    width: 2.25em;
+    width: 2.75em;
   }
 }
 
@@ -220,7 +220,6 @@ $body-font-family: Source Sans Pro, Arial, Helvetica, sans-serif;
     margin: .5rem 0;
   }
 }
-
 
 @mixin ellipsized-table {
   &.ellipsized tr.ellipsized {

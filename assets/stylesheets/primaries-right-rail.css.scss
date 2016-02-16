@@ -1,5 +1,5 @@
-//= require ./main/sparklines
 @import '_variables';
+@import 'main/sparklines.css.scss';
 
 @include tense-conditionals;
 
@@ -115,9 +115,11 @@ table.t-pollster {
 .race[data-party-id=Dem] {
   .race-name { background: $widgetBlue; }
   tr.leader { background: $widgetLightBlue; }
+  .sparkline path { stroke: $widgetBlue; }
 }
 
 .race[data-party-id=GOP] {
   .race-name { background: $widgetRed; }
   tr.leader { background: $widgetLightRed; }
+  .sparkline path { stroke: $widgetRed; }
 }
