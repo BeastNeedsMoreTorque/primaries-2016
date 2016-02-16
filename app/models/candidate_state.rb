@@ -19,6 +19,7 @@ CandidateState = RubyImmutableStruct.new(:database, :candidate_id, :state_code, 
   def candidate_last_name; candidate.name; end
   def state_name; state.name; end
   def party_name; candidate.party_name; end
+  def has_delegates?; n_delegates > 0; end
 
   def <=>(rhs)
     # Sort by party first, so iterating over all candidate_states will return

@@ -91,6 +91,8 @@ Race = RubyImmutableStruct.new(
     n_delegates - n_delegates_with_candidates
   end
 
+  def has_delegates_without_candidates?; n_delegates_without_candidates > 0; end
+
   def pct_precincts_reporting
     reporting_str = if n_precincts_total.nil? || n_precincts_total == 0
       'N/A'

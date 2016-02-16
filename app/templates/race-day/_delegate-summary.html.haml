@@ -28,8 +28,21 @@
                   - for dot_group in candidate_states_to_dot_groups(candidate_states)
                     .dot-group<
                       - for dot_subgroup in dot_group.dot_subgroups
-                        %span.dot-subgroup{'data-state-code': dot_subgroup.candidate_state.state_code}<>
+                        %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                           = '•' * dot_subgroup.n_dots
+            %tr.up-for-grabs
+              - races = race_day.races.select{ |r| r.party_id == party.id }
+              - n_delegates_total = races.map(&:n_delegates).reduce(0, :+)
+              - n_delegates_without_candidates = races.map(&:n_delegates_without_candidates).reduce(0, :+)
+              %td.candidate
+                Up for grabs
+              %td.n-delegates-int= n_delegates_without_candidates
+              %td.n-delegates-dots
+                - for dot_group in races_to_unassigned_dot_groups(races)
+                  .dot-group<
+                    - for dot_subgroup in dot_group.dot_subgroups
+                      %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
+                        = '•' * dot_subgroup.n_dots
         %ul.state-delegates
           - party_candidate_states.group_by(&:state).each do |state, candidate_states|
             - party_state = candidate_states.first.party_state
