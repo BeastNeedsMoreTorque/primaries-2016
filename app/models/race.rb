@@ -75,6 +75,7 @@ Race = RubyImmutableStruct.new(
   def date; race_day.date; end
   def disabled?; race_day.disabled?; end
   def enabled?; race_day.enabled?; end
+  def today?; race_day.today?; end
   def n_delegates; party_state.n_delegates; end
   def pollster_slug; party_state.pollster_slug; end
   def pollster_last_updated; party_state.pollster_last_updated; end
@@ -127,7 +128,7 @@ Race = RubyImmutableStruct.new(
       # In NH, some results come in at midnight but they're more confusing than
       # anything else. Hide them.
       'future'
-    elsif !n_precincts_reporting.nil? && n_precincts_reporting > 0
+    elsif any_precincts_reporting?
       if n_precincts_reporting < n_precincts_total
         'present'
       else
@@ -143,6 +144,21 @@ Race = RubyImmutableStruct.new(
   def future?; when_race_happens == 'future'; end
 
   def any_precincts_reporting?; (n_precincts_reporting || 0) > 0; end
+
+  # Returns something like:
+  #
+  # * "Results coming February 20" (if not today)
+  # * "Results coming 7:00 p.m. EST" (if expect_results_time)
+  # * "Results coming soon" (if expect_results_time.nil?)
+  def results_coming_s
+    if !today?
+      "Results coming #{date.strftime('%B %-d')}"
+    elsif !expect_results_time?
+      "Results coming soon"
+    else
+      "Results coming #{expect_results_time.to_datetime.new_offset('Eastern').strftime('%l:%M %P %Z').sub('m', '.m.').sub('-05:00', 'EST').sub('-04:00', 'EDT')}"
+    end
+  end
 
   # e.g., 'Iowa Democratic Caucus'
   def title

@@ -1,5 +1,5 @@
-//= require ./main/sparklines
 @import '_variables';
+@import 'main/sparklines.css.scss';
 
 @include tense-conditionals;
 
@@ -8,17 +8,23 @@
 }
 
 body{
+  margin: 0 auto;
   @include widget-base;
+
+  max-width: 30rem;
 }
 
 h1, h2, h3, h4{
   margin: 0;
-  &.sub {
-    text-align: center;
-  }
+  font-family: $header-font-family;
+  text-align: center;
 }
 
-h2.sub a {
+h1, h3 {
+  text-transform: uppercase;
+}
+
+h2 a {
   color: inherit;
   text-decoration: none;
 
@@ -27,108 +33,93 @@ h2.sub a {
   }
 }
 
+p.intro {
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
 
-.primary-right-rail {
-  margin: 0 auto;
+div.rail-banner {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+}
 
+.tease-link { 
+  @include tease-link();
+  margin-top: 0;
+  margin-bottom: 0;
+}
 
+.footnotes {
+  @include footnotes;
+  margin-top: 5px;
+}
 
-  p.intro {
-    margin-bottom: 12px;
-    margin-top: 12px;
-  }
+.race-name{
+  width: 100%;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 18px;
+  display: inline-block;
+  color: #fff;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-align: center;
 
-  div.rail-banner {
-    background-color: black;
-    color: white;
-    font-weight: bold;
-    padding: 5px;
-  }
-
-  .tease-link { 
-    @include tease-link();
-    margin-top: 0;
+  h3 {
     margin-bottom: 0;
   }
 
-  .footnotes {
-    @include footnotes;
-    margin-top: 5px;
+  p {
+    margin: 0;
+    font-size: .75rem;
+  }
+}
+
+table.t-pollster {
+  @include pollster-table(); // 10px left/right padding on cells
+
+  .n-votes, .n-votes-pct {
+    text-align: right;
+  }
+}
+
+.sparkline {
+  display: inline-block;
+  height: 1.2rem;
+  vertical-align: middle;
+  width: 50px;
+}
+
+.race {
+  h3, p {
+    margin: 10px;
   }
 
-  .race-name{
-    width: 100%;
-    margin-top: 12px;
-    margin-bottom: 6px;
-    font-weight: bold;
-    font-size: 18px;
-    display: inline-block;
-    color: #fff;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    text-align: center;
-    h3 {
-      a {
-        color: #fff;
-      }
-      margin-bottom: 0 !important;
+  table {
+    thead, th, .pollster {
+      font-weight: normal !important;
     }
-    p {
-      margin: 0 !important;
-      font-size: 12px;
-    }
-  }
-
-  div.container {
-    .race-name.gop { background: $widgetRed; }
-    .race-name.dem { background: $widgetBlue; }
-  }
-
-  table.t-pollster {
-    @include pollster-table(); // 10px left/right padding on cells
-
-    .n-votes, .n-votes-pct {
-      text-align: right;
+    th {
+      padding-bottom: 6px;
     }
   }
 
-  .sparkline {
-    display: inline-block;
-    height: 1.2rem;
-    vertical-align: middle;
-    width: 50px;
+  tr.winner td.candidate::after {
+    content: '✓';
   }
+}
 
-  .party-container {
-    h3, p {
-      margin: 10px;
-    }
+.race[data-party-id=Dem] {
+  .race-name { background: $widgetBlue; }
+  tr.leader { background: $widgetLightBlue; }
+  .sparkline path { stroke: $widgetBlue; }
+}
 
-    table {
-      thead, th, .pollster {
-        font-weight: normal !important;
-      }
-      th {
-        padding-bottom: 6px;
-      }
-    }
-
-    table[data-party-id="Dem"] {
-      td {
-        //background-color: $widgetLightBlue;
-      }
-      tr.leader {
-        background-color: $widgetLightBlue;
-      }
-    }
-    table[data-party-id="GOP"] {
-      td {
-        //background-color: $widgetLightRed;
-      }
-      tr.leader {
-        background-color: $widgetLightRed;
-      }
-    }
-  }
-
+.race[data-party-id=GOP] {
+  .race-name { background: $widgetRed; }
+  tr.leader { background: $widgetLightRed; }
+  .sparkline path { stroke: $widgetRed; }
 }

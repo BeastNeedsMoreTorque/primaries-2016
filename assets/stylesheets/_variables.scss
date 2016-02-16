@@ -24,6 +24,10 @@ $widgetBlue: #1559D1;
 $widgetLightRed: lighten($widgetRed, 45%);
 $widgetLightBlue: lighten($widgetBlue, 45%);
 
+$header-font-family: ProximaNovaCond-Extrabld, Arial, Helvetica, sans-serif;
+$huffpo-font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+$body-font-family: Source Sans Pro, Arial, Helvetica, sans-serif;
+
 @mixin no-results-swatch {
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="%23ddd"/><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1" stroke="white"/></svg>');
 }
@@ -38,16 +42,16 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 
 @mixin body-copy {
 	margin: 0;
-	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+  font-family: $body-font-family;
 	background-color: #fff;
 }
 
 @mixin huffpo-body-copy {
-  font-family: Helvetica Neue,Helvetica,Arial,sans-serif;  
+  font-family: $huffpo-font-family;
 }
 
 @mixin header-copy {
-	font-family: ProximaNovaCond-Extrabld, Arial, Helvetica, sans-serif;
+  font-family: $header-font-family;
 }
 
 @mixin rail-link-out {
@@ -160,7 +164,7 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 
   .sparkline + .percent {
     display: inline-block;
-    width: 2.25em;
+    width: 2.75em;
   }
 }
 
@@ -216,7 +220,6 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
     margin: .5rem 0;
   }
 }
-
 
 @mixin ellipsized-table {
   &.ellipsized tr.ellipsized {

@@ -108,14 +108,6 @@ body.race-day .race {
   .n-delegates {
     line-height: 1.4rem;
 
-    .dots-Dem .with-candidates{
-      color: $strongDem;
-    }
-
-    .dots-GOP .with-candidates {
-      color: $strongGOP;
-    }
-
     .without-candidates {
       opacity: .35;
     }
@@ -152,6 +144,16 @@ body.race-day .race {
     height: .9rem;
     line-height: .9rem;
   }
+}
+
+body.race-day .race[data-party-id="Dem"] {
+  td.n-delegates .dots,
+  .n-delegates .dots .with-candidates { color: $strongDem; }
+}
+
+body.race-day .race[data-party-id="GOP"] {
+  td.n-delegates .dots,
+  .n-delegates .dots .with-candidates { color: $strongGOP; }
 }
 
 body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates { display: none; }
