@@ -8,7 +8,10 @@
 }
 
 body{
+  margin: 0 auto;
   @include widget-base;
+
+  max-width: 30rem;
 }
 
 h1, h2, h3, h4{
