@@ -16,7 +16,7 @@ module ServerSchedule
   # (If we didn't wait until *after* the task finishes, we could end up
   # bunching API requests together, which could exhaust our quota. Better too
   # few requests than too many, because they're more likely to succeed.)
-  TickIntervalInS = 15*60
+  TickIntervalInS = 10*60
 
   # The list of ticks.
   #
@@ -35,8 +35,9 @@ module ServerSchedule
   # Our limit is 10 API requests per minute.
   Ticks = [
     del_super,
-    election_day('2016-02-01'),
+    election_day('2016-02-20'),
     election_day('2016-02-09'),
+    election_day('2016-02-01'),
     pollster
   ]
 
