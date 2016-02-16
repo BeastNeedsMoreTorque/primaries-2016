@@ -4,19 +4,13 @@
 @include precincts-reporting-conditionals;
 @include tense-conditionals;
 
-$splash-ele-bg: #eee;
-
-$party-container-height: 100px;
-
 body {
   margin: 0;
 }
 
-.flex-container {
+.races {
 	display: flex;
 	flex-flow: row;
-	display: -webkit-flex;
-  -webkit-flex-direction: row;
 }
 
 .primary-splash-banner {
@@ -31,10 +25,6 @@ body {
   }
 }
 
-.hidden {
-	opacity: 0;
-}
-
 .legend-and-status {
   display: -webkit-flex;
   display: flex;
@@ -44,7 +34,6 @@ body {
   justify-content: space-around;
   -webkit-flex: 0 0 auto;
   flex: 0 0 auto;
-
   white-space: nowrap;
 }
 
@@ -64,7 +53,6 @@ body {
     width: .7rem;
     height: .7rem;
     border: 1px solid #cdcdcd;
-    background: white;
     vertical-align: middle;
   }
 }
@@ -72,8 +60,6 @@ body {
 .map-container {
   display: -webkit-flex;
   display: flex;
-  -webkit-flex-direction: row;
-  flex-direction: row;
 
 	.map {
 		svg {
@@ -102,11 +88,6 @@ body {
 	    pointer-events: none; // so it doesn't cause mouseleave
 	  }
 
-	  g.subcounties path:not([fill]) {
-      // Avoid flash of unstyled map
-	    fill: white;
-	  }
-
 	  g.cities {
 	    pointer-events: none;
 	  }
@@ -120,28 +101,11 @@ body {
 	  text {
 	    font-size: 20px;
 	    @include svg-city-label();
-	  }
-	}
 
-	&.dem {
-		.legend {
-			.swatch.leading {
-				background: $strongDem;
-			}
-      .swatch.trailing {
-				background: $widgetLightBlue;
-			}
-		}
-	}
-	&.gop {
-		.legend {
-      .swatch.leading {
-				background: $strongGOP;
-			}
-      .swatch.trailing {
-				background: $widgetLightRed;
-			}
-		}
+      &.background {
+        stroke-width: 4px;
+      }
+	  }
 	}
 }
 
@@ -155,13 +119,6 @@ body {
 	-webkit-align-items: center;
 	-webkit-justify-content: center;
 	justify-content: center;
-
-  &.gop {
-	  background-color: $widgetRed;
-  }
-  &.dem {
-	  background-color: $widgetBlue;
-  }
 }
 
 .leading-candidate-delegates {
@@ -174,7 +131,6 @@ body {
 			font-weight: normal;
 			text-align: center;
 		}
-
 	}
 }
 
@@ -200,23 +156,10 @@ body {
 
 .see-all-candidates {
 	text-align: center;
-	margin: -10px 0 5px 0;
-
 }
 
 .candidate-position-listing {
-  border-bottom: 4px solid transparent;
-  display: -webkit-flex;
-  display: flex; //allows divs to stack next to each other
-  -webkit-flex-direction: column;
-  flex-direction: column; //orders top to bottom
-  -webkit-flex-wrap: wrap;
-  flex-wrap: wrap; //wraps left to right
-  -webkit-justify-content: center;
-  justify-content: center; //centers vertically if there is not a full column
-  -webkit-align-content: start;
-  align-content: start;
-  padding: 10px;
+  padding: 10px 10px 5px;
 
   table {
   	width: 100%;
@@ -253,8 +196,39 @@ body {
 			}
 		}
   }
+}
 
-  &.dem {
+.race {
+  width: 50%;
+  box-sizing: border-box;
+  display: -webkit-flex;
+  display: flex;
+
+  // Put space between the two races
+  &:first-child { padding-right: 5px; }
+  &:last-child { padding-left: 5px; }
+}
+
+.party-container {
+	flex-shrink: 0;
+	-webkit-flex-shrink: 0;
+}
+
+.race[data-party-id=Dem] {
+  .party-container {
+    background-color: $widgetLightBlue;
+  }
+
+  .frontrunner-lbl {
+    color: $strongDem;
+  }
+
+  .candidate.leader {
+    background: $widgetBlue;
+    color: #fff;
+  }
+
+  .candidate-position-listing {
 	  background-color: $widgetLightBlue;
 		table {
 			tr {
@@ -262,7 +236,35 @@ body {
 			}
 		}	  
   }
-  &.gop {
+
+  .candidate-row-container {
+	  background-color: $widgetBlue;
+  }
+
+  path { fill: white; }
+  path.candidate-leads { fill: $widgetBlue; }
+  path.candidate-trails { fill: $widgetLightBlue; }
+  .map-container .legend {
+    .swatch.leading { background: $widgetBlue; }
+    .swatch.trailing { background: $widgetLightBlue; }
+	}
+}
+
+.race[data-party-id=GOP] {
+  .party-container {
+    background-color: $widgetLightRed; 
+  }
+
+  .frontrunner-lbl {
+    color: $strongGOP;
+  }
+
+  .candidate.leader {
+    background: $widgetRed;
+    color: #fff;
+  }
+
+  .candidate-position-listing {
 	  background-color: $widgetLightRed;
 		table {
 			tr {
@@ -270,38 +272,24 @@ body {
 			}
 		}	  
   }
-}
 
-.party-container {
-	flex-shrink: 0;
-	-webkit-flex-shrink: 0;
+  .candidate-row-container {
+	  background-color: $widgetRed;
+  }
 
-	&.dem {
-		background-color: $widgetLightBlue;
-		.frontrunner-lbl { color: $strongDem; }
-		.candidate.leader {
-			background: $widgetBlue;
-			color: #fff;
-		}
-	}
-	&.gop {
-		background-color: $widgetLightRed; 
-		.frontrunner-lbl { color: $strongGOP; }
-		.candidate.leader {
-			background: $widgetRed;
-			color: #fff;
-		}
+  path { fill: white; }
+  path.candidate-leads { fill: $widgetRed; }
+  path.candidate-trails { fill: $widgetLightRed; }
+  .map-container .legend {
+    .swatch.leading { background: $widgetRed; }
+    .swatch.trailing { background: $widgetLightRed; }
 	}
 }
 
 .map-precincts-container {
-	padding: 10px 10px 0;
+	padding: 10px 0 0 10px;
   -webkit-flex: 1 1 auto;
   flex: 1 1 auto;
-
-	&:last-child {
-		padding-right: 0;
-	}
 
 	.precincts {
     font-size: .9rem;

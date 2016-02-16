@@ -11,30 +11,26 @@
       %div.header
         %div.line
         %div.hed
-          %h1.main-hed.when-present= "LIVE RESULTS"
-          %h1.main-hed.when-past= "RESULTS"
-          %h1.main-hed.when-future= "HAPPENING TONIGHT"
+          %h1.when-present Live Results
+          %h1.when-past Results
+          %h1.when-future Happening Soon
         %div.line
-      %h2.main-hed.sub
-        %a{target: '_blank', href: '/2016/primaries/2016-02-09'}= "#{race_day.title}"
-      %div.container
-        %p.intro.when-future= "Anti-establishment candidates Bernie Sanders and Donald Trump are leading in New Hampshire polls. See how each candidate performs when results arrive later tonight."
-        %p.tease-link.when-future
+      %h2
+        %a{target: '_blank', href: '/2016/primaries/2016-02-09'}= race_day.title
+      .race-day
+        %p.intro.when-future= race_day.body
+        %p.tease-link.when-future.when-past
           %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See the election calendar
         %p.tease-link.when-present
-          %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See live updates
-        %p.tease-link.when-past
-          %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See upcoming races
-        - race_day.state_party_races.first[1].each do |party, race, _|#TODO: Look at all races for multi race days!
-          - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
-          .party-container
-            - del_key = "n_#{party.id.downcase}_delegates"
-            %div{'class': "race-name #{party_abbrev}"}
-              %h3= "#{party.adjective.upcase} PRIMARY"
-              %p{class: "#{party.id.downcase}-del-available"}
-                Delegates:
-                = race.n_delegates
-            %table.t-pollster{'data-party-id': party.id}
+          %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See live updates
+
+        - race_day.races.each do |race|
+          .race{id: race.id, 'data-party-id': race.party_id}
+            .race-name
+              %h3= race.title
+              %p
+                Delegates: #{race.n_delegates}
+            %table.t-pollster
               %thead
                 %tr
                   %th.candidate Candidate
@@ -45,12 +41,11 @@
               %tbody
                 - race.candidate_races.each do |candidate_race|
                   - candidate = candidate_race.candidate
-                  %tr{'data-candidate-id': candidate.id}
+                  - is_leader = candidate_race.n_votes > 0 && candidate_race.n_votes == race.candidate_races.first.n_votes
+                  %tr{'data-candidate-id': candidate.id, class: "#{is_leader ? 'leader' : ''} #{candidate_race.winner? ? 'winner' : ''}"}
                     %td.candidate
                       %img{src: image_path("#{candidate.slug}.png"), alt: ''}
                       = candidate.full_name
-                      - if candidate_race.winner?
-                        %span.winner ✓
                     %td.pollster.when-future
                       - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
                         .sparkline!= candidate_race.poll_sparkline.to_svg

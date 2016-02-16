@@ -7,8 +7,6 @@ class PrimariesMobileAdView < BaseView
 
   def output_path; '2016/primaries/mobile-ad.html'; end
 
-  def pct_precincts_reporting_str; precinct_stats[:reporting_precincts_pct_str]; end
-
   def self.generate_all(database)
     self.generate_for_view(PrimariesMobileAdView.new(database))
   end

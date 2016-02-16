@@ -13,64 +13,61 @@
       .hed
         %h1.main-hed.when-present= "LIVE RESULTS: #{race_day.title}"
         %h1.main-hed.when-past= "RESULTS: #{race_day.title}"
-        %h1.main-hed.when-future= "HAPPENING TONIGHT: #{race_day.title}"
+        %h1.main-hed.when-future= "HAPPENING SOON: #{race_day.title}"
       .line
-    .flex-container
-      -race_day.state_party_races.first[1].each do |party, race, _|
-        .party-container{class: party.id.downcase}
-          .candidate-row-container{class: party.id.downcase}
-            .leading-candidate-img
-              %img{src: image_path("#{party.name.downcase}.svg"), alt: ''}
-            .leading-candidate-delegates.left
-              .frontrunner-lbl
-                %span= party.adjective.upcase
-                %span CANDIDATES
-                %span Total votes
-          .candidate-position-listing{class: party.id.downcase}
-            %table
-              %tbody
-                - race.candidate_races[0..2].each do |candidate_race|
-                  - candidate = candidate_race.candidate
-                  %tr.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
-                    %td.candidate-name= candidate.name
-                    %td.n-votes.when-precincts-reporting= format_int(candidate_race.n_votes)
-                    -if format_percent_or_nil(candidate_race.percent_vote) != 'N/A'
-                      %td.n-votes-pct.when-no-precincts-reporting= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
-                    -else
-                      %td.n-votes-pct.when-no-precincts-reporting= ""
-          -if party.id == "GOP"
-            .see-all-candidates
-              %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
+    .races
+      - race_day.races.each do |race|
+        .race{'data-party-id': race.party_id, id: race.id}
+          .party-container
+            .candidate-row-container
+              .leading-candidate-img
+                %img{src: image_path("#{race.party_id}.svg"), alt: ''}
+              .leading-candidate-delegates.left
+                .frontrunner-lbl
+                  %span= race.party_adjective
+                  %span Candidates
+                  %span Total votes
+            .candidate-position-listing
+              %table
+                %tbody
+                  - race.candidate_races[0..2].each do |candidate_race|
+                    - candidate = candidate_race.candidate
+                    %tr.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
+                      %td.candidate-name= candidate.name
+                      %td.n-votes.when-precincts-reporting= format_int(candidate_race.n_votes)
+                      -if format_percent_or_nil(candidate_race.percent_vote) != 'N/A'
+                        %td.n-votes-pct.when-no-precincts-reporting= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
+                      -else
+                        %td.n-votes-pct.when-no-precincts-reporting= ""
+            - if race.candidate_races.length > 3
+              .see-all-candidates
+                %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
 
-        .map-precincts-container{class: "#{party.id.downcase} #{race.n_precincts_reporting > 0 ? '' : 'no-'}precincts-reporting"}
-          .precincts.when-present.when-past
-            -if party.id == "Dem"
-              %span.precincts-val= "#{precinct_stats[:reporting_precincts_pct_str_dem]}"
-            -else
-              %span.precincts-val= "#{precinct_stats[:reporting_precincts_pct_str_gop]}"
-            %span= " OF PRECINCTS REPORTING"
-          .precincts.when-future
-            %span= "Results coming 7:00 p.m. EST"
-          .map-container{class: "#{party.id.downcase}"}
-            .map
-              != map_svg("states/#{race.state_code}")
-            .legend-and-status
-              .race-status.when-present
-                %button.refresh 0:30
-              %ul.legend.when-precincts-reporting
-                %li
-                  %span.swatch.leading
-                  %span.name= race.candidate_races.first.candidate.name
-                  leads
-                %li
-                  %span.swatch.trailing
-                  %span.name= race.candidate_races.first.candidate.name
-                  trails
-                %li
-                  %span.swatch.no-results
-                  No results
-              %p.tease-link
-                %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"} See results
+          .map-precincts-container{class: "#{race.n_precincts_reporting > 0 ? '' : 'no-'}precincts-reporting"}
+            .precincts.when-present.when-past
+              %span.precincts-val= race.pct_precincts_reporting
+              of precincts reporting
+            .precincts.when-future= race.results_coming_s
+            .map-container
+              .map
+                != map_svg("states/#{race.state_code}")
+              .legend-and-status
+                .race-status.when-present
+                  %button.refresh 0:30
+                %ul.legend.when-precincts-reporting
+                  %li
+                    %span.swatch.leading
+                    %span.name= race.candidate_races.first.candidate.name
+                    leads
+                  %li
+                    %span.swatch.trailing
+                    %span.name= race.candidate_races.first.candidate.name
+                    trails
+                  %li
+                    %span.swatch.no-results
+                    No results
+                %p.tease-link
+                  %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"} See results
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script

@@ -1,31 +1,51 @@
 $(function() {
-  function updateCandidates(data, tense){
-    $(".leader").removeClass("leader");
-    $('.winner').removeClass('winner');
+  function update_race_from_json($race, race_json) {
+    var candidate_id_to_tr_and_position = {}; // { candidate_id -> { tr: HTMLElement, position: 3 } }
+    $race.find('tr[data-candidate-id]').each(function(i) {
+      candidate_id_to_tr_and_position[this.getAttribute('data-candidate-id')] = { tr: this, position: i };
+    });
+    var need_reorder = false;
 
-    for (var party in data['candidates']) {
-      var sorted = data.candidates[party];
-      var leader = data.leaders[party];
+    race_json.candidates.forEach(function(candidate_json, i) {
+      var o = candidate_id_to_tr_and_position[candidate_json.id];
+      var tr = o.tr;
 
-      if(tense !== 'future') {
-        $("tr[data-candidate-id='"+leader.id+"']").addClass("leader");
+      if (o.position != i) {
+        need_reorder = true;
       }
 
-      for (var i in sorted) {
-        var candidate = sorted[i];
-        var $tr = $('tr[data-candidate-id=' + candidate.id + ']');
-        $tr.find('.n-votes').text(format_int(candidate.votes || 0));
-        $tr.find('.n-votes-pct').text(format_int(candidate.pct || 0));
-        $tr.toggleClass('winner', candidate.winner);
+      if (need_reorder) {
+        tr.parentNode.appendChild(tr);
+        // and need_reorder stays true, so every subsequent row will be moved
+        // to the end of the table while we iterate.
       }
-    }
+
+      var class_name = '';
+      if (candidate_json.leader) {
+        class_name += ' leader';
+      }
+      if (candidate_json.winner) {
+        class_name += ' winner';
+      }
+
+      tr.setAttribute('class', class_name);
+      $('.n-votes', tr).text(format_int(candidate_json.n_votes || 0));
+      $('.n-votes-pct', tr).text(format_percent(candidate_json.percent_vote || 0));
+    });
+  }
+
+  function update_races_from_json(json) {
+    json.races.forEach(function(race_json) {
+      var $race = $('#' + race_json.id);
+      update_race_from_json($race, race_json);
+    });
   }
 
   function getData(){
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
       tense = json["when_race_day_happens"];
       $("body").removeClass().addClass("race-day-" + tense);
-      updateCandidates(json["candidates"], tense);
+      update_races_from_json(json);
     })
       .fail(function() { console.warn('Failed to load', this); })
       .always(function() { window.setTimeout(getData, 30000); });
