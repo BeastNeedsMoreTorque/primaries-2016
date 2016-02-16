@@ -307,6 +307,31 @@ $body-font-family: Source Sans Pro, Arial, Helvetica, sans-serif;
   vertical-align: middle;
 }
 
+@mixin party-stuff-side-by-side-when-wide {
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+
+  &>* {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+
+    @media (min-width: 650px) {
+      width: 50%;
+      &:first-child {
+        padding-right: 20px;
+      }
+      &:last-child {
+        padding-left: 20px;
+      }
+    }
+  }
+}
+
 @mixin dots-inline-block {
   display: inline-block; // so they wrap at a small line height
   font-size: 1rem;       // all dots are the same size

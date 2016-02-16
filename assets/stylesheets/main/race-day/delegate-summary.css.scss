@@ -1,0 +1,126 @@
+body.race-day .delegate-summary {
+  .party-delegate-summaries {
+    @include party-stuff-side-by-side-when-wide();
+  }
+
+  table.candidate-delegates {
+    white-space: nowrap;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 5px 10px;
+    }
+
+    th {
+      text-align: left;
+      border-bottom: 1px solid black;
+    }
+
+    td {
+      vertical-align: top;
+      border-bottom: 1px solid #ccc;
+    }
+
+    td.candidate {
+      width: 6rem;
+
+      img {
+        display: inline-block;
+        height: 2rem;
+        vertical-align: middle;
+        padding-right: .25rem;
+      }
+
+      span {
+        display: inline-block;
+        height: 2rem;
+        line-height: 2rem;
+      }
+    }
+
+    td.n-delegates-int {
+      width: 2rem;
+      height: 2rem;
+      padding-right: .25rem;
+      line-height: 2rem;
+      text-align: right;
+    }
+
+    td.n-delegates-dots {
+      width: 100%;
+      padding-top: .5rem;
+      white-space: normal;
+
+      .dot-group {
+        vertical-align: top;
+        display: inline-block;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        width: 1.75rem; height: 1.75rem; line-height: .35; // by trial-and-error
+      }
+    }
+  }
+
+  ul.state-delegates {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: center;
+    justify-content: center;
+    text-align: center;
+
+    li {
+      padding-top: .5rem;
+      width: 2.2rem;
+      cursor: pointer;
+    }
+
+    .name {
+      display: none;
+    }
+
+    .map {
+      display: inline-block;
+    }
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  .party-delegate-summary[data-party-id=Dem] {
+    path {
+      fill: $strongDem;
+    }
+
+    .n-delegates-dots, .state-code {
+      color: $strongDem;
+    }
+  }
+
+  .party-delegate-summary[data-party-id=GOP] {
+    path {
+      fill: $strongGOP;
+    }
+
+    .n-delegates-dots, .state-code {
+      color: $strongGOP;
+    }
+  }
+
+  .party-delegate-summary.state-highlighted {
+    .n-delegates-dots .dot-subgroup:not(.highlight) {
+      opacity: .5;
+      color: $muted;
+    }
+
+    ul.state-delegates li:not(.highlight) {
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1);
+      opacity: .5;
+    }
+  }
+}

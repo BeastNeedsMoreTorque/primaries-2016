@@ -1,0 +1,53 @@
+.delegate-summary
+  %h2 It's All About The Delegates
+
+  %p
+    Our intrepid contenders are trying to win enough delegates to
+    clinch a nomination at their party conventions in June.
+
+  %p
+    Here's a breakdown of the delegates from tonight's states.
+
+  .party-delegate-summaries
+    - race_day.candidate_states.group_by(&:party).each do |party, party_candidate_states|
+      .party-delegate-summary{'data-party-id': party.id}
+        %h3= party.name
+        %table.candidate-delegates
+          %thead
+            %tr
+              %th.candidate Candidate
+              %th.n-delegates{colspan: 2} Delegates
+          %tbody
+            - party_candidate_states.group_by(&:candidate).each do |candidate, candidate_states|
+              %tr{'data-candidate-id': candidate.id}
+                %td.candidate
+                  %img{src: image_path("big-headshots/#{candidate.slug}.png"), alt: ''}
+                  %span= candidate.last_name
+                %td.n-delegates-int= candidate_states.map(&:n_delegates).reduce(0, :+)
+                %td.n-delegates-dots
+                  - for dot_group in candidate_states_to_dot_groups(candidate_states)
+                    .dot-group<
+                      - for dot_subgroup in dot_group.dot_subgroups
+                        %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
+                          = '•' * dot_subgroup.n_dots
+            %tr.up-for-grabs
+              - races = race_day.races.select{ |r| r.party_id == party.id }
+              - n_delegates_total = races.map(&:n_delegates).reduce(0, :+)
+              - n_delegates_without_candidates = races.map(&:n_delegates_without_candidates).reduce(0, :+)
+              %td.candidate
+                Up for grabs
+              %td.n-delegates-int= n_delegates_without_candidates
+              %td.n-delegates-dots
+                - for dot_group in races_to_unassigned_dot_groups(races)
+                  .dot-group<
+                    - for dot_subgroup in dot_group.dot_subgroups
+                      %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
+                        = '•' * dot_subgroup.n_dots
+        %ul.state-delegates
+          - party_candidate_states.group_by(&:state).each do |state, candidate_states|
+            - party_state = candidate_states.first.party_state
+            %li{'data-state-code': state.code}
+              .state-code= state.code
+              .map!= map_svg("states/tiny/#{state.code}")
+              .n-delegates= party_state.n_delegates
+              -#.n-pledged-delegates= party_state.n_pledged_delegates
