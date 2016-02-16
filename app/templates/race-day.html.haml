@@ -8,10 +8,15 @@
   - if body
     %p.intro-copy= body
 
-  %span.state-selector-label Jump to state
-  %select.state-selector
-    - race_day.state_party_races.each do |state, party_races|
-      %option #{state.name}
+  .state-dropdown
+    %button.dropdown-button{type: 'button'}
+      Select a state
+      %span.caret
+    %ul.dropdown-menu
+      - race_day.state_party_races.each do |state, party_races|
+        %li
+          %a{href: "#"}
+            #{state.name}
 
   %ul.states
     - race_day.state_party_races.each do |state, party_races|

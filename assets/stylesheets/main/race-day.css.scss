@@ -14,6 +14,23 @@ body.race-day {
     }
   }
 
+  .dropdown-button {
+    display: block;
+    background: none;
+    border: 1px solid #ccc;
+    width: 30em;
+    margin: 4em auto;
+    padding: 0.5em;
+    font-size: 1em;
+    font-family: 'Source Sans Pro';
+  }
+
+  .dropdown-menu {
+    width: 30em;
+    text-align: center;
+    margin: auto;
+  }
+
   ul {
     list-style: none;
     margin: 0;
