@@ -33,4 +33,18 @@ body.race-day {
   li.state {
     margin-bottom: 3rem;
   }
+
+  .dot-group {
+    vertical-align: top;
+    display: inline-block;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+    text-align: left; transform: rotate(-90deg) scaleX(-1); // top to bottom, right to left
+    width: 1.75rem; height: 1.75rem; line-height: .35; // by trial-and-error
+  }
+
+  .dot-subgroup {
+    display: inline;
+  }
 }

@@ -21,6 +21,7 @@ module Assets
       position_svg_cities.js
       countdown.js
       state-race-days.js
+      dot-groups.js
       race-day.js
       delegate-summary.js
       all-primaries.js

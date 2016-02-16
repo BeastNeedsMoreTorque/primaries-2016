@@ -50,6 +50,11 @@ body.race-day table.candidates {
     padding-left: 0; // Every pixel counts. This column's data is thin, so we're sure this won't be ugly
   }
 
+  td.n-delegates {
+    text-align: right;
+    padding-right: .25rem; // smaller than others
+  }
+
   .n-votes, .percent-vote {
     text-align: right;
     width: 1px;
@@ -66,33 +71,16 @@ body.race-day table.candidates {
     width: 3em;
   }
 
+  td.n-delegates-dots {
+    padding-left: 0;
+  }
+
   th.n-delegates, td.n-delegates {
-    padding-left: .75rem;
+    padding-left: 0;
+    width: 1px;
   }
 
-  .n-delegates-int {
-    -webkit-flex: 0 0 auto;
-    flex: 0 0 auto;
-    width: 2rem; // so it's always the same
-    padding-right: .25rem;
-    text-align: right;
-  }
-
-  tr.highlight-on-map td {
-    //font-weight: bold;
-
-    .sparkline path {
-      stroke: white;
-      stroke-width: 5;
-    }
-  }
-
-  tr.highlight-on-map td.n-delegates {
-    .dots {
-      color: white;
-      font-weight: normal; // because they're dots and they'd be janky if they resized
-    }
-  }
+  tr.highlight-on-map td.n-delegates-dots { color: white; }
 }
 
 body.race-day .race {
@@ -147,16 +135,17 @@ body.race-day .race {
 }
 
 body.race-day .race[data-party-id="Dem"] {
-  td.n-delegates .dots,
+  td.n-delegates-dots,
   .n-delegates .dots .with-candidates { color: $strongDem; }
 }
 
 body.race-day .race[data-party-id="GOP"] {
-  td.n-delegates .dots,
+  td.n-delegates-dots,
   .n-delegates .dots .with-candidates { color: $strongGOP; }
 }
 
-body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates { display: none; }
+body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates,
+body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates-dots { display: none; }
 
 body.race-day .race.no-precincts-reporting {
   .n-votes, .percent-vote { display: none; }

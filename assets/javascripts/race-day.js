@@ -545,8 +545,8 @@ function poll_results() {
           candidate: $('td.candidate', this),
           n_votes: $('td.n-votes', this),
           percent_vote: $('td.percent-vote', this),
-          n_delegates_dots: $('td.n-delegates .dots', this),
-          n_delegates_int: $('td.n-delegates .n-delegates-int', this)
+          n_delegates_dots: $('td.n-delegates-dots', this),
+          n_delegates_int: $('td.n-delegates', this)
         };
       });
     });
@@ -569,8 +569,7 @@ function poll_results() {
         n_precincts: $('.race-status .n-precincts-reporting', this),
         last_updated: $('.race-status time', this),
         n_delegates_with_candidates: {
-          dots_without_candidates: $ndwc.find('.dots .without-candidates', this),
-          dots_with_candidates: $ndwc.find('.dots .with-candidates', this),
+          dots: $ndwc.find('.dots', this),
           int_with_candidates: $ndwc.find('.n-delegates-with-candidates-int', this),
           int_total: $ndwc.find('.n-delegates-int', this)
         },
@@ -619,7 +618,8 @@ function poll_results() {
         $(elems.tr).toggleClass('winner', winner);
         elems.n_votes.text(format_int(n_votes));
         elems.percent_vote.text(format_percent(percent_vote));
-        elems.n_delegates_dots.text(new Array(n_delegates).fill("•").join(''));
+
+        elems.n_delegates_dots.assign_simple_dot_groups(n_delegates);
         elems.n_delegates_int.text(format_int(n_delegates));
       }
     });
@@ -662,8 +662,7 @@ function poll_results() {
           elems.last_updated.attr('datetime', last_updated.toISOString()).render_datetime();
         }
         var dels = elems.n_delegates_with_candidates;
-        dels.dots_without_candidates.text(new Array(n_delegates - n_delegates_with_candidates).fill("•").join(''));
-        dels.dots_with_candidates.text(new Array(n_delegates_with_candidates).fill("•").join(''));
+        dels.dots.assign_bisected_dot_groups('with-candidates', n_delegates_with_candidates, 'without-candidates', n_delegates - n_delegates_with_candidates);
         dels.int_with_candidates.text(format_int(n_delegates_with_candidates));
         dels.int_total.text(format_int(n_delegates));
       }

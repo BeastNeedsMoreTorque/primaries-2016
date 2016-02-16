@@ -9,7 +9,7 @@
         - else
           Votes
       %th.percent-vote= '%'
-      %th.n-delegates Delegates
+      %th.n-delegates{colspan: 2} Delegates
       - if race.has_pollster_data?
         %th.pollster Polling Average 
   %tbody
@@ -21,10 +21,8 @@
           %span.name= candidate.name
         %td.n-votes= format_int(candidate_race.n_votes)
         %td.percent-vote= format_percent_or_nil(candidate_race.percent_vote)
-        %td.n-delegates
-          .n-delegates-inner
-            %span.n-delegates-int= format_int(candidate_race.n_delegates)
-            .dots{class: "dots-#{race.party_id}"}= "•" * candidate_race.n_delegates
+        %td.n-delegates= format_int(candidate_race.n_delegates || 0)
+        %td.n-delegates-dots!= candidate_race_dot_groups(candidate_race).to_html
         - if race.has_pollster_data?
           %td.pollster
             - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
@@ -38,16 +36,3 @@
 
 - if race.pollster_last_updated
   %p.poll-last-updated.when-no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.pollster_last_updated)}\"></time>"
-
-.n-delegates.n-delegates-with-candidates
-  .dots{class: "dots-#{race.party_id}"}
-    %span.with-candidates>= "•" * race.n_delegates_with_candidates
-    %span.without-candidates= "•" * race.n_delegates_without_candidates
-  %p
-    %span.n-delegates-with-candidates-int= format_int(race.n_delegates_with_candidates)
-    of
-    %span.n-delegates-int= format_int(race.n_delegates)
-    delegates accounted for in #{race.state_name}.
-  %p
-    HuffPost counts unpledged delegates who have publicly stated their intent to vote for a candidate.
-    %a{href: '/2016/primaries/about-delegates'} More info &raquo;
