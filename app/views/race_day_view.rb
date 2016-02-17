@@ -1,8 +1,11 @@
 require_relative './base_view'
 
+require_relative '../helpers/dot_group_helper'
 require_relative '../models/race_day'
 
 class RaceDayView < BaseView
+  include DotGroupHelper
+
   attr_reader(:race_day)
 
   def initialize(database, race_day)
@@ -39,6 +42,7 @@ class RaceDayView < BaseView
       .select { |rd| rd.id < race_day.id }
       .last
   end
+
 
   # The race day immediately after the one we're focused on
   def next_race_day

@@ -15,3 +15,14 @@
     != map_svg("states/#{race.state_code}")
     != render(partial: 'race-day/race-map-legend', locals: { party: race.party })
   != render(partial: 'race-day/race-candidates', locals: { race: race })
+
+  .n-delegates.n-delegates-with-candidates
+    .dots!= race_assigned_unassigned_delegates_dot_groups(race).to_html
+    %p
+      %span.n-delegates-with-candidates-int= format_int(race.n_delegates_with_candidates)
+      of
+      %span.n-delegates-int= format_int(race.n_delegates)
+      delegates accounted for in #{race.state_name}.
+    %p
+      HuffPost counts unpledged delegates who have publicly stated their intent to vote for a candidate.
+      %a{href: '/2016/primaries/about-delegates'} More info &raquo;

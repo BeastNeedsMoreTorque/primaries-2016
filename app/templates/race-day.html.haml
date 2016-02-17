@@ -18,6 +18,12 @@
           %a.dropdown-link{href: "#"}
             #{state.name}
 
+  -# If there are two races in a party, display a summary
+  - if race_day.races.group_by(&:party).values.any? { |a| a.length > 1 }
+    != render(partial: 'race-day/delegate-summary', locals: { race_day: race_day })
+
+    %h2 And Now, The Races
+
   %ul.states
     - race_day.state_party_races.each do |state, party_races|
       %li.state

@@ -64,36 +64,31 @@ body.race-day {
     padding: 0;
   }
 
-  ul.parties, ul.party-state {
-    display: flex;
-    display: -webkit-flex;
-    flex-wrap: wrap;
-    -webkit-flex-wrap: wrap;
+  ul.party-state {
+    @include party-stuff-side-by-side-when-wide();
   }
 
   ul.party-state>li.party-state {
-    box-sizing: border-box;
-    display: block;
-    width: 100%;
-    -webkit-flex: 0 0 auto;
-    flex: 0 0 auto;
-
     // Make the inner ul.other-races stretch to full height
     display: -webkit-flex;
     display: flex;
-
-    @media (min-width: 650px) {
-      width: 50%;
-      &:first-child {
-        padding-right: 20px;
-      }
-      &:last-child {
-        padding-left: 20px;
-      }
-    }
   }
 
   li.state {
     margin-bottom: 3rem;
+  }
+
+  .dot-group {
+    vertical-align: top;
+    display: inline-block;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+    text-align: left; transform: rotate(-90deg) scaleX(-1); // top to bottom, right to left
+    width: 1.75rem; height: 1.75rem; line-height: .35; // by trial-and-error
+  }
+
+  .dot-subgroup {
+    display: inline;
   }
 }

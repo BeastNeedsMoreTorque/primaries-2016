@@ -206,14 +206,15 @@ calculate_projection_width_height = (features) ->
   [ projection, width, height ]
 
 project_features = (features, projection) ->
+  ret = {}
   for key in Object.keys(features)
-    features[key] = d3.geo.project({ type: 'FeatureCollection', features: features[key] }, projection)
-  features
+    ret[key] = d3.geo.project({ type: 'FeatureCollection', features: features[key] }, projection)
+  ret
 
 topojsonize = (features) ->
   # Modeled after topojson's bin/topojson
   options =
-    'pre-quantization': 2000
+    'pre-quantization': 6000
     'post-quantization': 2000
     'coordinate-system': 'cartesian'
     'minimum-area': 5
@@ -241,6 +242,51 @@ topojsonize = (features) ->
   topojson.filter(topology, options)
   topojson.prune(topology, options)
   topology
+
+merge_counties_into_multipolygon = (counties_geojson) ->
+  reader = new jsts.io.GeoJSONReader()
+  counties_geometry = reader.read(JSON.stringify(counties_geojson))
+    .buffer(0) # make valid
+
+  merged_geometry = if counties_geometry.getGeometryType() == 'Polygon'
+    counties_geometry
+  else
+    jsts.operation.union.CascadedPolygonUnion.union(counties_geometry.geometries)
+
+  writer = new jsts.io.GeoJSONWriter()
+  writer.write(merged_geometry)
+
+topojsonize_tiny = (features) ->
+  # Modeled after topojsonize()
+  options =
+    'pre-quantization': 5000
+    'post-quantization': 200
+    'coordinate-system': 'cartesian'
+    'minimum-area': 10
+    'preserve-attached': false
+    'property-transform': (d) -> {}
+
+  # Now merge all the counties together. We want a MultiPolygon and
+  # topojson.mesh() only returns a MultiLineString. (And topojson.merge()
+  # produces bad results.)
+  polygons = []
+  for feature in features.counties.features
+    continue if !feature.geometry # MP has a null geometry
+    geometry = feature.geometry
+    switch geometry.type
+      when 'Polygon' then polygons.push(geometry.coordinates)
+      when 'MultiPolygon'
+        for polygon in geometry.coordinates
+          polygons.push(polygon)
+      else throw "We don't handle geometries of type #{geometry.type}"
+
+  counties_gc = { type: 'GeometryCollection', geometries: polygons.map((p) -> type: 'Polygon', coordinates: p) }
+  merged_geojson = merge_counties_into_multipolygon(counties_gc)
+  merged_topology = topojson.topology({ counties: merged_geojson }, options)
+  topojson.simplify(merged_topology, options)
+  topojson.filter(merged_topology, options)
+  topojson.prune(merged_topology, options)
+  merged_topology
 
 compress_svg_path = (path) ->
   # First, round to one decimal and multiply by 10
@@ -448,10 +494,6 @@ render_cities_g = (topology, geometries) ->
 render_state_svg = (state_code, features, callback) ->
   output_filename = "./output/#{state_code}.svg"
 
-  if !features.counties.length
-    console.log("Skipping #{output_filename} because we have no county paths")
-    return callback(null)
-
   console.log("Rendering #{output_filename}...")
 
   [ projection, width, height ] = calculate_projection_width_height(features)
@@ -481,6 +523,28 @@ render_state_svg = (state_code, features, callback) ->
   data_string = data.join('\n')
   fs.writeFile(output_filename, data_string, callback)
 
+render_tiny_state_svg = (state_code, features, callback) ->
+  output_filename = "./output/tiny/#{state_code}.svg"
+
+  console.log("Rendering #{output_filename}...")
+
+  [ projection, width, height ] = calculate_projection_width_height(features)
+  features = project_features(features, projection)
+  path = d3.geo.path().projection(null)
+  topology = topojsonize_tiny(features)
+
+  # Note that our viewBox is width/height multiplied by 10. We round everything to integers to compress
+  data = [
+    '<?xml version="1.0" encoding="utf-8"?>'
+    '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"#{width}\" height=\"#{height}\" viewBox=\"0 0 #{width} #{height}\">"
+    render_state_path(path, topology, topology.objects.counties)
+    "</svg>"
+  ]
+
+  data_string = data.join('\n')
+  fs.writeFile(output_filename, data_string, callback)
+
 render_all_states = (callback) ->
   pending_states = Object.keys(features_by_state).sort()
 
@@ -489,11 +553,18 @@ render_all_states = (callback) ->
       state_code = pending_states.shift()
       render_state_svg state_code, features_by_state[state_code], (err) ->
         throw err if err
-        process.nextTick(step)
+        render_tiny_state_svg state_code, features_by_state[state_code], (err) ->
+          throw err if err
+          process.nextTick(step)
     else
       callback(null)
 
   step()
+
+try
+  fs.mkdirSync('./output/tiny')
+catch e
+  throw e if e.code != 'EEXIST'
 
 geo_loader.load_all_features (err, key_to_features) ->
   throw err if err
@@ -509,4 +580,4 @@ geo_loader.load_all_features (err, key_to_features) ->
 
   render_all_states (err) ->
     throw err if err
-    console.log('Done! Now try `cp output/*.svg ../assets/maps/states/`')
+    console.log('Done! Now try `cp -r output/* ../assets/maps/states/`')
