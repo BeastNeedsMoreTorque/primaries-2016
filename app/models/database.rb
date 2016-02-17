@@ -82,7 +82,7 @@ class Database
     @candidate_races = load_candidate_races(sheets_source.candidates, ap_election_days.candidate_races, ap_election_days.races, sheets_source.races)
     @race_subcounties = load_race_subcounties(geo_ids_source.geo_ids, ap_election_days.race_subcounties)
     @races = load_races(sheets_source.races, copy_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
-    @race_days = load_race_days(sheets_source.race_days, copy_source.race_days, LastDate)
+    @race_days = load_race_days(sheets_source.race_days, copy_source.race_days, last_date)
 
     @now = now
     @last_date = last_date

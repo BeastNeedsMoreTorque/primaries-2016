@@ -155,7 +155,7 @@ Race = RubyImmutableStruct.new(
   def results_coming_s
     if !today?
       "Results coming #{date.strftime('%B %-d')}"
-    elsif !expect_results_time?
+    elsif expect_results_time.nil?
       "Results coming soon"
     else
       "Results coming #{expect_results_time.to_datetime.new_offset('Eastern').strftime('%l:%M %P %Z').sub('m', '.m.').sub('-05:00', 'EST').sub('-04:00', 'EDT')}"
