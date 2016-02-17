@@ -1,0 +1,47 @@
+<?xml version="1.0" standalone="yes"?>
+<svg width="160px" height="80px" viewBox="0 0 160 80" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <!-- I converted this to Woff using https://icomoon.io. This is the original. -->
+  <defs>
+    <font id="Dots" horiz-adv-x="2048">
+      <font-face
+        font-family="Dots"
+        font-weight="normal"
+        font-style="normal"
+        units-per-em="2048"
+        cap-height="2048"
+        x-height="2048"
+        ascent="2048"
+        descent="0"
+        mathline="0"
+        bbox="0 0 2048 2048"
+        ideographic="0"
+        mathematical="0"
+        alphabetic="0"
+        hanging="0"
+        unicode-rance="U+2022"
+        >
+        <font-face-src>
+          <font-face-name name="Dots"/>
+        </font-face-src>
+        <!--
+          Circle magic number is 0.55228475. http://www.tinaja.com/glib/ellipse4.pdf
+
+          This circle is centered at 1024,1024 and has radius 2048*3/8=786. So
+          anchors are at 256 and 1792, and control points are at:
+
+          * 1024 - 768 * 0.55228475 = 600
+          * 1024 + 768 * 0.55228475 = 1448
+        -->
+        <missing-glyph><path d="M0,0L2048,2048L0,2048Z"/></missing-glyph>
+        <glyph unicode="•" d="
+          M256,1024
+          C256,600 600,256 1024,256
+          C1448,256 1792,600 1792,1024
+          C1792,1448 1448,1792 1024,1792
+          C600,1792 256,1448 256,1024
+          Z"></glyph>
+      </font-face>
+    </font>
+  </defs>
+  <text x="0" y="80" style="font-family: Dots; font-size: 80px">ab••••••</text>
+</svg>

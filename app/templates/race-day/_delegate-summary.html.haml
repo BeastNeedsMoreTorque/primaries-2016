@@ -26,7 +26,7 @@
                 %td.n-delegates-int= candidate_states.map(&:n_delegates).reduce(0, :+)
                 %td.n-delegates-dots
                   - for dot_group in candidate_states_to_dot_groups(candidate_states)
-                    .dot-group<
+                    .dot-group<>
                       - for dot_subgroup in dot_group.dot_subgroups
                         %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                           = '•' * dot_subgroup.n_dots
@@ -39,7 +39,7 @@
               %td.n-delegates-int= n_delegates_without_candidates
               %td.n-delegates-dots
                 - for dot_group in races_to_unassigned_dot_groups(races)
-                  .dot-group<
+                  .dot-group<>
                     - for dot_subgroup in dot_group.dot_subgroups
                       %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                         = '•' * dot_subgroup.n_dots
