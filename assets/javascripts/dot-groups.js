@@ -63,19 +63,20 @@
 
     // Handle partial class-1 and class-2 dot-groups
     var remainder = n_dots1 % DotsPerGroup;
+    var partial_dots2 = n_dots2;
     if (remainder > 0) {
       var parts = [ dot_subgroup(class1, dot_string(remainder)) ];
 
       if (n_dots2 >= DotsPerGroup - remainder) {
+        partial_dots2 -= (DotsPerGroup - remainder);
         parts.push(dot_subgroup(class2, dot_string(DotsPerGroup - remainder)));
       } else if (n_dots2 > 0) {
+        partial_dots2 = 0;
         parts.push(dot_subgroup(class2, dot_string(n_dots2)));
       }
 
       htmls.push(dot_group(parts.join('')));
     }
-
-    var partial_dots2 = Math.max(n_dots2 - remainder, 0);
 
     // Handle full and partial class-2 dot-groups
     if (partial_dots2 >= DotsPerGroup) {

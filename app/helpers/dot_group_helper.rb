@@ -40,19 +40,20 @@ module DotGroupHelper
 
       # Handle partial class-1 and class-2 dot-groups
       remainder = n_dots1 % DotsPerGroup
+      partial_dots2 = n_dots2
       if remainder > 0
         html = dot_subgroup(class_name1, dot_string(remainder))
 
         if n_dots2 >= DotsPerGroup - remainder
+          partial_dots2 -= (DotsPerGroup - remainder)
           html << dot_subgroup(class_name2, dot_string(DotsPerGroup - remainder))
         elsif n_dots2 != 0
+          partial_dots2 = 0
           html << dot_subgroup(class_name2, dot_string(n_dots2))
         end
 
         ret << dot_group(html)
       end
-
-      partial_dots2 = [ n_dots2 - remainder, 0 ].max
 
       # Handle full and partial class-2 dot-groups
       if partial_dots2 >= DotsPerGroup
