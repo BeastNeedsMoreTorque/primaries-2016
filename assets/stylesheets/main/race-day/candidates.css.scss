@@ -99,11 +99,6 @@ body.race-day .race {
     .without-candidates {
       opacity: .35;
     }
-
-    .dots {
-      @include dots-inline-block();
-      padding-right: .25rem;
-    }
   }
 
   .n-delegates-with-candidates {

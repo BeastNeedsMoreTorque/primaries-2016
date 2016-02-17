@@ -111,6 +111,10 @@ module DotGroupHelper
     BisectedDotGroups.new('with-candidates', race.n_delegates_with_candidates, 'without-candidates', race.n_delegates_without_candidates)
   end
 
+  def race_simple_dot_groups(race)
+    SimpleDotGroups.new(race.n_delegates)
+  end
+
   private
 
   def candidate_state_dot_sets_to_dot_groups(dot_sets)

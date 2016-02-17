@@ -55,39 +55,6 @@ class BaseView
     "#{Months[date.month - 1]} #{date.day}"
   end
 
-  def render_state_race_days_by_date
-    render(partial: 'state-race-days-table', locals: {
-      columns: [
-        [ 'date', 'Date' ],
-        [ 'state', 'State' ],
-        [ 'party', 'Party' ],
-        [ 'n-delegates', 'Delegates' ]
-      ].map { |arr| StateRaceDaysColumn.new(*arr) },
-      hide_repeats_column: 'date',
-      races: races
-    })
-  end
-
-  def render_state_race_days_by_state
-    render(partial: 'state-race-days-table', locals: {
-      columns: [
-        [ 'state', 'State' ],
-        [ 'date', 'Date' ],
-        [ 'party', 'Party' ],
-        [ 'n-delegates', 'Delegates' ]
-      ].map { |arr| StateRaceDaysColumn.new(*arr) },
-      hide_repeats_column: 'state',
-      races: races.sort do |a, b|
-        c1 = a.state_name <=> b.state_name
-        if c1 != 0
-          c1
-        else
-          a.race_day_id <=> b.race_day_id
-        end
-      end
-    })
-  end
-
   Database::CollectionNames.each do |collection_name|
     define_method(collection_name.to_sym) { database.send(collection_name) }
   end

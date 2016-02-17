@@ -331,15 +331,3 @@ $body-font-family: Source Sans Pro, Arial, Helvetica, sans-serif;
     }
   }
 }
-
-@mixin dots-inline-block {
-  display: inline-block; // so they wrap at a small line height
-  font-size: 1rem;       // all dots are the same size
-  white-space: normal;   // in case parents have white-space: nowrap
-  line-height: .4;
-  margin-top: -.25rem;   // because line-height makes things weird
-
-  word-break: break-all;     // what you'd expect
-  word-wrap: break-word;     // IE Edge
-  overflow-wrap: break-word; // CSS3 equivalent of word-wrap
-}
