@@ -14,21 +14,48 @@ body.race-day {
     }
   }
 
+  .state-dropdown {
+    position: relative;
+    width: 30em;
+    margin: 4em auto;
+  }
+
   .dropdown-button {
     display: block;
     background: none;
     border: 1px solid #ccc;
     width: 30em;
-    margin: 4em auto;
     padding: 0.5em;
     font-size: 1em;
     font-family: 'Source Sans Pro';
+    cursor: pointer;
+    outline: none;
   }
 
   .dropdown-menu {
+    display: none;
+    position: absolute;
     width: 30em;
     text-align: center;
     margin: auto;
+    background: #fff;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-top: 0;
+    z-index: 100;
+    padding: 1em 0 1.2em;
+    a {
+      display: block;
+      text-decoration: none;
+      padding: 0.2em;
+      color: #000;
+      &:hover {
+        background: $widgetLightBlue;
+      }
+    }
+    &.visible {
+      display: block;
+    }
   }
 
   ul {
