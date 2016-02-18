@@ -259,7 +259,7 @@ function add_tooltips() {
    */
   $(document).on('click', '.race-tooltip a.close', on_mouseleave);
 
-  $('.party-state-map svg').each(function() {
+  $('.race:not(.not-today) .party-state-map svg').each(function() {
     add_tooltip(this);
   });
 }
@@ -517,7 +517,7 @@ function color_counties() {
     });
   }
 
-  $('.party-state-map svg').each(function() {
+  $('.race:not(.not-today) .party-state-map svg').each(function() {
     var $race = $(this).closest('.race');
     var $table = $race.find('table');
     var party_id = $race.attr('data-party-id');
@@ -534,7 +534,7 @@ function poll_results() {
 
     var els = els_by_candidate_id_and_state_code = {};
 
-    $('.race[data-state-code]').each(function() {
+    $('.race:not(.not-today)[data-state-code]').each(function() {
       var state_code = this.getAttribute('data-state-code');
 
       $('tr[data-candidate-id]', this).each(function() {
@@ -558,7 +558,7 @@ function poll_results() {
 
     var els = els_by_party_id_and_state_code = {};
 
-    $('.race[data-party-id][data-state-code]').each(function() {
+    $('.race:not(.not-today)[data-party-id][data-state-code]').each(function() {
       var party_id = this.getAttribute('data-party-id');
       var state_code = this.getAttribute('data-state-code');
 
@@ -579,7 +579,7 @@ function poll_results() {
 
   function tr_order_matches_document_order(trs_in_order) {
     // Merge sort two Arrays of <tr> elements
-    var document_trs = $('table.candidates tbody tr').get();
+    var document_trs = $('.race:not(.not-today) table.candidates tbody tr').get();
 
     if (document_trs.length != trs_in_order.length) {
       return false; // should never happen; undefined behavior if it does
@@ -737,7 +737,7 @@ $(function() {
 
     wait_for_font_then('Source Sans Pro', function() {
       line_up_race_divs();
-      $('.race svg').position_svg_cities();
+      $('.party-state-map svg').position_svg_cities();
     });
 
     add_tooltips();
