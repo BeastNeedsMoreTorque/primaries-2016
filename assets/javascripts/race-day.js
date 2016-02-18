@@ -691,29 +691,33 @@ function poll_results() {
 }
 
 /**
- * Ensures that when Democratic and Republican <p class="text"> blurbs are
+ * Ensures that when Democratic and Republican <div class="status">s are
  * aligned, their heights are identical.
  *
  * This makes the rest of the page flow nicely.
  */
-function fix_text_heights() {
+function line_up_race_divs() {
   var refresh_requested = false;
 
   function refresh_text_heights() {
     refresh_requested = false;
 
-    $('li.state p.text').css({ height: 'auto' });
+    $('.race-status, .party-state-map').css({ height: 'auto' });
 
-    $('li.state').each(function() {
-      var $ps = $('p.text', this);
-      if ($ps.length == 2) {
-        if ($ps[0].getBoundingClientRect().top == $ps[1].getBoundingClientRect().top) {
-          var $p1 = $ps.first();
-          var $p2 = $ps.last();
-          var h = Math.max($p1.height(), $p2.height());
-          $ps.css({ height: h + 'px' });
+    $('ul.party-state').each(function() {
+      var el = this;
+
+      [ '.race-status', '.party-state-map' ].forEach(function(class_name) {
+        var $divs = $(class_name, el);
+        if ($divs.length == 2) {
+          if ($divs[0].getBoundingClientRect().top == $divs[1].getBoundingClientRect().top) {
+            var $p1 = $divs.first();
+            var $p2 = $divs.last();
+            var h = Math.max($p1.height(), $p2.height());
+            $divs.css({ height: h + 'px' });
+          }
         }
-      }
+      });
     });
   }
 
@@ -732,7 +736,7 @@ $(function() {
     $('time').render_datetime();
 
     wait_for_font_then('Source Sans Pro', function() {
-      fix_text_heights();
+      line_up_race_divs();
       $('.race svg').position_svg_cities();
     });
 
