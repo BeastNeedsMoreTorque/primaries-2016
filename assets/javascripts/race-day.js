@@ -658,7 +658,7 @@ function poll_results() {
       var n_reporting = +arr[2];
       var n_total = +arr[3];
       var has_delegate_counts = arr[4] == 'true';
-      var has_pledged_delegate_counts = arr[4] == 'true';
+      var has_pledged_delegate_counts = arr[5] == 'true';
       var last_updated = new Date(arr[6]);
       var when_race_happens = arr[7]; // 'past', 'present' or 'future'
       var n_delegates_with_candidates = +arr[8];
