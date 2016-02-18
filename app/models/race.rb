@@ -58,6 +58,18 @@ Race = RubyImmutableStruct.new(
     "/2016/primaries/#{race_day_id}##{anchor}"
   end
 
+  # If this is a GOP-IA race, returns the Dem-IA race.
+  #
+  # May return nil.
+  def other_party_race
+    other_party_id = party_id == 'Dem' ? 'GOP' : 'Dem'
+    arr = database.races.find_all_by_party_state_id("#{other_party_id}-#{state_code}")
+    if arr.length > 1
+      throw 'TODO handle case of >1 races per party'
+    end
+    arr.first
+  end
+
   # Sort by date, then state name, then party name
   def <=>(rhs)
     c1 = race_day_id.<=>(rhs.race_day_id)

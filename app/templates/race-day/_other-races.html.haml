@@ -1,8 +1,0 @@
-%ul.other-races
-  - for race in races
-    %li.race
-      - if race.enabled?
-        The #{race.title} is on
-        %a{href: race.href}= race.date.strftime('%B %-d')
-      - else
-        %span.disabled The #{race.title} is on #{race.date.strftime('%B %-d')}

@@ -20,7 +20,7 @@ a {
   width: 282px;
   margin: auto;
   padding: 10px;
-  @media (min-width: 500px) {
+  @media (min-width: $narrowest-desktop) {
     width: 420px;
   }
   a {
@@ -32,12 +32,12 @@ a {
     padding: 8px 14px 8px 0;
   }
   .logo__topbar--desktop {
-    @media (max-width: 499px) {
+    @media (max-width: $widest-mobile) {
         display: none;
     }
   }
   .logo__topbar--mobile {
-      @media (min-width: 500px) {
+      @media (min-width: $narrowest-desktop) {
           display: none;
       }
   }

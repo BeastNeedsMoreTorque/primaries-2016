@@ -1,16 +1,34 @@
-.race{id: race.anchor, 'data-party-id': race.party_id, 'data-state-code': race.state_code, class: "#{race.when_race_happens} #{race.has_delegate_counts && 'has-delegate-counts' || ''} #{race.any_precincts_reporting? ? '' : 'no-'}precincts-reporting"}
+- html_class = race.when_race_happens
+- if race.has_delegate_counts
+  - html_class << ' ' + 'has-delegate-counts'
+- html_class << ' ' + (race.any_precincts_reporting? ? '' : 'no-') + 'precincts-reporting'
+- if !is_today
+  - html_class << ' ' + 'not-today'
+
+.race{id: race.anchor, 'data-party-id': race.party_id, 'data-state-code': race.state_code, class: html_class}
   %h3.race-name= race.title
+
   .race-status
-    .status-past
-      %p All precincts reporting
-      %p
-        Last updated:
-        %time{datetime: race.last_updated.nil? ? '' : format_datetime(race.last_updated)}
-    .status-present
-      %button.refresh 0:30
-      %p.n-precincts-reporting &nbsp;
-    .status-future= race.results_coming_s
-  %p.text= race.text # may be nil, but we still put the <p> so we can line up the Dem and GOP <p>s
+    - if is_today
+      .status-past
+        %p All precincts reporting
+        %p
+          Last updated:
+          %time{datetime: race.last_updated.nil? ? '' : format_datetime(race.last_updated)}
+      .status-present
+        %button.refresh 0:30
+        %p.n-precincts-reporting &nbsp;
+      .status-future= race.results_coming_s
+
+      - if race.text.length > 0
+        %p.text= race.text
+    - else
+      != render(partial: 'race-day/link-to-race-day', locals: { race: race })
+
   != render(partial: 'race-day/race-map', locals: { race: race })
   != render(partial: 'race-day/race-candidates', locals: { race: race })
   != render(partial: 'race-day/race-delegates', locals: { race: race })
+
+  - if is_today && race.other_party_race && race.other_party_race.race_day_id != race.race_day_id
+    != render(partial: 'race-day/link-to-race-day', locals: { race: race.other_party_race })
+

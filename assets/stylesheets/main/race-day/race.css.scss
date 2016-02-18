@@ -1,7 +1,11 @@
 @import '../../_variables';
 
 body.race-day .race {
-  margin-bottom: 2rem;
+  padding: 2rem 0;
+
+  h3 {
+    font-size: 1.5rem;
+  }
 
   h2, h3 {
     text-align: center;
@@ -9,7 +13,8 @@ body.race-day .race {
 
   .race-status {
     text-align: center;
-    padding: .2rem 1rem;
+    padding: .2rem 1rem 1rem;
+    font-style: italic;
 
     .status-past, .status-present, .status-future {
       display: none;
@@ -20,8 +25,12 @@ body.race-day .race {
     }
 
     p {
-      font-style: italic;
       margin: .2rem auto;
+    }
+
+    p.text {
+      font-style: normal;
+      padding: 1rem 0 0;
     }
   }
 
@@ -31,11 +40,42 @@ body.race-day .race {
   &.present .race-status .status-present { display: block; }
 
   .race-name {
-    margin: 5px 0 15px;
+    margin: 0;
   }
 
   .party-state-map {
     position: relative;
+  }
+
+  &:not(.not-today) .link-to-race-day {
+    margin: 0;
+    padding: 2rem 1rem 0;
+    color: $muted;
+    text-align: center;
+    font-style: italic;
+
+    @media(min-width: $narrowest-desktop) {
+      display: none;
+    }
+  }
+
+  &.not-today {
+    @media(max-width: $widest-mobile) {
+      display: none;
+    }
+
+    .link-to-race-day {
+      margin: 0;
+    }
+
+    h3,
+    .party-state-map,
+    table.candidates,
+    .poll-last-updated,
+    .n-delegates {
+      cursor: default;
+      opacity: .3;
+    }
   }
 
   &[data-party-id=Dem] {

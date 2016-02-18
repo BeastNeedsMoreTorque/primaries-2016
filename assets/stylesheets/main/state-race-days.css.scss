@@ -9,7 +9,7 @@
     }
   }
 
-  @media(max-width: 600px) {
+  @media(max-width: $widest-mobile) {
     table {
       font-size: .85rem;
     }
@@ -64,7 +64,7 @@
     white-space: nowrap;
   }
   .results-button-desktop {
-    @media (max-width: 600px) {
+    @media (max-width: $widest-mobile) {
       display: none;
     }
   }
