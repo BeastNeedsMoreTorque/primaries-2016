@@ -555,7 +555,7 @@ function poll_results() {
           n_delegates_dots: $('td.n-delegates-dots', this),
           n_delegates_int: $('td.n-delegates', this),
           n_pledged_delegates_dots: $('td.n-pledged-delegates-dots', this),
-          n_pledged_delegates_int: $('td.n-pledged-delegates-int', this)
+          n_pledged_delegates_int: $('td.n-pledged-delegates', this)
         };
       });
     });
