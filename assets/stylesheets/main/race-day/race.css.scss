@@ -48,19 +48,23 @@ body.race-day .race {
   }
 
   &:not(.not-today) .link-to-race-day {
+    @media(min-width: $narrowest-desktop) {
+      // This link appears on mobile only. On desktop, we'll show the entire
+      // other race, faded.
+      display: none;
+    }
+
     margin: 0;
     padding: 2rem 1rem 0;
     color: $muted;
     text-align: center;
     font-style: italic;
-
-    @media(min-width: $narrowest-desktop) {
-      display: none;
-    }
   }
 
   &.not-today {
     @media(max-width: $widest-mobile) {
+      // Hide the section entirely on mobile. We'll show a .link-to-race-day
+      // within today's .race instead.
       display: none;
     }
 
@@ -75,6 +79,8 @@ body.race-day .race {
     div.n-delegates { // not td.n-delegates
       cursor: default;
       opacity: .3;
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1);
     }
   }
 
