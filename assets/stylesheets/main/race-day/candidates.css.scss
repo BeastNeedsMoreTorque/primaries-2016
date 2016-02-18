@@ -146,7 +146,5 @@ body.race-day .race.no-precincts-reporting {
   .n-votes, .percent-vote { display: none; }
 }
 
-body.race-day .race.precincts-reporting:not(.not-today) {
-  table.candidates td { cursor: pointer; }
-  .pollster { display: none; }
-}
+body.race-day .race.precincts-reporting:not(.not-today) table.candidates td { cursor: pointer; }
+body.race-day .race.precincts-reporting table.candidates .pollster { display: none; }
