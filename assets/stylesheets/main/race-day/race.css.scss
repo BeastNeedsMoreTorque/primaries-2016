@@ -77,7 +77,7 @@ body.race-day .race {
     .party-state-map,
     table.candidates,
     .poll-last-updated,
-    div.n-delegates { // not td.n-delegates
+    div.party-state-delegates {
       cursor: default;
       opacity: .3;
       -webkit-filter: grayscale(1);

@@ -14,8 +14,8 @@ Race = RubyImmutableStruct.new(
 ) do
   include Comparable
 
-  # Sum of candidate_states.n_delegates (pledged and unpledged alike)
-  attr_reader(:n_delegates_with_candidates)
+  # Sum of candidate_states.n_delegates and .n_pledged_delegates
+  attr_reader(:n_delegates_with_candidates, :n_pledged_delegates_with_candidates)
 
   attr_reader(
     :id,
@@ -48,6 +48,7 @@ Race = RubyImmutableStruct.new(
     @race_subcounties = database.race_subcounties.find_all_by_race_id(@id) || []
 
     @n_delegates_with_candidates = @candidate_states.map(&:n_delegates).reduce(0, :+)
+    @n_pledged_delegates_with_candidates = @candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
 
   def n_votes_is_really_n_sdes
@@ -97,22 +98,22 @@ Race = RubyImmutableStruct.new(
   def enabled?; race_day.enabled?; end
   def today?; race_day.today?; end
   def n_delegates; party_state.n_delegates; end
+  def n_pledged_delegates; party_state.n_pledged_delegates; end
   def pollster_slug; party_state.pollster_slug; end
   def pollster_last_updated; party_state.pollster_last_updated; end
 
   def has_pollster_data?; !pollster_slug.nil?; end
 
   # True iff at least one candidate has a delegate -- pledged or unpledged
-  def has_delegate_counts
-    n_delegates_with_candidates != 0
-  end
+  def has_delegate_counts?; n_delegates_with_candidates != 0; end
+  def has_pledged_delegate_counts?; n_pledged_delegates_with_candidates != 0; end
 
   # Number of pledged/unpledged delegates not assigned to any candidates
-  def n_delegates_without_candidates
-    n_delegates - n_delegates_with_candidates
-  end
+  def n_delegates_without_candidates; n_delegates - n_delegates_with_candidates; end
+  def n_pledged_delegates_without_candidates; n_pledged_delegates - n_pledged_delegates_with_candidates; end
 
   def has_delegates_without_candidates?; n_delegates_without_candidates > 0; end
+  def has_pledged_delegates_without_candidates?; n_pledged_delegates_without_candidates > 0; end
 
   def pct_precincts_reporting
     reporting_str = if n_precincts_total.nil? || n_precincts_total == 0

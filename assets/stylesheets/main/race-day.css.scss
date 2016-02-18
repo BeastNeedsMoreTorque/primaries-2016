@@ -33,4 +33,18 @@ body.race-day {
   li.state {
     margin-bottom: 3rem;
   }
+
+  &.show-delegates {
+    .n-pledged-delegates,
+    .n-pledged-delegates-dots {
+      display: none;
+    }
+  }
+
+  &.show-pledged-delegates {
+    .n-delegates,
+    .n-delegates-dots {
+      display: none;
+    }
+  }
 }

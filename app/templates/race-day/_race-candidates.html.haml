@@ -10,6 +10,7 @@
           Votes
       %th.percent-vote= '%'
       %th.n-delegates{colspan: 2} Delegates
+      %th.n-pledged-delegates{colspan: 2} Delegates
       - if race.has_pollster_data?
         %th.pollster Polling Average 
   %tbody
@@ -22,7 +23,9 @@
         %td.n-votes= format_int(candidate_race.n_votes)
         %td.percent-vote= format_percent_or_nil(candidate_race.percent_vote)
         %td.n-delegates= format_int(candidate_race.n_delegates || 0)
-        %td.n-delegates-dots!= candidate_race_dot_groups(candidate_race).to_html
+        %td.n-delegates-dots!= candidate_race_dot_groups(candidate_race, :n_delegates).to_html
+        %td.n-pledged-delegates= format_int(candidate_race.n_pledged_delegates || 0)
+        %td.n-pledged-delegates-dots!= candidate_race_dot_groups(candidate_race, :n_pledged_delegates).to_html
         - if race.has_pollster_data?
           %td.pollster
             - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?

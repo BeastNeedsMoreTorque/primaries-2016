@@ -38,7 +38,7 @@ body.race-day .delegate-summary {
       }
     }
 
-    td.n-delegates-int {
+    td.n-delegates-int, td.n-pledged-delegates-int {
       width: 2rem;
       height: 2rem;
       padding-right: .25rem;
@@ -46,7 +46,7 @@ body.race-day .delegate-summary {
       text-align: right;
     }
 
-    td.n-delegates-dots {
+    td.n-delegates-dots, td.n-pledged-delegates-dots {
       width: 100%;
       padding-top: .5rem;
       white-space: normal;
@@ -87,7 +87,7 @@ body.race-day .delegate-summary {
       fill: $strongDem;
     }
 
-    .n-delegates-dots, .state-code {
+    .n-delegates-dots, .n-pledged-delegates-dots, .state-code {
       color: $strongDem;
     }
   }
@@ -97,13 +97,13 @@ body.race-day .delegate-summary {
       fill: $strongGOP;
     }
 
-    .n-delegates-dots, .state-code {
+    .n-delegates-dots, .n-pledged-delegates-dots, .state-code {
       color: $strongGOP;
     }
   }
 
   .party-delegate-summary.state-highlighted {
-    .n-delegates-dots .dot-subgroup:not(.highlight) {
+    .dot-subgroup:not(.highlight) {
       opacity: .5;
       color: $muted;
     }
@@ -114,4 +114,11 @@ body.race-day .delegate-summary {
       opacity: .5;
     }
   }
+}
+
+body.race-day.show-delegates .party-delegate-summary {
+  .n-pledged-delegates-int, .n-pledged-delegates-dots { display: none; }
+}
+body.race-day.show-pledged-delegates .party-delegate-summary {
+  .n-delegates-int, .n-delegates-dots { display: none; }
 }

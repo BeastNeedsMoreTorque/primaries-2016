@@ -16,6 +16,7 @@ class RaceDayView < BaseView
   def output_path; "2016/primaries/#{race_day.id}.html"; end
   def page_title; "2016 Presidential Primaries: #{race_day.date.strftime('%B %-d, %Y')}"; end
   def layout; 'main'; end
+  def body_class; super + ' show-delegates'; end
   def stylesheets; [ asset_path('main.css') ]; end
 
   def hed; race_day.title; end

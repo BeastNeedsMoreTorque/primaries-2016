@@ -17,6 +17,7 @@
             %tr
               %th.candidate Candidate
               %th.n-delegates{colspan: 2} Delegates
+              %th.n-pledged-delegates{colspan: 2} Pledged Delegates
           %tbody
             - party_candidate_states.group_by(&:candidate).each do |candidate, candidate_states|
               %tr{'data-candidate-id': candidate.id}
@@ -25,7 +26,14 @@
                   %span= candidate.last_name
                 %td.n-delegates-int= candidate_states.map(&:n_delegates).reduce(0, :+)
                 %td.n-delegates-dots
-                  - for dot_group in candidate_states_to_dot_groups(candidate_states)
+                  - for dot_group in candidate_states_to_dot_groups(candidate_states, :has_delegates?, :n_delegates)
+                    .dot-group<>
+                      - for dot_subgroup in dot_group.dot_subgroups
+                        %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
+                          = '•' * dot_subgroup.n_dots
+                %td.n-pledged-delegates-int= candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
+                %td.n-pledged-delegates-dots
+                  - for dot_group in candidate_states_to_dot_groups(candidate_states, :has_pledged_delegates?, :n_pledged_delegates)
                     .dot-group<>
                       - for dot_subgroup in dot_group.dot_subgroups
                         %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
@@ -34,11 +42,20 @@
               - races = race_day.races.select{ |r| r.party_id == party.id }
               - n_delegates_total = races.map(&:n_delegates).reduce(0, :+)
               - n_delegates_without_candidates = races.map(&:n_delegates_without_candidates).reduce(0, :+)
+              - n_pledged_delegates_total = races.map(&:n_pledged_delegates).reduce(0, :+)
+              - n_pledged_delegates_without_candidates = races.map(&:n_pledged_delegates_without_candidates).reduce(0, :+)
               %td.candidate
                 Up for grabs
               %td.n-delegates-int= n_delegates_without_candidates
               %td.n-delegates-dots
-                - for dot_group in races_to_unassigned_dot_groups(races)
+                - for dot_group in races_to_unassigned_dot_groups(races, :has_delegates_without_candidates?, :n_delegates_without_candidates)
+                  .dot-group<>
+                    - for dot_subgroup in dot_group.dot_subgroups
+                      %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
+                        = '•' * dot_subgroup.n_dots
+              %td.n-pledged-delegates-int= n_pledged_delegates_without_candidates
+              %td.n-pledged-delegates-dots
+                - for dot_group in races_to_unassigned_dot_groups(races, :has_pledged_delegates_without_candidates?, :n_pledged_delegates_without_candidates)
                   .dot-group<>
                     - for dot_subgroup in dot_group.dot_subgroups
                       %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
@@ -50,4 +67,4 @@
               .state-code= state.code
               .map!= map_svg("states/tiny/#{state.code}")
               .n-delegates= party_state.n_delegates
-              -#.n-pledged-delegates= party_state.n_pledged_delegates
+              .n-pledged-delegates= party_state.n_pledged_delegates

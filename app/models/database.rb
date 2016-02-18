@@ -171,7 +171,7 @@ class Database
         sheet_candidate.full_name,
         sheet_candidate.last_name,
         del_super_candidate ? del_super_candidate.n_delegates : 0,
-        del_super_candidate ? del_super_candidate.n_unpledged_delegates : 0,
+        del_super_candidate ? (del_super_candidate.n_delegates - del_super_candidate.n_unpledged_delegates) : 0,
         pollster_candidate ? pollster_candidate.poll_percent : nil,
         pollster_candidate ? pollster_candidate.sparkline : nil,
         pollster_candidate ? pollster_candidate.last_updated : nil,
@@ -287,6 +287,7 @@ class Database
           del_super_candidate_state.candidate_id,
           del_super_candidate_state.state_code,
           del_super_candidate_state.n_delegates,
+          del_super_candidate_state.n_delegates - del_super_candidate_state.n_unpledged_delegates,
           pollster_candidate_state ? pollster_candidate_state.poll_percent : nil,
           pollster_candidate_state ? pollster_candidate_state.sparkline : nil
         )
@@ -347,6 +348,7 @@ class Database
           sheets_party_state.party_id,
           sheets_party_state.state_code,
           sheets_party_state.n_delegates,
+          sheets_party_state.n_delegates - sheets_party_state.n_unpledged_delegates,
           pollster_party_state ? pollster_party_state.slug : nil,
           pollster_party_state ? pollster_party_state.last_updated : nil
         )
