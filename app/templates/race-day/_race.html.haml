@@ -1,11 +1,11 @@
 - html_class = race.when_race_happens
 - if race.has_delegate_counts?
-  - html_class << ' ' + 'has-delegate-counts'
+  - html_class << ' has-delegate-counts'
 - if race.has_pledged_delegate_counts?
-  - html_class << ' ' + 'has-pledged-delegate-counts'
+  - html_class << ' has-pledged-delegate-counts'
 - html_class << ' ' + (race.any_precincts_reporting? ? '' : 'no-') + 'precincts-reporting'
 - if !is_today
-  - html_class << ' ' + 'not-today'
+  - html_class << ' not-today'
 
 .race{id: race.anchor, 'data-party-id': race.party_id, 'data-state-code': race.state_code, class: html_class}
   %h3.race-name= race.title
