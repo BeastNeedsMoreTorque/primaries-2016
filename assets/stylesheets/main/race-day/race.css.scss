@@ -2,6 +2,7 @@
 
 body.race-day .race {
   padding: 2rem 0;
+  width: 100%; // Not sure why this makes a difference :S
 
   h3 {
     font-size: 1.5rem;
