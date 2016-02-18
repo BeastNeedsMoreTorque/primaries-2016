@@ -3,6 +3,6 @@
     %li.race
       - if race.enabled?
         The #{race.title} is on
-        %a{href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"}= race.date.strftime('%B %-d')
+        %a{href: race.href}= race.date.strftime('%B %-d')
       - else
         %span.disabled The #{race.title} is on #{race.date.strftime('%B %-d')}

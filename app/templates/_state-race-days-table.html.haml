@@ -36,7 +36,7 @@
           %td.disabled-button
         - else
           %td.enabled-button
-            %a.results-button{href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"}
+            %a.results-button{href: race.href}
               %span.results-button-desktop
                 - if race.when_race_happens == 'future'
                   Preview

@@ -1,4 +1,4 @@
-.race{id: "#{race.state_code}-#{race.party_id}", 'data-party-id': race.party_id, 'data-state-code': race.state_code, class: "#{race.when_race_happens} #{race.has_delegate_counts && 'has-delegate-counts' || ''} #{race.any_precincts_reporting? ? '' : 'no-'}precincts-reporting"}
+.race{id: race.anchor, 'data-party-id': race.party_id, 'data-state-code': race.state_code, class: "#{race.when_race_happens} #{race.has_delegate_counts && 'has-delegate-counts' || ''} #{race.any_precincts_reporting? ? '' : 'no-'}precincts-reporting"}
   %h3.race-name= race.title
   .race-status
     .status-past
@@ -11,8 +11,6 @@
       %p.n-precincts-reporting &nbsp;
     .status-future= race.results_coming_s
   %p.text= race.text # may be nil, but we still put the <p> so we can line up the Dem and GOP <p>s
-  .party-state-map
-    != map_svg("states/#{race.state_code}")
-    != render(partial: 'race-day/race-map-legend', locals: { party: race.party })
+  != render(partial: 'race-day/race-map', locals: { race: race })
   != render(partial: 'race-day/race-candidates', locals: { race: race })
   != render(partial: 'race-day/race-delegates', locals: { race: race })

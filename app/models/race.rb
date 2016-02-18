@@ -29,9 +29,13 @@ Race = RubyImmutableStruct.new(
     :race_subcounties
   )
 
+  # What we put as the hash in a URL to jump to this race
+  attr_reader(:anchor)
+
   def after_initialize
     @id = "#{race_day_id}-#{party_id}-#{state_code}"
     @party_state_id = "#{@party_id}-#{@state_code}"
+    @anchor = "#{@state_code}-#{@party_id}"
 
     @party_state = database.party_states.find!(@party_state_id)
     @candidate_races = database.candidate_races.find_all_by_race_id(@id)
@@ -48,6 +52,10 @@ Race = RubyImmutableStruct.new(
 
   def n_votes_is_really_n_sdes
     party_id == 'Dem' && state_code == 'IA'
+  end
+
+  def href
+    "/2016/primaries/#{race_day_id}##{anchor}"
   end
 
   # Sort by date, then state name, then party name

@@ -59,7 +59,7 @@
                     %td.n-votes-pct.when-past.when-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
             %div.footnotes
               %a.footnotes-for-pollster.when-future{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-              %a.footnotes-for-race-day.when-present.when-past{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"} Detailed results
+              %a.footnotes-for-race-day.when-present.when-past{target: '_blank', href: race.href} Detailed results
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
