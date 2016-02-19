@@ -29,9 +29,13 @@ Race = RubyImmutableStruct.new(
     :race_subcounties
   )
 
+  # Something to put after the "#" in a URL
+  attr_reader(:anchor)
+
   def after_initialize
     @id = "#{race_day_id}-#{party_id}-#{state_code}"
     @party_state_id = "#{@party_id}-#{@state_code}"
+    @anchor = "#{@state_code}-#{@party_id}"
 
     @party_state = database.party_states.find!(@party_state_id)
     @candidate_races = database.candidate_races.find_all_by_race_id(@id)

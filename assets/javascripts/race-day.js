@@ -740,12 +740,12 @@ $(function() {
     color_counties(); // set up on_database_change
     poll_results(); // send AJAX request
   });
-});
 
-$('.dropdown-button').click(function() {
-  $('.dropdown-menu').toggleClass("visible");
-});
+  $('.dropdown-button').click(function() {
+    $('.dropdown-menu').toggleClass("visible");
+  });
 
-$(".dropdown-link").click(function() {
-  $('.dropdown-menu').toggleClass("visible");
+  $(".dropdown-link").click(function() {
+    $('.dropdown-menu').toggleClass("visible");
+  });
 });
