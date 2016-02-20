@@ -16,7 +16,7 @@ module ServerSchedule
   # (If we didn't wait until *after* the task finishes, we could end up
   # bunching API requests together, which could exhaust our quota. Better too
   # few requests than too many, because they're more likely to succeed.)
-  TickIntervalInS = 10*60
+  #TickIntervalInS = 10*60
 
   # The list of ticks.
   #
@@ -43,8 +43,8 @@ module ServerSchedule
 
   # On election night, do something like this:
   #
-  # TickIntervalInS = 10
-  #
+  TickIntervalInS = 10
+  
   Ticks = [
     election_day('2016-02-20'),
     election_day('2016-02-20'),
