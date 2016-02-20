@@ -157,6 +157,10 @@ Race = RubyImmutableStruct.new(
       else
         'past'
       end
+    elsif !expect_results_time.nil? && database.now >= expect_results_time
+      # If AP says results are coming, say it's present. That way we'll see the
+      # little refresh countdowns.
+      'present'
     else
       'future'
     end
