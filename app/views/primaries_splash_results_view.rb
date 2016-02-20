@@ -70,7 +70,7 @@ class PrimariesSplashResultsView < BaseView
       geo_id = cgr.geo_id
       n_votes = cgr.n_votes
 
-      if !geo_id_stats.include?(geo_id) || n_votes > geo_id_stats[geo_id][:leader_n_votes]
+      if n_votes > 0 && (!geo_id_stats.include?(geo_id) || n_votes > geo_id_stats[geo_id][:leader_n_votes])
         geo_id_stats[geo_id] = {
           leader_id: cgr.candidate_id,
           leader_n_votes: n_votes
