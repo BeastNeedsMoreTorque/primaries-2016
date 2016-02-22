@@ -122,7 +122,9 @@ Race = RubyImmutableStruct.new(
     else
       pct_reporting = (n_precincts_reporting.to_f / n_precincts_total.to_f) * 100.0
       if pct_reporting > 99
-        '99%'
+        '>99%'
+      elsif pct_reporting < 1
+        '<1%'
       else
         "#{pct_reporting.round}%"
       end

@@ -32,4 +32,33 @@ describe 'The splash banner', type: :feature do
     loop until page.evaluate_script('!jQuery.active')
     expect(page.first('.precincts', visible: true).text).to eq('12% of precincts reporting')
   end
+
+  it 'should show <1% precincts reporting in HTML' do
+    PrimariesSplashView.generate_all(quick_database(1, 200))
+    visit('/2016/primaries/splash')
+    expect(page.first('.precincts', visible: true).text).to eq('<1% of precincts reporting')
+  end
+
+  it 'should show <1% precincts reporting from JSON' do
+    PrimariesSplashView.generate_all(quick_database(0, 200))
+    PrimariesSplashResultsView.generate_all(quick_database(1, 200))
+    visit('/2016/primaries/splash')
+    loop until page.evaluate_script('!jQuery.active')
+    expect(page.first('.precincts', visible: true).text).to eq('<1% of precincts reporting')
+  end
+
+  it 'should show >99% of precincts reporting in HTML' do
+    PrimariesSplashView.generate_all(quick_database(199, 200))
+    visit('/2016/primaries/splash')
+    expect(page.first('.precincts', visible: true).text).to eq('>99% of precincts reporting')
+  end
+
+  it 'should show >99% precincts reporting from JSON' do
+    PrimariesSplashView.generate_all(quick_database(198, 200))
+    PrimariesSplashResultsView.generate_all(quick_database(199, 200))
+    visit('/2016/primaries/splash')
+    loop until page.evaluate_script('!jQuery.active')
+    expect(page.first('.precincts', visible: true).text).to eq('>99% of precincts reporting')
+  end
+
 end
