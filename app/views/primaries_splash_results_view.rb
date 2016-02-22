@@ -1,10 +1,9 @@
 require_relative './base_view'
 
 require_relative '../models/race_day'
-require_relative '../../lib/primaries_widgets_view'
 
 class PrimariesSplashResultsView < BaseView
-  include PrimariesWidgetsView
+  alias_method(:race_day, :focus_race_day)
 
   def initialize(database)
     super(database)

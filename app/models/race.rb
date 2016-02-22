@@ -54,10 +54,6 @@ Race = RubyImmutableStruct.new(
     @n_pledged_delegates_with_candidates = @candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
 
-  def n_votes_is_really_n_sdes
-    party_id == 'Dem' && state_code == 'IA'
-  end
-
   def href
     "/2016/primaries/#{race_day_id}##{anchor}"
   end

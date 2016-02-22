@@ -1,9 +1,7 @@
 require_relative './base_view'
-require_relative '../../lib/primaries_embed_view'
-require_relative '../../lib/primaries_widgets_view'
 
 class PrimariesMobileAdView < BaseView
-  include PrimariesEmbedView, PrimariesWidgetsView
+  alias_method(:race_day, :focus_race_day)
 
   def output_path; '2016/primaries/mobile-ad.html'; end
 

@@ -59,7 +59,7 @@ $(function() {
     update_when_race_happens_from_json($race, race_json.when_race_happens);
     update_svg_from_json($race, race_json);
     update_candidates_from_json($race, race_json.candidates);
-    update_precincts_reporting_from_json($race, race_json.precincts_reporting_percent);
+    update_precincts_reporting_from_json($race, race_json.precincts_reporting_percent_s);
   }
 
   function do_poll(callback) {
