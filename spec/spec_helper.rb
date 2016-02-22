@@ -4,6 +4,8 @@
 # https://github.com/rspec/rspec-core/issues/1983
 $LOAD_PATH.delete_if { |p| File.expand_path(p) == File.expand_path('./lib') }
 
+require 'fileutils'
+
 require_relative '../lib/env'
 Bundler.require(:development)
 
@@ -69,4 +71,10 @@ def mock_database(date_string, last_date_string, source_overrides={})
     now,
     last_date
   )
+end
+
+RSpec.configure do |config|
+  config.before(:each) do
+    FileUtils.rm(Dir["#{Paths.Dist}/**/*.html"] + Dir["#{Paths.Dist}/**/*.json"])
+  end
 end

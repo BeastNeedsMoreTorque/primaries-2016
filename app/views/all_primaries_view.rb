@@ -1,5 +1,6 @@
 require_relative './base_view'
 
+require_relative '../helpers/dot_group_helper'
 require_relative '../models/race_day'
 
 class AllPrimariesView < BaseView
