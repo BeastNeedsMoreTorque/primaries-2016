@@ -27,14 +27,14 @@ class RaceDayResultsView < BaseView
   protected
 
   def candidate_csv
-    header = "candidate_id,party_id,n_delegates,n_unpledged_delegates\n"
-    data = candidates.map{ |c| "#{c.id},#{c.party_id},#{c.n_delegates},#{c.n_unpledged_delegates}" }.join("\n")
+    header = "candidate_id,party_id,n_delegates,n_pledged_delegates\n"
+    data = candidates.map{ |c| "#{c.id},#{c.party_id},#{c.n_delegates},#{c.n_pledged_delegates}" }.join("\n")
     header + data
   end
 
   def candidate_race_csv
-    header = "candidate_id,state_code,n_votes,percent_vote,n_delegates,winner\n"
-    data = race_day.candidate_races.map{ |cr| "#{cr.candidate_id},#{cr.state_code},#{cr.n_votes},#{cr.percent_vote},#{cr.n_delegates},#{cr.winner?}" }.join("\n")
+    header = "candidate_id,state_code,n_votes,percent_vote,n_delegates,n_pledged_delegates,winner\n"
+    data = race_day.candidate_races.map{ |cr| "#{cr.candidate_id},#{cr.state_code},#{cr.n_votes},#{cr.percent_vote},#{cr.n_delegates},#{cr.n_pledged_delegates},#{cr.winner?}" }.join("\n")
     header + data
   end
 
@@ -69,8 +69,8 @@ class RaceDayResultsView < BaseView
   end
 
   def race_csv
-    header = "party_id,state_code,n_precincts_reporting,n_precincts_total,has_delegate_counts,last_updated,when_race_happens,n_delegates_with_candidates,n_delegates\n"
-    data = race_day.races.map{ |r| "#{r.party_id},#{r.state_code},#{r.n_precincts_reporting},#{r.n_precincts_total},#{r.has_delegate_counts},#{r.last_updated},#{r.when_race_happens},#{r.n_delegates_with_candidates},#{r.n_delegates}" }.join("\n")
+    header = "party_id,state_code,n_precincts_reporting,n_precincts_total,has_delegate_counts,has_pledged_delegate_counts,last_updated,when_race_happens,n_delegates_with_candidates,n_delegates,n_pledged_delegates_with_candidates,n_pledged_delegates\n"
+    data = race_day.races.map{ |r| "#{r.party_id},#{r.state_code},#{r.n_precincts_reporting},#{r.n_precincts_total},#{r.has_delegate_counts?},#{r.has_pledged_delegate_counts?},#{r.last_updated},#{r.when_race_happens},#{r.n_delegates_with_candidates},#{r.n_delegates},#{r.n_pledged_delegates_with_candidates},#{r.n_pledged_delegates}" }.join("\n")
     header + data
   end
 

@@ -1,0 +1,3 @@
+.party-state-map
+  != map_svg("states/#{race.state_code}")
+  != render(partial: 'race-day/race-map-legend', locals: { party: race.party })

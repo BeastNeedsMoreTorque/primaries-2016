@@ -23,7 +23,11 @@ module DotGroupHelper
     end
 
     def dot_string(n_dots)
-      '•' * n_dots
+      if n_dots < 0
+        '' # We're fiddling with stuff in dev mode
+      else
+        '•' * n_dots
+      end
     end
   end
 
@@ -40,19 +44,20 @@ module DotGroupHelper
 
       # Handle partial class-1 and class-2 dot-groups
       remainder = n_dots1 % DotsPerGroup
+      partial_dots2 = n_dots2
       if remainder > 0
         html = dot_subgroup(class_name1, dot_string(remainder))
 
         if n_dots2 >= DotsPerGroup - remainder
+          partial_dots2 -= (DotsPerGroup - remainder)
           html << dot_subgroup(class_name2, dot_string(DotsPerGroup - remainder))
         elsif n_dots2 != 0
+          partial_dots2 = 0
           html << dot_subgroup(class_name2, dot_string(n_dots2))
         end
 
         ret << dot_group(html)
       end
-
-      partial_dots2 = [ n_dots2 - remainder, 0 ].max
 
       # Handle full and partial class-2 dot-groups
       if partial_dots2 >= DotsPerGroup
@@ -86,28 +91,32 @@ module DotGroupHelper
   end
 
   # Turns a list of candidate_states into some DotGroups
-  def candidate_states_to_dot_groups(candidate_states)
-    dot_sets = candidate_states.select(&:has_delegates?).map do |candidate_state|
-      CandidateStateDotSet.new(candidate_state.candidate_id, candidate_state.state_code, candidate_state.n_delegates)
+  def candidate_states_to_dot_groups(candidate_states, include_method, method)
+    dot_sets = candidate_states.select(&include_method).map do |candidate_state|
+      CandidateStateDotSet.new(candidate_state.candidate_id, candidate_state.state_code, candidate_state.send(method))
     end
 
     candidate_state_dot_sets_to_dot_groups(dot_sets)
   end
 
-  def races_to_unassigned_dot_groups(races)
-    dot_sets = races.select(&:has_delegates_without_candidates?).map do |race|
-      CandidateStateDotSet.new(nil, race.state_code, race.n_delegates_without_candidates)
+  def races_to_unassigned_dot_groups(races, include_method, method)
+    dot_sets = races.select(&include_method).map do |race|
+      CandidateStateDotSet.new(nil, race.state_code, race.send(method))
     end
 
     candidate_state_dot_sets_to_dot_groups(dot_sets)
   end
 
-  def candidate_race_dot_groups(candidate_race)
-    SimpleDotGroups.new(candidate_race.n_delegates)
+  def candidate_race_dot_groups(candidate_race, method)
+    SimpleDotGroups.new(candidate_race.send(method))
   end
 
-  def race_assigned_unassigned_delegates_dot_groups(race)
-    BisectedDotGroups.new('with-candidates', race.n_delegates_with_candidates, 'without-candidates', race.n_delegates_without_candidates)
+  def race_assigned_unassigned_delegates_dot_groups(race, method1, method2)
+    BisectedDotGroups.new('with-candidates', race.send(method1), 'without-candidates', race.send(method2))
+  end
+
+  def race_simple_dot_groups(race)
+    SimpleDotGroups.new(race.n_delegates)
   end
 
   private

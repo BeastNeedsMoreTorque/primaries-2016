@@ -9,7 +9,7 @@
     }
   }
 
-  @media(max-width: 600px) {
+  @media(max-width: $widest-mobile) {
     table {
       font-size: .85rem;
     }
@@ -17,8 +17,8 @@
 
   td {
     border-top: 1px solid $tableBorderColor;
-    vertical-align: middle;
-    padding: .4rem;
+    vertical-align: top;
+    padding: .5rem;
     &.state {
       padding-right: 0;
     }
@@ -50,6 +50,7 @@
   .disabled-button {
     visibility: hidden;
   }
+
   .results-button {
     background: #fff;
     border: 1px solid #ccc;
@@ -58,12 +59,12 @@
     font: inherit;
     font-size: .9rem;
     display:block;
-    padding: .15rem .3rem;
+    padding: .1rem .3rem;
     color: #999;
     white-space: nowrap;
   }
   .results-button-desktop {
-    @media (max-width: 600px) {
+    @media (max-width: $widest-mobile) {
       display: none;
     }
   }
@@ -86,20 +87,6 @@
     width: 100%;
   }
 
-  .n-delegates {
-    padding-right: 0;
-    padding-left: 0;
-  }
-
-  .n-delegates-inner {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-justify-content: flex-start;
-    justify-content: flex-start;
-    -webkit-align-items: center;
-    align-items: center;
-  }
-
   .n-delegates-int {
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
@@ -108,16 +95,16 @@
     text-align: right;
   }
 
-  .dots {
-    @include dots-inline-block();
-    max-width: 12em;
+  .n-delegates-dots {
+    max-width: 10rem;
+    padding: .25rem 0;
   }
 
-  .dots-dem {
+  tr[data-party-id=Dem] .n-delegates-dots {
     color: $strongDem;
   }
 
-  .dots-gop {
+  tr[data-party-id=GOP] .n-delegates-dots {
     color: $strongGOP;
   }
 

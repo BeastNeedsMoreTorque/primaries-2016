@@ -26,7 +26,10 @@
                 .frontrunner-lbl
                   %span= race.party_adjective
                   %span Candidates
-                  %span Total votes
+                  - if race.n_votes_th
+                    %span Total #{race.n_votes_th} *
+                  - else
+                    %span Total votes
             .candidate-position-listing
               %table
                 %tbody
@@ -39,6 +42,10 @@
                         %td.n-votes-pct.when-no-precincts-reporting= "#{format_percent_or_nil(candidate_race.percent_vote)}%"
                       -else
                         %td.n-votes-pct.when-no-precincts-reporting= ""
+            - if race.n_votes_footnote
+              .n-votes-footnote
+                %span.asterisk *
+                = race.n_votes_footnote
             - if race.candidate_races.length > 3
               .see-all-candidates
                 %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
@@ -67,7 +74,7 @@
                     %span.swatch.no-results
                     No results
                 %p.tease-link
-                  %a{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"}
+                  %a{target: '_blank', href: race.href}
                     %span.when-future
                       See preview
                     %span.when-past.when-present

@@ -10,12 +10,15 @@ Race = RubyImmutableStruct.new(
   :n_precincts_reporting,
   :n_precincts_total,
   :last_updated,
-  :ap_says_its_over
+  :ap_says_its_over,
+  :n_votes_th,
+  :n_votes_tooltip_th,
+  :n_votes_footnote
 ) do
   include Comparable
 
-  # Sum of candidate_states.n_delegates (pledged and unpledged alike)
-  attr_reader(:n_delegates_with_candidates)
+  # Sum of candidate_states.n_delegates and .n_pledged_delegates
+  attr_reader(:n_delegates_with_candidates, :n_pledged_delegates_with_candidates)
 
   attr_reader(
     :id,
@@ -48,10 +51,27 @@ Race = RubyImmutableStruct.new(
     @race_subcounties = database.race_subcounties.find_all_by_race_id(@id) || []
 
     @n_delegates_with_candidates = @candidate_states.map(&:n_delegates).reduce(0, :+)
+    @n_pledged_delegates_with_candidates = @candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
 
   def n_votes_is_really_n_sdes
     party_id == 'Dem' && state_code == 'IA'
+  end
+
+  def href
+    "/2016/primaries/#{race_day_id}##{anchor}"
+  end
+
+  # If this is a GOP-IA race, returns the Dem-IA race.
+  #
+  # May return nil.
+  def other_party_race
+    other_party_id = party_id == 'Dem' ? 'GOP' : 'Dem'
+    arr = database.races.find_all_by_party_state_id("#{other_party_id}-#{state_code}")
+    if arr.length > 1
+      throw 'TODO handle case of >1 races per party'
+    end
+    arr.first
   end
 
   # Sort by date, then state name, then party name
@@ -81,22 +101,37 @@ Race = RubyImmutableStruct.new(
   def enabled?; race_day.enabled?; end
   def today?; race_day.today?; end
   def n_delegates; party_state.n_delegates; end
+  def n_pledged_delegates; party_state.n_pledged_delegates; end
   def pollster_slug; party_state.pollster_slug; end
   def pollster_last_updated; party_state.pollster_last_updated; end
 
   def has_pollster_data?; !pollster_slug.nil?; end
 
   # True iff at least one candidate has a delegate -- pledged or unpledged
-  def has_delegate_counts
-    n_delegates_with_candidates != 0
-  end
+  def has_delegate_counts?; n_delegates_with_candidates != 0; end
+  def has_pledged_delegate_counts?; n_pledged_delegates_with_candidates != 0; end
 
   # Number of pledged/unpledged delegates not assigned to any candidates
-  def n_delegates_without_candidates
-    n_delegates - n_delegates_with_candidates
-  end
+  def n_delegates_without_candidates; n_delegates - n_delegates_with_candidates; end
+  def n_pledged_delegates_without_candidates; n_pledged_delegates - n_pledged_delegates_with_candidates; end
 
   def has_delegates_without_candidates?; n_delegates_without_candidates > 0; end
+  def has_pledged_delegates_without_candidates?; n_pledged_delegates_without_candidates > 0; end
+
+  # Describes how many precincts are reporting.
+  #
+  # This is ONLY meant to be shown for a "past" race. It only returns these
+  # phrases:
+  #
+  # * "All precincts reporting"
+  # * "{n} of {n} precincts reporting"
+  def precincts_reporting_sentence
+    if all_precincts_reporting?
+      'All precincts reporting'
+    else
+      "#{n_precincts_reporting} of #{n_precincts_total} reporting"
+    end
+  end
 
   def pct_precincts_reporting
     reporting_str = if n_precincts_total.nil? || n_precincts_total == 0
@@ -140,6 +175,10 @@ Race = RubyImmutableStruct.new(
       else
         'past'
       end
+    elsif !expect_results_time.nil? && database.now >= expect_results_time
+      # If AP says results are coming, say it's present. That way we'll see the
+      # little refresh countdowns.
+      'present'
     else
       'future'
     end
@@ -150,6 +189,7 @@ Race = RubyImmutableStruct.new(
   def future?; when_race_happens == 'future'; end
 
   def any_precincts_reporting?; (n_precincts_reporting || 0) > 0; end
+  def all_precincts_reporting?; !n_precincts_reporting.nil? && n_precincts_reporting == n_precincts_total; end
 
   # Returns something like:
   #
@@ -159,7 +199,7 @@ Race = RubyImmutableStruct.new(
   def results_coming_s
     if !today?
       "Results coming #{date.strftime('%B %-d')}"
-    elsif !expect_results_time?
+    elsif expect_results_time.nil?
       "Results coming soon"
     else
       "Results coming #{expect_results_time.to_datetime.new_offset('Eastern').strftime('%l:%M %P %Z').sub('m', '.m.').sub('-05:00', 'EST').sub('-04:00', 'EDT')}"

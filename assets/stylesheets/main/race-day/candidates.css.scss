@@ -46,11 +46,12 @@ body.race-day table.candidates {
     content: '✓';
   }
 
-  .n-delegates {
+  .n-delegates, .n-pledged-delegates {
     padding-left: 0; // Every pixel counts. This column's data is thin, so we're sure this won't be ugly
+    width: 1px;
   }
 
-  td.n-delegates {
+  td.n-delegates, td.n-pledged-delegates {
     text-align: right;
     padding-right: .25rem; // smaller than others
   }
@@ -71,54 +72,20 @@ body.race-day table.candidates {
     width: 3em;
   }
 
-  td.n-delegates-dots {
+  td.n-delegates-dots, td.n-pledged-delegates-dots {
     padding-left: 0;
   }
 
-  th.n-delegates, td.n-delegates {
-    padding-left: 0;
-    width: 1px;
-  }
-
-  tr.highlight-on-map td.n-delegates-dots { color: white; }
+  tr.highlight-on-map td.n-delegates-dots,
+  tr.highlight-on-map td.n-pledged-delegates-dots { color: white; }
 }
 
 body.race-day .race {
-  .n-delegates-inner {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-justify-content: flex-start;
-    justify-content: flex-start;
-    -webkit-align-items: center;
-    align-items: center;
+  span.asterisk {
+    color: $strongDem;
   }
 
-  .n-delegates {
-    line-height: 1.4rem;
-
-    .without-candidates {
-      opacity: .35;
-    }
-
-    .dots {
-      @include dots-inline-block();
-      padding-right: .25rem;
-    }
-  }
-
-  .n-delegates-with-candidates {
-    margin-top: 1.5rem;
-    text-align: center;
-    font-size: .8rem;
-
-    p {
-      margin: 0 10px;
-      color: $muted;
-      line-height: 1.3em;
-    }
-  }
-
-  p.state-delegate-equivalents, p.poll-last-updated {
+  p.n-votes-footnote, p.poll-last-updated {
     font-size: .8rem;
     margin: .5rem 10px 1rem;
     color: $muted;
@@ -136,22 +103,26 @@ body.race-day .race {
 
 body.race-day .race[data-party-id="Dem"] {
   td.n-delegates-dots,
-  .n-delegates .dots .with-candidates { color: $strongDem; }
+  td.n-pledged-delegates-dots,
+  .dot-subgroup.with-candidates { color: $strongDem; }
 }
 
 body.race-day .race[data-party-id="GOP"] {
   td.n-delegates-dots,
-  .n-delegates .dots .with-candidates { color: $strongGOP; }
+  td.n-pledged-delegates-dots,
+  .dot-subgroup.with-candidates { color: $strongGOP; }
 }
 
-body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates,
-body.race-day .race:not(.has-delegate-counts) table.candidates .n-delegates-dots { display: none; }
+body.race-day .race:not(.has-delegate-counts) table.candidates {
+  .n-delegates, .n-delegates-dots { display: none; }
+}
+body.race-day .race:not(.has-pledged-delegate-counts) table.candidates {
+  .n-pledged-delegates, .n-pledged-delegates-dots { display: none; }
+}
 
 body.race-day .race.no-precincts-reporting {
   .n-votes, .percent-vote { display: none; }
 }
 
-body.race-day .race.precincts-reporting {
-  table.candidates td { cursor: pointer; }
-  .pollster { display: none; }
-}
+body.race-day .race.precincts-reporting:not(.not-today) table.candidates td { cursor: pointer; }
+body.race-day .race.precincts-reporting table.candidates .pollster { display: none; }

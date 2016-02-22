@@ -54,7 +54,7 @@ Assets.build # so asset_path() works
 require_relative '../app/models/database'
 
 def mock_database(date_string, last_date_string, source_overrides={})
-  date = Date.parse(date_string)
+  now = Time.parse(date_string)
   last_date = Date.parse(last_date_string)
 
   sheets_source = source_overrides[:sheets_source] || Database.default_sheets_source
@@ -62,10 +62,11 @@ def mock_database(date_string, last_date_string, source_overrides={})
   Database.new(
     source_overrides[:copy_source] || Database.default_copy_source,
     sheets_source,
+    source_overrides[:geo_ids_source] || Database.default_geo_ids_source,
     source_overrides[:ap_del_super_source] || Database.default_ap_del_super_source,
     source_overrides[:ap_election_days_source] || Database.default_ap_election_days_source,
     source_overrides[:pollster_source] || Database.default_pollster_source(sheets_source.parties, sheets_source.races),
-    date,
+    now,
     last_date
   )
 end

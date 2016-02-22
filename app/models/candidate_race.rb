@@ -14,9 +14,10 @@ CandidateRace = RubyImmutableStruct.new(:database, :candidate_id, :race_id, :n_v
     @candidate_state = database.candidate_states.find("#{@candidate_id}-#{@state_code}") # may be nil
   end
 
-  def n_delegates; @candidate_state.n_delegates; end
-  def poll_sparkline; @candidate_state.poll_sparkline; end
-  def poll_percent; @candidate_state.poll_percent; end
+  def n_delegates; @candidate_state ? @candidate_state.n_delegates : 0; end
+  def n_pledged_delegates; @candidate_state ? @candidate_state.n_pledged_delegates : 0; end
+  def poll_sparkline; @candidate_state ? @candidate_state.poll_sparkline : nil; end
+  def poll_percent; @candidate_state ? @candidate_state.poll_percent : nil; end
   def candidate_last_name; @candidate.name; end
   def winner?; ap_says_winner || huffpost_says_winner; end
   def leader?; @leader; end

@@ -52,7 +52,7 @@ function countdown($buttons, interval_s, callback_that_calls_a_callback) {
     $buttons.text(text);
   }
 
-  $buttons.on('click', click);
+  $buttons.on('click.countdown', click);
 
   start();
 }

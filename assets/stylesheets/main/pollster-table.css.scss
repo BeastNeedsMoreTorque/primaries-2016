@@ -5,24 +5,18 @@
   display: -webkit-flex;
   flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
+  margin-left: -20px;
+  margin-right: -20px;
 
   .t-pollster {
+    // Make it 23em, put two side-by-side when possible, and stack them when
+    // there isn't any room.
     box-sizing: border-box;
-    flex: 1 1 auto;
-    -webkit-flex: 1 1 auto;
-
-    width: 100%;
-
-    @media (min-width: 40rem) {
-      width: 50%;
-
-      &:first-child {
-        padding-right: 20px;
-      }
-      &:last-child {
-        padding-left: 20px;
-      }
-    }
+    padding: 0 20px;
+    -webkit-flex: 1 0 auto;
+    flex: 1 0 auto;
+    width: 23em;
+    max-width: 100%;
   }
 
   table {

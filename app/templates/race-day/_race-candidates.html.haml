@@ -3,13 +3,14 @@
     %tr
       %th.candidate Candidate
       %th.n-votes
-        - if race.n_votes_is_really_n_sdes
-          %abbr{title: 'State Delegate Equivalents'} SDEs
-          %sup> ∗
+        - if race.n_votes_th
+          = race.n_votes_th
+          %span.asterisk> *
         - else
           Votes
       %th.percent-vote= '%'
       %th.n-delegates{colspan: 2} Delegates
+      %th.n-pledged-delegates{colspan: 2} Delegates
       - if race.has_pollster_data?
         %th.pollster Polling Average 
   %tbody
@@ -22,17 +23,19 @@
         %td.n-votes= format_int(candidate_race.n_votes)
         %td.percent-vote= format_percent_or_nil(candidate_race.percent_vote)
         %td.n-delegates= format_int(candidate_race.n_delegates || 0)
-        %td.n-delegates-dots!= candidate_race_dot_groups(candidate_race).to_html
+        %td.n-delegates-dots!= candidate_race_dot_groups(candidate_race, :n_delegates).to_html
+        %td.n-pledged-delegates= format_int(candidate_race.n_pledged_delegates || 0)
+        %td.n-pledged-delegates-dots!= candidate_race_dot_groups(candidate_race, :n_pledged_delegates).to_html
         - if race.has_pollster_data?
           %td.pollster
             - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
               .sparkline!= candidate_race.poll_sparkline.to_svg
             %span.percent= format_percent_or_nil(candidate_race.poll_percent)
 
-- if race.n_votes_is_really_n_sdes
-  %p.state-delegate-equivalents.when-past.when-present
-    %sup ∗
-    The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention.
+- if race.n_votes_footnote
+  %p.n-votes-footnote.when-precincts-reporting
+    %span.asterisk *
+    = race.n_votes_footnote
 
 - if race.pollster_last_updated
   %p.poll-last-updated.when-no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.pollster_last_updated)}\"></time>"

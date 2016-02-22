@@ -8,6 +8,13 @@ var database = {
 };
 var on_database_change = []; // Array of zero-argument callbacks
 
+var include_unpledged_delegates = true;
+var on_include_unpledged_delegates_changed = [];
+function set_include_unpledged_delegates(value) {
+  include_unpledged_delegates = value;
+  on_include_unpledged_delegates_changed.forEach(function(callback) { callback(value); });
+}
+
 function n_precincts_text(n) {
   return n == 1 ? '1 precinct' : (n + ' precincts');
 }
@@ -48,26 +55,32 @@ function add_tooltips() {
         '<thead>' +
           '<tr>' +
             '<th class="candidate">Candidate</th>' +
-            '<th class="n-votes">Votes</th>' +
-            '<th class="n-votes n-state-delegate-equivalents"><abbr title="State Delegate Equivalents">SDEs</abbr>×100<sup>∗</sup></th>' +
+            '<th class="n-votes"></th>' +
             '<th class="percent-vote">%</th>' +
           '</tr>' +
         '</thead>' +
         '<tbody></tbody>' +
       '</table>' +
-      '<p class="n-state-delegate-equivalents"><sup>∗</sup> The Iowa Democratic Party reports State Delegate Equivalents (SDEs), not votes.</p>' +
+      '<p class="n-votes-footnote"><span class="asterisk">*</span> <span class="text"></span></p>' +
       '<p class="precincts"></p>' +
     '</div></div>');
   var svg_hover_path = null;
 
-  function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, is_from_touch) {
+  function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, n_votes_tooltip_th, n_votes_footnote, is_from_touch) {
     $tooltip.find('h4').text(county_name);
 
     if (n_total) {
       $tooltip.find('table').show();
       $tooltip.find('span.n-reporting').text(format_int(n_reporting));
       $tooltip.find('span.n-total').text(format_int(n_total));
+      $tooltip.find('th.n-votes').text(n_votes_tooltip_th || 'Votes');
       $tooltip.find('p.precincts').text(n_precincts_reporting_text(n_reporting, n_total)).removeClass('no-precincts-note');
+      if (n_votes_footnote) {
+        $tooltip.find('th.n-votes').append('<span class="asterisk">*</span>');
+        $tooltip.find('p.n-votes-footnote .text').text(n_votes_footnote).show();
+      } else {
+        $tooltip.find('p.n-votes-footnote').hide();
+      }
       $tooltip.toggleClass('opened-from-touch', is_from_touch);
 
       var $tbody = $tooltip.find('tbody').empty();
@@ -172,6 +185,8 @@ function add_tooltips() {
 
   function show_tooltip_for_svg_path(svg_path, is_from_touch) {
     var geo_name = svg_path.getAttribute('data-name');
+    var n_votes_tooltip_th = $(svg_path).closest('[data-n-votes-tooltip-th]').attr('data-n-votes-tooltip-th');
+    var n_votes_footnote = $(svg_path).closest('[data-n-votes-footnote]').attr('data-n-votes-footnote');
     var party_id = $(svg_path).closest('[data-party-id]').attr('data-party-id');
     var state_code = $(svg_path).closest('[data-state-code]').attr('data-state-code');
     var candidates = extract_candidate_list($(svg_path).closest('.party-state').find('table.candidates'));
@@ -185,12 +200,10 @@ function add_tooltips() {
     }
 
     if (data) {
-      update_tooltip(geo_name, candidates, data.n_votes, data.n_reporting, data.n_total, is_from_touch);
-      $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
+      update_tooltip(geo_name, candidates, data.n_votes, data.n_reporting, data.n_total, n_votes_tooltip_th, n_votes_footnote, is_from_touch);
       position_tooltip_near_svg_path(svg_path);
     } else {
       update_tooltip(geo_name);
-      $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
       position_tooltip_near_svg_path(svg_path);
     }
   }
@@ -259,7 +272,7 @@ function add_tooltips() {
    */
   $(document).on('click', '.race-tooltip a.close', on_mouseleave);
 
-  $('.party-state-map svg').each(function() {
+  $('.race:not(.not-today) .party-state-map svg').each(function() {
     add_tooltip(this);
   });
 }
@@ -517,7 +530,7 @@ function color_counties() {
     });
   }
 
-  $('.party-state-map svg').each(function() {
+  $('.race:not(.not-today) .party-state-map svg').each(function() {
     var $race = $(this).closest('.race');
     var $table = $race.find('table');
     var party_id = $race.attr('data-party-id');
@@ -528,13 +541,13 @@ function color_counties() {
 }
 
 function poll_results() {
-  var els_by_candidate_id_and_state_code = null; // Maps "123-CA" to { n_votes, n_delegates, tr }.
+  var els_by_candidate_id_and_state_code = null; // Maps "123-CA" to { n_votes, n_delegates, n_pledged_delegates, tr }.
   function ensure_els_by_candidate_id_and_state_code_is_populated() {
     if (els_by_candidate_id_and_state_code) return;
 
     var els = els_by_candidate_id_and_state_code = {};
 
-    $('.race[data-state-code]').each(function() {
+    $('.race:not(.not-today)[data-state-code]').each(function() {
       var state_code = this.getAttribute('data-state-code');
 
       $('tr[data-candidate-id]', this).each(function() {
@@ -546,7 +559,9 @@ function poll_results() {
           n_votes: $('td.n-votes', this),
           percent_vote: $('td.percent-vote', this),
           n_delegates_dots: $('td.n-delegates-dots', this),
-          n_delegates_int: $('td.n-delegates', this)
+          n_delegates_int: $('td.n-delegates', this),
+          n_pledged_delegates_dots: $('td.n-pledged-delegates-dots', this),
+          n_pledged_delegates_int: $('td.n-pledged-delegates', this)
         };
       });
     });
@@ -558,28 +573,33 @@ function poll_results() {
 
     var els = els_by_party_id_and_state_code = {};
 
-    $('.race[data-party-id][data-state-code]').each(function() {
+    $('.race:not(.not-today)[data-party-id][data-state-code]').each(function() {
       var party_id = this.getAttribute('data-party-id');
       var state_code = this.getAttribute('data-state-code');
 
-      var $ndwc = $('.n-delegates-with-candidates', this);
+      var $psd = $('.party-state-delegates', this);
 
       var these_els = els[party_id + '-' + state_code] = {
         race: $(this),
         n_precincts: $('.race-status .n-precincts-reporting', this),
         last_updated: $('.race-status time', this),
         n_delegates_with_candidates: {
-          dots: $ndwc.find('.dots', this),
-          int_with_candidates: $ndwc.find('.n-delegates-with-candidates-int', this),
-          int_total: $ndwc.find('.n-delegates-int', this)
+          dots: $psd.find('.n-delegates-dots', this),
+          int_with_candidates: $psd.find('.n-delegates-with-candidates-int', this),
+          int_total: $psd.find('.n-delegates-int', this)
         },
+        n_pledged_delegates_with_candidates: {
+          dots: $psd.find('.n-pledged-delegates-dots', this),
+          int_with_candidates: $psd.find('.n-pledged-delegates-with-candidates-int', this),
+          int_total: $psd.find('.n-pledged-delegates-int', this)
+        }
       };
     });
   }
 
   function tr_order_matches_document_order(trs_in_order) {
     // Merge sort two Arrays of <tr> elements
-    var document_trs = $('table.candidates tbody tr').get();
+    var document_trs = $('.race:not(.not-today) table.candidates tbody tr').get();
 
     if (document_trs.length != trs_in_order.length) {
       return false; // should never happen; undefined behavior if it does
@@ -609,7 +629,8 @@ function poll_results() {
       var n_votes = +arr[2];
       var percent_vote = +arr[3];
       var n_delegates = +arr[4];
-      var winner = (arr[5] == 'true');
+      var n_pledged_delegates = +arr[5];
+      var winner = (arr[6] == 'true');
 
       var key = candidate_id + '-' + state_code;
       var elems = els_by_candidate_id_and_state_code[key];
@@ -621,6 +642,8 @@ function poll_results() {
 
         elems.n_delegates_dots.assign_simple_dot_groups(n_delegates);
         elems.n_delegates_int.text(format_int(n_delegates));
+        elems.n_pledged_delegates_dots.assign_simple_dot_groups(n_pledged_delegates);
+        elems.n_pledged_delegates_int.text(format_int(n_pledged_delegates));
       }
     });
 
@@ -641,10 +664,13 @@ function poll_results() {
       var n_reporting = +arr[2];
       var n_total = +arr[3];
       var has_delegate_counts = arr[4] == 'true';
-      var last_updated = new Date(arr[5]);
-      var when_race_happens = arr[6]; // 'past', 'present' or 'future'
-      var n_delegates_with_candidates = +arr[7];
-      var n_delegates = +arr[8];
+      var has_pledged_delegate_counts = arr[5] == 'true';
+      var last_updated = new Date(arr[6]);
+      var when_race_happens = arr[7]; // 'past', 'present' or 'future'
+      var n_delegates_with_candidates = +arr[8];
+      var n_delegates = +arr[9];
+      var n_pledged_delegates_with_candidates = +arr[10];
+      var n_pledged_delegates = +arr[11];
 
       var key = party_id + '-' + state_code;
 
@@ -655,7 +681,9 @@ function poll_results() {
           .addClass(when_race_happens)
           .removeClass('no-precincts-reporting precincts-reporting')
           .addClass(n_reporting > 0 ? 'precincts-reporting' : 'no-precincts-reporting')
-          .toggleClass('has-delegate-counts', has_delegate_counts);
+          .toggleClass('has-delegate-counts', has_delegate_counts)
+          .toggleClass('has-pledged-delegate-counts', has_pledged_delegate_counts)
+          ;
 
         elems.n_precincts.text(n_precincts_reporting_text(n_reporting, n_total));
         if (!isNaN(last_updated.getFullYear())) {
@@ -665,6 +693,10 @@ function poll_results() {
         dels.dots.assign_bisected_dot_groups('with-candidates', n_delegates_with_candidates, 'without-candidates', n_delegates - n_delegates_with_candidates);
         dels.int_with_candidates.text(format_int(n_delegates_with_candidates));
         dels.int_total.text(format_int(n_delegates));
+
+        dels = elems.n_pledged_delegates_with_candidates;
+        dels.dots.assign_bisected_dot_groups('with-candidates', n_pledged_delegates_with_candidates, 'without-candidates', n_pledged_delegates - n_pledged_delegates_with_candidates);
+        dels.int_with_candidates.text(format_int(n_pledged_delegates_with_candidates))
       }
     });
   }
@@ -687,33 +719,37 @@ function poll_results() {
 
   $('button.refresh')
     .countdown(30, do_poll)
-    .click(); // poll immediately on page load
+    .trigger('click.countdown'); // poll immediately on page load, to populate map; don't trigger AOL beacon
 }
 
 /**
- * Ensures that when Democratic and Republican <p class="text"> blurbs are
+ * Ensures that when Democratic and Republican <div class="status">s are
  * aligned, their heights are identical.
  *
  * This makes the rest of the page flow nicely.
  */
-function fix_text_heights() {
+function line_up_race_divs() {
   var refresh_requested = false;
 
   function refresh_text_heights() {
     refresh_requested = false;
 
-    $('li.state p.text').css({ height: 'auto' });
+    $('.race-status, .party-state-map').css({ height: 'auto' });
 
-    $('li.state').each(function() {
-      var $ps = $('p.text', this);
-      if ($ps.length == 2) {
-        if ($ps[0].getBoundingClientRect().top == $ps[1].getBoundingClientRect().top) {
-          var $p1 = $ps.first();
-          var $p2 = $ps.last();
-          var h = Math.max($p1.height(), $p2.height());
-          $ps.css({ height: h + 'px' });
+    $('ul.party-state').each(function() {
+      var el = this;
+
+      [ '.race-status', '.party-state-map' ].forEach(function(class_name) {
+        var $divs = $(class_name, el);
+        if ($divs.length == 2) {
+          if ($divs[0].getBoundingClientRect().top == $divs[1].getBoundingClientRect().top) {
+            var $p1 = $divs.first();
+            var $p2 = $divs.last();
+            var h = Math.max($p1.height(), $p2.height());
+            $divs.css({ height: h + 'px' });
+          }
         }
-      }
+      });
     });
   }
 
@@ -727,13 +763,25 @@ function fix_text_heights() {
   refresh_text_heights();
 }
 
+function update_include_unpledged_delegates_checkboxes(checked) {
+  $('input[name=include-unpledged-delegates]').prop('checked', checked)
+}
+on_include_unpledged_delegates_changed.push(update_include_unpledged_delegates_checkboxes);
+
+function update_body_include_unpledged_delegates(checked) {
+  $('body')
+    .toggleClass('show-delegates', checked)
+    .toggleClass('show-pledged-delegates', !checked);
+}
+on_include_unpledged_delegates_changed.push(update_body_include_unpledged_delegates);
+
 $(function() {
   $('body.race-day').each(function() {
     $('time').render_datetime();
 
     wait_for_font_then('Source Sans Pro', function() {
-      fix_text_heights();
-      $('.race svg').position_svg_cities();
+      line_up_race_divs();
+      $('.party-state-map svg').position_svg_cities();
     });
 
     add_tooltips();
@@ -747,5 +795,9 @@ $(function() {
 
   $(".dropdown-link").click(function() {
     $('.dropdown-menu').toggleClass("visible");
+  });
+
+  $(document).on('click', 'input[name=include-unpledged-delegates]', function() {
+    set_include_unpledged_delegates(this.checked);
   });
 });

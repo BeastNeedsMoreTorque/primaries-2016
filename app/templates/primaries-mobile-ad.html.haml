@@ -34,16 +34,17 @@
               %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
             %span.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
             %span.frontrunner-unit.when-present.when-past
-              - if race.n_votes_is_really_n_sdes
-                SDEs *
+              - if race.n_votes_th
+                = race.n_votes_th
+                %span.asterisk *
               - else
-                %span.frontrunner-unit.when-present.when-past Votes 
+                Votes
             .frontrunner-num.pct.when-present.when-past= "#{format_percent_or_nil(leader.percent_vote)}%"
 
-  - if race_day.races.any?(&:n_votes_is_really_n_sdes)
-    %p.source.sde.when-present.when-past
-      * Iowa Democrats report State Delegate Equivalents (SDEs), predictions of
-      who will attend the state-wide party convention.
+  - race_day.races.map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
+    %p.source.when-present.when-past
+      %span.asterisk *
+      = footnote
 
   .tease-link.when-past
     %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See results"
