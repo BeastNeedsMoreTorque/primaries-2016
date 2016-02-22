@@ -15,6 +15,8 @@ class BaseView
   def last_date; database.last_date; end
   def copy; database.copy; end
 
+  def social_image_url; absolute_image_path_if_possible('share.png'); end
+
   def layout; nil; end
 
   # Turns Markdown into HTML

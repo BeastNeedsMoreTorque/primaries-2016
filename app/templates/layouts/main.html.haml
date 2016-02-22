@@ -3,33 +3,33 @@
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
-    %title= meta[:page_title]
+    %title HuffPost 2016 Election Coverage: #{hed}
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
-    %meta{name: 'author', content: meta[:author]}
-    %meta{name: 'description', content: meta[:page_description]}
+    %meta{name: 'author', content: 'HuffPostPolitics'}
+    %meta{name: 'description', content: meta_description}
 
     - if ENV['FACEBOOK_APP_ID']
       %meta{property: 'fb:app_id', content: ENV['FACEBOOK_APP_ID']}
-    %meta{property: 'og:description', content: meta[:page_description]}
+    %meta{property: 'og:description', content: social_description}
     %meta{property: 'og:type', content: 'article'}
     %meta{property: 'og:site_name', content: 'The Huffington Post'}
     %meta{property: 'og:url', content: "http://elections.huffingtonpost.com/#{output_path[0 .. -5]}"}
 
-    - if meta[:social_image_url] =~ /^https?:\/\//
-      %meta{property: 'og:image', content: meta[:social_image_url]}
-      %meta{name: 'twitter:image', content: meta[:social_image_url]}
+    - if social_image_url =~ /^https?:\/\//
+      %meta{property: 'og:image', content: social_image_url}
+      %meta{name: 'twitter:image', content: social_image_url}
     - else
-      / og:image and twitter:image omitted because meta[:social_image_url] is a relative URL
+      / og:image and twitter:image omitted because social_image_url is a relative URL
 
     %meta{property: 'article:publisher', content: 'HuffingtonPost'}
-    %meta{property: 'article:author', content: meta[:author]}
+    %meta{property: 'article:author', content: 'HuffPostPolitics'}
 
     %meta{name: 'twitter:card', content: 'summary_large_image'}
-    %meta{name: 'twitter:creator', content: meta[:author_twitter]}
-    %meta{name: 'twitter:title', content: meta[:page_title]}
+    %meta{name: 'twitter:creator', content: 'HuffPostPol'}
+    %meta{name: 'twitter:title', content: "HuffPost 2016 Election Coverage: #{hed}"}
 
-    -# For our own benefit:
-    %meta{property: 'suggested-tweet', content: meta[:twitter_desc]}
+    -# Our own JS uses this one
+    %meta{property: 'suggested-tweet', content: suggested_tweet}
 
     %link{rel: 'stylesheet', href: '//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic'}
     %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
