@@ -70,18 +70,33 @@ $widest-mobile: 660px;
 
 @mixin tense-conditionals {
   .race-day-past {
-    .when-future:not(.when-past),
-    .when-present:not(.when-past) { display: none;}
+    .when-race-day-future:not(.when-race-day-past),
+    .when-race-day-present:not(.when-race-day-past) { display: none;}
   }
 
   .race-day-present {
-    .when-future:not(.when-present),
-    .when-past:not(.when-present) { display: none;}
+    .when-race-day-future:not(.when-race-day-present),
+    .when-race-day-past:not(.when-race-day-present) { display: none;}
   }
 
   .race-day-future {
-    .when-past:not(.when-future),
-    .when-present:not(.when-future) { display: none; }
+    .when-race-day-past:not(.when-race-day-future),
+    .when-race-day-present:not(.when-race-day-future) { display: none; }
+  }
+
+  .race-past {
+    .when-race-future:not(.when-race-past),
+    .when-race-present:not(.when-race-past) { display: none;}
+  }
+
+  .race-present {
+    .when-race-future:not(.when-race-present),
+    .when-race-past:not(.when-race-present) { display: none;}
+  }
+
+  .race-future {
+    .when-race-past:not(.when-race-future),
+    .when-race-present:not(.when-race-future) { display: none; }
   }
 }
 
@@ -250,10 +265,6 @@ $widest-mobile: 660px;
       font-size: 0.8em;
     }
   }
-}
-
-@mixin mobile-ad-base {
-	@include widget-base;
 }
 
 @mixin svg-city-label {

@@ -42,11 +42,21 @@ $(function() {
 
   function update_precincts_reporting_from_json($race, string) {
     $race.find('.precincts-val').text(string);
+    $race
+      .toggleClass('no-precincts-reporting', string == 'N/A')
+      .toggleClass('precincts-reporting', string != 'N/A');
+  }
+
+  function update_when_race_happens_from_json($race, tense) {
+    $race
+      .removeClass('race-past race-present race-future')
+      .addClass('race-' + tense);
   }
 
   function update_race_from_json(race_json) {
     var $race = $('#' + race_json.id);
 
+    update_when_race_happens_from_json($race, race_json.when_race_happens);
     update_svg_from_json($race, race_json);
     update_candidates_from_json($race, race_json.candidates);
     update_precincts_reporting_from_json($race, race_json.precincts_reporting_percent);

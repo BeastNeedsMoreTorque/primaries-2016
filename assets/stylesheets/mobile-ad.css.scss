@@ -1,24 +1,22 @@
 @import '_variables';
 
-@include tense-conditionals;
-
-.primary-mobile-ad {
-	@include mobile-ad-base;
+body {
+  font-family: $huffpo-font-family;
+  margin: 0 auto;
+  max-width: 305px;
 }
 
-body {
+h1, h2, h3 {
+  font-family: $header-font-family;
+}
+
+h1, h2, h3, p {
+  text-align: center;
   margin: 0;
 }
 
-.head {
-	@include header-copy;
-	text-align: center;
-	h1, h3 {
-		margin: 0;
-	}
-	p {
-		margin: 0;
-	}
+a {
+  color: #2e7061;
 }
 
 .source {
@@ -29,21 +27,6 @@ body {
 	}
 }
 
-.countdown-container {
-	font-weight: bold;
-	margin: 5px;
-	text-align: center;
-	span {
-		&:not(.lbl) {
-			font-size: 20px;
-		}
-		&.lbl {
-			font-size: 12px;
-			padding-top: 10px;
-		}
-	}
-}
-
 .parties-container {
 	display: -webkit-flex;
   display: flex;
@@ -51,15 +34,16 @@ body {
   justify-content: center;
   -webkit-align-items: center;
   -webkit-justify-content: center;
-	width: 100%;
+  margin: 5px 0;
 }
 
 .party-container {
-	margin-top: 5px;
-	margin-bottom: 5px;
-	border-right: 3px solid #fff;
-	border-left: 3px solid #fff;
-	width: 150px;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+  &:first-child { border-right: 3px solid white; }
+  &:last-child { border-left: 3px solid white; }
+	width: 50%;
 	&.Dem {
 		background: $widgetLightBlue;
 	}
@@ -70,39 +54,29 @@ body {
 
 .frontrunner-lbl {
 	padding: 5px 10px;
+	margin: 0 0 5px 0;
 	text-align: center;
   text-transform: uppercase;
-	margin: 0 0 5px 0;
 	color: #fff;
 	font-size: 12px;
-	width: 100%;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	@include vertical-center-flex;
+  line-height: 20px;
+
 	img {
 		width: 20%;
+    float: left;
 	}
 	div {
-		width: 80%;
-		text-align: center;
 		margin-left: 5px;
-		font-size: 1em;
 	}
-	p {
-		margin: 0;
-	}
-	.Dem & {
-		background: $widgetBlue;
-	}
-	.GOP & {
-		background: $widgetRed;
-	}
+	.Dem & { background: $widgetBlue; }
+	.GOP & { background: $widgetRed; }
 }
 
 .img-stats-container {
-	@include vertical-center-flex;
-	width: 100%;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  -webkit-align-items: center;
 }
 
 .leading-candidate-img {
@@ -145,38 +119,17 @@ body {
 	}
 }
 
-.frontrunner-num {
-	//font-size: 18px;
-	&.pct {
-		//font-size: 12px;
-	}
-}
-
-.frontrunner-unit {
-}
-
 .no-results {
-	h4 {
-		text-align: center;
-	}
 	margin: 0 auto;
 }
 
 p.precincts {
-	@include huffpo-body-copy;
 	font-weight: bold;
-	text-align: center;
 	margin: 0 5px 5px 5px;
 }
 
 .tease-link {
 	@include tease-link();
-	@include huffpo-body-copy;
-	margin: 5px;
-	max-width: 305px;
-	text-align: center;
+  margin-top: 5px;
 	margin: 0 auto;
-	a {
-    color: #2e7061;
-	}
 }
