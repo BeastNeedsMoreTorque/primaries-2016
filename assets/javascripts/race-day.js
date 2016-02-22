@@ -23,7 +23,7 @@ function n_precincts_reporting_text(reporting, total) {
   if (total == 0) {
     return 'There are no precincts here';
   } else {
-    return reporting + ' of ' + n_precincts_text(total) + ' reporting (' + Math.round(100 * reporting / total) + '%)';
+    return reporting + ' of ' + n_precincts_text(total) + ' reporting (' + format_percent_int(100 * reporting / total) + '%)';
   }
 }
 
