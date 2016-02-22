@@ -22,7 +22,7 @@
             See preview &raquo;
 
   %h3.section-hed Who&rsquo;s Ahead?
-  .pollster-tables
+  .pollster-tables.show-n-delegates
     != render(partial: 'pollster-table', locals: { party: parties.find!('Dem') })
     != render(partial: 'pollster-table', locals: { party: parties.find!('GOP') })
 
