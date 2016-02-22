@@ -22,13 +22,10 @@ body {
 }
 
 .source {
-	font-size: 11px;
+	font-size: .8rem;
+  text-align: center;
 	a {
-		color: black;
-	}
-	&.sde {
-		text-align: center;
-		@include huffpo-body-copy;
+		color: inherit;
 	}
 }
 

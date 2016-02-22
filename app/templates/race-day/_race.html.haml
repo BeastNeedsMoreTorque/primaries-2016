@@ -7,7 +7,7 @@
 - if !is_today
   - html_class << ' not-today'
 
-.race{id: race.anchor, 'data-party-id': race.party_id, 'data-state-code': race.state_code, class: html_class}
+.race{id: race.anchor, 'data-party-id': race.party_id, 'data-state-code': race.state_code, 'data-n-votes-tooltip-th': race.n_votes_tooltip_th, 'data-n-votes-footnote': race.n_votes_footnote, class: html_class}
   %h3.race-name= race.title
 
   .race-status

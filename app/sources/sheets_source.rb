@@ -23,7 +23,18 @@ class SheetsSource
     end
   end
 
-  Race = RubyImmutableStruct.new(:race_day_id, :party_id, :state_code, :race_type, :expect_results_time, :ap_says_its_over, :huffpost_override_winner_last_name) do
+  Race = RubyImmutableStruct.new(
+    :race_day_id,
+    :party_id,
+    :state_code,
+    :race_type,
+    :expect_results_time,
+    :ap_says_its_over,
+    :huffpost_override_winner_last_name,
+    :n_votes_th,
+    :n_votes_tooltip_th,
+    :n_votes_footnote
+  ) do
     attr_reader(:id)
     attr_reader(:party_state_id)
 
@@ -52,9 +63,12 @@ class SheetsSource
     end
 
     @races = races_tsv.split(/\r?\n/)[1..-1].map do |line|
-      date_s, party_id, state_code, race_type, expect_results_ISO8601_UTC, ap_says_its_over, huffpost_override_winner_last_name = line.split(/\t/)
-      expect_results_time = expect_results_ISO8601_UTC && Time.parse(expect_results_ISO8601_UTC) || nil
-      Race.new(date_s, party_id, state_code, race_type, expect_results_time, ap_says_its_over == 'TRUE', huffpost_override_winner_last_name || nil)
+      arr = line.split(/\t/)
+        .map! { |x| x.empty? ? nil : x }
+      arr[4] = Time.parse(arr[4]) if arr[4] # expect_results_time
+      arr[5] = (arr[5] == 'TRUE')           # ap_says_its_over
+
+      Race.new(*arr)
     end
 
     @race_days = race_days_tsv.split(/\r?\n/)[1..-1].map do |line|

@@ -3,9 +3,9 @@
     %tr
       %th.candidate Candidate
       %th.n-votes
-        - if race.n_votes_is_really_n_sdes
-          %abbr{title: 'State Delegate Equivalents'} SDEs
-          %sup> ∗
+        - if race.n_votes_th
+          = race.n_votes_th
+          %span.asterisk> *
         - else
           Votes
       %th.percent-vote= '%'
@@ -32,10 +32,10 @@
               .sparkline!= candidate_race.poll_sparkline.to_svg
             %span.percent= format_percent_or_nil(candidate_race.poll_percent)
 
-- if race.n_votes_is_really_n_sdes
-  %p.state-delegate-equivalents.when-past.when-present
-    %sup ∗
-    The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention.
+- if race.n_votes_footnote
+  %p.n-votes-footnote.when-precincts-reporting
+    %span.asterisk *
+    = race.n_votes_footnote
 
 - if race.pollster_last_updated
   %p.poll-last-updated.when-no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.pollster_last_updated)}\"></time>"

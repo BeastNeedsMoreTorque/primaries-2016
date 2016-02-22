@@ -10,7 +10,10 @@ Race = RubyImmutableStruct.new(
   :n_precincts_reporting,
   :n_precincts_total,
   :last_updated,
-  :ap_says_its_over
+  :ap_says_its_over,
+  :n_votes_th,
+  :n_votes_tooltip_th,
+  :n_votes_footnote
 ) do
   include Comparable
 

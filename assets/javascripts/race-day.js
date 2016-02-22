@@ -55,26 +55,32 @@ function add_tooltips() {
         '<thead>' +
           '<tr>' +
             '<th class="candidate">Candidate</th>' +
-            '<th class="n-votes">Votes</th>' +
-            '<th class="n-votes n-state-delegate-equivalents"><abbr title="State Delegate Equivalents">SDEs</abbr>×100<sup>∗</sup></th>' +
+            '<th class="n-votes"></th>' +
             '<th class="percent-vote">%</th>' +
           '</tr>' +
         '</thead>' +
         '<tbody></tbody>' +
       '</table>' +
-      '<p class="n-state-delegate-equivalents"><sup>∗</sup> The Iowa Democratic Party reports State Delegate Equivalents (SDEs), not votes.</p>' +
+      '<p class="n-votes-footnote"><span class="asterisk">*</span> <span class="text"></span></p>' +
       '<p class="precincts"></p>' +
     '</div></div>');
   var svg_hover_path = null;
 
-  function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, is_from_touch) {
+  function update_tooltip(county_name, candidates, n_votes_in_county, n_reporting, n_total, n_votes_tooltip_th, n_votes_footnote, is_from_touch) {
     $tooltip.find('h4').text(county_name);
 
     if (n_total) {
       $tooltip.find('table').show();
       $tooltip.find('span.n-reporting').text(format_int(n_reporting));
       $tooltip.find('span.n-total').text(format_int(n_total));
+      $tooltip.find('th.n-votes').text(n_votes_tooltip_th || 'Votes');
       $tooltip.find('p.precincts').text(n_precincts_reporting_text(n_reporting, n_total)).removeClass('no-precincts-note');
+      if (n_votes_footnote) {
+        $tooltip.find('th.n-votes').append('<span class="asterisk">*</span>');
+        $tooltip.find('p.n-votes-footnote .text').text(n_votes_footnote).show();
+      } else {
+        $tooltip.find('p.n-votes-footnote').hide();
+      }
       $tooltip.toggleClass('opened-from-touch', is_from_touch);
 
       var $tbody = $tooltip.find('tbody').empty();
@@ -179,6 +185,8 @@ function add_tooltips() {
 
   function show_tooltip_for_svg_path(svg_path, is_from_touch) {
     var geo_name = svg_path.getAttribute('data-name');
+    var n_votes_tooltip_th = $(svg_path).closest('[data-n-votes-tooltip-th]').attr('data-n-votes-tooltip-th');
+    var n_votes_footnote = $(svg_path).closest('[data-n-votes-footnote]').attr('data-n-votes-footnote');
     var party_id = $(svg_path).closest('[data-party-id]').attr('data-party-id');
     var state_code = $(svg_path).closest('[data-state-code]').attr('data-state-code');
     var candidates = extract_candidate_list($(svg_path).closest('.party-state').find('table.candidates'));
@@ -192,12 +200,10 @@ function add_tooltips() {
     }
 
     if (data) {
-      update_tooltip(geo_name, candidates, data.n_votes, data.n_reporting, data.n_total, is_from_touch);
-      $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
+      update_tooltip(geo_name, candidates, data.n_votes, data.n_reporting, data.n_total, n_votes_tooltip_th, n_votes_footnote, is_from_touch);
       position_tooltip_near_svg_path(svg_path);
     } else {
       update_tooltip(geo_name);
-      $tooltip.toggleClass('is-state-delegate-equivalents', party_id == 'Dem' && state_code == 'IA');
       position_tooltip_near_svg_path(svg_path);
     }
   }

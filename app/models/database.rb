@@ -376,7 +376,10 @@ class Database
         ap_race ? ap_race.n_precincts_reporting : nil,
         ap_race ? ap_race.n_precincts_total : nil,
         ap_race ? ap_race.last_updated : nil,
-        sheets_race.ap_says_its_over
+        sheets_race.ap_says_its_over,
+        sheets_race.n_votes_th,
+        sheets_race.n_votes_tooltip_th,
+        sheets_race.n_votes_footnote
       )
     end
 
