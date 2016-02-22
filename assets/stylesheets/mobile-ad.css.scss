@@ -19,7 +19,7 @@ a {
   color: #2e7061;
 }
 
-.source {
+.source, .footnote {
 	font-size: .8rem;
   text-align: center;
 	a {
@@ -126,6 +126,11 @@ a {
 p.precincts {
 	font-weight: bold;
 	margin: 0 5px 5px 5px;
+}
+
+.footnote {
+  padding: .25rem 0;
+  text-align: left;
 }
 
 .tease-link {

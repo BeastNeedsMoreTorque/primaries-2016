@@ -47,8 +47,8 @@
                   Votes
               .frontrunner-num.pct= "#{format_percent_or_nil(leader.percent_vote)}%"
 
-  - race_day.races.select(&:future?).map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
-    %p.source
+  - race_day.races.reject(&:future?).map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
+    %p.footnote
       %span.asterisk *
       = footnote
 
