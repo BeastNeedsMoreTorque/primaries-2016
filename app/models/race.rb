@@ -118,6 +118,21 @@ Race = RubyImmutableStruct.new(
   def has_delegates_without_candidates?; n_delegates_without_candidates > 0; end
   def has_pledged_delegates_without_candidates?; n_pledged_delegates_without_candidates > 0; end
 
+  # Describes how many precincts are reporting.
+  #
+  # This is ONLY meant to be shown for a "past" race. It only returns these
+  # phrases:
+  #
+  # * "All precincts reporting"
+  # * "{n} of {n} precincts reporting"
+  def precincts_reporting_sentence
+    if all_precincts_reporting?
+      'All precincts reporting'
+    else
+      "#{n_precincts_reporting} of #{n_precincts_total} reporting"
+    end
+  end
+
   def pct_precincts_reporting
     reporting_str = if n_precincts_total.nil? || n_precincts_total == 0
       'N/A'
@@ -174,6 +189,7 @@ Race = RubyImmutableStruct.new(
   def future?; when_race_happens == 'future'; end
 
   def any_precincts_reporting?; (n_precincts_reporting || 0) > 0; end
+  def all_precincts_reporting?; !n_precincts_reporting.nil? && n_precincts_reporting == n_precincts_total; end
 
   # Returns something like:
   #

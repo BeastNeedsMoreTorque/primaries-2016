@@ -13,12 +13,17 @@
   .race-status
     - if is_today
       .status-past
-        %p All precincts reporting
+        - if race.all_precincts_reporting?
+          %p All precincts reporting
+        - else
+          -# Let JS fill in number of precincts reporting
+          %p.n-precincts-reporting &nbsp;
         %p
           Last updated:
           %time{datetime: race.last_updated.nil? ? '' : format_datetime(race.last_updated)}
       .status-present
         %button.refresh 0:30
+        -# Let JS fill in number of precincts reporting
         %p.n-precincts-reporting &nbsp;
       .status-future= race.results_coming_s
 
