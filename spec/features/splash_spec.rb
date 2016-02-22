@@ -10,7 +10,13 @@ describe 'The splash banner', type: :feature do
 
   def ap_election_days_source_with_winner(candidate_id)
     source = Database.default_ap_election_days_source
-    source.candidate_races.map! { |cr| cr.merge(ap_says_winner: (candidate_id == cr.candidate_id), huffpost_says_winner: false) }
+    source.candidate_races.map! { |cr| cr.merge(winner: (candidate_id == cr.candidate_id)) }
+    source
+  end
+
+  def sheets_source_without_winners
+    source = Database.default_sheets_source
+    source.races.map! { |r| r.merge(huffpost_override_winner_last_name: nil) }
     source
   end
 
@@ -28,7 +34,8 @@ describe 'The splash banner', type: :feature do
       '2016-02-01',
       '2016-02-01',
       focus_race_day_id: '2016-02-01',
-      ap_election_days_source: ap_election_days_source_with_winner(candidate_id)
+      ap_election_days_source: ap_election_days_source_with_winner(candidate_id),
+      sheets_source: sheets_source_without_winners
     )
   end
 
