@@ -1,60 +1,14 @@
-.1-race
+.one-race
   - race = race_day.races.first
-  .race{'data-party-id': race.party_id, id: race.id, class: "race-#{race.when_race_happens} #{race.any_precincts_reporting? ? '' : 'no-'}-precincts-reporting"}
-    .party-container
-      .party-header
-        .leading-candidate-img
-          %img{src: image_path("#{race.party_id}.svg"), alt: ''}
-        .leading-candidate-delegates.left
-          .frontrunner-lbl
-            %span #{race.party_adjective} Candidates
-            - if race.n_votes_th
-              %span!= "Total #{race.n_votes_th} <span class=\"asterisk\">*</span>"
-            - else
-              %span Total votes
-      .candidate-position-listing
-        %table
-          %tbody
-            - race.candidate_races[0..2].each do |candidate_race|
-              - candidate = candidate_race.candidate
-              %tr.candidate{'data-candidate-id': candidate.id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
-                %td.candidate-name= candidate.name
-                %td.n-votes= format_int(candidate_race.n_votes)
-                %td.n-votes-pct= "#{format_percent_or_nil(candidate_race.percent_vote || 0)}%"
-      - if race.n_votes_footnote
-        .n-votes-footnote
-          %span.asterisk *
-          = race.n_votes_footnote
-      - if race.candidate_races.length > 3
-        .see-all-candidates
-          %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
+  .race{'data-party-id': race.party_id, id: race.id, class: "race-#{race.when_race_happens} #{race.any_precincts_reporting? ? '' : 'no-'}precincts-reporting"}
+    != render(partial: 'primaries/splash/party-candidate-listing', locals: { race: race })
 
-    .map-precincts-container
-      .precincts.when-race-present.when-race-past
-        %span.precincts-val= race.pct_precincts_reporting
-        of precincts reporting
-      .precincts.when-race-future= race.results_coming_s
-      .map-container
-        .map
-          != map_svg("states/#{race.state_code}")
-        .legend-and-status
-          .race-status.when-race-present
-            %button.refresh 0:30
-          %ul.legend.when-precincts-reporting
-            %li
-              %span.swatch.leading
-              %span.name= race.candidate_races.first.candidate.name
-              leads
-            %li
-              %span.swatch.trailing
-              %span.name= race.candidate_races.first.candidate.name
-              trails
-            %li
-              %span.swatch.no-results
-              No results
-          %p.tease-link
-            %a{target: '_blank', href: race.href}
-              %span.when-race-future
-                See preview
-              %span.when-race-past.when-race-present
-                See results
+    .precincts-status-tease
+      != render(partial: 'primaries/splash/precincts-reporting', locals: { race: race })
+      .race-status.when-race-present
+        %button.refresh 0:30
+      != render(partial: 'primaries/splash/tease-link', locals: { race: race })
+
+    .map!= map_svg("states/#{race.state_code}")
+
+    != render(partial: 'primaries/splash/map-legend', locals: { leader_name: race.candidate_races.first.candidate_last_name })

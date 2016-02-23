@@ -27,9 +27,7 @@ $(function() {
   }
 
   function update_candidates_from_json($race, candidates_json) {
-    var table_arr = [ '<table><tbody>' ];
-
-    var tr_strings = candidates_json.slice(0, 3).map(function(candidate_json) {
+    var tr_strings = candidates_json.map(function(candidate_json) {
       return '<tr class="candidate ' + (candidate_json.leader ? 'leader' : '') + ' ' + (candidate_json.winner ? 'winner' : '') + '">'
         + '<td class="candidate-name">' + candidate_json.last_name + '</td>'
         + '<td class="n-votes">' + format_int(candidate_json.n_votes || 0) + '</td>'
@@ -37,7 +35,8 @@ $(function() {
         + '</tr>';
     });
 
-    $race.find('.candidate-position-listing').html('<table><tbody>' + tr_strings.join('') + '</tbody></table>');
+    $race.find('.candidate-position-listing table')
+      .replaceWith('<table><tbody>' + tr_strings.join('') + '</tbody></table>');
   }
 
   function update_precincts_reporting_from_json($race, string) {

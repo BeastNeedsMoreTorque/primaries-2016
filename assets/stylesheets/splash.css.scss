@@ -32,6 +32,54 @@ body {
   .race {
     display: -webkit-flex;
     display: flex;
+
+    &>* {
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+    }
+  }
+
+  .party-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+
+  .party-header {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: center;
+    justify-content: center;
+
+    * {
+      display: block;
+      padding: 5px 0; // 5px above and below -> 10px between elements
+    }
+  }
+
+  .precincts-status-tease {
+    border-left: 10px solid white;
+    border-right: 10px solid white;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+  }
+
+  .legend {
+    // Make it stretch to the height of the whole page
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    justify-content: center;
+    -webkit-justify-content: center;
+    width: 8rem;
   }
 }
 
@@ -77,57 +125,59 @@ body {
 .map-container {
   display: -webkit-flex;
   display: flex;
+}
 
-	.map {
-		svg {
-			width: 100%;
-		  height: 100%;
-		}
+.map {
+  svg {
+    width: 100%;
+    height: 100%;
+    max-height: 11rem;
+    max-width: 11rem;
+  }
 
-		path.state {
-	    stroke: #999;
-	    stroke-width: 10; // divided by 10
-	    fill: #fff;
-	    pointer-events: none; // so it doesn't cause mouseleave
-	  }
+  path.state {
+    stroke: #999;
+    stroke-width: 10; // divided by 10
+    fill: #fff;
+    pointer-events: none; // so it doesn't cause mouseleave
+  }
 
-	  path.mesh {
-	    fill: none;
-	    stroke: #eee;
-	    stroke-width: 10; // divided by 10
-	    pointer-events: none; // so it doesn't cause mouseleave
-	  }
+  path.mesh {
+    fill: none;
+    stroke: #eee;
+    stroke-width: 10; // divided by 10
+    pointer-events: none; // so it doesn't cause mouseleave
+  }
 
-	  path.hover {
-	    stroke: black;
-	    stroke-width: 20; // divided by 10
-	    fill: rgba(255, 255, 255, 0.2);
-	    pointer-events: none; // so it doesn't cause mouseleave
-	  }
+  path.hover {
+    stroke: black;
+    stroke-width: 20; // divided by 10
+    fill: rgba(255, 255, 255, 0.2);
+    pointer-events: none; // so it doesn't cause mouseleave
+  }
 
-	  g.cities {
-	    pointer-events: none;
-	  }
+  g.cities {
+    pointer-events: none;
+  }
 
-	  circle {
-	    fill: black;
-	    stroke: white;
-	    stroke-width: 1px;
-	  }
+  circle {
+    fill: black;
+    stroke: white;
+    stroke-width: 1px;
+  }
 
-	  text {
-	    font-size: 20px;
-	    @include svg-city-label();
+  text {
+    font-size: 20px;
+    @include svg-city-label();
 
-      &.background {
-        stroke-width: 4px;
-      }
-	  }
-	}
+    &.background {
+      stroke-width: 4px;
+    }
+  }
 }
 
 .party-header {
-	padding: 10px 0;
+	padding: 10px;
   text-align: center;
   color: white;
 
@@ -135,6 +185,7 @@ body {
     font: inherit;
     margin: 0;
     padding: 0;
+    white-space: nowrap;
   }
 }
 
@@ -145,19 +196,15 @@ body {
   padding: 0 10px 10px;
 }
 
-.candidate-position-lbl {
-	font-weight: bold;
-	padding-left: 5px;
-	padding-right: 5px;
-	@include vertical-center-flex;
-}
-
-.see-all-candidates {
-	text-align: center;
-}
-
 .candidate-position-listing {
-  padding: 10px 10px 5px;
+  padding: 10px;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  margin: 0 auto;
 
   table {
   	width: 100%;
@@ -173,23 +220,23 @@ body {
 	      content: ' ✓';
 	    }
 		}
+  }
 
-    td {
-      padding: 5px 4px 3px;
+  td {
+    padding: 5px 4px 3px;
 
-      &.candidate-name {
-        width: 4rem;
-      }
+    &.candidate-name {
+      width: 4rem;
+    }
 
-      &.n-votes {
-        width: 3.5rem;
-        text-align: right;
-      }
+    &.n-votes {
+      width: 3.5rem;
+      text-align: right;
+    }
 
-      &.n-votes-pct {
-        width: 2rem;
-        text-align: right;
-      }
+    &.n-votes-pct {
+      width: 2rem;
+      text-align: right;
     }
   }
 }
@@ -225,7 +272,7 @@ body {
   path { fill: white; }
   path.candidate-leads { fill: $widgetBlue; }
   path.candidate-trails { fill: $widgetLightBlue; }
-  .map-container .legend {
+  .legend {
     .swatch.leading { background: $widgetBlue; }
     .swatch.trailing { background: $widgetLightBlue; }
 	}
@@ -257,7 +304,7 @@ body {
   path { fill: white; }
   path.candidate-leads { fill: $widgetRed; }
   path.candidate-trails { fill: $widgetLightRed; }
-  .map-container .legend {
+  .legend {
     .swatch.leading { background: $widgetRed; }
     .swatch.trailing { background: $widgetLightRed; }
 	}
@@ -267,48 +314,34 @@ body {
 	padding: 10px 0 0 10px;
   -webkit-flex: 1 1 auto;
   flex: 1 1 auto;
+}
 
-	.precincts {
+.precincts {
+  font-size: .9rem;
+  padding-bottom: 3px;
+  margin-bottom: 3px;
+  border-bottom: 1px solid black;
+}
+
+.map-container {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+
+  .map {
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    height: 200px;
+    width: 100px; // IE 11+Edge make it too wide otherwise
+  }
+}
+
+.race-status {
+  text-align: center;
+
+  button.refresh {
+    @include refresh-button();
     font-size: .9rem;
-		padding-bottom: 3px;
-		margin-bottom: 3px;
-		border-bottom: 1px solid black;
-	}
-
-	.map-container {
-    display: -webkit-flex;
-    display: flex;
-		flex-direction: row;
-		-webkit-flex-direction: row;
-
-		.map {
-      -webkit-flex: 1 1 auto;
-      flex: 1 1 auto;
-			height: 200px;
-      width: 100px; // IE 11+Edge make it too wide otherwise
-		}
-	}
-
-  .race-status {
-    text-align: center;
-
-    .status-past, .status-present, .status-future {
-      display: none;
-      padding: .5rem 1rem;
-      margin: .5rem auto;
-    }
-
-    .status-past, .status-present-text, .status-future {
-      font-style: italic;
-    }
-
-    button.refresh {
-      @include refresh-button();
-      font-size: .9rem;
-    }
-
-    .status-present-text {
-      margin: .5rem auto;
-    }
   }
 }
