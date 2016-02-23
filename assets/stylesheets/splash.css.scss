@@ -12,9 +12,27 @@ body {
   font-family: $huffpo-font-family;
 }
 
-.races {
+.two-races {
+  display: -webkit-flex;
 	display: flex;
-	flex-flow: row;
+
+  .race {
+    box-sizing: border-box;
+    width: 50%;
+    display: -webkit-flex;
+    display: flex;
+
+    // Put space between the two races
+    &:first-child { padding-right: 5px; }
+    &:last-child { padding-left: 5px; }
+  }
+}
+
+.one-race {
+  .race {
+    display: -webkit-flex;
+    display: flex;
+  }
 }
 
 .tease-link {
@@ -108,24 +126,15 @@ body {
 	}
 }
 
-.candidate-row-container {
+.party-header {
 	padding: 10px 0;
-	display: flex;
-	flex-flow: column;
-	display: -webkit-flex;
-  -webkit-flex-direction: column;
- 	align-items: center;
-	-webkit-align-items: center;
-	-webkit-justify-content: center;
-	justify-content: center;
-}
+  text-align: center;
+  color: white;
 
-.leading-candidate-delegates {
-	position: relative;
-  color: #fff;
-
-  span {
-    display: block;
+  h3, h4 {
+    font: inherit;
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -154,7 +163,7 @@ body {
   	width: 100%;
     border-collapse: collapse;
     font-size: .8rem;
-    line-height: 1.2;
+    line-height: 1rem;
 
 		.candidate {
 	    font-weight: bold;
@@ -165,42 +174,29 @@ body {
 	    }
 		}
 
-		tr {
-			td {
-				padding: 5px 4px 3px;
+    td {
+      padding: 5px 4px 3px;
 
-        &.candidate-name {
-          width: 4rem;
-        }
+      &.candidate-name {
+        width: 4rem;
+      }
 
-				&.n-votes {
-					width: 3.5rem;
-					text-align: right;
-				}
+      &.n-votes {
+        width: 3.5rem;
+        text-align: right;
+      }
 
-				&.n-votes-pct {
-					width: 2rem;
-					text-align: right;
-				}
-			}
-		}
+      &.n-votes-pct {
+        width: 2rem;
+        text-align: right;
+      }
+    }
   }
 }
 
-.race {
-  width: 50%;
-  box-sizing: border-box;
-  display: -webkit-flex;
-  display: flex;
-
-  // Put space between the two races
-  &:first-child { padding-right: 5px; }
-  &:last-child { padding-left: 5px; }
-}
-
 .party-container {
-	flex-shrink: 0;
-	-webkit-flex-shrink: 0;
+  -webkit-flex: 1 0 auto;
+  flex: 1 0 auto;
 }
 
 .race[data-party-id=Dem] {
@@ -222,7 +218,7 @@ body {
 		}	  
   }
 
-  .candidate-row-container {
+  .party-header {
 	  background-color: $widgetBlue;
   }
 
@@ -254,7 +250,7 @@ body {
 		}	  
   }
 
-  .candidate-row-container {
+  .party-header {
 	  background-color: $widgetRed;
   }
 

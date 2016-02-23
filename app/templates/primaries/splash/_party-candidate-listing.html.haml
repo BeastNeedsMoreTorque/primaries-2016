@@ -1,0 +1,25 @@
+.party-container
+  .party-header
+    %img{src: image_path("#{race.party_id}.svg"), alt: ''}
+    %h3 #{race.party_adjective} Candidates
+    %h4
+      - if race.n_votes_th
+        Total #{race.n_votes_th}
+        %span.asterisk<> *
+      - else
+        Total votes
+  .candidate-position-listing
+    %table
+      %tbody
+        - race.candidate_races[0..2].each do |candidate_race|
+          %tr.candidate{'data-candidate-id': candidate_race.candidate_id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
+            %td.candidate-name= candidate_race.candidate_last_name
+            %td.n-votes= format_int(candidate_race.n_votes || 0)
+            %td.n-votes-pct #{format_percent_or_nil(candidate_race.percent_vote || 0)}%
+  - if race.n_votes_footnote
+    .n-votes-footnote
+      %span.asterisk *
+      = race.n_votes_footnote
+  - if race.candidate_races.length > 3
+    .see-all-candidates
+      %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See all candidates
