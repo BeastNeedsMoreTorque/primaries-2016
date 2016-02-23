@@ -57,10 +57,6 @@ $widest-mobile: 660px;
   font-family: $header-font-family;
 }
 
-@mixin rail-link-out {
-  .tease-link { @include tease-link(); }
-}
-
 @mixin precincts-reporting-conditionals {
   .no-precincts-reporting .when-precincts-reporting,
   .precincts-reporting .when-no-precincts-reporting {
@@ -101,7 +97,6 @@ $widest-mobile: 660px;
 }
 
 @mixin tease-link {
-
   display: -webkit-flex;
   display: flex;
   -webkit-align-items: center;
@@ -187,7 +182,7 @@ $widest-mobile: 660px;
 }
 
 @mixin widget-base {
-  @include huffpo-body-copy;
+  font-family: $huffpo-font-family;
 
   a {
     color: #2e7061;
@@ -195,7 +190,7 @@ $widest-mobile: 660px;
 
   h1, h2, h3, h4{
     &.main-hed {
-      @include header-copy;
+      font-family: $header-font-family;
     }
   }
 
@@ -226,7 +221,7 @@ $widest-mobile: 660px;
     }
 	}
 
-	@include rail-link-out;
+  .tease-link { @include tease-link(); }
 }
 
 @mixin footnotes {

@@ -5,17 +5,16 @@
 @include tense-conditionals;
 
 body {
-  margin: 0;
+  @include widget-base();
+  margin: 0 auto;
+  padding: 0;
+  max-width: 945px;
+  font-family: $huffpo-font-family;
 }
 
 .races {
 	display: flex;
 	flex-flow: row;
-}
-
-.primary-splash-banner {
-  @include widget-base();
-  max-width: 945px;
 }
 
 .tease-link {
