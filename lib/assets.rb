@@ -48,9 +48,10 @@ module Assets
   # To refer to `main.css` from a template, write `asset_path('main.css')`.
   StylesheetAssets = %w(
     main.css
-    splash.css
-    primaries-right-rail.css
     mobile-ad.css
+    primaries-linkout-image.css
+    primaries-right-rail.css
+    splash.css
   )
 
   # Assets we serve with a sha1 digest.

@@ -1,0 +1,39 @@
+!!! 5
+%html{lane: 'en'}
+  %head
+    %meta{charset: 'utf-8'}
+    %title Huffington Post 2016 Primaries Linkout Image
+    %link{rel: 'stylesheet', href: asset_path('primaries-linkout-image.css')}
+
+%body
+  - for race in race_day.races
+    .race{id: race.id, class: race.party_id}
+      %svg{xmlns: 'http://www.w3.org/2000/svg', 'xmlns:xlink': 'http://www.w3.org/1999/xlink', viewBox: '0 0 350 350'}
+        %g.state{transform: 'translate(0 0)'}
+          != map_svg("states/#{race.state_code}").gsub(/(width|height)="\d+"/) { "#{$1}=\"350\"" }
+
+        -# Translate to the center, minus half the width/height of the images
+        -# Circle center: (175, 175)
+        %g.headshots{transform: "translate(#{175 - 48*0.5} #{175 - 72*0.5})"}
+          -# We'll draw the candidates' faces in a circle around the state.
+          -#
+          -# Remedial Polar Coordinates: https://en.wikipedia.org/wiki/Polar_coordinate_system
+          -#
+          -# In polar coordinates, a circle has constant r. Only one coordinate,
+          -# ϕ, can vary. We'll space out all candidates equally along the
+          -# spectrum 0 <= ϕ <= 2π.
+          -#
+          -# We draw in Cartesian coordinates, of course. Conversion:
+          -# * x = r * cos(ϕ)
+          -# * y = r * sin(ϕ)
+          -#
+          -# We don't care about clockwise/counterclockwise, negatives or
+          -# positives. It'll be a circle no matter what.
+
+          - step = 2 * Math::PI / race.candidate_races.length
+          - phi = step / 10 # get it off-center
+          - r = 140 # px radius
+
+          - for candidate_race in race.candidate_races
+            %image{x: (r * Math.cos(phi)), y: (r * Math.sin(phi)), width: 48, height: 72, 'xlink:href': image_path("#{candidate_race.candidate_slug}.png")}
+            - phi += step
