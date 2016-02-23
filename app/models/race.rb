@@ -148,7 +148,7 @@ Race = RubyImmutableStruct.new(
   def when_race_happens
     if ap_says_its_over
       'past'
-    elsif party_state_id == 'Dem-NH' && !expect_results_time.nil? && database.now < expect_results_time
+    elsif state_code == 'NH' && !expect_results_time.nil? && database.now < expect_results_time
       # In NH, some results come in at midnight the night before. They're
       # confusing because they make it look like the polls are closed before
       # they're even open.
