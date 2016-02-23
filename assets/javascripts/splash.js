@@ -35,8 +35,7 @@ $(function() {
         + '</tr>';
     });
 
-    $race.find('.candidate-position-listing table')
-      .replaceWith('<table><tbody>' + tr_strings.join('') + '</tbody></table>');
+    $race.find('.candidate-position-listing tbody').html(tr_strings.join(''));
   }
 
   function update_precincts_reporting_from_json($race, string) {
