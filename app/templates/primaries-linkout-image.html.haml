@@ -92,11 +92,18 @@
         // 2. Write img to a canvas
         img.onload = function() {
           var canvas = document.createElement('canvas');
-          canvas.width = 350;
+
+          // The square image is 350x350. We'll also have a 4:3 view. Look
+          // good with both by drawing in the middle of the bigger one.
+          var width = Math.ceil(350 * 4 / 3);
+          canvas.width = width;
           canvas.height = 350;
+          var x = Math.floor((width - 350) / 2);
 
           var ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
+          ctx.fillStyle = 'white';
+          ctx.fillRect(0, 0, width, 350);
+          ctx.drawImage(img, x, 0);
 
           var pngDataUri = canvas.toDataURL('image/png');
 

@@ -10,7 +10,7 @@ class PrimariesLinkoutImageView < BaseView
 
   def inline_image_path(relative_path)
     bytes = IO.read("#{Paths.Assets}/images/#{relative_path}")
-    "data:image/png;base64,#{Base64.encode64(bytes)}"
+    "data:image/png;base64,#{Base64.strict_encode64(bytes)}"
   end
 
   def self.generate_all(database)
