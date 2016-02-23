@@ -21,16 +21,16 @@
       - race_day.races.each do |race|
         - leader = race.candidate_races.first
         .party-container.race{class: "#{race.party_id} race-#{race.when_race_happens}"}
-          .frontrunner-lbl
+          .party-header
             %img{src: image_path("#{race.party_id}.svg"), alt: ''}
-            .container
-              %p= race.party_name
-          .img-stats-container
-            .leading-candidate-img
-              %img{src: image_path("big-headshots/#{leader.candidate.slug}.png"), alt: ''}
-            .leading-candidate-delegates
-              %p.frontrunner-cd= leader.candidate_last_name
-              %p.leads= leader.winner? ? 'Wins' : 'Leads'
+            .party= race.party_name
+          .leader
+            %img{src: image_path("big-headshots/#{leader.candidate.slug}.png"), alt: ''}
+            %p
+              - if leader.winner?
+                #{leader.candidate_last_name} Wins
+              - else
+                #{leader.candidate_last_name} Leads
           .votes-container
             - if race.future?
               %span.polling= "#{format_percent_or_nil(leader.poll_percent)}%"
@@ -45,7 +45,7 @@
                   %span.asterisk<> *
                 - else
                   Votes
-              .frontrunner-num.pct= "#{format_percent_or_nil(leader.percent_vote)}%"
+              %div= "#{format_percent_or_nil(leader.percent_vote)}%"
 
   - race_day.races.reject(&:future?).map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
     %p.footnote
