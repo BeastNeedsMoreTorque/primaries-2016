@@ -3,12 +3,49 @@
   %head
     %meta{charset: 'utf-8'}
     %title Huffington Post 2016 Primaries Linkout Image
-    %link{rel: 'stylesheet', href: asset_path('primaries-linkout-image.css')}
+    %style
+      :plain
+        body {
+          margin: 2rem;
+        }
+
+        .race {
+          display: inline-block;
+        }
+
+        .race>svg {
+          width: 350px;
+          height: 350px;
+        }
+
+        button.download-as-png {
+          display: block;
+          box-sizing: border-box;
+          margin: 1rem 0;
+          padding: 1rem;
+          width: 100%;
+        }
 
 %body
   - for race in race_day.races
+    - fill = { 'Dem' => '#1559d1', 'GOP' => '#b72727' }[race.party_id]
     .race{id: race.id, class: race.party_id}
       %svg{xmlns: 'http://www.w3.org/2000/svg', 'xmlns:xlink': 'http://www.w3.org/1999/xlink', viewBox: '0 0 350 350'}
+        %style
+          :plain
+            g.counties, g.subcounties, g.cities { display: none; }
+
+            path.state {
+              stroke: 20px solid black;
+              fill: #{fill};
+            }
+
+            path.mesh {
+              fill: none;
+              stroke: white;
+              stroke-width: 10px;
+            }
+
         %g.state{transform: 'translate(0 0)'}
           != map_svg("states/#{race.state_code}").gsub(/(width|height)="\d+"/) { "#{$1}=\"350\"" }
 
@@ -35,5 +72,45 @@
           - r = 140 # px radius
 
           - for candidate_race in race.candidate_races
-            %image{x: (r * Math.cos(phi)), y: (r * Math.sin(phi)), width: 48, height: 72, 'xlink:href': image_path("#{candidate_race.candidate_slug}.png")}
+            %image{x: (r * Math.cos(phi)), y: (r * Math.sin(phi)), width: 48, height: 72, 'xlink:href': inline_image_path("#{candidate_race.candidate_slug}.png")}
             - phi += step
+
+      %button.download-as-png Download as .png
+
+  %script
+    :plain
+      function onClickDownloadAsPng() {
+        // https://svgopen.org/2010/papers/62-From_SVG_to_Canvas_and_Back/index.html
+        var button = this;
+        var svg = button.previousElementSibling;
+
+        // 1. Write SVG to an img
+        var svg_xml = (new XMLSerializer()).serializeToString(svg);
+        var img = new Image();
+        img.src = "data:image/svg+xml;base64," + btoa(svg_xml);
+
+        // 2. Write img to a canvas
+        img.onload = function() {
+          var canvas = document.createElement('canvas');
+          canvas.width = 350;
+          canvas.height = 350;
+
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+
+          var pngDataUri = canvas.toDataURL('image/png');
+
+          var a = document.createElement('a');
+          a.href = pngDataUri;
+          a.download = 'primaries-linkout-image.png';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        };
+      }
+
+      var buttons = document.querySelectorAll('button.download-as-png');
+      for (var i = 0; i < buttons.length; i++) {
+        var button = buttons[i];
+        button.addEventListener('click', onClickDownloadAsPng, false);
+      }

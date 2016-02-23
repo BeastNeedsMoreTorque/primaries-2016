@@ -61,7 +61,7 @@ module Assets
   # proxy servers and clients will serve the old version instead of the new one.
   #
   # To refer to `images/clinton.png` from a template, write
-  # `image_path('clinton')`.
+  # `image_path('clinton.png')`.
   DigestAssets = %w(
     images/**/*.{png,jpg,gif,svg}
   )
