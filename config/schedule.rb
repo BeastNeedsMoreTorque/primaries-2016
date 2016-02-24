@@ -44,11 +44,11 @@ module ServerSchedule
 
   # On election night, do something like this:
   #
-  TickIntervalInS = 10
+  TickIntervalInS = 60#10
 
   Ticks = [
     election_day('2016-02-23'),
-    election_day('2016-02-23'),
+    # election_day('2016-02-23'),
     election_day('2016-02-23'),
     election_day('2016-02-23'),
     election_day('2016-02-23'),
