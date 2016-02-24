@@ -45,7 +45,7 @@
               - n_pledged_delegates_total = races.map(&:n_pledged_delegates).reduce(0, :+)
               - n_pledged_delegates_without_candidates = races.map(&:n_pledged_delegates_without_candidates).reduce(0, :+)
               %td.candidate
-                Up for grabs
+                %span Up for grabs
               %td.n-delegates-int= n_delegates_without_candidates
               %td.n-delegates-dots
                 - for dot_group in races_to_unassigned_dot_groups(races, :has_delegates_without_candidates?, :n_delegates_without_candidates)
