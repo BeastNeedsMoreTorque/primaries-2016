@@ -787,9 +787,9 @@ $(function() {
     add_tooltips();
     color_counties(); // set up on_database_change
     poll_results(); // send AJAX request
-  });
 
-  $(document).on('click', 'input[name=include-unpledged-delegates]', function() {
-    set_include_unpledged_delegates(this.checked);
+    $(document).on('click', 'input[name=include-unpledged-delegates]', function() {
+      set_include_unpledged_delegates(this.checked);
+    });
   });
 });
