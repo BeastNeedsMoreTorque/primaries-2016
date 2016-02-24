@@ -1,0 +1,21 @@
+.party-container
+  .party-header
+    %img{src: image_path("#{race.party_id}.svg"), alt: ''}
+    %h3 #{race.party_adjective} Candidates
+  .candidate-position-listing
+    %table
+      %thead
+        %tr
+          %th.candidate-name Candidate
+          %th.n-votes Votes
+          %th.n-votes-pct %
+      %tbody
+        - race.candidate_races.each do |candidate_race|
+          %tr.candidate{'data-candidate-id': candidate_race.candidate_id, class: "#{candidate_race.winner? ? 'winner' : ''} #{candidate_race.leader? ? 'leader' : ''}"}
+            %td.candidate-name= candidate_race.candidate_last_name
+            %td.n-votes= format_int(candidate_race.n_votes || 0)
+            %td.n-votes-pct #{format_percent_or_nil(candidate_race.percent_vote || 0)}%
+    - if race.n_votes_footnote
+      .n-votes-footnote
+        %span.asterisk *
+        = race.n_votes_footnote

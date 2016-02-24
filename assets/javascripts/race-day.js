@@ -23,7 +23,7 @@ function n_precincts_reporting_text(reporting, total) {
   if (total == 0) {
     return 'There are no precincts here';
   } else {
-    return reporting + ' of ' + n_precincts_text(total) + ' reporting (' + Math.round(100 * reporting / total) + '%)';
+    return reporting + ' of ' + n_precincts_text(total) + ' reporting (' + format_percent_int(100 * reporting / total) + '%)';
   }
 }
 
@@ -787,7 +787,6 @@ $(function() {
     add_tooltips();
     color_counties(); // set up on_database_change
     poll_results(); // send AJAX request
-  });
 
   $('.dropdown-button').click(function() {
     $('.dropdown-menu').toggleClass("visible");
@@ -799,5 +798,7 @@ $(function() {
 
   $(document).on('click', 'input[name=include-unpledged-delegates]', function() {
     set_include_unpledged_delegates(this.checked);
+  });
+
   });
 });

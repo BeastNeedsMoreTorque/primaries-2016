@@ -21,21 +21,11 @@ class RaceDayView < BaseView
 
   def hed; race_day.title; end
   def body; race_day.body; end
-  def social_img; absolute_image_path_if_possible('share.png'); end
-  def twitter; race_day.tweet; end
+  def meta_description; "#{race_day.title} U.S. live elections primary primaries caucus caucuses results"; end
+  def social_description; "Live-updating #{race_day.title} results"; end
+  def suggested_tweet; race_day.tweet || social_description; end
   def pubbed_dt; race_day.pubbed_dt; end
   def updated_dt; race_day.updated_dt_or_nil; end
-
-  def meta
-    @meta ||= {
-      page_title: "HuffPost 2016 Election Coverage: #{hed}",
-      page_description: "#{body}",
-      author: "HuffPostPolitics",
-      author_twitter: "HuffPostPol",
-      social_image_url: "#{social_img}",
-      twitter_desc: "#{twitter}"
-    }
-  end
 
   # The race day prior to the one we're focused on
   def previous_race_day
@@ -43,7 +33,6 @@ class RaceDayView < BaseView
       .select { |rd| rd.id < race_day.id }
       .last
   end
-
 
   # The race day immediately after the one we're focused on
   def next_race_day

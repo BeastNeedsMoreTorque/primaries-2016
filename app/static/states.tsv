@@ -20,7 +20,7 @@ fips_int	state_code	abbreviation	name	n_dem_delegates	n_dem_unpledged_delegates	
 19	IA	Iowa	Iowa	52	8	30	0
 20	KS	Kan.	Kansas	37	4	40	0
 21	KY	Ky.	Kentucky	60	5	46	0
-22	LA	La.	Louisiana	59	8	46	2
+22	LA	La.	Louisiana	59	8	46	0
 23	ME	Maine	Maine	30	5	23	0
 24	MD	Md.	Maryland	118	23	38	0
 25	MA	Mass.	Massachusetts	116	25	42	0

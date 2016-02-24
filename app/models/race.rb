@@ -54,10 +54,6 @@ Race = RubyImmutableStruct.new(
     @n_pledged_delegates_with_candidates = @candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
 
-  def n_votes_is_really_n_sdes
-    party_id == 'Dem' && state_code == 'IA'
-  end
-
   def href
     "/2016/primaries/#{race_day_id}##{anchor}"
   end
@@ -118,21 +114,6 @@ Race = RubyImmutableStruct.new(
   def has_delegates_without_candidates?; n_delegates_without_candidates > 0; end
   def has_pledged_delegates_without_candidates?; n_pledged_delegates_without_candidates > 0; end
 
-  # Describes how many precincts are reporting.
-  #
-  # This is ONLY meant to be shown for a "past" race. It only returns these
-  # phrases:
-  #
-  # * "All precincts reporting"
-  # * "{n} of {n} precincts reporting"
-  def precincts_reporting_sentence
-    if all_precincts_reporting?
-      'All precincts reporting'
-    else
-      "#{n_precincts_reporting} of #{n_precincts_total} reporting"
-    end
-  end
-
   def pct_precincts_reporting
     reporting_str = if n_precincts_total.nil? || n_precincts_total == 0
       'N/A'
@@ -141,7 +122,9 @@ Race = RubyImmutableStruct.new(
     else
       pct_reporting = (n_precincts_reporting.to_f / n_precincts_total.to_f) * 100.0
       if pct_reporting > 99
-        '99%'
+        '>99%'
+      elsif pct_reporting < 1
+        '<1%'
       else
         "#{pct_reporting.round}%"
       end
@@ -165,9 +148,10 @@ Race = RubyImmutableStruct.new(
   def when_race_happens
     if ap_says_its_over
       'past'
-    elsif !expect_results_time.nil? && database.now < expect_results_time
-      # In NH, some results come in at midnight but they're more confusing than
-      # anything else. Hide them.
+    elsif state_code == 'NH' && !expect_results_time.nil? && database.now < expect_results_time
+      # In NH, some results come in at midnight the night before. They're
+      # confusing because they make it look like the polls are closed before
+      # they're even open.
       'future'
     elsif any_precincts_reporting?
       if n_precincts_reporting < n_precincts_total

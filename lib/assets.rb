@@ -48,9 +48,10 @@ module Assets
   # To refer to `main.css` from a template, write `asset_path('main.css')`.
   StylesheetAssets = %w(
     main.css
-    splash.css
-    primaries-right-rail.css
     mobile-ad.css
+    primaries-linkout-image.css
+    primaries-right-rail.css
+    splash.css
   )
 
   # Assets we serve with a sha1 digest.
@@ -60,7 +61,7 @@ module Assets
   # proxy servers and clients will serve the old version instead of the new one.
   #
   # To refer to `images/clinton.png` from a template, write
-  # `image_path('clinton')`.
+  # `image_path('clinton.png')`.
   DigestAssets = %w(
     images/**/*.{png,jpg,gif,svg}
   )

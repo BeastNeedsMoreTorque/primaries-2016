@@ -1,10 +1,9 @@
 require_relative './base_view'
 
 require_relative '../models/race_day'
-require_relative '../../lib/primaries_widgets_view'
 
 class PrimariesSplashResultsView < BaseView
-  include PrimariesWidgetsView
+  alias_method(:race_day, :focus_race_day)
 
   def initialize(database)
     super(database)
@@ -42,6 +41,7 @@ class PrimariesSplashResultsView < BaseView
   def race_h(race)
     {
       id: race.id,
+      when_race_happens: race.when_race_happens,
       candidates: race.candidate_races.map { |cr| candidate_race_h(cr) },
       geos: race_geos_h(race),
       precincts_reporting_percent_s: race.pct_precincts_reporting

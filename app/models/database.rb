@@ -46,7 +46,8 @@ require_relative '../sources/sheets_source'
 # -- plus the rendering date.
 class Database
   LastDate = Date.parse(ENV['LAST_DATE'] || '2016-02-28')
-  Now = Time.parse(ENV['NOW'] || Time.now.iso8601)
+  Now = Time.parse(ENV['NOW'] || Time.now.utc.iso8601)
+  FocusRaceDayId = ENV['FOCUS_RACE_DAY_ID'] || '2016-02-23'
 
   CollectionNames = %w(
     candidates
@@ -68,8 +69,9 @@ class Database
   attr_reader(:now)
   attr_reader(:last_date)
   attr_reader(:copy)
+  attr_reader(:focus_race_day) # What we show on splash, right-rail, mobile-ad
 
-  def initialize(copy_source, sheets_source, geo_ids_source, ap_del_super, ap_election_days, pollster_source, now, last_date)
+  def initialize(copy_source, sheets_source, geo_ids_source, ap_del_super, ap_election_days, pollster_source, now, last_date, focus_race_day_id)
     @parties = load_parties(sheets_source.parties, ap_del_super.parties)
     @states = load_states(sheets_source.states)
     @party_states = load_party_states(sheets_source.party_states, pollster_source.party_states)
@@ -86,6 +88,7 @@ class Database
 
     @now = now
     @last_date = last_date
+    @focus_race_day = @race_days.find!(focus_race_day_id)
     @copy = copy_source.raw_data
   end
 
@@ -110,7 +113,8 @@ class Database
       ap_election_days,
       pollster_source,
       Now,
-      LastDate
+      LastDate,
+      FocusRaceDayId
     )
   end
 

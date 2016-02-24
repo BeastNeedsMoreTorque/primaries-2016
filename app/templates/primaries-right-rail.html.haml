@@ -11,9 +11,9 @@
       %div.header
         .line
         .hed
-          %h1.when-present Live Results
-          %h1.when-past Results
-          %h1.when-future Happening Soon
+          %h1.when-race-day-present Live Results
+          %h1.when-race-day-past Results
+          %h1.when-race-day-future Happening Soon
         %div.line
       .race-day
         %h2
@@ -21,9 +21,9 @@
         - if !race_day.today?
           %h4.date= race_day.date.strftime('%B %-d')
         %p.intro= race_day.body
-        %p.tease-link.when-future.when-past
+        %p.tease-link.when-race-day-future.when-race-day-past
           %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See the election calendar
-        %p.tease-link.when-present
+        %p.tease-link.when-race-day-present
           %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See live updates
 
         - race_day.races.each do |race|
@@ -36,10 +36,10 @@
               %thead
                 %tr
                   %th.candidate Candidate
-                  %th.pollster.when-future
+                  %th.pollster.when-race-day-future
                     .long-table-heading Polling Average
-                  %th.n-votes.when-past.when-present Votes
-                  %th.n-votes-pct.when-past.when-present %
+                  %th.n-votes.when-race-day-past.when-race-day-present Votes
+                  %th.n-votes-pct.when-race-day-past.when-race-day-present %
               %tbody
                 - race.candidate_races.each do |candidate_race|
                   - candidate = candidate_race.candidate
@@ -47,7 +47,7 @@
                     %td.candidate
                       %img{src: image_path("#{candidate.slug}.png"), alt: ''}
                       = candidate.full_name
-                    %td.pollster.when-future
+                    %td.pollster.when-race-day-future
                       - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
                         .sparkline!= candidate_race.poll_sparkline.to_svg
                       %span.percent
@@ -55,11 +55,11 @@
                           N/A
                         - else
                           = "#{format_percent_or_nil(candidate_race.poll_percent)}%"
-                    %td.n-votes.when-past.when-present= format_int(candidate_race.n_votes)
-                    %td.n-votes-pct.when-past.when-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
+                    %td.n-votes.when-race-day-past.when-race-day-present= format_int(candidate_race.n_votes)
+                    %td.n-votes-pct.when-race-day-past.when-race-day-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
             %div.footnotes
-              %a.footnotes-for-pollster.when-future{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-              %a.footnotes-for-race-day.when-present.when-past{target: '_blank', href: race.href} Detailed results
+              %a.footnotes-for-pollster.when-race-day-future{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
+              %a.footnotes-for-race-day.when-race-day-present.when-race-day-past{target: '_blank', href: race.href} Detailed results
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script

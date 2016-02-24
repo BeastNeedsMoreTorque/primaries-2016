@@ -15,6 +15,8 @@ class BaseView
   def last_date; database.last_date; end
   def copy; database.copy; end
 
+  def social_image_url; absolute_image_path_if_possible('share.png'); end
+
   def layout; nil; end
 
   # Turns Markdown into HTML
@@ -76,8 +78,8 @@ class BaseView
 
   def asset_path(path); Assets.asset_path(path); end
   def image_path(path); Assets.image_path(path); end
-  def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
   def now; database.now; end
+  def focus_race_day; database.focus_race_day; end
 
   # Tries to return an absolute path to the image -- that is, with the protocol.
   #

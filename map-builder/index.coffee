@@ -7,6 +7,7 @@ require('d3-geo-projection')(d3)
 
 MaxWidth = 350
 MaxHeight = 350
+MinDistanceBetweenCities = 35 # px, vertically or horizontally
 
 geo_loader = require('./geo-loader')
 
@@ -292,7 +293,7 @@ compress_svg_path = (path) ->
   # First, round to one decimal and multiply by 10
   #
   # Do this while we're still dealing with absolute coordinates.
-  path = path.replace(/\.(\d)\d+/g, (__, one_decimal) -> one_decimal)
+  int_path = path.replace(/\.(\d)\d+/g, (__, one_decimal) -> one_decimal)
 
   last_point = null
   last_instruction = null
@@ -301,9 +302,9 @@ compress_svg_path = (path) ->
   next_instruction_index = 0
   instr_regex = /([a-zA-Z ])(?:(\d+),(\d+))?/g
 
-  while (match = instr_regex.exec(path)) != null
+  while (match = instr_regex.exec(int_path)) != null
     if next_instruction_index != instr_regex.lastIndex - match[0].length
-      throw "Found a non-instruction at position #{next_instruction_index} of path #{path}. Next instruction was at position #{instr_regex.lastIndex}. Aborting."
+      throw "Found a non-instruction at position #{next_instruction_index} of path #{int_path}. Next instruction was at position #{instr_regex.lastIndex}. Aborting."
     next_instruction_index = instr_regex.lastIndex
 
     switch match[1]
@@ -342,10 +343,10 @@ compress_svg_path = (path) ->
         last_point = point
 
       else
-        throw "Need to handle SVG instruction #{match[0]}. Aborting."
+        throw "Need to handle SVG instruction #{match[0]}. Original path: #{path}. Aborting."
 
-  if next_instruction_index != path.length
-    throw "Unhandled SVG instruction at end of path: #{path.slice(next_instruction_index)}"
+  if next_instruction_index != int_path.length
+    throw "Unhandled SVG instruction at end of path: #{int_path.slice(next_instruction_index)}"
 
   out.join('')
 
@@ -424,6 +425,10 @@ intersect_or_null = (original_geojson, jsts_geometry) ->
       .buffer(0) # make valid
     intersection_geometry = jsts_geometry.intersection(original_geometry)
     ret = writer.write(intersection_geometry)
+
+    if ret.type == 'GeometryCollection'
+      ret.geometries = ret.geometries.filter((g) -> g.type != 'Point')
+
     if ret.type == 'GeometryCollection' && ret.geometries.length == 0
       null
     else if ret.type == 'Point'
@@ -458,9 +463,10 @@ render_subcounties_g = (path, topology, geometries) ->
 
   for geometry in geometries when geometry.properties.geo_id.slice(5) != '00000' # geo-id 3301500000 in NH is water
     feature = topojson.feature(topology, geometry)
-    d = path(intersect_or_original(feature.geometry, counties_geometry))
-    d = compress_svg_path(d)
-    ret.push("    <path data-geo-id=\"#{+geometry.properties.geo_id}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
+    intersection = intersect_or_original(feature.geometry, counties_geometry)
+    d = path(intersection)
+    small_d = compress_svg_path(d)
+    ret.push("    <path data-geo-id=\"#{+geometry.properties.geo_id}\" data-name=\"#{geometry.properties.name}\" d=\"#{small_d}\"/>")
 
   ret.push('  </g>')
   ret.join('\n')
@@ -479,7 +485,7 @@ render_cities_g = (topology, geometries) ->
   for city in cities
     p = city.geometry.coordinates
 
-    continue if rendered_cities.find((p2) -> distance2(p, p2) < 25 * 25)
+    continue if rendered_cities.find((p2) -> distance2(p, p2) < MinDistanceBetweenCities * MinDistanceBetweenCities)
 
     x = p[0].toFixed(1)
     y = p[1].toFixed(1)

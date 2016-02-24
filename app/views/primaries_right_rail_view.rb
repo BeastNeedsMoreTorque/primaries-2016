@@ -1,11 +1,9 @@
 require_relative './base_view'
-require_relative '../../lib/primaries_embed_view'
-require_relative '../../lib/primaries_widgets_view'
 
 require 'date'
 
 class PrimariesRightRailView < BaseView
-  include PrimariesEmbedView, PrimariesWidgetsView
+  alias_method(:race_day, :focus_race_day)
 
   def output_path; '2016/primaries/right-rail.html'; end
 
