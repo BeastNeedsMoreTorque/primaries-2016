@@ -14,21 +14,21 @@ class RaceDayResultsView < BaseView
 
   def build_json
     JSON.dump(
-      candidate_csv: candidate_csv,
-      candidate_race_csv: candidate_race_csv,
-      candidate_county_race_csv: candidate_county_race_csv,
-      candidate_race_subcounty_csv: candidate_race_subcounty_csv,
-      county_race_csv: county_race_csv,
-      race_subcounty_csv: race_subcounty_csv,
-      race_csv: race_csv
+      candidate_csv: candidate_csv.strip,
+      candidate_race_csv: candidate_race_csv.strip,
+      candidate_county_race_csv: candidate_county_race_csv.strip,
+      candidate_race_subcounty_csv: candidate_race_subcounty_csv.strip,
+      county_race_csv: county_race_csv.strip,
+      race_subcounty_csv: race_subcounty_csv.strip,
+      race_csv: race_csv.strip
     )
   end
 
   protected
 
   def candidate_csv
-    header = "candidate_id,party_id,n_delegates,n_pledged_delegates\n"
-    data = candidates.map{ |c| "#{c.id},#{c.party_id},#{c.n_delegates},#{c.n_pledged_delegates}" }.join("\n")
+    header = "candidate_id,party_id,last_name,n_delegates,n_pledged_delegates\n"
+    data = candidates.map{ |c| "#{c.id},#{c.party_id},#{c.last_name},#{c.n_delegates},#{c.n_pledged_delegates}" }.join("\n")
     header + data
   end
 

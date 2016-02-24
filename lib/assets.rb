@@ -22,6 +22,8 @@ module Assets
       countdown.js
       state-race-days.js
       dot-groups.js
+      race-day-database.js
+      race-day-nodes.js
       race-day.js
       delegate-summary.js
       all-primaries.js
