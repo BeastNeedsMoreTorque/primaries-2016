@@ -3,11 +3,43 @@
 # Changing code here? Copy those changes to assets/javascripts/dot-groups.js.
 module DotGroupHelper
   DotsPerGroup = 25
-  DotGroupWithSubgroups = RubyImmutableStruct.new(:dot_subgroups)
+
   CandidateStateDotSet = RubyImmutableStruct.new(:candidate_id_or_nil, :state_code, :n_delegates)
   CandidateStateDotSubgroup = RubyImmutableStruct.new(:candidate_id_or_nil, :state_code, :n_dots)
-  DotGroupWithClasses = RubyImmutableStruct.new(:dot_subgroups)
-  ClassNameDotSubgroup = RubyImmutableStruct.new(:class_name, :n_dots)
+
+  DotGroupsWithSubgroups = RubyImmutableStruct.new(:dot_groups) do
+    def to_s
+      dot_groups.map(&:to_s).join('|')
+    end
+
+    def to_html(subgroup_key)
+      html = []
+
+      for dot_group in @dot_groups
+        html << '<div class="dot-group">'
+
+        for dot_subgroup in dot_group.dot_subgroups
+          html << "<span #{subgroup_key}=\"#{dot_subgroup.data}\">#{'•' * dot_subgroup.n_dots}</span>"
+        end
+
+        html << '</div>'
+      end
+
+      html.join('')
+    end
+  end
+
+  DotGroupWithSubgroups = RubyImmutableStruct.new(:dot_subgroups) do
+    def to_s
+      dot_subgroups.map(&:to_s).join(' ')
+    end
+  end
+
+  DotSubgroup = RubyImmutableStruct.new(:data, :n_dots) do
+    def to_s
+      "#{data}:#{n_dots}"
+    end
+  end
 
   module HtmlMethods
     def dot_groups(n_groups, html_in_each)
@@ -28,47 +60,6 @@ module DotGroupHelper
       else
         '•' * n_dots
       end
-    end
-  end
-
-  BisectedDotGroups = RubyImmutableStruct.new(:class_name1, :n_dots1, :class_name2, :n_dots2) do
-    include HtmlMethods
-
-    def to_html
-      ret = []
-
-      # Handle full class-1 dot-groups
-      if n_dots1 >= DotsPerGroup
-        ret << dot_groups(n_dots1 / DotsPerGroup, dot_subgroup(class_name1, dot_string(DotsPerGroup)))
-      end
-
-      # Handle partial class-1 and class-2 dot-groups
-      remainder = n_dots1 % DotsPerGroup
-      partial_dots2 = n_dots2
-      if remainder > 0
-        html = dot_subgroup(class_name1, dot_string(remainder))
-
-        if n_dots2 >= DotsPerGroup - remainder
-          partial_dots2 -= (DotsPerGroup - remainder)
-          html << dot_subgroup(class_name2, dot_string(DotsPerGroup - remainder))
-        elsif n_dots2 != 0
-          partial_dots2 = 0
-          html << dot_subgroup(class_name2, dot_string(n_dots2))
-        end
-
-        ret << dot_group(html)
-      end
-
-      # Handle full and partial class-2 dot-groups
-      if partial_dots2 >= DotsPerGroup
-        ret << dot_groups(partial_dots2 / DotsPerGroup, dot_subgroup(class_name2, dot_string(DotsPerGroup)))
-      end
-
-      if (partial_dots2 % DotsPerGroup) > 0
-        ret << dot_group(dot_subgroup(class_name2, dot_string(partial_dots2 % DotsPerGroup)))
-      end
-
-      ret.join('')
     end
   end
 
@@ -111,12 +102,53 @@ module DotGroupHelper
     SimpleDotGroups.new(candidate_race.send(method))
   end
 
-  def race_assigned_unassigned_delegates_dot_groups(race, method1, method2)
-    BisectedDotGroups.new('with-candidates', race.send(method1), 'without-candidates', race.send(method2))
+  def race_assigned_unassigned_delegates_dot_groups_html(race, method1, method2)
+    group_dot_subgroups([
+      DotSubgroup.new('with-candidates', race.send(method1)),
+      DotSubgroup.new('without-candidates', race.send(method2))
+    ]).to_html('class')
   end
 
   def race_simple_dot_groups(race)
     SimpleDotGroups.new(race.n_delegates)
+  end
+
+  # Turns an Array of DotSubgroups into an Array of DotGroupWithSubgroups
+  #
+  # For instance, this code:
+  #
+  #   encode_subgroups([ DotSubgroup.new('AL', 24), DotSubgroup('AR', 10) ])
+  #
+  # will be organized into buckets of 25 dots each, like this:
+  #
+  #   [
+  #     DotGroupWithSubgroups([ DotSubgroup.new('AL', 24), DotSubgroup.new('AR', 1) ]),
+  #     DotGroupWithSubgroups([ DotSubgroup.new('AR', 9) ])
+  #   ]
+  def group_dot_subgroups(dot_subgroups)
+    out = []
+    out_remaining = 0
+
+    cur_group = nil
+
+    for in_subgroup in dot_subgroups
+      n = in_subgroup.n_dots
+
+      while n > 0
+        if out_remaining == 0
+          out_remaining = DotsPerGroup
+          cur_group = DotGroupWithSubgroups.new([])
+          out << cur_group
+        end
+
+        out_subgroup = DotSubgroup.new(in_subgroup.data, [ out_remaining, n ].min)
+        cur_group.dot_subgroups << out_subgroup
+        out_remaining -= out_subgroup.n_dots
+        n -= out_subgroup.n_dots
+      end
+    end
+
+    DotGroupsWithSubgroups.new(out)
   end
 
   private

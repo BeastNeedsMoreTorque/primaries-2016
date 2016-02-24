@@ -1,41 +1,43 @@
 require_relative '../../app/helpers/dot_group_helper'
 
 describe DotGroupHelper do
-  describe DotGroupHelper::BisectedDotGroups do
-    include DotGroupHelper::HtmlMethods
+  describe '#group_dot_subgroups' do
+    include DotGroupHelper
 
-    def render(*args); DotGroupHelper::BisectedDotGroups.new(*args).to_html; end
+    def g(*subgroups); DotGroupHelper::DotGroupWithSubgroups.new(subgroups); end
+    def sg(data, n); DotGroupHelper::DotSubgroup.new(data, n); end
+    def go(*subgroups); group_dot_subgroups(subgroups).to_s; end
 
     it 'should render nothing when there are no dots' do
-      expect(render('A', 0, 'B', 0)).to eq('')
+      expect(go()).to eq('')
     end
 
-    it 'should render A when B is 0' do
-      expect(render('A', 25, 'B', 0)).to eq(dot_group(dot_subgroup('A', dot_string(25))))
+    it 'should put a dot in a group' do
+      expect(go(sg('A', 1))).to eq('A:1')
     end
 
-    it 'should render two dot groups when A is too big for one' do
-      expect(render('A', 26, 'B', 0)).to eq(dot_group(dot_subgroup('A', dot_string(25))) + dot_group(dot_subgroup('A', dot_string(1))))
+    it 'should fill a group with dots' do
+      expect(go(sg('A', 25))).to eq('A:25')
     end
 
-    it 'should render B when A is 0' do
-      expect(render('A', 0, 'B', 25)).to eq(dot_group(dot_subgroup('B', dot_string(25))))
+    it 'should split a subgroup into two groups' do
+      expect(go(sg('A', 26))).to eq('A:25|A:1')
     end
 
-    it 'should put A and B in the same dot group when possible' do
-      expect(render('A', 13, 'B', 12)).to eq(dot_group(dot_subgroup('A', dot_string(13)) + dot_subgroup('B', dot_string(12))))
+    it 'should split a second subgroup correctly' do
+      expect(go(sg('A', 10), sg('B', 26))).to eq('A:10 B:15|B:11')
     end
 
-    it 'should start B mid-dot-group' do
-      expect(render('A', 13, 'B', 13)).to eq(dot_group(dot_subgroup('A', dot_string(13)) + dot_subgroup('B', dot_string(12))) + dot_group(dot_subgroup('B', dot_string(1))))
+    it 'should split a third subgroup correctly, when each group only contains two subgroups' do
+      expect(go(sg('A', 26), sg('B', 25), sg('C', 25))).to eq('A:25|A:1 B:24|B:1 C:24|C:1')
     end
 
-    it 'should fill B into the correct dot-group size' do
-      expect(render('A', 13, 'B', 25+12)).to eq(dot_group(dot_subgroup('A', dot_string(13)) + dot_subgroup('B', dot_string(12))) + dot_group(dot_subgroup('B', dot_string(25))))
+    it 'should split a third subgroup correctly, when a group contains three subgroups' do
+      expect(go(sg('A', 1), sg('B', 2), sg('C', 23))).to eq('A:1 B:2 C:22|C:1')
     end
 
-    it 'should extend B past two dot groups' do
-      expect(render('A', 1, 'B', 50)).to eq(dot_group(dot_subgroup('A', dot_string(1)) + dot_subgroup('B', dot_string(24))) + dot_group(dot_subgroup('B', dot_string(25))) + dot_group(dot_subgroup('B', dot_string(1))))
+    it 'should filter out 0-dot subgroups' do
+      expect(go(sg('A', 1), sg('B', 0), sg('C', 1))).to eq('A:1 C:1')
     end
   end
 end

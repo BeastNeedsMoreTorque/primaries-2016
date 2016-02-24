@@ -103,7 +103,7 @@ body.race-day .delegate-summary {
   }
 
   .party-delegate-summary.state-highlighted {
-    .dot-subgroup:not(.highlight) {
+    .dot-group :not(.highlight) {
       opacity: .5;
       color: $muted;
     }

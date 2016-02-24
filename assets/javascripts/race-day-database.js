@@ -6,6 +6,10 @@ function Candidate(line) {
   this.last_name = arr[2];
   this.n_delegates = +arr[3];
   this.n_pledged_delegates = +arr[4];
+  this.n_delegates_in_race_day = +arr[5];
+  this.n_pledged_delegates_in_race_day = +arr[6];
+  this.delegate_dot_groups = arr[7];
+  this.pledged_delegate_dot_groups = arr[8];
 }
 
 function CandidateCountyRace(line) {
@@ -46,6 +50,16 @@ function CountyRace(line) {
   this.n_precincts_total = +arr[4];
 }
 
+function Party(line) {
+  var arr = line.split(',');
+
+  this.id = arr[0];
+  this.n_delegates_up_for_grabs = +arr[1];
+  this.n_pledged_delegates_up_for_grabs = +arr[2];
+  this.delegate_dots_up_for_grabs = arr[3];
+  this.pledged_delegate_dots_up_for_grabs = arr[4];
+}
+
 function Race(line) {
   var arr = line.split(',');
 
@@ -61,6 +75,9 @@ function Race(line) {
   this.n_delegates = +arr[9];
   this.n_pledged_delegates_with_candidates = +arr[10];
   this.n_pledged_delegates = +arr[11];
+  this.delegate_dots = arr[12];
+  this.pledged_delegate_dots = arr[13];
+
   this.party_state_id = this.party_id + '-' + this.state_code;
 }
 
@@ -80,6 +97,7 @@ var RaceDayTables = [
   { id: 'candidate_races', name: 'candidate_race', klass: 'CandidateRace' },
   { id: 'candidate_race_subcounties', name: 'candidate_race_subcounty', klass: 'CandidateRaceSubcounty' },
   { id: 'county_races', name: 'county_race', klass: 'CountyRace' },
+  { id: 'parties', name: 'party', klass: 'Party' },
   { id: 'races', name: 'race', klass: 'Race' },
   { id: 'race_subcounties', name: 'race_subcounty', klass: 'RaceSubcounty' }
 ];

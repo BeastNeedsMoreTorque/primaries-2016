@@ -104,13 +104,13 @@ body.race-day .race {
 body.race-day .race[data-party-id="Dem"] {
   td.n-delegates-dots,
   td.n-pledged-delegates-dots,
-  .dot-subgroup.with-candidates { color: $strongDem; }
+  .dot-group .with-candidates { color: $strongDem; }
 }
 
 body.race-day .race[data-party-id="GOP"] {
   td.n-delegates-dots,
   td.n-pledged-delegates-dots,
-  .dot-subgroup.with-candidates { color: $strongGOP; }
+  .dot-group .with-candidates { color: $strongGOP; }
 }
 
 body.race-day .race:not(.has-delegate-counts) table.candidates {

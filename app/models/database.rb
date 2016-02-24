@@ -12,6 +12,7 @@ require_relative '../collections/counties'
 require_relative '../collections/county_races'
 require_relative '../collections/race_subcounties'
 require_relative '../collections/parties'
+require_relative '../collections/party_race_days'
 require_relative '../collections/party_states'
 require_relative '../collections/races'
 require_relative '../collections/race_days'
@@ -25,6 +26,7 @@ require_relative '../models/candidate_race_subcounty'
 require_relative '../models/county'
 require_relative '../models/county_race'
 require_relative '../models/party'
+require_relative '../models/party_race_day'
 require_relative '../models/party_state'
 require_relative '../models/race'
 require_relative '../models/race_day'
@@ -58,6 +60,7 @@ class Database
     counties
     county_races
     parties
+    party_race_days
     party_states
     races
     race_days
@@ -85,6 +88,7 @@ class Database
     @race_subcounties = load_race_subcounties(geo_ids_source.geo_ids, ap_election_days.race_subcounties)
     @races = load_races(sheets_source.races, copy_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
     @race_days = load_race_days(sheets_source.race_days, copy_source.race_days, last_date)
+    @party_race_days = load_party_race_days(@parties, @race_days)
 
     @now = now
     @last_date = last_date
@@ -339,6 +343,18 @@ class Database
     end
 
     Parties.new(all)
+  end
+
+  def load_party_race_days(parties, race_days)
+    all = []
+
+    for party in parties
+      for race_day in race_days
+        all << PartyRaceDay.new(self, party.id, race_day.id)
+      end
+    end
+
+    PartyRaceDays.new(all)
   end
 
   def load_party_states(sheets_party_states, pollster_party_states)

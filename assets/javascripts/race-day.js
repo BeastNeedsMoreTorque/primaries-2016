@@ -472,13 +472,14 @@
           elems.last_updated.attr('datetime', race.last_updated.toISOString()).render_datetime();
         }
         var dels = elems.n_delegates_with_candidates;
-        dels.dots.assign_bisected_dot_groups('with-candidates', race.n_delegates_with_candidates, 'without-candidates', race.n_delegates - race.n_delegates_with_candidates);
+        dels.dots.assign_encoded_dot_groups('class', race.delegate_dots);
         dels.int_with_candidates.text(format_int(race.n_delegates_with_candidates));
         dels.int_total.text(format_int(race.n_delegates));
 
         dels = elems.n_pledged_delegates_with_candidates;
-        dels.dots.assign_bisected_dot_groups('with-candidates', race.n_pledged_delegates_with_candidates, 'without-candidates', race.n_pledged_delegates - race.n_pledged_delegates_with_candidates);
+        dels.dots.assign_encoded_dot_groups('class', race.pledged_delegate_dots);
         dels.int_with_candidates.text(format_int(race.n_pledged_delegates_with_candidates))
+        dels.int_total.text(format_int(race.n_pledged_delegates));
       });
     }
 
@@ -567,6 +568,11 @@
     add_tooltips();
     color_counties(); // set up on_database_change
     poll_results(); // send AJAX request
+
+    $('.party-delegate-summary').each(function() {
+      var summary = new DelegateSummary(this);
+      on_database_change.push(summary.set_database);
+    });
 
     $(document).on('click', 'input[name=include-unpledged-delegates]', function() {
       set_include_unpledged_delegates(this.checked);

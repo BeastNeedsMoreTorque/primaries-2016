@@ -27,6 +27,7 @@ Race = RubyImmutableStruct.new(
     :candidate_county_races,
     :candidate_race_subcounties,
     :county_races,
+    :party_race_day_id,
     :party_state,
     :party_state_id,
     :race_subcounties
@@ -37,6 +38,7 @@ Race = RubyImmutableStruct.new(
 
   def after_initialize
     @id = "#{race_day_id}-#{party_id}-#{state_code}"
+    @party_race_day_id = "#{@party_id}-#{@race_day_id}"
     @party_state_id = "#{@party_id}-#{@state_code}"
     @anchor = "#{@state_code}-#{@party_id}"
 
