@@ -58,6 +58,11 @@ load_features = (key, callback) ->
     shp_filename = "#{__dirname}/input/#{basename}.shp"
     shapefile.read shp_filename, (err, feature_collection) ->
       throw err if err
+
+      # Minnesota has a weird FIPS code, 27000, for Lake Superior
+      feature_collection.features = feature_collection.features.filter (f) ->
+        !/000$/.test(f.properties.ADMIN_FIPS || '')
+
       callback(null, feature_collection.features)
 
 # Calls callback with a mapping from DataFiles key to Array of GeoJSON features

@@ -407,9 +407,6 @@ render_counties_g = (path, topology, geometries) ->
   ret = [ '  <g class="counties" transform="scale(0.1)">' ]
 
   for geometry in geometries
-    # Minnesota has a weird FIPS code, 27000, for Lake Superior
-    continue if /000$/.test(geometry.properties.fips_string)
-
     d = path(topojson.feature(topology, geometry))
     d = compress_svg_path(d)
     ret.push("    <path data-fips-int=\"#{+geometry.properties.fips_string}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
@@ -560,7 +557,7 @@ render_tiny_state_svg = (state_code, features, options, callback) ->
 
 render_all_states = (callback) ->
   pending_states = Object.keys(features_by_state).sort()
-  pending_states = [ 'MA', 'VT' ]
+  pending_states = [ 'MA', 'MN' ]
 
   step = ->
     if pending_states.length > 0
