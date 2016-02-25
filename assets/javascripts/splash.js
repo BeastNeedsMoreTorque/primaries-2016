@@ -75,5 +75,5 @@ $(function() {
 
   $('button.refresh')
     .countdown(30, do_poll)
-    .trigger('click.countdown'); // poll immediately on page load, to populate map; don't trigger AOL beacon
+    .eq(0).trigger('click.countdown'); // poll immediately on page load, to populate map
 });
