@@ -22,7 +22,7 @@ function RaceDayNodes() {
     var psd = raceEl.querySelector('.party-state-delegates');
     races[party_id][state_code] = {
       div: this,
-      n_precincts: raceEl.querySelector('.race-status .n-precincts-reporting'),
+      n_precincts: raceEl.querySelectorAll('.race-status .n-precincts-reporting'),
       last_updated: raceEl.querySelector('.race-status time'),
       n_delegates_with_candidates: {
         dots: psd.querySelector('.n-delegates-dots'),

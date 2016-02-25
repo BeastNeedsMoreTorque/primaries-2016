@@ -466,7 +466,10 @@
           .toggleClass('has-pledged-delegate-counts', race.has_pledged_delegate_counts)
           ;
 
-        elems.n_precincts.textContent = n_precincts_reporting_text(race.n_precincts_reporting, race.n_precincts_total);
+        Array.prototype.forEach.call(elems.n_precincts, function(el) {
+          el.textContent = n_precincts_reporting_text(race.n_precincts_reporting, race.n_precincts_total);
+        });
+
         if (!isNaN(race.last_updated.getFullYear())) {
           elems.last_updated.setAttribute('datetime', race.last_updated.toISOString());
           $(elems.last_updated).render_datetime();
