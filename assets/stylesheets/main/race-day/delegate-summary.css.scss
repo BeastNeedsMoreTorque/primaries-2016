@@ -97,7 +97,7 @@ body.race-day .delegate-summary {
   }
 
   .party-delegate-summary[data-party-id=Dem] {
-    text.foreground {
+    text {
       fill: $strongDem;
     }
 
@@ -107,7 +107,7 @@ body.race-day .delegate-summary {
   }
 
   .party-delegate-summary[data-party-id=GOP] {
-    text.foreground {
+    text {
       fill: $strongGOP;
     }
 
