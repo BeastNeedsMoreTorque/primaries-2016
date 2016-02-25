@@ -2,4 +2,5 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="181" viewBox="0 0 350 181">
   <path class="state" transform="scale(0.1)" d="M104,1513v-371l16,-121v-337v-34v-415l34,-51v-138l100,8h251v9h300h468l17,17h969v-17h468h17h300l51,26v26l66,17 50,-26v34h34l-67,61v34l-17,9 -16,78 66,52 17,69h17l33,69 101,8 -17,18 17,43v466h16v466l17,9v207l-100,9h-251v8h-301v9h-467v8h-1053v-8h-435v-9h-401l-16,-8h-268l-33,-9v-147l17,-69"/>
+<text x="175" y="90">KS</text>
 </svg>

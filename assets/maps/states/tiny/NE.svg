@@ -2,4 +2,5 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="163" viewBox="0 0 350 163">
   <path class="state" transform="scale(0.1)" d="M104,849v-263l16,-39v-310v-16v-178l84,8h134h50h133l67,15h134h33h201l33,16h535l17,8h434l33,-8h168v31l100,46h33l17,39h50l17,-46 67,7 66,-15h101l50,46 33,-7 100,54v31l51,15v31l100,8 -17,78 34,23v70l33,70 50,7 -17,47 34,31v147h33l34,31v140l33,-8v101v162l50,16v54l34,-23v78l16,46 34,31h33v39l34,23 -17,39 50,23h-150v8h-167v8h-218v7h-267v8h-401v8h-952v-8h-385l-50,-8 17,-170v-326l-117,-8h-184l-33,-7h-167l-251,-16v-101l17,-93"/>
+<text x="175" y="81">NE</text>
 </svg>

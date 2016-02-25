@@ -2,4 +2,5 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="288" height="350" viewBox="0 0 288 350">
   <path class="state" transform="scale(0.1)" d="M72,137l14,-50h83l27,67 -27,33h-83l-14,-50M2697,3345l27,-50h28l55,33v51l-28,33 -82,-17v-50M1350,3011l14,-50h82l14,-17 55,34v33h151l14,17v83l-41,34h-96l-42,-84h-110l-41,-50M320,3145l55,-67h68l42,-34 13,51h28l41,-51 14,51 55,33v33h-96l-28,50 -69,34 -68,-17v-33h-55v-50"/>
+<text x="144" y="175">AS</text>
 </svg>
