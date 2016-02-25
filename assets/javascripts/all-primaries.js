@@ -11,5 +11,7 @@ $(function() {
         .toggleClass('show-n-pledged-delegates', !checked)
         ;
     });
+
+    wait_for_font_then('Source Sans Pro', init_state_race_days);
   });
 });
