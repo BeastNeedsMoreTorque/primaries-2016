@@ -17,9 +17,6 @@ Race = RubyImmutableStruct.new(
 ) do
   include Comparable
 
-  # Sum of candidate_states.n_delegates and .n_pledged_delegates
-  attr_reader(:n_delegates_with_candidates, :n_pledged_delegates_with_candidates)
-
   attr_reader(
     :id,
     :candidate_races,
@@ -51,9 +48,6 @@ Race = RubyImmutableStruct.new(
     @candidate_race_subcounties = database.candidate_race_subcounties.find_all_by_race_id(@id) || []
     @county_races = database.county_races.find_all_by_race_id(@id) || []
     @race_subcounties = database.race_subcounties.find_all_by_race_id(@id) || []
-
-    @n_delegates_with_candidates = @candidate_states.map(&:n_delegates).reduce(0, :+)
-    @n_pledged_delegates_with_candidates = @candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
 
   def href
@@ -99,7 +93,9 @@ Race = RubyImmutableStruct.new(
   def enabled?; race_day.enabled?; end
   def today?; race_day.today?; end
   def n_delegates; party_state.n_delegates; end
+  def n_delegates_with_candidates; party_state.n_delegates_with_candidates; end
   def n_pledged_delegates; party_state.n_pledged_delegates; end
+  def n_pledged_delegates_with_candidates; party_state.n_pledged_delegates_with_candidates; end
   def pollster_slug; party_state.pollster_slug; end
   def pollster_last_updated; party_state.pollster_last_updated; end
 

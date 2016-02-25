@@ -5,15 +5,16 @@
 CandidateState = RubyImmutableStruct.new(:database, :candidate_id, :state_code, :n_delegates, :n_pledged_delegates, :poll_percent, :poll_sparkline) do
   include Comparable
 
-  attr_reader(:id, :candidate, :party, :party_id, :party_state, :state)
+  attr_reader(:id, :candidate, :party, :party_id, :party_state, :party_state_id, :state)
 
   def after_initialize
-    @id = "#{candidate_id}-#{state_code}"
-    @candidate = database.candidates.find!(candidate_id)
+    @id = "#{@candidate_id}-#{@state_code}"
+    @candidate = database.candidates.find!(@candidate_id)
     @party = @candidate.party
     @party_id = @party.id
-    @party_state = database.party_states.find!("#{party_id}-#{state_code}")
-    @state = database.states.find!(state_code)
+    @party_state_id = "#{@party_id}-#{@state_code}"
+    @party_state = database.party_states.find!(@party_state_id)
+    @state = database.states.find!(@state_code)
   end
 
   def candidate_last_name; candidate.name; end

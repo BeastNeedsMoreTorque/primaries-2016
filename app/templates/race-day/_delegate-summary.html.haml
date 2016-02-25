@@ -60,13 +60,13 @@
                     - for dot_subgroup in dot_group.dot_subgroups
                       %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                         = '•' * dot_subgroup.n_dots
-        %ul.state-delegates
-          - party_candidate_states.group_by(&:state).each do |state, candidate_states|
-            - party_state = candidate_states.first.party_state
-            %li{'data-state-code': state.code}
-              .map!= map_svg("states/tiny/#{state.code}")
-              .n-delegates= party_state.n_delegates
-              .n-pledged-delegates= party_state.n_pledged_delegates
-
+        .state-delegates
+          %ul
+            - party_candidate_states.group_by(&:state).each do |state, candidate_states|
+              - party_state = candidate_states.first.party_state
+              %li{'data-state-code': state.code, 'data-state-name': state.name, 'data-n-delegates': party_state.n_delegates, 'data-n-pledged-delegates': party_state.n_pledged_delegates, 'data-n-delegates-with-candidates': party_state.n_delegates_with_candidates, 'data-n-pledged-delegates-with-candidates': party_state.n_pledged_delegates_with_candidates, 'data-race-href': "##{party_state.state_code}-#{party_state.party_id}"}
+                .map!= map_svg("states/tiny/#{state.code}")
+                .n-delegates= format_int(party_state.n_delegates)
+                .n-pledged-delegates= format_int(party_state.n_pledged_delegates)
 
         != render(partial: 'race-day/include-unpledged-delegates')

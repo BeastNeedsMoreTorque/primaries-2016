@@ -53,7 +53,7 @@ body.race-day .delegate-summary {
     }
   }
 
-  ul.state-delegates {
+  .state-delegates ul {
     display: -webkit-flex;
     display: flex;
     -webkit-flex-wrap: wrap;
@@ -96,6 +96,11 @@ body.race-day .delegate-summary {
     }
   }
 
+  li .n-delegates, li .n-pledged-delegates {
+    color: $muted;
+    font-size: .8rem;
+  }
+
   .party-delegate-summary[data-party-id=Dem] {
     text {
       fill: $strongDem;
@@ -122,7 +127,7 @@ body.race-day .delegate-summary {
       color: $muted;
     }
 
-    ul.state-delegates li:not(.highlight) {
+    .state-delegates li:not(.highlight) {
       -webkit-filter: grayscale(1);
       filter: grayscale(1);
       opacity: .5;
@@ -131,6 +136,49 @@ body.race-day .delegate-summary {
 
   p.include-unpledged-delegates {
     padding-top: .5rem;
+  }
+
+  .state-delegates {
+    position: relative; // for the tooltip
+  }
+}
+
+.delegate-summary-tooltip {
+  box-sizing: border-box;
+  font-size: .8rem;
+  text-align: center;
+  padding: .4rem 2rem; // 2rem on the right for an "x"; on the left for centering
+  line-height: 1.4rem;
+  border: 1px solid #ccc;
+  left: 5%;
+  width: 90%;
+  box-shadow: 0 0 10px #ccc;
+  position: absolute;
+  background: white;
+  color: $muted;
+
+  p {
+    display: inline;
+    margin: 0;
+    padding: 0;
+  }
+
+  a.race {
+    white-space: nowrap;
+    padding: 0 .5rem; // .5rem on both side, so if it wraps it centers
+  }
+
+  a.close {
+    text-decoration: none;
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    right: 1px; // for the border
+    top: 1px; // for the border
+    padding: .4rem;
+    font-size: 1rem;
+    width: 1.4rem;
+    height: 1.5rem;
   }
 }
 
