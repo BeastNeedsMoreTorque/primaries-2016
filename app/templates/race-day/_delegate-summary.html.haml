@@ -68,3 +68,6 @@
               .map!= map_svg("states/tiny/#{state.code}")
               .n-delegates= party_state.n_delegates
               .n-pledged-delegates= party_state.n_pledged_delegates
+
+
+        != render(partial: 'race-day/include-unpledged-delegates')

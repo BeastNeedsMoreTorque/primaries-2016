@@ -114,6 +114,10 @@ body.race-day .delegate-summary {
       opacity: .5;
     }
   }
+
+  p.include-unpledged-delegates {
+    padding-top: .5rem;
+  }
 }
 
 body.race-day.show-delegates .party-delegate-summary {
