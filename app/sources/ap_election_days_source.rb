@@ -13,8 +13,8 @@ require 'set'
 # Provides:
 #
 # * candidate_races: id, n_votes, winner
-# * candidate_county_races: candidate_id, fips_int, race_id, n_votes
-# * candidate_race_subcounties: candidate_id, race_id, reporting_unit_id, n_votes
+# * candidate_county_races: candidate_race_id, candidate_id, fips_int, race_id, n_votes
+# * candidate_race_subcounties: candidate_race_id, candidate_id, race_id, reporting_unit_id, n_votes
 # * county_fips_ints (Set of Integers)
 # * county_races: id, n_votes, n_precincts_reporting, n_precincts_total
 # * subcounty_reporting_unit_ids (Set of Integers)
@@ -22,8 +22,8 @@ require 'set'
 # * races: id, party_id, state_code, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource
   CandidateRace = RubyImmutableStruct.new(:id, :candidate_id, :n_votes, :winner)
-  CandidateCountyRace = RubyImmutableStruct.new(:candidate_id, :fips_int, :race_id, :n_votes)
-  CandidateRaceSubcounty = RubyImmutableStruct.new(:candidate_id, :race_id, :reporting_unit_id, :n_votes)
+  CandidateCountyRace = RubyImmutableStruct.new(:candidate_race_id, :candidate_id, :fips_int, :race_id, :n_votes)
+  CandidateRaceSubcounty = RubyImmutableStruct.new(:candidate_race_id, :candidate_id, :race_id, :reporting_unit_id, :n_votes)
   CountyRace = RubyImmutableStruct.new(:fips_int, :race_id, :n_votes, :n_precincts_reporting, :n_precincts_total)
   RaceSubcounty = RubyImmutableStruct.new(:race_id, :reporting_unit_id, :n_votes, :n_precincts_reporting, :n_precincts_total)
   Race = RubyImmutableStruct.new(:id, :party_id, :state_code, :n_votes, :max_n_votes, :n_precincts_reporting, :n_precincts_total, :last_updated)
@@ -124,6 +124,7 @@ class ApElectionDaysSource
             next if candidate_id.length >= 6 # unassigned, no preference, etc
 
             @candidate_county_races << CandidateCountyRace.new(
+              "#{candidate_id}-#{race_id}",
               candidate_id,
               fips_int,
               race_id,
@@ -150,6 +151,7 @@ class ApElectionDaysSource
 
             next if candidate_id.length >= 6 # unassigned, no preference, etc
             @candidate_race_subcounties << CandidateRaceSubcounty.new(
+              "#{candidate_id}-#{race_id}",
               candidate_id,
               race_id,
               reporting_unit_id,
