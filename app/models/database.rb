@@ -193,14 +193,12 @@ class Database
   end
 
   def load_candidate_county_races(sheets_candidates, sheets_races, ap_candidate_county_races)
-    valid_race_ids = sheets_races.map(&:id).to_set
-    valid_candidate_ids = sheets_candidates.map(&:id).to_set
+    valid_candidate_race_ids = build_valid_candidate_race_ids(sheets_candidates, sheets_races)
 
-    all = []
-
-    ap_candidate_county_races.each do |ccr|
-      if valid_race_ids.include?(ccr.race_id) && valid_candidate_ids.include?(ccr.candidate_id)
-        all << CandidateCountyRace.new(
+    all = ap_candidate_county_races
+      .select { |ccr| valid_candidate_race_ids.include?(ccr.candidate_race_id) }
+      .map! do |ccr|
+        CandidateCountyRace.new(
           self,
           ccr.candidate_id,
           ccr.fips_int,
@@ -208,22 +206,29 @@ class Database
           ccr.n_votes
         )
       end
-    end
 
     all.sort
 
     CandidateCountyRaces.new(all)
   end
 
+  def build_valid_candidate_race_ids(sheets_candidates, sheets_races)
+    sheets_candidates.flat_map do |candidate|
+      last_race_day_id = candidate.dropped_out_date_or_nil ? candidate.dropped_out_date_or_nil.to_s : ':' # ':' is after '9'
+
+      sheets_races
+        .select { |r| r.race_day_id < last_race_day_id }
+        .map! { |r| "#{candidate.id}-#{r.id}" }
+    end.to_set
+  end
+
   def load_candidate_race_subcounties(sheets_candidates, sheets_races, geo_ids, ap_candidate_race_subcounties)
-    valid_race_ids = sheets_races.map(&:id).to_set
-    valid_candidate_ids = sheets_candidates.map(&:id).to_set
+    valid_candidate_race_ids = build_valid_candidate_race_ids(sheets_candidates, sheets_races)
 
-    all = []
-
-    ap_candidate_race_subcounties.each do |crs|
-      if valid_race_ids.include?(crs.race_id) && valid_candidate_ids.include?(crs.candidate_id)
-        all << CandidateRaceSubcounty.new(
+    all = ap_candidate_race_subcounties
+      .select { |crs| valid_candidate_race_ids.include?(crs.candidate_race_id) }
+      .map! do |crs|
+        CandidateRaceSubcounty.new(
           self,
           crs.candidate_id,
           crs.race_id,
@@ -231,7 +236,6 @@ class Database
           crs.n_votes
         )
       end
-    end
 
     all.sort
 
