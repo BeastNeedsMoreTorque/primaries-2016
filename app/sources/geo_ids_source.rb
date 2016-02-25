@@ -18,6 +18,10 @@ class GeoIdsSource
       geo_id = geo_id_s.to_i
       ap_id = ap_id_s ? ap_id_s.to_i : nil
 
+      puts line
+      puts [ ap_id_s, geo_id_s ].inspect
+      puts [ geo_id, ap_id ].inspect
+
       @ap_ids[geo_id] = ap_id
       @geo_ids[ap_id] = geo_id if ap_id
     end

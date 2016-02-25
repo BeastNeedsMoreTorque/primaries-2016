@@ -110,7 +110,7 @@ class ApElectionDaysSource
               candidate_hash[:winner] == 'X'
             )
           end
-        elsif reporting_unit[:level] == 'subunit' && state_code != 'NH' # TODO fix this
+        elsif reporting_unit[:level] == 'subunit' && ![ 'NH', 'MA', 'VT' ].include?(state_code)
           fips_code = reporting_unit[:fipsCode]
 
           fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal

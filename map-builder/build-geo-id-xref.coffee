@@ -22,7 +22,7 @@ load_geo_rows = (state_code, callback) ->
 
     callback(null, geo_rows)
 
-load_ap_rows = (filename, callback) ->
+load_ap_rows = (state_code, filename, callback) ->
   fs.readFile filename, (err, data) ->
     return callback(err) if err
 
@@ -30,7 +30,7 @@ load_ap_rows = (filename, callback) ->
 
     obj = JSON.parse(data)
     for race in obj.races
-      for reportingUnit in race.reportingUnits when reportingUnit.level == 'subunit'
+      for reportingUnit in race.reportingUnits when reportingUnit.level == 'subunit' && reportingUnit.statePostal == state_code
         ap_id_to_row[reportingUnit.reportingunitID] =
           ap_id: +reportingUnit.reportingunitID
           fips_int: +reportingUnit.fipsCode
@@ -84,7 +84,7 @@ if process.argv.length != 4
 load_geo_rows process.argv[2], (err, geo_rows) ->
   throw err if err
 
-  load_ap_rows process.argv[3], (err, ap_rows) ->
+  load_ap_rows process.argv[2], process.argv[3], (err, ap_rows) ->
     throw err if err
 
     [ rows, ap_only_rows, geo_only_rows ] = merge_rows(ap_rows, geo_rows)

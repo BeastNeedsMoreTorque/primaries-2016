@@ -10,7 +10,7 @@ DataFiles = require('./DataFiles')
 is_data_downloaded = (key, callback) ->
   data_file = DataFiles[key]
   shp_size = data_file.shp_size
-  path = "./input/#{data_file.basename}.shp"
+  path = "#{__dirname}/input/#{data_file.basename}.shp"
 
   fs.stat path, (err, stats) ->
     ret = if err
@@ -33,9 +33,9 @@ download_data = (key, callback) ->
     throw err if err
 
     deflated = if /\.zip$/.test(url)
-      res.pipe(unzip.Extract(path: './input'))
+      res.pipe(unzip.Extract(path: "#{__dirname}/input"))
     else
-      res.pipe(zlib.createGunzip()).pipe(tar.extract('./input'))
+      res.pipe(zlib.createGunzip()).pipe(tar.extract("#{__dirname}/input"))
 
     deflated
       .on('error', (err) -> throw err)
@@ -55,7 +55,7 @@ load_features = (key, callback) ->
   ensure_data_downloaded key, (err) ->
     data_file = DataFiles[key]
     basename = data_file.basename
-    shp_filename = "./input/#{basename}.shp"
+    shp_filename = "#{__dirname}/input/#{basename}.shp"
     shapefile.read shp_filename, (err, feature_collection) ->
       throw err if err
       callback(null, feature_collection.features)

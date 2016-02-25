@@ -560,6 +560,7 @@ render_tiny_state_svg = (state_code, features, options, callback) ->
 
 render_all_states = (callback) ->
   pending_states = Object.keys(features_by_state).sort()
+  pending_states = [ 'MA', 'VT' ]
 
   step = ->
     if pending_states.length > 0
@@ -612,7 +613,7 @@ geo_loader.load_all_features (err, key_to_features) ->
   organize_features('cities', key_to_features.cities)
   organize_features('counties', key_to_features.counties)
 
-  [ 'NH' ].forEach (key) ->
+  [ 'MA', 'NH', 'VT' ].forEach (key) ->
     organize_subcounty_features(key, key_to_features[key])
 
   [ 'AS', 'GU', 'MP' ].forEach (key) ->
