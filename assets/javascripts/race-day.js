@@ -775,6 +775,20 @@ function update_body_include_unpledged_delegates(checked) {
 }
 on_include_unpledged_delegates_changed.push(update_body_include_unpledged_delegates);
 
+var topCheck = function(){
+  var top = $(window).scrollTop();
+  if($('#scrollfinder').length === 0)
+    return;
+  if($('#scrollfinder').offset() === undefined)
+    return;
+  var offset = $('#scrollfinder').offset().top;
+  if (top > offset) {
+    $('.dropdown-container').addClass('fixed');
+  } else {
+    $('.dropdown-container').removeClass('fixed');
+  }
+}
+
 $(function() {
   $('body.race-day').each(function() {
     $('time').render_datetime();
@@ -787,6 +801,13 @@ $(function() {
     add_tooltips();
     color_counties(); // set up on_database_change
     poll_results(); // send AJAX request
+  });
+
+  $(window).scroll(function(){
+    topCheck();
+  });
+  
+  topCheck();
 
   $('.dropdown-button').click(function() {
     $('.dropdown-menu').toggleClass("visible");
@@ -800,5 +821,4 @@ $(function() {
     set_include_unpledged_delegates(this.checked);
   });
 
-  });
 });
