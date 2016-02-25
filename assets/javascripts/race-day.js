@@ -47,7 +47,6 @@
     var svg_hover_path = null;
 
     function update_tooltip(county_name, race, geo_race, candidate_geo_races, highlight_candidate_id, is_from_touch) {
-      console.log('here');
       $tooltip.find('h4').text(county_name);
 
       if (geo_race) {

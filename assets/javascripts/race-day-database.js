@@ -141,7 +141,7 @@ function RaceDay(race_day_json) {
     o2[ccr.geo_id].push(ccr);
   });
   this.candidate_race_subcounties.forEach(function(crs) {
-    var party_id = candidates_by_id[ccr.candidate_id].party_id;
+    var party_id = candidates_by_id[crs.candidate_id].party_id;
     o2 = o[party_id];
     if (!o2.hasOwnProperty(crs.geo_id)) { o2[crs.geo_id] = []; }
     o2[crs.geo_id].push(crs);
