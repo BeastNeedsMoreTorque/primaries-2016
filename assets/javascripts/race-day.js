@@ -521,16 +521,30 @@
       $('ul.party-state').each(function() {
         var el = this;
 
+        // Queue up all div resizing so we do it all at once. Do not resize
+        // while iterating: that'll cause a repaint per race (20ms total on
+        // Super Tuesday in Chrome on a fast dev machine).
+        var to_resize = [];
+
         [ '.race-status', '.party-state-map' ].forEach(function(class_name) {
           var $divs = $(class_name, el);
           if ($divs.length == 2) {
-            if ($divs[0].getBoundingClientRect().top == $divs[1].getBoundingClientRect().top) {
-              var $p1 = $divs.first();
-              var $p2 = $divs.last();
-              var h = Math.max($p1.height(), $p2.height());
-              $divs.css({ height: h + 'px' });
+            var rect1 = $divs.get(0).getBoundingClientRect();
+            var rect2 = $divs.get(1).getBoundingClientRect();
+            if (rect1.top == rect2.top) {
+              if (rect1.height > rect2.height) {
+                to_resize.push({ div: $divs.get(1), height: $divs.eq(0).height() });
+              } else if (rect2.height > rect1.height) {
+                to_resize.push({ div: $divs.get(0), height: $divs.eq(1).height() });
+              }
             }
           }
+        });
+
+        to_resize.forEach(function(o) {
+          var div = o.div;
+          var height = o.height;
+          div.style.height = height + 'px';
         });
       });
     }
