@@ -1,3 +1,7 @@
+// export these functions
+var simple_dot_group_html = null;
+var encoded_dot_groups_html = null;
+
 (function() {
   var DotsPerGroup = 25;
 
@@ -31,12 +35,12 @@
   }
 
   /**
-   * Sets the inner HTML to be some <div class="dot-group">s.
+   * Builds an HTML String of <div class="dot-group">s.
    *
    * This is a copy of the logic in app/helpers/dot_groups_helper.rb. Change
    * things there, then copy the changes here.
    */
-  $.fn.assign_simple_dot_groups = function(n_dots) {
+  simple_dot_groups_html = function simple_dot_group_html(n_dots) {
     var htmls = [];
 
     if (n_dots > DotsPerGroup) {
@@ -47,11 +51,11 @@
       htmls.push(dot_group(dot_string(n_dots % DotsPerGroup)));
     }
 
-    this.html(htmls.join(''));
+    return htmls.join('');
   };
 
   /**
-   * Sets the inner HTML to be some <div class="dot-group">s with subgroups,
+   * Builds an HTML String of some <div class="dot-group">s with subgroups,
    * based on the passed input string.
    *
    * @param html_attribute Name of the HTML attribute we set on each subgroup
@@ -59,7 +63,7 @@
    *                     within separated by ` `. Each subgroup is a
    *                     `value:n-dots` pair.
    */
-  $.fn.assign_encoded_dot_groups = function(html_attribute, encoded_dot_groups) {
+  encoded_dot_groups_html = function encoded_dot_groups_html(html_attribute, encoded_dot_groups) {
     var dot_group_strings = encoded_dot_groups.split('|').filter(function(s) { return !!s; });
 
     var html = [];
@@ -78,6 +82,6 @@
       html.push('</div>');
     });
 
-    $(this).html(html.join(''));
-  }
+    return html.join('');
+  };
 })();

@@ -1,5 +1,4 @@
 function DelegateSummary(el) {
-  var $el = $(el);
   var current_state_code = null;
 
   var party_id = el.getAttribute('data-party-id');
@@ -7,10 +6,10 @@ function DelegateSummary(el) {
   var candidate_trs = {}; // id -> { int_td, dots_td, pledged_int_td, pledged_dots_td }
 
   function Tr(tr, up_for_grabs) {
-    var $int_td = $('td.n-delegates-int', tr);
-    var $dots_td = $('td.n-delegates-dots', tr);
-    var $pledged_int_td = $('td.n-pledged-delegates-int', tr);
-    var $pledged_dots_td = $('td.n-pledged-delegates-dots', tr);
+    var int_td = tr.querySelector('td.n-delegates-int');
+    var dots_td = tr.querySelector('td.n-delegates-dots');
+    var pledged_int_td = tr.querySelector('td.n-pledged-delegates-int');
+    var pledged_dots_td = tr.querySelector('td.n-pledged-delegates-dots');
 
     this.rewrite = function rewrite_tr(object) {
       var data;
@@ -30,18 +29,18 @@ function DelegateSummary(el) {
         };
       }
 
-      $int_td.text(format_int(data.n_delegates));
-      $dots_td.assign_encoded_dot_groups('data-state-code', data.delegate_dots);
-      $pledged_int_td.text(format_int(data.n_pledged_delegates));
-      $pledged_dots_td.assign_encoded_dot_groups('data-state-code', data.pledged_delegate_dots);
+      int_td.textContent = format_int(data.n_delegates);
+      dots_td.innerHTML = encoded_dot_groups_html('data-state-code', data.delegate_dots);
+      pledged_int_td.textContent = format_int(data.n_pledged_delegates);
+      pledged_dots_td.innerHTML = encoded_dot_groups_html('data-state-code', data.pledged_delegate_dots);
     }
   }
 
-  $('tr[data-candidate-id]', el).each(function() {
-    var candidate_id = this.getAttribute('data-candidate-id');
-    candidate_trs[candidate_id] = new Tr(this, false);
+  Array.prototype.forEach.call(el.querySelectorAll('tr[data-candidate-id]'), function(tr) {
+    var candidate_id = tr.getAttribute('data-candidate-id');
+    candidate_trs[candidate_id] = new Tr(tr, false);
   });
-  up_for_grabs_tr = new Tr($('tr.up-for-grabs', el).get(0), true);
+  up_for_grabs_tr = new Tr(el.querySelector('tr.up-for-grabs'), true);
 
   this.set_database = function set_database(database) {
     database.candidates.forEach(function(candidate) {
@@ -77,16 +76,16 @@ function DelegateSummary(el) {
 
   function highlight_state(state_code) {
     $('[data-state-code=' + state_code + ']', el).addClass('highlight');
-    $el.addClass('state-highlighted');
+    $(el).addClass('state-highlighted');
   }
 
   function unhighlight_state() {
     $('.highlight', el).removeClass('highlight');
-    $el.removeClass('state-highlighted');
+    $(el).removeClass('state-highlighted');
     current_state_code = null;
   }
 
-  $el.on('click', 'li[data-state-code]', function(ev) {
+  $(el).on('click', 'li[data-state-code]', function(ev) {
     ev.preventDefault();
 
     var state_code = ev.currentTarget.getAttribute('data-state-code');

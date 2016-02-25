@@ -442,9 +442,9 @@
         elems.n_votes.textContent = format_int(candidate_race.n_votes);
         elems.percent_vote.textContent = format_percent(candidate_race.percent_vote);
 
-        $(elems.n_delegates_dots).assign_simple_dot_groups(candidate_race.n_delegates);
+        elems.n_delegates_dots.innerHTML = simple_dot_groups_html(candidate_race.n_delegates);
         elems.n_delegates_int.textContent = format_int(candidate_race.n_delegates);
-        $(elems.n_pledged_delegates_dots).assign_simple_dot_groups(candidate_race.n_pledged_delegates);
+        elems.n_pledged_delegates_dots.innerHTML = simple_dot_groups_html(candidate_race.n_pledged_delegates);
         elems.n_pledged_delegates_int.textContent = format_int(candidate_race.n_pledged_delegates);
       });
 
@@ -474,12 +474,12 @@
         }
 
         var dels = elems.n_delegates_with_candidates;
-        $(dels.dots).assign_encoded_dot_groups('class', race.delegate_dots);
+        dels.dots.innerHTML = encoded_dot_groups_html('class', race.delegate_dots);
         dels.int_with_candidates.textContent = format_int(race.n_delegates_with_candidates);
         dels.int_total.textContent = format_int(race.n_delegates);
 
         dels = elems.n_pledged_delegates_with_candidates;
-        $(dels.dots).assign_encoded_dot_groups('class', race.pledged_delegate_dots);
+        dels.dots.innerHTML = encoded_dot_groups_html('class', race.pledged_delegate_dots);
         dels.int_with_candidates.textContent = format_int(race.n_pledged_delegates_with_candidates);
         dels.int_total.textContent = format_int(race.n_pledged_delegates);
       });
