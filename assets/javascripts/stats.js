@@ -15,6 +15,25 @@ bN_cfg = {
   }
 }
 
+function runOmni() {
+  s_265.pfxID = 'hpo';
+  s_265.channel = 'us.hpmgpol';
+  s_265.linkInternalFilters = 'javascript:,huffingtonpost.com';
+  s_265.prop16 = 'page';
+  s_265.prop1 = 'elections';
+  s_265.pageName = "" + document.title;
+  s_265.prop12 = "" + document.URL.split('?')[0];
+  s_265.t();
+}
+
+s_265_account ="aolhuffpostpolitics,aolsvc";
+
+(function(d){
+var s = d.createElement('script');
+s.src = "http://o.aolcdn.com/os_merge/?file=/aol/beacon.min.js&file=/aol/omniture.min.js";
+d.getElementsByTagName('head')[0].appendChild(s);
+})(document);
+
 document.body.innerHTML += '<div id="parsely-root" style="display:none;"><span id="parsely-cfg" data-parsely-site="huffingtonpost.com"></span></div>';
 
 (function(s, p, d) {
@@ -26,6 +45,12 @@ document.body.innerHTML += '<div id="parsely-root" style="display:none;"><span i
   e = d.createElement(s); e.id = i; e.async = true;
   e.src = h+"//"+u+"/p.js"; r.appendChild(e);
 })("script", "parsely", document);
+
+
+// Workaround so Omniture tracking code doesn't crash on pages w/ SVG
+if (typeof SVGAnimatedString !== 'undefined') {
+  SVGAnimatedString.prototype.indexOf = function indexOf() { };
+}
 
 function runComscore() {
   COMSCORE.beacon({
