@@ -100,8 +100,6 @@ class BaseView
 
   # Returns inline <svg> data from the given `path`
   def map_svg(path)
-    return '' if %w(states/DA states/tiny/DA).include?(path)
-
     # a .svg file includes a DOCTYPE, but we're including it inline so we don't
     # want it.
     header_length = 137

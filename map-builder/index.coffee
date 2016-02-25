@@ -9,6 +9,21 @@ MaxWidth = 350
 MaxHeight = 350
 MinDistanceBetweenCities = 35 # px, vertically or horizontally
 
+BigTopojsonOptions =
+  'pre-quantization': 6000
+  'post-quantization': 2000
+  'coordinate-system': 'cartesian'
+  'minimum-area': 5
+  'preserve-attached': false
+
+TinyTopojsonOptions =
+  'pre-quantization': 5000
+  'post-quantization': 200
+  'coordinate-system': 'cartesian'
+  'minimum-area': 10
+  'preserve-attached': false
+  'property-transform': (d) -> {}
+
 geo_loader = require('./geo-loader')
 
 # These cities didn't come from any one source. Adam Hooper compiled them from
@@ -214,21 +229,17 @@ project_features = (features, projection) ->
 
 topojsonize = (features) ->
   # Modeled after topojson's bin/topojson
-  options =
-    'pre-quantization': 6000
-    'post-quantization': 2000
-    'coordinate-system': 'cartesian'
-    'minimum-area': 5
-    'preserve-attached': false
-    'property-transform': (d) ->
-      p = d.properties
+  options = {}
+  (options[k] = v) for k, v of BigTopojsonOptions
+  options['property-transform'] = (d) ->
+    p = d.properties
 
-      state_code: p.STATE
-      fips_string: p.ADMIN_FIPS # counties only
-      geo_id: p.GEOID # subcounties only
-      name: p.ADMIN_NAME || p.NAME
-      feature: p.FEATURE # cities only; we filter for 'Civil'
-      population: +p.POP_2010 # cities only
+    state_code: p.STATE
+    fips_string: p.ADMIN_FIPS # counties only
+    geo_id: p.GEOID # subcounties only
+    name: p.ADMIN_NAME || p.NAME
+    feature: p.FEATURE # cities only; we filter for 'Civil'
+    population: +p.POP_2010 # cities only
 
   topology = topojson.topology(features, options)
   topojson.clockwise(topology, options)
@@ -257,37 +268,32 @@ merge_counties_into_multipolygon = (counties_geojson) ->
   writer = new jsts.io.GeoJSONWriter()
   writer.write(merged_geometry)
 
-topojsonize_tiny = (features) ->
-  # Modeled after topojsonize()
-  options =
-    'pre-quantization': 5000
-    'post-quantization': 200
-    'coordinate-system': 'cartesian'
-    'minimum-area': 10
-    'preserve-attached': false
-    'property-transform': (d) -> {}
+topojsonize_tiny = (features, options) ->
+  topology = if options.skip_merge
+    topojson.topology({ counties: features.counties }, TinyTopojsonOptions)
+  else
+    # Now merge all the counties together. We want a MultiPolygon and
+    # topojson.mesh() only returns a MultiLineString. (And topojson.merge()
+    # produces bad results.)
+    polygons = []
+    for feature in features.counties.features
+      continue if !feature.geometry # MP has a null geometry
+      geometry = feature.geometry
+      switch geometry.type
+        when 'Polygon' then polygons.push(geometry.coordinates)
+        when 'MultiPolygon'
+          for polygon in geometry.coordinates
+            polygons.push(polygon)
+        else throw "We don't handle geometries of type #{geometry.type}"
 
-  # Now merge all the counties together. We want a MultiPolygon and
-  # topojson.mesh() only returns a MultiLineString. (And topojson.merge()
-  # produces bad results.)
-  polygons = []
-  for feature in features.counties.features
-    continue if !feature.geometry # MP has a null geometry
-    geometry = feature.geometry
-    switch geometry.type
-      when 'Polygon' then polygons.push(geometry.coordinates)
-      when 'MultiPolygon'
-        for polygon in geometry.coordinates
-          polygons.push(polygon)
-      else throw "We don't handle geometries of type #{geometry.type}"
+    counties_gc = { type: 'GeometryCollection', geometries: polygons.map((p) -> type: 'Polygon', coordinates: p) }
+    merged_geojson = merge_counties_into_multipolygon(counties_gc)
+    topojson.topology({ counties: merged_geojson }, TinyTopojsonOptions)
 
-  counties_gc = { type: 'GeometryCollection', geometries: polygons.map((p) -> type: 'Polygon', coordinates: p) }
-  merged_geojson = merge_counties_into_multipolygon(counties_gc)
-  merged_topology = topojson.topology({ counties: merged_geojson }, options)
-  topojson.simplify(merged_topology, options)
-  topojson.filter(merged_topology, options)
-  topojson.prune(merged_topology, options)
-  merged_topology
+  topojson.simplify(topology, TinyTopojsonOptions)
+  topojson.filter(topology, TinyTopojsonOptions)
+  topojson.prune(topology, TinyTopojsonOptions)
+  topology
 
 compress_svg_path = (path) ->
   # First, round to one decimal and multiply by 10
@@ -497,12 +503,12 @@ render_cities_g = (topology, geometries) ->
   ret.push('  </g>')
   ret.join('\n')
 
-render_state_svg = (state_code, features, callback) ->
+render_state_svg = (state_code, features, options, callback) ->
   output_filename = "./output/#{state_code}.svg"
 
   console.log("Rendering #{output_filename}...")
 
-  [ projection, width, height ] = calculate_projection_width_height(features)
+  [ projection, width, height ] = options.projection || calculate_projection_width_height(features)
   features = project_features(features, projection)
   path = d3.geo.path().projection(null)
   topology = topojsonize(features)
@@ -521,7 +527,7 @@ render_state_svg = (state_code, features, callback) ->
   else
     data.push(render_counties_g(path, topology, topology.objects.counties.geometries))
     data.push(render_counties_mesh_path(path, topology))
-  if topology.objects.cities.geometries.length
+  if topology.objects.cities?.geometries?.length
     data.push(render_cities_g(topology, topology.objects.cities.geometries))
 
   data.push('</svg>')
@@ -529,15 +535,15 @@ render_state_svg = (state_code, features, callback) ->
   data_string = data.join('\n')
   fs.writeFile(output_filename, data_string, callback)
 
-render_tiny_state_svg = (state_code, features, callback) ->
+render_tiny_state_svg = (state_code, features, options, callback) ->
   output_filename = "./output/tiny/#{state_code}.svg"
 
   console.log("Rendering #{output_filename}...")
 
-  [ projection, width, height ] = calculate_projection_width_height(features)
+  [ projection, width, height ] = options.projection || calculate_projection_width_height(features)
   features = project_features(features, projection)
   path = d3.geo.path().projection(null)
-  topology = topojsonize_tiny(features)
+  topology = topojsonize_tiny(features, options)
 
   # Note that our viewBox is width/height multiplied by 10. We round everything to integers to compress
   data = [
@@ -558,15 +564,42 @@ render_all_states = (callback) ->
   step = ->
     if pending_states.length > 0
       state_code = pending_states.shift()
-      render_state_svg state_code, features_by_state[state_code], (err) ->
-        throw err if err
-        render_tiny_state_svg state_code, features_by_state[state_code], (err) ->
-          throw err if err
+      render_state_svg state_code, features_by_state[state_code], {}, (err) ->
+        return callback(err) if err
+        render_tiny_state_svg state_code, features_by_state[state_code], {}, (err) ->
+          return callback(err) if err
           process.nextTick(step)
     else
       callback(null)
 
   step()
+
+render_DA = (features, callback) ->
+  # Merge all countries together. We want a MultiPolygon and topojson.mesh()
+  # only returns a MultiLineString.
+  polygons = (feature.geometry for feature in features)
+  coordinates = (polygon.coordinates for polygon in polygons)
+
+  # http://bl.ocks.org/mbostock/3757101
+  projection = d3.geo.azimuthalEqualArea()
+    .clipAngle(180 - 1e-3)
+    .scale(237 * MaxWidth / 960)
+    .translate([ MaxWidth / 2, MaxHeight / 2 ])
+    .precision(.1)
+
+  janky_options =
+    skip_merge: true
+    projection: [ projection, MaxWidth, MaxHeight ]
+
+  janky_features =
+    counties: [ { type: 'Feature', geometry: { type: 'MultiPolygon', coordinates: coordinates } } ]
+    subcounties: []
+    cities: []
+
+  render_state_svg 'DA', janky_features, janky_options, (err) ->
+    return callback(err) if err
+    render_tiny_state_svg 'DA', janky_features, janky_options, (err) ->
+      callback(err)
 
 try
   fs.mkdirSync('./output/tiny')
@@ -587,4 +620,7 @@ geo_loader.load_all_features (err, key_to_features) ->
 
   render_all_states (err) ->
     throw err if err
-    console.log('Done! Now try `cp -r output/* ../assets/maps/states/`')
+
+    render_DA key_to_features.DA, (err) ->
+      throw err if err
+      console.log('Done! Now try `cp -r output/* ../assets/maps/states/`')
