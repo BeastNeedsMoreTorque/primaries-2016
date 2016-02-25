@@ -14,58 +14,58 @@ function RaceDayNodes() {
   // party_id -> state_code -> { div, n_precincts, last_updated, n_delegates_with_candidates, n_pledged_delegates_with_candidates }
   var races = this.races = {};
 
-  $('div.race:not(.not-today)').each(function() {
-    var party_id = this.getAttribute('data-party-id');
-    var state_code = this.getAttribute('data-state-code');
+  Array.prototype.forEach.call(document.querySelectorAll('div.race:not(.not-today)'), function(raceEl) {
+    var party_id = raceEl.getAttribute('data-party-id');
+    var state_code = raceEl.getAttribute('data-state-code');
 
     if (!races.hasOwnProperty(party_id)) { races[party_id] = {}; }
-    var $psd = $('.party-state-delegates', this);
+    var psd = raceEl.querySelector('.party-state-delegates');
     races[party_id][state_code] = {
       div: this,
-      n_precincts: $('.race-status .n-precincts-reporting', this),
-      last_updated: $('.race-status time', this),
+      n_precincts: raceEl.querySelector('.race-status .n-precincts-reporting'),
+      last_updated: raceEl.querySelector('.race-status time'),
       n_delegates_with_candidates: {
-        dots: $psd.find('.n-delegates-dots'),
-        int_with_candidates: $psd.find('.n-delegates-with-candidates-int'),
-        int_total: $psd.find('.n-delegates-int')
+        dots: psd.querySelector('.n-delegates-dots'),
+        int_with_candidates: psd.querySelector('.n-delegates-with-candidates-int'),
+        int_total: psd.querySelector('.n-delegates-int')
       },
       n_pledged_delegates_with_candidates: {
-        dots: $psd.find('.n-pledged-delegates-dots'),
-        int_with_candidates: $psd.find('.n-pledged-delegates-with-candidates-int'),
-        int_total: $psd.find('.n-pledged-delegates-int')
+        dots: psd.querySelector('.n-pledged-delegates-dots'),
+        int_with_candidates: psd.querySelector('.n-pledged-delegates-with-candidates-int'),
+        int_total: psd.querySelector('.n-pledged-delegates-int')
       }
     };
 
-    $('table.candidates tbody tr').each(function(i) {
-      var candidate_id = this.getAttribute('data-candidate-id');
+    Array.prototype.forEach.call(raceEl.querySelectorAll('table.candidates tbody tr'), function(tr, i) {
+      var candidate_id = tr.getAttribute('data-candidate-id');
 
       if (!candidate_races.hasOwnProperty(candidate_id)) { candidate_races[candidate_id] = {}; }
       o = candidate_races[candidate_id];
 
       o[state_code] = {
-        tr: this,
-        n_votes: $('.n-votes', this),
-        percent_vote: $('.percent-vote', this),
-        n_delegates_dots: $('td.n-delegates-dots', this),
-        n_delegates_int: $('td.n-delegates', this),
-        n_pledged_delegates_dots: $('td.n-pledged-delegates-dots', this),
-        n_pledged_delegates_int: $('td.n-pledged-delegates', this)
+        tr: tr,
+        n_votes: tr.querySelector('.n-votes'),
+        percent_vote: tr.querySelector('.percent-vote'),
+        n_delegates_dots: tr.querySelector('td.n-delegates-dots'),
+        n_delegates_int: tr.querySelector('td.n-delegates'),
+        n_pledged_delegates_dots: tr.querySelector('td.n-pledged-delegates-dots'),
+        n_pledged_delegates_int: tr.querySelector('td.n-pledged-delegates')
       };
     });
 
     o = county_races[party_id] = {};
-    $('g.counties path', this).each(function() {
-      var fips_int = this.getAttribute('data-fips-int');
+    Array.prototype.forEach.call(raceEl.querySelectorAll('g.counties path'), function(path) {
+      var fips_int = path.getAttribute('data-fips-int');
       o[fips_int] = {
-        path: this
+        path: path
       };
     });
 
     o = race_subcounties[party_id] = {};
-    $('g.subcounties path', this).each(function() {
-      var geo_id = this.getAttribute('data-geo-id');
+    Array.prototype.forEach.call(raceEl.querySelectorAll('g.subcounties path'), function(path) {
+      var geo_id = path.getAttribute('data-geo-id');
       o[geo_id] = {
-        path: this
+        path: path
       };
     });
   });

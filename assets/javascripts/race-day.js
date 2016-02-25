@@ -439,13 +439,13 @@
         var elems = nodes.candidate_races[candidate_race.candidate_id][candidate_race.state_code];
         trs_in_order.push(elems.tr);
         $(elems.tr).toggleClass('winner', candidate_race.winner);
-        elems.n_votes.text(format_int(candidate_race.n_votes));
-        elems.percent_vote.text(format_percent(candidate_race.percent_vote));
+        elems.n_votes.textContent = format_int(candidate_race.n_votes);
+        elems.percent_vote.textContent = format_percent(candidate_race.percent_vote);
 
-        elems.n_delegates_dots.assign_simple_dot_groups(candidate_race.n_delegates);
-        elems.n_delegates_int.text(format_int(candidate_race.n_delegates));
-        elems.n_pledged_delegates_dots.assign_simple_dot_groups(candidate_race.n_pledged_delegates);
-        elems.n_pledged_delegates_int.text(format_int(candidate_race.n_pledged_delegates));
+        $(elems.n_delegates_dots).assign_simple_dot_groups(candidate_race.n_delegates);
+        elems.n_delegates_int.textContent = format_int(candidate_race.n_delegates);
+        $(elems.n_pledged_delegates_dots).assign_simple_dot_groups(candidate_race.n_pledged_delegates);
+        elems.n_pledged_delegates_int.textContent = format_int(candidate_race.n_pledged_delegates);
       });
 
       if (!tr_order_matches_document_order(trs_in_order)) {
@@ -467,19 +467,21 @@
           .toggleClass('has-pledged-delegate-counts', race.has_pledged_delegate_counts)
           ;
 
-        elems.n_precincts.text(n_precincts_reporting_text(race.n_precincts_reporting, race.n_precincts_total));
+        elems.n_precincts.textContent = n_precincts_reporting_text(race.n_precincts_reporting, race.n_precincts_total);
         if (!isNaN(race.last_updated.getFullYear())) {
-          elems.last_updated.attr('datetime', race.last_updated.toISOString()).render_datetime();
+          elems.last_updated.setAttribute('datetime', race.last_updated.toISOString());
+          $(elems.last_updated).render_datetime();
         }
+
         var dels = elems.n_delegates_with_candidates;
-        dels.dots.assign_encoded_dot_groups('class', race.delegate_dots);
-        dels.int_with_candidates.text(format_int(race.n_delegates_with_candidates));
-        dels.int_total.text(format_int(race.n_delegates));
+        $(dels.dots).assign_encoded_dot_groups('class', race.delegate_dots);
+        dels.int_with_candidates.textContent = format_int(race.n_delegates_with_candidates);
+        dels.int_total.textContent = format_int(race.n_delegates);
 
         dels = elems.n_pledged_delegates_with_candidates;
-        dels.dots.assign_encoded_dot_groups('class', race.pledged_delegate_dots);
-        dels.int_with_candidates.text(format_int(race.n_pledged_delegates_with_candidates))
-        dels.int_total.text(format_int(race.n_pledged_delegates));
+        $(dels.dots).assign_encoded_dot_groups('class', race.pledged_delegate_dots);
+        dels.int_with_candidates.textContent = format_int(race.n_pledged_delegates_with_candidates);
+        dels.int_total.textContent = format_int(race.n_pledged_delegates);
       });
     }
 
