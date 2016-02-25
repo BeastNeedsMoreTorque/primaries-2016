@@ -1,10 +1,7 @@
 function position_svg_cities() {
-  var $svg = $(this);
-  var $texts = $svg.find('text');
+  var svg = this;
 
-  if ($texts.length == 0) return;
-
-  var viewBoxStrings = $svg[0].getAttribute('viewBox').split(' ');
+  var viewBoxStrings = svg.getAttribute('viewBox').split(' ');
   // Assume origin x and y are `0`
   var width = +viewBoxStrings[2];
   var height = +viewBoxStrings[3];
@@ -27,9 +24,14 @@ function position_svg_cities() {
     return rects.every(function(rect2) { return !rects_intersect(rect, rect2); });
   }
 
-  function trial_rectangles(x, y, width, height) {
+  function trial_rectangles(original_bbox) {
     var margin_x = 6; // px between dot and text
     var margin_y = 4; // px between dot and text
+
+    var x = original_bbox.x;
+    var y = original_bbox.y;
+    var width = original_bbox.width;
+    var height = original_bbox.height;
 
     var x_height = Math.round(height / 4); // roughly?
     var y_above = Math.round(y - height - margin_y);
@@ -51,51 +53,65 @@ function position_svg_cities() {
     ];
   }
 
-  $texts.get()
-    // Sort from north to south. Otherwise, in a situation like this:
-    //
-    // +---------------+
-    // |               |
-    // |          2    |
-    // |             1 |
-    // |               |
-    // |               |
-    // |               |
-    // +---------------+
-    //
-    // ... city #1's label would go above-left, and city #2's label would
-    // overlap no matter what.
-    //
-    // (See Kansas: Topeka and Overland Park.)
-    .sort(function(text1, text2) { return +text1.getAttribute('y') - text2.getAttribute('y'); })
-    .forEach(function(text) {
-      var x = +text.getAttribute('x');
-      var y = +text.getAttribute('y');
-      var rect = text.getBBox();
-      var potential_rects = trial_rectangles(x, y, rect.width, rect.height);
-
-      for (var i = 0; i < potential_rects.length; i++) {
-        var r = potential_rects[i];
-        var rect2 = { x: r[1], y: r[2], width: rect.width, height: rect.height };
-        if (rect_fits(rect2)) {
-          rects.push(rect2);
-          text.setAttribute('x', rect2.x);
-          text.setAttribute('y', rect2.y);
-          text.setAttribute('class', r[0]);
-          return;
-        }
-      }
-
-      console.warn('Could not position text', text);
+  // Calculate the positions of all the <text> elements. Do this all at once,
+  // before any positioning -- that way, we won't repaint.
+  var texts = []; // Array of { text, rect, x, y }
+  Array.prototype.forEach.call(svg.querySelectorAll('text'), function(el) {
+    texts.push({
+      el: el,
+      bbox: el.getBBox(),
+      x: null, // output x
+      y: null  // output y
     });
+  });
+  if (texts.length == 0) return;
 
-  // Turn each <text> into a <text class="background"> and <text class="foreground">.
-  var cities = $texts[0].parentNode;
-  $texts.each(function() {
-    var class_name = this.getAttribute('class');
-    var text2 = this.cloneNode(true);
-    this.setAttribute('class', class_name + ' background');
-    text2.setAttribute('class', class_name + ' foreground');
+  // Sort from north to south. Otherwise, in a situation like this:
+  //
+  // +---------------+
+  // |               |
+  // |          2    |
+  // |             1 |
+  // |               |
+  // |               |
+  // |               |
+  // +---------------+
+  //
+  // ... city #1's label would go above-left, and city #2's label would
+  // overlap no matter what.
+  //
+  // (See Kansas: Topeka and Overland Park.)
+  texts.sort(function(o1, o2) { return o1.bbox.y - o2.bbox.y; });
+
+  texts.forEach(function(o) {
+    var potential_rects = trial_rectangles(o.bbox);
+
+    for (var i = 0; i < potential_rects.length; i++) {
+      var r = potential_rects[i];
+      var rect2 = { x: r[1], y: r[2], width: o.bbox.width, height: o.bbox.height };
+      if (rect_fits(rect2)) {
+        rects.push(rect2);
+        o.x = rect2.x;
+        o.y = rect2.y;
+        return;
+      }
+    }
+
+    console.warn('Could not position text', text);
+  });
+
+  // Set the position of every <text>
+  texts.forEach(function(o) {
+    o.el.setAttribute('x', o.x);
+    o.el.setAttribute('y', o.y);
+  });
+
+  // Turn each <text> into two: <text class="background"> and <text class="foreground">.
+  var cities = texts[0].el.parentNode;
+  texts.forEach(function(o) {
+    var text2 = o.el.cloneNode(true);
+    o.el.setAttribute('class', 'background');
+    text2.setAttribute('class', 'foreground');
     cities.appendChild(text2);
   });
 }
