@@ -21,6 +21,8 @@ require 'set'
 # * race_subcounties: race_id, reporting_unit_id, n_votes, n_precincts_reporting, n_precincts_total
 # * races: id, party_id, state_code, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource
+  NonCountyStateCodes = %w(AK MA MN NH VT).to_set
+
   CandidateRace = RubyImmutableStruct.new(:id, :candidate_id, :n_votes, :winner)
   CandidateCountyRace = RubyImmutableStruct.new(:candidate_race_id, :candidate_id, :fips_int, :race_id, :n_votes)
   CandidateRaceSubcounty = RubyImmutableStruct.new(:candidate_race_id, :candidate_id, :race_id, :reporting_unit_id, :n_votes)
@@ -110,13 +112,8 @@ class ApElectionDaysSource
               candidate_hash[:winner] == 'X'
             )
           end
-        elsif reporting_unit[:level] == 'subunit' && ![ 'NH', 'MA', 'VT' ].include?(state_code)
-          fips_code = if state_code == 'AK'
-            reporting_unit[:reportingunitID]
-          else
-            reporting_unit[:fipsCode]
-          end
-
+        elsif reporting_unit[:level] == 'subunit' && !NonCountyStateCodes.include?(state_code)
+          fips_code = reporting_unit[:fipsCode]
           fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
           @county_fips_ints.add(fips_int)
           n_county_votes = 0

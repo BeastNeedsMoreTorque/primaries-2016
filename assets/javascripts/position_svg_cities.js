@@ -98,7 +98,7 @@ function position_svg_cities(svgs) {
         }
       }
 
-      console.warn('Could not position text', text);
+      console.warn('Could not position text', o);
     });
 
     return ret;

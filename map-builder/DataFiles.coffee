@@ -7,6 +7,10 @@ module.exports =
     basename: 'countyp010g'
     url: 'http://dds.cr.usgs.gov/pub/data/nationalatlas/countyp010g.shp_nt00934.tar.gz'
     shp_size: 48737664
+  congressional_districts:
+    basename: 'tl_2015_us_cd114'
+    url: 'http://www2.census.gov/geo/tiger/TIGER2015/CD/tl_2015_us_cd114.zip'
+    shp_size: 63491628
   DA:
     basename: 'ne_110m_land'
     url: 'http://naciscdn.org/naturalearth/110m/physical/ne_110m_land.zip'

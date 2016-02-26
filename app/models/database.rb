@@ -228,11 +228,14 @@ class Database
     all = ap_candidate_race_subcounties
       .select { |crs| valid_candidate_race_ids.include?(crs.candidate_race_id) }
       .map! do |crs|
+        geo_id = geo_ids[crs.reporting_unit_id]
+        throw "Missing geo_id #{crs.reporting_unit_id} in app/sources/ap_id_to_geo_id.tsv" if geo_id.nil?
+
         CandidateRaceSubcounty.new(
           self,
           crs.candidate_id,
           crs.race_id,
-          geo_ids[crs.reporting_unit_id],
+          geo_id,
           crs.n_votes
         )
       end

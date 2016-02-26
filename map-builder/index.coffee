@@ -166,16 +166,26 @@ organize_features = (key, features) ->
 # Our HACK is to overwrite counties with districts. They both look like FIPS
 # codes.
 organize_alaska_districts = (features) ->
-  features_by_state.AK.counties = for feature in features
+  features_by_state.AK.subcounties = for feature in features
     p = feature.properties
-
-    console.log(feature)
 
     type: 'Feature'
     geometry: feature.geometry
     properties:
-      ADMIN_FIPS: p.GEOID
-      ADMIN_NAME: p.NAMELSAD
+      GEOID: p.GEOID
+      NAME: p.NAMELSAD
+
+# On the Friday before Super Tuesday, AP decided to report MN results by
+# congressional district.
+organize_minnesota_districts = (features) ->
+  features_by_state.MN.subcounties = for feature in features when feature.properties.STATEFP == '27'
+    p = feature.properties
+
+    type: 'Feature'
+    geometry: feature.geometry
+    properties:
+      GEOID: p.GEOID
+      NAME: p.NAMELSAD
 
 organize_subcounty_features = (state_code, features) ->
   console.log("Organizing #{state_code} subcounties...")
@@ -599,6 +609,7 @@ render_state = (state_code, callback) ->
 
 render_all_states = (callback) ->
   pending_states = Object.keys(features_by_state).sort()
+    .filter((s) -> s == 'MN' || s == 'AK')
 
   step = ->
     if pending_states.length > 0
@@ -652,6 +663,7 @@ geo_loader.load_all_features (err, key_to_features) ->
   organize_features('counties', key_to_features.counties)
 
   organize_alaska_districts(key_to_features.AK)
+  organize_minnesota_districts(key_to_features.congressional_districts)
 
   [ 'MA', 'NH', 'VT' ].forEach (key) ->
     organize_subcounty_features(key, key_to_features[key])
