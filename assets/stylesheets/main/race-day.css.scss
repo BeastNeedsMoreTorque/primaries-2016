@@ -153,4 +153,10 @@ body.race-day {
       display: none;
     }
   }
+
+  &.multi-state .race-anchor {
+    display: block;
+    position: relative;
+    top: -95px;
+  }
 }
