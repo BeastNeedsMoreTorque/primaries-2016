@@ -3,6 +3,8 @@ require_relative './base_view'
 require_relative '../helpers/dot_group_helper'
 require_relative '../models/race_day'
 
+require_relative '../helpers/dot_group_helper'
+
 class AllPrimariesView < BaseView
   include DotGroupHelper
 

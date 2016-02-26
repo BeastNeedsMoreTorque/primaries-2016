@@ -8,8 +8,29 @@
   - if body
     %p.intro-copy= body
 
+  - if multi_state?
+    .dropdown-container#jump-to-race
+      %ul.dropdown-inner.nav
+        %li.dropdown-label Jump to a state
+        %li.dropdown
+          %a.dropdown-toggle{"data-toggle": "dropdown", href: "#", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}
+            Select
+            %svg.caret{x: "0", y: "0", width: "10", height: "7"}
+              %polygon{points: "10,0 5,7 0,0"}
+          %ul.dropdown-menu
+            - race_day.races.group_by(&:state_code).each do |state_code, races|
+              - races.each_with_index do |race, i|
+                %li{class: (i == 0 ? 'first' : 'second')}
+                  %a.dropdown-link{href: '#' + race.anchor}
+                    %span.state-name= race.state_name
+                    %span.party-name= race.title
+        %li.back-to-top
+          %a{href: "#"} Back to top
+
+    #scrollfinder
+
   -# If there are two races in a party, display a summary
-  - if race_day.races.group_by(&:party).values.any? { |a| a.length > 1 }
+  - if multi_state?
     != render(partial: 'race-day/delegate-summary', locals: { race_day: race_day })
 
     %h2 And Now, The Races

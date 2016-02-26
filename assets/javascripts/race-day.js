@@ -581,6 +581,7 @@
     wait_for_font_then('Source Sans Pro', function() {
       line_up_race_divs();
       $('.party-state-map svg').position_svg_cities();
+      $('body').scrollspy({ target: '#jump-to-race' });
     });
 
     add_tooltips();
@@ -595,6 +596,30 @@
     $(document).on('click', 'input[name=include-unpledged-delegates]', function() {
       set_include_unpledged_delegates(this.checked);
     });
+
+    var topCheck = function(){
+      var top = $(window).scrollTop();
+      if($('#scrollfinder').length === 0)
+        return;
+      if($('#scrollfinder').offset() === undefined)
+        return;
+      var offset = $('#scrollfinder').offset().top;
+      if (top > offset) {
+        $('.dropdown-container').addClass('fixed');
+      } else {
+        $('.dropdown-container').removeClass('fixed');
+      }
+    };
+
+    $('body').scrollspy({ target: '#jump-to-race' });
+
+    $(window).scroll(function(){
+      topCheck();
+    });
+
+    topCheck();
+
+    $('.dropdown-toggle').dropdown();
   }
 
   $(function() {

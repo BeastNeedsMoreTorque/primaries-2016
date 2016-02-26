@@ -30,7 +30,7 @@ Race = RubyImmutableStruct.new(
     :race_subcounties
   )
 
-  # What we put as the hash in a URL to jump to this race
+  # Something to put after the "#" in a URL
   attr_reader(:anchor)
 
   def after_initialize

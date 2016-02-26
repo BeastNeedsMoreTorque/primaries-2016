@@ -14,6 +14,112 @@ body.race-day {
     }
   }
 
+  .dropdown-container {
+    position: fixed;
+    top: -100px;
+    &.fixed {
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      box-shadow: 0 4px 2px -2px #ccc;
+      z-index: 100;
+      padding: 0.5em 0;
+      margin: 0;
+      transition: top 200ms;
+    }
+  }
+
+  .dropdown-label {
+    color: #999999;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    margin-bottom: 2px;
+  }
+
+  .back-to-top {
+    text-transform: uppercase;
+    font-size: 0.8em;
+    text-align: right;
+    a {
+      text-decoration: none;
+      color: #999999;
+    }
+  }
+
+  .dropdown.open .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-inner {
+    width: 90%;
+    max-width: 30em;
+    margin: auto;
+  }
+
+  .dropdown-toggle {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    background: none;
+    border: 1px solid #ccc;
+    max-width: 30em;
+    margin: 0 auto;
+    padding: 0.5em;
+    font-size: 1em;
+    font-family: 'Source Sans Pro';
+    cursor: pointer;
+    outline: none;
+    text-align: left;
+    text-decoration: none;
+    color: #000;
+  }
+
+  .caret {
+    position: absolute;
+    right: 12px;
+    top: 16px;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    width: 90%;
+    max-width: 30em;
+    text-align: center;
+    margin: auto;
+    background: #fff;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-top: 0;
+    z-index: 100;
+    padding: 1em 0 1.2em;
+    a {
+      display: block;
+      text-decoration: none;
+      padding: 0.2em;
+      color: #000;
+      &:hover {
+        background: $widgetLightBlue;
+      }
+    }
+  }
+
+  @media (max-width: 649px) {
+    .state-name {
+      display: none;
+    }
+  }
+
+  @media (min-width: 650px) {
+    .second {
+      display: none;
+    }
+    .party-name {
+      display: none;
+    }
+  }
+
   ul {
     list-style: none;
     margin: 0;
@@ -46,5 +152,11 @@ body.race-day {
     .n-delegates-dots {
       display: none;
     }
+  }
+
+  &.multi-state .race-anchor {
+    display: block;
+    position: relative;
+    top: -95px;
   }
 }
