@@ -609,7 +609,6 @@ render_state = (state_code, callback) ->
 
 render_all_states = (callback) ->
   pending_states = Object.keys(features_by_state).sort()
-    .filter((s) -> s == 'MN' || s == 'AK')
 
   step = ->
     if pending_states.length > 0
