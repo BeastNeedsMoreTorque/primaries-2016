@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="314" height="350" viewBox="0 0 314 350">
-  <path class="state" transform="scale(0.1)" d="M109,2543v-351v-16v-502h30v-468l15,-16v-501v-17v-501h30v-84h299v17h2233l15,-17h269v67l15,83v117l-15,34v434l15,50v485l15,33v552l15,16v752l15,50v251h-135l-194,17h-1454v100l45,33h-569l-30,-16h-225v267h-344l-75,-17v-234h15v-484h15v-134"/>
+  <path class="state" transform="scale(0.1)" d="M498,3145v267h-344l-75,-17v-234h15v-484h15v-485v-16v-502h30v-468l15,-16v-501v-17v-501h30v-84h299v17h2233l15,-17h269v67l15,83v117l-15,34v434l15,50v485l15,33v552l15,16v752l15,50v251h-135l-194,17h-1454v100l45,33h-569l-30,-16Z"/>
 <text x="157" y="175">NM</text>
 </svg>

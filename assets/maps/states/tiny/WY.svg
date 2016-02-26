@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="269" viewBox="0 0 350 269">
-  <path class="state" transform="scale(0.1)" d="M87,2223v-180l33,-89v-347l17,-77v-320l17,-13v-423h17v-487l16,-13v-205h134v12h434v13h802h17h802h384l17,-13h418v-12h117v333l16,13v372l17,51v346l17,13v359l17,180v230l16,39v372l17,90v115l-117,13h-217l-50,13h-385h-66h-1538h-83h-552l-50,-13h-267v-167v-103v-102"/>
+  <path class="state" transform="scale(0.1)" d="M3362,1556l17,180v230l16,39v372l17,90v115l-117,13h-217l-50,13h-385h-66h-1538h-83h-552l-50,-13h-267v-167v-103v-282l33,-89v-347l17,-77v-320l17,-13v-423h17v-487l16,-13v-205h134v12h434v13h802h17h802h384l17,-13h418v-12h117v333l16,13v372l17,51v346l17,13Z"/>
 <text x="175" y="134">WY</text>
 </svg>

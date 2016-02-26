@@ -59,9 +59,11 @@ load_features = (key, callback) ->
     shapefile.read shp_filename, (err, feature_collection) ->
       throw err if err
 
-      # Minnesota has a weird FIPS code, 27000, for Lake Superior
       feature_collection.features = feature_collection.features.filter (f) ->
-        !/000$/.test(f.properties.ADMIN_FIPS || '')
+        # Minnesota has a weird FIPS code, 27000, for Lake Superior
+        return false if /000$/.test(f.properties.ADMIN_FIPS || '')
+
+        true
 
       callback(null, feature_collection.features)
 
