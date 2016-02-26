@@ -161,6 +161,22 @@ organize_features = (key, features) ->
       features_by_state[state_code] = { cities: [], counties: [], subcounties: [] }
     features_by_state[state_code][key].push(feature)
 
+# AP tallies Alaska votes by congressional district for these states.
+#
+# Our HACK is to overwrite counties with districts. They both look like FIPS
+# codes.
+organize_alaska_districts = (features) ->
+  features_by_state.AK.counties = for feature in features
+    p = feature.properties
+
+    console.log(feature)
+
+    type: 'Feature'
+    geometry: feature.geometry
+    properties:
+      ADMIN_FIPS: p.GEOID
+      ADMIN_NAME: p.NAMELSAD
+
 organize_subcounty_features = (state_code, features) ->
   console.log("Organizing #{state_code} subcounties...")
   for feature in features
@@ -184,7 +200,6 @@ organize_territory_features = (state_code, features) ->
       out_feature = fips_string_to_out_feature[fips_string] =
         type: 'Feature'
         properties:
-          STATE: state_code
           ADMIN_FIPS: fips_string
           NAME: TerritoryFipsCodeNames[fips_string]
         geometry:
@@ -584,7 +599,6 @@ render_state = (state_code, callback) ->
 
 render_all_states = (callback) ->
   pending_states = Object.keys(features_by_state).sort()
-    .filter((s) -> s >= 'MP')
 
   step = ->
     if pending_states.length > 0
@@ -636,6 +650,8 @@ geo_loader.load_all_features (err, key_to_features) ->
 
   organize_features('cities', key_to_features.cities)
   organize_features('counties', key_to_features.counties)
+
+  organize_alaska_districts(key_to_features.AK)
 
   [ 'MA', 'NH', 'VT' ].forEach (key) ->
     organize_subcounty_features(key, key_to_features[key])

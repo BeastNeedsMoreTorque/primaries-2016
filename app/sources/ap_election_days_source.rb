@@ -111,7 +111,11 @@ class ApElectionDaysSource
             )
           end
         elsif reporting_unit[:level] == 'subunit' && ![ 'NH', 'MA', 'VT' ].include?(state_code)
-          fips_code = reporting_unit[:fipsCode]
+          fips_code = if state_code == 'AK'
+            reporting_unit[:reportingunitID]
+          else
+            reporting_unit[:fipsCode]
+          end
 
           fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
           @county_fips_ints.add(fips_int)
