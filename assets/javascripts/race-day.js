@@ -796,6 +796,7 @@ $(function() {
     wait_for_font_then('Source Sans Pro', function() {
       line_up_race_divs();
       $('.party-state-map svg').position_svg_cities();
+      $('body').scrollspy({ target: '#jump-to-race' });
     });
 
     add_tooltips();
@@ -809,13 +810,7 @@ $(function() {
   
   topCheck();
 
-  $('.dropdown-button').click(function() {
-    $('.dropdown-menu').toggleClass("visible");
-  });
-
-  $(".dropdown-link").click(function() {
-    $('.dropdown-menu').toggleClass("visible");
-  });
+  $('.dropdown-toggle').dropdown();
 
   $(document).on('click', 'input[name=include-unpledged-delegates]', function() {
     set_include_unpledged_delegates(this.checked);
