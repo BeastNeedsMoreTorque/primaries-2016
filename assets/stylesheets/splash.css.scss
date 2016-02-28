@@ -8,6 +8,7 @@ body {
   @include widget-base();
   margin: 0 auto;
   padding: 0;
+  padding-bottom: 5px; // fix problem on race day. Maybe involves pymjs. Dunno.
   max-width: 945px;
   font-family: $huffpo-font-family;
 }
