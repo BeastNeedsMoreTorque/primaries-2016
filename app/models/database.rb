@@ -7,6 +7,7 @@ require_relative '../collections/candidates'
 require_relative '../collections/candidate_county_races'
 require_relative '../collections/candidate_races'
 require_relative '../collections/candidate_states'
+require_relative '../collections/candidate_race_days'
 require_relative '../collections/candidate_race_subcounties'
 require_relative '../collections/counties'
 require_relative '../collections/county_races'
@@ -21,6 +22,7 @@ require_relative '../collections/subcounties'
 require_relative '../models/candidate'
 require_relative '../models/candidate_county_race'
 require_relative '../models/candidate_race'
+require_relative '../models/candidate_race_day'
 require_relative '../models/candidate_state'
 require_relative '../models/candidate_race_subcounty'
 require_relative '../models/county'
@@ -55,6 +57,7 @@ class Database
     candidates
     candidate_county_races
     candidate_race_subcounties
+    candidate_race_days
     candidate_races
     candidate_states
     counties
@@ -89,6 +92,7 @@ class Database
     @races = load_races(sheets_source.races, copy_source.races, sheets_source.candidates, ap_election_days.races, pollster_source.candidate_states)
     @race_days = load_race_days(sheets_source.race_days, copy_source.race_days, last_date)
     @party_race_days = load_party_race_days(@parties, @race_days)
+    @candidate_race_days = load_candidate_race_days(@candidates, @race_days)
 
     @now = now
     @last_date = last_date
@@ -362,6 +366,26 @@ class Database
     end
 
     PartyRaceDays.new(all)
+  end
+
+  def load_candidate_race_days(candidates, race_days)
+    all = []
+
+    for candidate in candidates
+      last_race_day_id = if candidate.dropped_out_date.nil?
+        ':' # after '9'
+      else
+        candidate.dropped_out_date.to_s
+      end
+
+      for race_day in race_days
+        if race_day.id <= last_race_day_id
+          all << CandidateRaceDay.new(self, candidate.id, race_day.id)
+        end
+      end
+    end
+
+    CandidateRaceDays.new(all)
   end
 
   def load_party_states(sheets_party_states, pollster_party_states)
