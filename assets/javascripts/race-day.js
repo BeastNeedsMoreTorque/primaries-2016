@@ -147,7 +147,6 @@
       var g = svg_path.parentNode;
       var svg = g.parentNode;
       svg_hover_path = svg_path.cloneNode();
-      svg_hover_path.setAttribute('transform', g.getAttribute('transform'));
       svg_hover_path.setAttribute('class', 'hover');
       svg.insertBefore(svg_hover_path, svg.lastChild.previousSibling); // before <g class="cities">
     }
