@@ -15,9 +15,11 @@ body.race-day {
   }
 
   .dropdown-container {
-    position: fixed;
+    display: none;
     top: -100px;
     &.fixed {
+      position: fixed;
+      display: block;
       top: 0;
       left: 0;
       width: 100%;
@@ -26,7 +28,6 @@ body.race-day {
       z-index: 100;
       padding: 0.5em 0;
       margin: 0;
-      transition: top 200ms;
     }
   }
 
