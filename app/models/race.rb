@@ -102,7 +102,7 @@ Race = RubyImmutableStruct.new(
 
   # false iff we have zilch data about how candidates are doing in this race
   def has_any_results_at_all?
-    n_pledged_delegates_with_candidates > 0 || any_precincts_reporting? || has_pollster_percents?
+    has_pledged_delegate_counts? || any_precincts_reporting? || has_pollster_percents?
   end
 
   def has_pollster_data?; !pollster_slug.nil?; end
