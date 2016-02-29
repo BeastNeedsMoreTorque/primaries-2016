@@ -31,6 +31,6 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
 
     candidate_races.map(&:state_code)
       .uniq
-      .reject! { |sc| used_state_codes.include?(sc) }
+      .reject { |sc| used_state_codes.include?(sc) }
   end
 end
