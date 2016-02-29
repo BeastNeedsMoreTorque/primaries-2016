@@ -14,7 +14,19 @@
         %h1.when-race-day-past Results
         %h1.when-race-day-future Happening Soon
       .line
-    - if race_day.races.length < 4
-      != render(partial: '/primaries/right-rail/few-races', locals: { race_day: race_day })
-    - else
-      != render(partial: '/primaries/right-rail/many-races', locals: { race_day: race_day })
+
+    .race-day
+      %h2
+        %a{target: '_blank', href: '/2016/primaries/2016-02-09'}= race_day.title
+      - if !race_day.today?
+        %h4.date= race_day.date.strftime('%B %-d')
+      %p.intro= race_day.body
+      %p.tease-link.when-race-day-future.when-race-day-past
+        %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See the election calendar
+      %p.tease-link.when-race-day-present
+        %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See live updates
+
+      - if race_day.races.length < 4
+        != render(partial: '/primaries/right-rail/few-races', locals: { race_day: race_day })
+      - else
+        != render(partial: '/primaries/right-rail/many-races', locals: { race_day: race_day })
