@@ -1,9 +1,12 @@
-table.many-races {
-  width: 100%;
-  border-collapse: collapse;
+.many-races {
   margin: 1rem 0 0;
-  padding: 0;
   font-size: .8rem;
+
+  &>table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 0;
+  }
 
   th {
     font-family: $header-font-family;
@@ -23,6 +26,9 @@ table.many-races {
   th[data-party-id=GOP] { background: $widgetRed; }
   th[data-party-id]:last-child, td[data-party-id]:last-child {
     border-left: 5px solid white;
+  }
+  td.state {
+    border-right: 5px solid white;
   }
 
   .map {
@@ -50,7 +56,7 @@ table.many-races {
   h3 {
     font: inherit;
     text-transform: none;
-    padding: .25rem;
+    padding: .5rem 0;
   }
 
   .race {
@@ -134,5 +140,17 @@ table.many-races {
     background: $widgetLightRed;
     td { border-color: $widgetLightRed; }
     tr.leader td { background: $widgetRed; }
+  }
+
+  .other-races {
+    margin-top: 1rem;
+
+    ul {
+      margin: 0;
+    }
+
+    li {
+      padding-top: .5rem;
+    }
   }
 }

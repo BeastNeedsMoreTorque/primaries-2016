@@ -100,6 +100,11 @@ Race = RubyImmutableStruct.new(
   def pollster_href; party_state.pollster_href; end
   def pollster_last_updated; party_state.pollster_last_updated; end
 
+  # false iff we have zilch data about how candidates are doing in this race
+  def has_any_results_at_all?
+    n_pledged_delegates_with_candidates > 0 || any_precincts_reporting? || has_pollster_percents?
+  end
+
   def has_pollster_data?; !pollster_slug.nil?; end
   def has_pollster_percents?; candidate_states.any?{ |cs| !cs.poll_percent.nil? }; end
 
