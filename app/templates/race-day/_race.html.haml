@@ -27,7 +27,8 @@
         %button.refresh 0:30
         -# Let JS fill in number of precincts reporting
         %p.n-precincts-reporting &nbsp;
-      .status-future= race.results_coming_s
+      .status-future
+        %p= race.results_coming_s
 
       - if race.text.length > 0
         %p.text= race.text

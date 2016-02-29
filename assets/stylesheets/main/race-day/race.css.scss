@@ -14,11 +14,25 @@ body.race-day .race {
 
   .race-status {
     text-align: center;
-    padding: .2rem 1rem 1rem;
+    padding: 0;
     font-style: italic;
 
     .status-past, .status-present, .status-future {
       display: none;
+
+      // status-past has two <p>s. present has one <p>, one <button>. Future has
+      // just a <p>. Make them all the same height.
+      //
+      // A <button> is ~1.5rem (the border, which uses px, throws it off a bit.)
+      // So we make the <p> 1.5rem also, and throw them in a flexbox so they're
+      // centered. Add a bit of padding to be safe.
+      height: 3.5rem;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-justify-content: center;
+      justify-content: center;
     }
 
     button.refresh {
@@ -26,19 +40,18 @@ body.race-day .race {
     }
 
     p {
-      margin: .2rem auto;
-    }
-
-    p.text {
-      font-style: normal;
-      padding: 1rem 0 0;
+      margin: 0;
+      padding: .1rem 1rem;
     }
   }
 
   // Show the current status
   &.past .race-status .status-past,
   &.future .race-status .status-future,
-  &.present .race-status .status-present { display: block; }
+  &.present .race-status .status-present {
+    display: -webkit-flex;
+    display: flex;
+  }
 
   .race-name {
     margin: 0;
