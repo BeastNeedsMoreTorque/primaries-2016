@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="254" viewBox="0 0 350 254">
-  <path class="state" transform="scale(0.1)" d="M1942,2476h-819v-12h-485l-16,-12h-418v-12h-117v-219h17v-388l16,-24v-85l-16,-24v-85l16,-12v-340v-12v-388l34,-36v-412v-352h150l50,12h385l16,12h635v12h702l150,-12h485l83,-12h301l50,-12h151v73l16,36v291l17,158v376l17,60v291l17,85v255l16,133v388l17,73v158l-100,12h-435v12h-451l-17,12Z"/>
-<text x="175" y="127">CO</text>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="1000" height="726" viewBox="0 0 1000 726">
+  <path class="state" d="M552,707l-233,-1 -294,-8 6,-181 -1,-54 7,-102 13,-343 133,5 212,4h128l200,-2 224,-7 8,201 10,229 9,250 -311,8Z"/>
+<text x="500" y="363">CO</text>
 </svg>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="288" height="350" viewBox="0 0 288 350">
-  <path class="state" transform="scale(0.1)" d="M1350,3011l14,-50h82l28,-17 41,34v33h151l14,17v83l-55,34h-82l-42,-84h-110ZM320,3145l55,-67h68l42,-34 13,51h28l41,-51 14,51 55,33v33h-96l-28,50 -69,34 -68,-17v-33h-55ZM72,137l14,-50h83l27,50 -27,50h-83ZM2697,3345l27,-50h28l55,33v51l-28,33 -82,-17Z"/>
-<text x="144" y="175">AS</text>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="823" height="1000" viewBox="0 0 823 1000">
+  <path class="state" d="M387,858l16,-15 24,3 6,17 39,-4 7,27 -11,11h-26l-14,-23 -28,3ZM89,899l17,-18 31,-11 5,15 25,-17 13,36h-27l-30,22ZM20,38l12,-13 20,2 -7,27 -19,-2ZM770,957l19,-15 11,9 -5,23h-18Z"/>
+<text x="411" y="500">AS</text>
 </svg>

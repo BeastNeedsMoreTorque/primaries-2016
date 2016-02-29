@@ -6,23 +6,23 @@ jsts = require('jsts')
 
 require('d3-geo-projection')(d3)
 
-MaxWidth = 350
-MaxHeight = 350
-MinDistanceBetweenCities = 35 # px, vertically or horizontally
+MaxWidth = 1000
+MaxHeight = 1000
+MinDistanceBetweenCities = 80 # px, vertically or horizontally
 
 BigTopojsonOptions =
-  'pre-quantization': 6000
-  'post-quantization': 2000
+  'pre-quantization': 10000
+  'post-quantization': 1000
   'coordinate-system': 'cartesian'
-  'minimum-area': 5
+  'minimum-area': 50
   'preserve-attached': false
   'property-transform': (f) -> f.properties
 
 TinyTopojsonOptions =
-  'pre-quantization': 5000
-  'post-quantization': 200
+  'pre-quantization': 10000
+  'post-quantization': 1000
   'coordinate-system': 'cartesian'
-  'minimum-area': 10
+  'minimum-area': 200
   'preserve-attached': false
   'property-transform': (f) -> {}
 
@@ -295,10 +295,8 @@ topojsonize = (features_json, options) ->
   topology
 
 compress_svg_path = (path) ->
-  # First, round to one decimal and multiply by 10
-  #
-  # Do this while we're still dealing with absolute coordinates.
-  int_path = path.replace(/\.(\d)\d+/g, (__, one_decimal) -> one_decimal)
+  # First off, round everything. That'll give us four decimals, like we want
+  int_path = path.replace(/\.\d+/g, '')
 
   last_point = null
   last_instruction = null
@@ -364,7 +362,7 @@ distance2 = (p1, p2) ->
 render_state_path = (path, topology) ->
   d = path(topojson.feature(topology, topology.objects.state))
   d = compress_svg_path(d)
-  '  <path class="state" transform="scale(0.1)" d="' + d + '"/>'
+  '  <path class="state" d="' + d + '"/>'
 
 # Returns a <path class="mesh">
 render_mesh_path = (path, topology, key) ->
@@ -372,14 +370,14 @@ render_mesh_path = (path, topology, key) ->
   d = path(mesh)
   if d
     d = compress_svg_path(d)
-    '  <path class="mesh" transform="scale(0.1)" d="' + d + '"/>'
+    '  <path class="mesh" d="' + d + '"/>'
   else
     # DC, for instance, has no mesh
     ''
 
 # Returns a <g class="counties"> full of <path data-fips-int="...">s
 render_counties_g = (path, topology, geometries) ->
-  ret = [ '  <g class="counties" transform="scale(0.1)">' ]
+  ret = [ '  <g class="counties">' ]
 
   for geometry in geometries
     d = path(topojson.feature(topology, geometry))
@@ -391,7 +389,7 @@ render_counties_g = (path, topology, geometries) ->
 
 # Returns a <g class="subcounties"> full of <path data-geo-id="...">s
 render_subcounties_g = (path, topology, geometries) ->
-  ret = [ '  <g class="subcounties" transform="scale(0.1)">' ]
+  ret = [ '  <g class="subcounties">' ]
 
   for geometry in geometries
     d = path(topojson.feature(topology, geometry))
@@ -418,9 +416,9 @@ render_cities_g = (city_features) ->
 
     continue if rendered_cities.find((p2) -> distance2(p, p2) < MinDistanceBetweenCities * MinDistanceBetweenCities)
 
-    x = p[0].toFixed(1)
-    y = p[1].toFixed(1)
-    ret.push("    <circle r=\"3\" cx=\"#{x}\" cy=\"#{y}\"/>")
+    x = p[0].toFixed(0)
+    y = p[1].toFixed(0)
+    ret.push("    <circle r=\"7\" cx=\"#{x}\" cy=\"#{y}\"/>")
     ret.push("    <text x=\"#{x}\" y=\"#{y}\">#{city.properties.name}</text>")
 
     rendered_cities.push(p)
