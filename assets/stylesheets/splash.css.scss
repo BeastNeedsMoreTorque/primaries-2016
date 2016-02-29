@@ -29,6 +29,111 @@ body {
   }
 }
 
+.many-races {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: stretch;
+  align-items: stretch;
+
+  ul, li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  ul.states li {
+    display: inline;
+  }
+
+  .party-race-day {
+    display: -webkit-flex;
+    display: flex;
+    box-sizing: border-box;
+    width: 50%;
+
+    &:first-child {
+      padding-right: 10px;
+      border-right: 1px solid black;
+    }
+    &:last-child {
+      padding-left: 10px;
+      border-left: 1px solid black;
+    }
+  }
+
+  .races-on-map {
+    width: 50%;
+  }
+
+  .party-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 50%;
+  }
+
+  .party-container {
+    -webkit-flex-grow: 0;
+    flex-grow: 0;
+  }
+
+  .candidates-and-states {
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    padding: .5rem;
+  }
+
+  .candidate-summary {
+    display: -webkit-flex;
+    display: flex;
+    background: white;
+    padding: .25rem;
+  }
+
+  .last-name {
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+  }
+
+  li.candidate {
+    padding-bottom: 1rem;
+  }
+
+  h5 {
+    font: inherit;
+    margin: 0;
+    padding: .5rem .25rem 0;
+    text-transform: uppercase;
+  }
+
+  .states-without-candidates ul.states {
+    padding-top: .5rem;
+  }
+
+  ul.states {
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    path {
+      stroke-width: 20px;
+      stroke: #999;
+      fill: white;
+    }
+
+    text {
+      font-family: $huffpo-font-family;
+      font-size: 450px;
+      font-weight: bold;
+      text-anchor: middle;
+      alignment-baseline: middle;
+    }
+  }
+}
+
 .one-race {
   .race {
     display: -webkit-flex;
@@ -249,8 +354,8 @@ body {
   flex: 1 0 auto;
 }
 
-.race[data-party-id=Dem] {
-  .party-container {
+.race[data-party-id=Dem], .party-race-day[data-party-id=Dem] {
+  .party-container, .candidates-and-states {
     background-color: $widgetLightBlue;
   }
 
@@ -258,6 +363,8 @@ body {
     background: $widgetBlue;
     color: #fff;
   }
+
+  ul.states text { fill: $widgetBlue; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightBlue;
@@ -278,8 +385,8 @@ body {
 	}
 }
 
-.race[data-party-id=GOP] {
-  .party-container {
+.race[data-party-id=GOP], .party-race-day[data-party-id=GOP] {
+  .party-container, .candidates-and-states {
     background-color: $widgetLightRed; 
   }
 
@@ -287,6 +394,8 @@ body {
     background: $widgetRed;
     color: #fff;
   }
+
+  ul.states text { fill: $widgetRed; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightRed;
@@ -306,6 +415,7 @@ body {
     .swatch.trailing { background: $widgetLightRed; }
 	}
 }
+
 
 .map-precincts-container {
 	padding: 10px 0 0 10px;

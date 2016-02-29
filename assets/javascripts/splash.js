@@ -71,9 +71,13 @@ $(function() {
       .always(callback);
   }
 
-  $("svg").position_svg_cities();
+  function init_splash() {
+    $("svg").position_svg_cities();
 
-  $('button.refresh')
-    .countdown(30, do_poll)
-    .eq(0).trigger('click.countdown'); // poll immediately on page load, to populate map
+    $('button.refresh')
+      .countdown(30, do_poll)
+      .eq(0).trigger('click.countdown'); // poll immediately on page load, to populate map
+  }
+
+  $('.one-race, .two-races').each(init_splash);
 });

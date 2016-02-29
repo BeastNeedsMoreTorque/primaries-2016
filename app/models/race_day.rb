@@ -28,7 +28,6 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
     :candidate_states,
     :candidate_race_subcounties,
     :county_races,
-    :party_race_days,
     :race_subcounties
   )
 
@@ -61,6 +60,10 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
     @candidate_race_subcounties = @races.flat_map(&:candidate_race_subcounties)
     @county_races = @races.flat_map(&:county_races)
     @race_subcounties = @races.flat_map(&:race_subcounties)
+  end
+
+  def party_race_days
+    database.party_race_days.find_all_by_race_day_id(id)
   end
 
   def disabled?; !@enabled; end
