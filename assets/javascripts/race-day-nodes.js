@@ -21,7 +21,7 @@ function RaceDayNodes() {
     if (!races.hasOwnProperty(party_id)) { races[party_id] = {}; }
     var psd = raceEl.querySelector('.party-state-delegates');
     races[party_id][state_code] = {
-      div: this,
+      div: raceEl,
       n_precincts: raceEl.querySelectorAll('.race-status .n-precincts-reporting'),
       last_updated: raceEl.querySelector('.race-status time'),
       n_delegates_with_candidates: {
