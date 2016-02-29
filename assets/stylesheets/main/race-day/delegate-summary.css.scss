@@ -3,7 +3,7 @@ body.race-day .delegate-summary {
     @include party-stuff-side-by-side-when-wide();
   }
 
-  p {
+  &>p {
     padding: 0 10px;
   }
 

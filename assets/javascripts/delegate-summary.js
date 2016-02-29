@@ -121,7 +121,6 @@ function DelegateSummary(el) {
       '<div class="delegate-summary-tooltip" style="top: ' + top + 'px;">',
         '<p class="n-delegates"><strong>' + state_name + '</strong>: ' + format_int(n_delegates_with_candidates) + ' of ' + format_int(n_delegates) + ' delegates accounted for.</p>',
         '<p class="n-pledged-delegates"><strong>' + state_name + '</strong>: ' + format_int(n_pledged_delegates_with_candidates) + ' of ' + format_int(n_pledged_delegates) + ' pledged delegates accounted for.</p>',
-        '</p>',
         ' <a class="race" href="' + race_href + '">Jump to race »</a>',
         '<a class="close" href="#">&times;</a>',
       '</div>'
