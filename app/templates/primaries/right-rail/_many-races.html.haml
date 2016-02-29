@@ -3,9 +3,11 @@
   %table
     %thead
       %tr
-        %th.state Race
+        %th.state
+          %h3 Race
         - for party in database.parties.all
-          %th{'data-party-id': party.id}= party.name
+          %th{'data-party-id': party.id}
+            %h3= party.name
     %tbody
       - race_day.state_party_races.each do |state, party_races|
         - if !party_races.any? { | party, race, __| !race.nil? && race.has_any_results_at_all? }
@@ -19,47 +21,48 @@
               .map!= map_svg("states/tiny/#{state.code}")
 
             - party_races.each do |party, race, __|
-              %td{'data-party-id': party.id}
+              %td{'data-party-id': party.id, class: race.nil? ? 'no-race' : ''}
                 - if race.nil?
                   -# Show nothing
                 - elsif race.n_pledged_delegates_with_candidates > 0
-                  .race.with-delegates
-                    %h4 Pledged Delegates
-                    %table.candidates
-                      - race.candidate_races.each do |candidate_race|
-                        %tr{class: candidate_race.html_winner_leader_classes}
-                          %td.candidate= candidate_race.candidate_last_name
-                          %td.n-pledged-delegates-int= format_int(candidate_race.n_pledged_delegates)
-                    .linkout
-                      %a{href: race.href} Results »
+                  .color-box
+                    .race.with-delegates
+                      %h4 Pledged Delegates
+                      %table.candidates
+                        - race.candidate_races.each do |candidate_race|
+                          %tr{class: candidate_race.html_winner_leader_classes}
+                            %td.candidate= candidate_race.candidate_last_name
+                            %td.n-pledged-delegates-int= format_int(candidate_race.n_pledged_delegates)
+                      .linkout
+                        %a{href: race.href} Results »
                 - elsif race.any_precincts_reporting?
-                  .race.with-votes
-                    %h4 Votes (%)
-                    %table.candidates
-                      - race.candidate_races.each do |candidate_race|
-                        %tr{class: candidate_race.html_winner_leader_classes}
-                          %td.candidate= candidate_race.candidate_last_name
-                          %td.percent-vote= format_percent_or_nil(candidate_race.percent_vote)
-                    .n-precincts-reporting #{race.pct_precincts_reporting} reporting
-                    .linkout
-                      %a{href: race.href} Live Results »
+                  .color-box
+                    .race.with-votes
+                      %h4 Votes (%)
+                      %table.candidates
+                        - race.candidate_races.each do |candidate_race|
+                          %tr{class: candidate_race.html_winner_leader_classes}
+                            %td.candidate= candidate_race.candidate_last_name
+                            %td.percent-vote= (candidate_race.percent_vote || 0).round
+                      .n-precincts-reporting #{race.pct_precincts_reporting} reporting
+                      .linkout
+                        %a{href: race.href} Live Results »
                 - elsif race.has_pollster_percents?
-                  .race.with-pollster
-                    %h4 Pollster Averages (%)
-                    %table.candidates
-                      - race.candidate_states.each do |candidate_state|
-                        %tr
-                          %td.candidate= candidate_race.candidate_last_name
-                          %td.percent-vote= format_percent_or_nil(candidate_state.poll_percent)
-                    .source
-                      Source:
-                      %a{href: race.pollster_href} Pollster
-                    .linkout
-                      %a{href: race.href} Preview »
+                  .color-box
+                    .race.with-pollster
+                      %h4 Pollster Averages (%)
+                      %table.candidates
+                        - race.candidate_states.each do |candidate_state|
+                          %tr
+                            %td.candidate= candidate_race.candidate_last_name
+                            %td.percent-vote= (candidate_state.poll_percent || 0).round
+                      .source
+                        Source:
+                        %a{href: race.pollster_href} Pollster
+                      .linkout
+                        %a{href: race.href} Preview »
                 - else
-                  .race.no-data
-                    .linkout
-                      %a{href: race.href} Preview »
+                  - raise "How did we get here?"
 
   - if other_races.length > 0
     .other-races

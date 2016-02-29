@@ -9,27 +9,39 @@
   }
 
   th {
-    font-family: $header-font-family;
-    text-transform: uppercase;
-    font-weight: bold;
-    padding: .5rem 0;
+    padding: 0 0 2px;
+
+    h3 {
+      padding: .5rem 0;
+      font-family: $header-font-family;
+      font-size: 1rem;
+      font-weight: normal;
+      text-transform: uppercase;
+    }
   }
 
-  &>tbody>tr>td {
-    border-top: 5px solid white;
-    padding: 0;
+  &>table>tbody>tr>td {
+    padding: 2px 0;
+    border-top: 2px solid transparent;
     vertical-align: top;
   }
 
-  th[data-party-id] { color: white; }
-  th[data-party-id=Dem] { background: $widgetBlue; }
-  th[data-party-id=GOP] { background: $widgetRed; }
+  th[data-party-id] {
+    color: white;
+  }
+
+  th[data-party-id=Dem] h3 { background: $widgetBlue; }
+  th[data-party-id=GOP] h3 { background: $widgetRed; }
   th[data-party-id]:last-child, td[data-party-id]:last-child {
-    border-left: 5px solid white;
+    border-left: 6px solid white;
   }
 
   .state {
-    border-right: 5px solid white;
+    border-right: 6px solid white;
+  }
+
+  td.state {
+    border-top: 2px solid black;
   }
 
   .map {
@@ -60,15 +72,21 @@
     padding: .5rem 0;
   }
 
-  .race {
-    display: -webkit-inline-flex;
-    display: inline-flex; // inline to stretch in <td>
-    -webkit-flex-direction: column;
-    flex-direction: column;
+  .color-box {
+    display: inline-block; // stretch to the full <td>
     box-sizing: border-box;
     width: 100%;
     height: 100%;
     padding: 5px;
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+  }
+
+  .race {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
 
     table {
       border-collapse: collapse;
@@ -104,14 +122,13 @@
   }
 
   .linkout {
-    height: 1.6rem; // If we don't set this, the <td> height isn't enough on Chrome 48
     -webkit-flex-grow: 1;
     flex-grow: 1;
     line-height: 1rem;
     text-align: center;
 
     // Put the sole child, a.linkout, at the bottom of the box.
-    -webkit-display: flex;
+    display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: column;
     flex-direction: column;
@@ -123,6 +140,7 @@
     }
 
     a {
+      height: 1.6rem; // If we don't set this, the <td> height isn't enough on Chrome 48
       display: block;
     }
   }
@@ -132,12 +150,12 @@
     vertical-align: middle;
   }
 
-  td[data-party-id=Dem] .race {
+  td[data-party-id=Dem] .color-box {
     background: $widgetLightBlue;
     td { border-color: $widgetLightBlue; }
     tr.leader td { background: $widgetBlue; }
   }
-  td[data-party-id=GOP] .race {
+  td[data-party-id=GOP] .color-box {
     background: $widgetLightRed;
     td { border-color: $widgetLightRed; }
     tr.leader td { background: $widgetRed; }
