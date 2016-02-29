@@ -21,11 +21,11 @@
               .map!= map_svg("states/tiny/#{state.code}")
 
             - party_races.each do |party, race, __|
-              %td{'data-party-id': party.id, class: race.nil? ? 'no-race' : ''}
+              %td{'data-party-id': party.id, class: race.nil? ? 'no-race' : ''}<>
                 - if race.nil?
                   -# Show nothing
                 - elsif race.n_pledged_delegates_with_candidates > 0
-                  .color-box
+                  .color-box<>
                     .race.with-delegates
                       %h4 Pledged Delegates
                       %table.candidates
@@ -36,7 +36,7 @@
                       .linkout
                         %a{href: race.href} Results »
                 - elsif race.any_precincts_reporting?
-                  .color-box
+                  .color-box<>
                     .race.with-votes
                       %h4 Votes (%)
                       %table.candidates
@@ -48,7 +48,7 @@
                       .linkout
                         %a{href: race.href} Live Results »
                 - elsif race.has_pollster_percents?
-                  .color-box
+                  .color-box<>
                     .race.with-pollster
                       %h4 Pollster Averages (%)
                       %table.candidates
