@@ -9,6 +9,7 @@
     %p.intro-copy= body
 
   - if multi_state?
+    #scrollfinder
     .dropdown-container#jump-to-race
       %ul.dropdown-inner.nav
         %li.dropdown-label Jump to
@@ -26,8 +27,6 @@
                   %a.dropdown-link{href: '#' + race.anchor}
                     %span.state-name= race.state_name
                     %span.party-name= race.title
-
-    #scrollfinder
 
   -# If there are two races in a party, display a summary
   - if multi_state?

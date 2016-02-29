@@ -602,7 +602,7 @@
         return;
       if($('#scrollfinder').offset() === undefined)
         return;
-      var offset = $('#scrollfinder').offset().top;
+      var offset = $('#scrollfinder').offset().top - 8;
       if (top > offset) {
         $('.dropdown-container').addClass('fixed');
       } else {
