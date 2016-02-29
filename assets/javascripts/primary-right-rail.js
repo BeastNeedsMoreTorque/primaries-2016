@@ -51,5 +51,5 @@ $(function() {
       .always(function() { window.setTimeout(getData, 30000); });
   }
 
-  getData();
+  $('.few-races').each(getData); // Only do it for few-races
 });
