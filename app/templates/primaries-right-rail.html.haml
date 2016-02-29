@@ -30,3 +30,10 @@
         != render(partial: '/primaries/right-rail/few-races', locals: { race_day: race_day })
       - else
         != render(partial: '/primaries/right-rail/many-races', locals: { race_day: race_day })
+
+  %script{src: '/2016/javascripts/pym.min.js'}
+  %script
+  var pymChild = new pym.Child();
+  %script{src: asset_path('primary-right-rail.js')}
+  %script{src: asset_path('ga.js')}
+  %script{src: asset_path('stats.js')}
