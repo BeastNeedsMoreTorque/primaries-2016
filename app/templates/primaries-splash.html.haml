@@ -19,7 +19,7 @@
   - elsif race_day.races.length == 2
     != render(partial: 'primaries/splash/2-races', locals: { race_day: race_day })
   - else
-    - throw "We only support 1- and 2-race race_days. That won't work on #{race_day.id}, which has #{race_day.races.length} races"
+    != render(partial: 'primaries/splash/many-races', locals: { race_day: race_day })
 
   %script{:type => "text/javascript", :src => "/2016/javascripts/pym.min.js"}
   %script
