@@ -16,4 +16,8 @@ PartyState = RubyImmutableStruct.new(:database, :party_id, :state_code, :n_deleg
   def n_pledged_delegates_with_candidates
     candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
+
+  def pollster_href
+    "//elections.huffingtonpost.com/pollster/#{pollster_slug}"
+  end
 end

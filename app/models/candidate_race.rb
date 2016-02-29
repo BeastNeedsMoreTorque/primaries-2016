@@ -28,6 +28,23 @@ CandidateRace = RubyImmutableStruct.new(:database, :candidate_id, :race_id, :n_v
   def winner?; ap_says_winner || huffpost_says_winner; end
   def leader?; @leader; end
 
+  # A String of HTML classes.
+  #
+  # Possible return values:
+  #
+  # * "leader"
+  # * "leader winner"
+  # * ""
+  def html_winner_leader_classes
+    if winner?
+      "leader winner"
+    elsif leader?
+      "leader"
+    else
+      ""
+    end
+  end
+
   def <=>(rhs)
     # Sort by race_day ID first. We have to do it at some point.
     x = race_day_id <=> rhs.race_day_id

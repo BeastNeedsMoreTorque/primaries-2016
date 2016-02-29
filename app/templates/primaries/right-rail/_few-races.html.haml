@@ -1,34 +1,35 @@
-- race_day.races.each do |race|
-  .race{id: race.id, 'data-party-id': race.party_id}
-    .race-name
-      %h3= race.title
-      %p
-        Delegates: #{race.n_delegates}
-    %table.t-pollster
-      %thead
-        %tr
-          %th.candidate Candidate
-          %th.pollster.when-race-day-future
-            .long-table-heading Polling Average
-          %th.n-votes.when-race-day-past.when-race-day-present Votes
-          %th.n-votes-pct.when-race-day-past.when-race-day-present %
-      %tbody
-        - race.candidate_races.each do |candidate_race|
-          - candidate = candidate_race.candidate
-          %tr{'data-candidate-id': candidate.id, class: "#{candidate_race.leader? ? 'leader' : ''} #{candidate_race.winner? ? 'winner' : ''}"}
-            %td.candidate
-              %img{src: image_path("#{candidate.slug}.png"), alt: ''}
-              = candidate.full_name
-            %td.pollster.when-race-day-future
-              - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
-                .sparkline!= candidate_race.poll_sparkline.to_svg
-              %span.percent
-                - if candidate_race.poll_percent.nil?
-                  N/A
-                - else
-                  = "#{format_percent_or_nil(candidate_race.poll_percent)}%"
-            %td.n-votes.when-race-day-past.when-race-day-present= format_int(candidate_race.n_votes)
-            %td.n-votes-pct.when-race-day-past.when-race-day-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
-    .footnotes
-      %a.footnotes-for-pollster.when-race-day-future{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-      %a.footnotes-for-race-day.when-race-day-present.when-race-day-past{target: '_blank', href: race.href} Detailed results
+.few-races
+  - race_day.races.each do |race|
+    .race{id: race.id, 'data-party-id': race.party_id}
+      .race-name
+        %h3= race.title
+        %p
+          Delegates: #{race.n_delegates}
+      %table.t-pollster
+        %thead
+          %tr
+            %th.candidate Candidate
+            %th.pollster.when-race-day-future
+              .long-table-heading Polling Average
+            %th.n-votes.when-race-day-past.when-race-day-present Votes
+            %th.n-votes-pct.when-race-day-past.when-race-day-present %
+        %tbody
+          - race.candidate_races.each do |candidate_race|
+            - candidate = candidate_race.candidate
+            %tr{'data-candidate-id': candidate.id, class: "#{candidate_race.leader? ? 'leader' : ''} #{candidate_race.winner? ? 'winner' : ''}"}
+              %td.candidate
+                %img{src: image_path("#{candidate.slug}.png"), alt: ''}
+                = candidate.full_name
+              %td.pollster.when-race-day-future
+                - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
+                  .sparkline!= candidate_race.poll_sparkline.to_svg
+                %span.percent
+                  - if candidate_race.poll_percent.nil?
+                    N/A
+                  - else
+                    = "#{format_percent_or_nil(candidate_race.poll_percent)}%"
+              %td.n-votes.when-race-day-past.when-race-day-present= format_int(candidate_race.n_votes)
+              %td.n-votes-pct.when-race-day-past.when-race-day-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
+      .footnotes
+        %a.footnotes-for-pollster.when-race-day-future{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
+        %a.footnotes-for-race-day.when-race-day-present.when-race-day-past{target: '_blank', href: race.href} Detailed results
