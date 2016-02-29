@@ -131,13 +131,13 @@ text: Republican voters in Iowa turned out in record numbers for the GOP caucus,
 date: 2016-03-01
 state: DA
 party: Dem
-text: Democrats Abroad holds votes in many places worldwide, from March 1 to March 8. We don’t tally votes for this race: we just report delegate counts.
+text: Democrats Abroad holds votes in many places worldwide, from March 1 to March 8. We don't have vote tallies for this race, but we’re counting delegates.
 
 
 date: 2016-03-01
 state: AS
 party: Dem
-text: We don’t tally votes for this race: we just report delegate counts.
+text: We don't have vote tallies for this race, but we’re counting delegates.
 
 
 :ignore all text after this line
