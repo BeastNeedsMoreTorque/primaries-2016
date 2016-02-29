@@ -3,6 +3,10 @@ body.race-day .delegate-summary {
     @include party-stuff-side-by-side-when-wide();
   }
 
+  p {
+    padding: 0 10px;
+  }
+
   table.candidate-delegates {
     white-space: nowrap;
     border-collapse: collapse;
