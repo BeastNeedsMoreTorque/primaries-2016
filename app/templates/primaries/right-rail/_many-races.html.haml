@@ -28,7 +28,7 @@
                           %td.candidate= candidate_race.candidate_last_name
                           %td.n-pledged-delegates-int= format_int(candidate_race.n_pledged_delegates)
                     .linkout
-                      %a{href: race.href} Results »
+                      %a{target: '_blank', href: race.href} Results »
               - elsif race.any_precincts_reporting?
                 .color-box<>
                   .race.with-votes
@@ -40,7 +40,7 @@
                           %td.percent-vote= (candidate_race.percent_vote || 0).round
                     .n-precincts-reporting #{race.pct_precincts_reporting} reporting
                     .linkout
-                      %a{href: race.href} Live Results »
+                      %a{target: '_blank', href: race.href} Live Results »
               - elsif race.has_pollster_percents?
                 .color-box<>
                   .race.with-pollster
@@ -52,12 +52,12 @@
                           %td.percent-vote= (candidate_state.poll_percent || 0).round
                     .source
                       Source:
-                      %a{href: race.pollster_href} Pollster
+                      %a{target: '_blank', href: race.pollster_href} Pollster
                     .linkout
-                      %a{href: race.href} Preview »
+                      %a{target: '_blank', href: race.href} Preview »
               - else
                 .color-box<>
                   .race.with-no-data
                     %p.no-polling-data No results yet
                     .linkout
-                      %a{href: race.href} Preview »
+                      %a{target: '_blank', href: race.href} Preview »
