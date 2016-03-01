@@ -9,15 +9,29 @@
 %body
   %div.primary-mobile-ad
     %div.head
-      %h3.main-hed
-        - case race_day.when_race_day_happens
-        - when 'future'
-          HAPPENING SOON: #{race_day.title}
-        - when 'present'
-          LIVE RESULTS: #{race_day.title}
-        - when 'past'
-          RESULTS: #{race_day.title}
-    - if race_day.races.length <= 2
+      %h1
+        %a{href: race_day.href}
+          - case race_day.when_race_day_happens
+          - when 'future'
+            HAPPENING SOON: #{race_day.title}
+          - when 'present'
+            LIVE RESULTS: #{race_day.title}
+          - when 'past'
+            RESULTS: #{race_day.title}
+    - if race_day.races.length > 2
+      .many-races
+        - race_day.party_race_days.each do |party_race_day|
+          .party-race-day{'data-party-id': party_race_day.party_id}
+            .party-header
+              %img{src: image_path("#{party_race_day.party_id}.svg"), alt: ''}
+              .party= party_race_day.party_name
+            .map-container
+              != country_map_with_race_day_party_states_highlighted(party_race_day.party_id)
+              %p
+                %a{href: race_day.href}
+                  %strong #{party_race_day.races.length}
+                  race#{party_race_day.races.length > 1 ? 's' : ''}
+    - else
       .parties-container
         - race_day.races.each do |race|
           - leader = race.candidate_races.first
