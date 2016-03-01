@@ -85,7 +85,7 @@ class Uploader
 
       File.open(absolute_path, 'r') do |f|
         @bucket.put_object({
-          key: relative_path,
+          key: relative_path.sub(/\.html$/, ''),
           acl: 'public-read',
           body: f,
           cache_control: "public, max-age=#{max_age}",
