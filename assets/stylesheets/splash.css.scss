@@ -41,10 +41,6 @@ body {
     padding: 0;
   }
 
-  ul.states li {
-    display: inline;
-  }
-
   .many-races-legend {
     display: -webkit-flex;
     display: flex;
@@ -144,17 +140,18 @@ body {
 
   li.candidate {
     border-top: .5rem solid transparent; // will be colored based on party
+    position: relative;
     display: -webkit-flex;
     display: flex;
     background: white;
     padding: .25rem;
-    line-height: 1.8rem;
+    line-height: 2rem;
 
     .last-name, .n-pledged-delegates { white-space: nowrap; }
 
     .last-name {
       img {
-        height: 1.8rem;
+        height: 2rem;
         width: auto;
         vertical-align: middle;
       }
@@ -174,7 +171,7 @@ body {
     display: inline-block;
   }
 
-  p.instructions {
+  .instructions {
     font-size: .8rem;
     color: $muted;
   }
@@ -188,6 +185,7 @@ body {
 
   .states-without-candidates {
     padding-top: .5rem;
+    line-height: 2rem;
   }
 
   ul.states {
@@ -195,10 +193,44 @@ body {
 
     li {
       display: inline-block;
-      width: 1.8rem;
-      height: 1.8rem;
+      position: relative;
+      width: 2rem;
+      height: 2rem;
       padding-left: .1rem;
       vertical-align: middle;
+
+      a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+      }
+
+      span.state-code {
+        display: block;
+        position: absolute;
+        font-weight: bold;
+        width: 100%;
+        height: 100%;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      a:hover .state-code {
+        text-decoration: underline;
+      }
+
+      &.winner a::after {
+        content: '✓';
+        display: block;
+        position: absolute;
+        right: -.2rem;
+        bottom: -.6rem;
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
     }
 
     svg {
@@ -210,14 +242,6 @@ body {
       stroke-width: 20px;
       stroke: #999;
       fill: white;
-    }
-
-    text {
-      font-family: $huffpo-font-family;
-      font-size: 450px;
-      font-weight: bold;
-      text-anchor: middle;
-      alignment-baseline: middle;
     }
   }
 }
@@ -454,6 +478,7 @@ body {
 
   ul.states text, .races-on-map path.today { fill: $widgetBlue; }
   li.candidate { border-top-color: $widgetLightBlue; }
+  ul.states a { color: $widgetBlue; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightBlue;
@@ -486,6 +511,7 @@ body {
 
   ul.states text, .races-on-map path.today { fill: $widgetRed; }
   li.candidate { border-top-color: $widgetLightRed; }
+  ul.states a { color: $widgetRed; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightRed;
