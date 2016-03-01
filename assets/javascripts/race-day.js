@@ -580,7 +580,6 @@
     wait_for_font_then('Source Sans Pro', function() {
       line_up_race_divs();
       $('.party-state-map svg').position_svg_cities();
-      $('body').scrollspy({ target: '#jump-to-race' });
     });
 
     add_tooltips();
@@ -597,19 +596,85 @@
     });
 
     var scrollFinder = document.getElementById('scrollfinder');
-    var $dropdownContainer = $('.dropdown-container');
-    function topCheck() {
-      if (scrollFinder) {
+    if (scrollFinder) {
+      var $dropdownContainer = $('.dropdown-container', scrollFinder);
+      function topCheck() {
         $dropdownContainer.toggleClass('fixed', window.scrollY > scrollFinder.offsetTop);
       }
+
+      var anchors = document.querySelectorAll('a[name]');
+      var anchor_map = null; // Array of { top, name } pairs
+      function refresh_anchor_map() {
+        anchor_map = [];
+        // We often have two anchors at the same position. We care about the
+        // first in that case; we should ignore the second.
+        var last_top = -1;
+
+        Array.prototype.forEach.call(anchors, function(el) {
+          var top = el.offsetTop;
+          if (top != last_top) {
+            // When we resize, we get off by a few pixels, it seems, on Chrome
+            // 48. I haven't bothered to investigate; I'll just gives a few
+            // pixels' buffer so nobody will notice.
+            anchor_map.push({ top: top - 10, name: el.getAttribute('name') });
+            last_top = top;
+          }
+        });
+      }
+
+      // Returns the first anchor above/at the current window.scrollY. If
+      // there are none, we're at the top of the page; returns `null`.
+      function find_current_anchor_name() {
+        var top = window.scrollY;
+        var ret = null;
+
+        for (var i = 0; i < anchor_map.length; i++) {
+          var o = anchor_map[i];
+          if (top <= o.top) {
+            return ret;
+          } else {
+            ret = o.name;
+          }
+        }
+
+        return ret;
+      }
+
+      var $dropdown_toggle_label = $dropdownContainer.find('.dropdown-toggle span.label');
+      var dropdown_toggle_original_html = $dropdown_toggle_label.html();
+      function adjust_dropdown_toggle_label() {
+        var anchor_name = find_current_anchor_name();
+        var anchor_html;
+
+        if (anchor_name) {
+          anchor_html = $dropdownContainer.find('a[href="#' + anchor_name + '"]').html();
+        } else {
+          anchor_html = dropdown_toggle_original_html;
+        }
+
+        $dropdown_toggle_label.html(anchor_html);
+      }
+
+      $dropdown_toggle_label.parent().dropdown();
+
+      function refresh_dropdown() {
+        topCheck();
+        refresh_anchor_map();
+        adjust_dropdown_toggle_label();
+      }
+
+      wait_for_font_then('Source Sans Pro', function() {
+        window.addEventListener('scroll', topCheck);
+        window.addEventListener('scroll', adjust_dropdown_toggle_label);
+        window.addEventListener('resize', function() {
+          // Since we adjust the height of things in a requestAnimationFrame(),
+          // we need to use the results in a requestAnimationFrame(), too.
+          window.requestAnimationFrame(refresh_dropdown);
+        });
+
+        refresh_dropdown();
+      });
     }
-
-    $('body').scrollspy({ target: '#jump-to-race' });
-
-    window.addEventListener('scroll', topCheck);
-    topCheck();
-
-    $('.dropdown-toggle').dropdown();
   }
 
   $(function() {

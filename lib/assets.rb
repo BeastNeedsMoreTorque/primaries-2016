@@ -13,7 +13,6 @@ module Assets
     'main.js' => %w(
       vendor/jquery-2.2.0.js
       vendor/dropdown.js
-      vendor/scrollspy.js
       wait_for_font_then.js
       render_time.js
       format_int.js
