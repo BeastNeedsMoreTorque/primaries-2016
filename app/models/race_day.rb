@@ -102,4 +102,8 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
       raise "Need title for #{self.inspect}"
     end
   end
+
+  def href
+    "/2016/primaries/#{id}"
+  end
 end
