@@ -45,9 +45,26 @@ body {
     display: inline;
   }
 
+  .many-races-legend {
+    display: -webkit-flex;
+    display: flex;
+    padding-top: .5rem;
+    font-size: .8rem;
+    font-weight: bold;
+    
+    h3 {
+      margin: 0;
+      font: inherit;
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
+    }
+  }
+
   .party-race-day {
     display: -webkit-flex;
     display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
     box-sizing: border-box;
     width: 50%;
 
@@ -62,60 +79,131 @@ body {
   }
 
   .races-on-map {
-    width: 50%;
+    width: 18rem;
+    padding-bottom: .5rem;
+
+    path {
+      color: none;
+      fill: #ccc;
+    }
   }
 
   .party-container {
     display: -webkit-flex;
     display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
     box-sizing: border-box;
-    width: 50%;
   }
 
   .party-container {
-    -webkit-flex-grow: 0;
-    flex-grow: 0;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+
+    .party-header {
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+
+      width: 5rem;
+
+      .n-pledged-delegates {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        -webkit-justify-content: flex-end;
+        justify-content: flex-end;
+        flex-grow: 1;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      h3 { // more specificity
+        text-align: center;
+        white-space: normal;
+      }
+    }
   }
 
   .candidates-and-states {
     -webkit-flex-grow: 1;
     flex-grow: 1;
-    padding: .5rem;
+    padding: 0 .5rem .5rem;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+
+    ul.candidates {
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
+    }
   }
 
-  .candidate-summary {
+  li.candidate {
+    border-top: .5rem solid transparent; // will be colored based on party
     display: -webkit-flex;
     display: flex;
     background: white;
     padding: .25rem;
+    line-height: 1.8rem;
+
+    .last-name, .n-pledged-delegates { white-space: nowrap; }
+
+    .last-name {
+      img {
+        height: 1.8rem;
+        width: auto;
+        vertical-align: middle;
+      }
+
+      padding-right: .15rem; // plus the .1rem padding-left on the svg makes .25rem
+    }
+
+    .n-pledged-delegates {
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
+      text-align: right;
+      font-weight: bold;
+    }
   }
 
-  .last-name {
-    -webkit-flex-grow: 1;
-    flex-grow: 1;
+  .wins-races, .leads-races {
+    display: inline-block;
   }
 
-  li.candidate {
-    padding-bottom: 1rem;
+  p.instructions {
+    font-size: .8rem;
+    color: $muted;
   }
 
   h5 {
+    display: inline;
     font: inherit;
     margin: 0;
-    padding: .5rem .25rem 0;
     text-transform: uppercase;
   }
 
-  .states-without-candidates ul.states {
+  .states-without-candidates {
     padding-top: .5rem;
   }
 
   ul.states {
+    display: inline;
+
+    li {
+      display: inline-block;
+      width: 1.8rem;
+      height: 1.8rem;
+      padding-left: .1rem;
+      vertical-align: middle;
+    }
+
     svg {
-      width: 2rem;
-      height: 2rem;
+      width: 100%;
+      height: 100%;
     }
 
     path {
@@ -364,7 +452,8 @@ body {
     color: #fff;
   }
 
-  ul.states text { fill: $widgetBlue; }
+  ul.states text, .races-on-map path.today { fill: $widgetBlue; }
+  li.candidate { border-top-color: $widgetLightBlue; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightBlue;
@@ -395,7 +484,8 @@ body {
     color: #fff;
   }
 
-  ul.states text { fill: $widgetRed; }
+  ul.states text, .races-on-map path.today { fill: $widgetRed; }
+  li.candidate { border-top-color: $widgetLightRed; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightRed;

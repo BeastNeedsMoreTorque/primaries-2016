@@ -26,11 +26,11 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
     n_pledged_delegates - candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
 
-  def state_codes_without_leaders
+  def races_without_leaders
     used_state_codes = candidate_races.select(&:leader?).map(&:state_code).to_set
 
-    candidate_races.map(&:state_code)
+    candidate_races.map(&:race)
+      .reject { |r| used_state_codes.include?(r.state_code) }
       .uniq
-      .reject { |sc| used_state_codes.include?(sc) }
   end
 end
