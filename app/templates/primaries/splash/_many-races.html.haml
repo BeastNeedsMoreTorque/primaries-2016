@@ -7,10 +7,10 @@
           %h3 #{party_race_day.party_adjective} Candidates
           .instructions
             %p Click a state to follow it.
-            %a{href: race_day.href} See all »
+            %a{target: '_blank', href: race_day.href} See all »
           .n-pledged-delegates
             %p
-              %a{href: "#{race_day.href}#summary"}
+              %a{target: '_blank', href: "#{race_day.href}#summary"}
                 Total pledged delegates:
                 %strong= party_race_day.n_pledged_delegates
 
@@ -30,7 +30,7 @@
                     %ul.states<>
                       - candidate_race_day.leads_candidate_races.each do |candidate_race|
                         %li{'data-state-code': candidate_race.state_code, class: candidate_race.winner? ? 'winner' : ''}<>
-                          %a{href: candidate_race.race_href, title: "#{candidate_race.state_name}: #{candidate_race.candidate_last_name} #{candidate_race.winner? ? 'wins' : 'leads'} (#{candidate_race.race_pct_precincts_reporting} of precincts reporting)"}<>
+                          %a{target: '_blank', href: candidate_race.race_href, title: "#{candidate_race.state_name}: #{candidate_race.candidate_last_name} #{candidate_race.winner? ? 'wins' : 'leads'} (#{candidate_race.race_pct_precincts_reporting} of precincts reporting)"}<>
                             %span.state-code= candidate_race.state_code
                             != map_svg("states/tiny/#{candidate_race.state_code}")
 
@@ -45,6 +45,6 @@
               %ul.states<>
                 - party_race_day.races_without_leaders.each do |race|
                   %li{'data-state-code': race.state_code}<>
-                    %a{href: race.href, title: "#{race.state_name}: waiting for results"}<>
+                    %a{target: '_blank', href: race.href, title: "#{race.state_name}: waiting for results"}<>
                       %span.state-code= race.state_code
                       != map_svg("states/tiny/#{race.state_code}")
