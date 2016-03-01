@@ -11,11 +11,11 @@
     .line
     .hed
       %h1.main-hed.when-race-day-present
-        %a{href: race_day.href}= "LIVE RESULTS: #{race_day.title}"
+        %a{target: '_blank', href: race_day.href}= "LIVE RESULTS: #{race_day.title}"
       %h1.main-hed.when-race-day-past
-        %a{href: race_day.href}= "RESULTS: #{race_day.title}"
+        %a{target: '_blank', href: race_day.href}= "RESULTS: #{race_day.title}"
       %h1.main-hed.when-race-day-future
-        %a{href: race_day.href}= "HAPPENING SOON: #{race_day.title}"
+        %a{target: '_blank', href: race_day.href}= "HAPPENING SOON: #{race_day.title}"
     .line
   - if race_day.races.length == 1
     != render(partial: 'primaries/splash/1-race', locals: { race_day: race_day })
