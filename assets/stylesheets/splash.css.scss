@@ -178,6 +178,10 @@ h1 a {
       text-align: right;
       font-weight: bold;
     }
+
+    ul.states path {
+      fill: #e6e6e6;
+    }
   }
 
   .wins-races, .leads-races {
@@ -251,15 +255,15 @@ h1 a {
       height: 100%;
     }
 
-    path {
-      stroke-width: 12px;
-      stroke: #9f9f9f;
-      fill: white;
-    }
-
     li[data-state-code=AS] path {
       stroke-width: 40px;
     }
+  }
+
+  .states-without-candidates ul.states path {
+    fill: #fff;
+    stroke-width: 12px;
+    stroke: #9f9f9f;
   }
 }
 
