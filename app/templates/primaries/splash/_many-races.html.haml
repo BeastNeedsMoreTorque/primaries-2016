@@ -1,37 +1,49 @@
 .many-races
   - race_day.party_race_days.each do |party_race_day|
     .party-race-day{'data-party-id': party_race_day.party_id}
-      .races-on-map
-
       .party-container
         .party-header
           %img{src: image_path("#{party_race_day.party_id}.svg"), alt: ''}
           %h3 #{party_race_day.party_adjective} Candidates
+          .n-pledged-delegates
+            %p
+              Total pledged delegates:
+              %strong= party_race_day.n_pledged_delegates
 
         .candidates-and-states
+          .many-races-legend
+            %h3 Leaders
+            .n-pledged-delegates Pledged delegates
           %ul.candidates
-            - party_race_day.candidate_race_days.each do |candidate_race_day|
+            - party_race_day.candidate_race_days.each_with_index do |candidate_race_day, i|
               %li.candidate
-                .candidate-summary
-                  .last-name= candidate_race_day.candidate_last_name
-                  .n-pledged-delegates-int= format_int(candidate_race_day.n_pledged_delegates)
+                .last-name
+                  %img{src: image_path("#{candidate_race_day.candidate_slug}.png"), alt: ''}
+                  = candidate_race_day.candidate_last_name
+
                 - if candidate_race_day.wins_candidate_races.length > 0
                   .wins-races
-                    %h5 Wins in:
-                    %ul.states
+                    %ul.states<>
                       - candidate_race_day.wins_candidate_races.each do |candidate_race|
-                        %li!= map_svg("states/tiny/#{candidate_race.state_code}")
+                        %li<>
+                          %a{href: candidate_race.race_href}!= map_svg("states/tiny/#{candidate_race.state_code}")
+
                 - if candidate_race_day.leads_not_wins_candidate_races.length > 0
                   .leads-races
-                    %h5 Leads in:
-                    %ul.states
+                    %ul.states<>
                       - candidate_race_day.leads_not_wins_candidate_races.each do |candidate_race|
-                        %li!= map_svg("states/tiny/#{candidate_race.state_code}")
-          .states-without-candidates
-            .candidate-summary
-              .last-name Up for grabs
-              .n-pledged-delegates-int= format_int(party_race_day.n_pledged_delegates_up_for_grabs)
-            - if party_race_day.state_codes_without_leaders.length > 0
-              %ul.states
-                - party_race_day.state_codes_without_leaders.each do |state_code|
-                  %li!= map_svg("states/tiny/#{state_code}")
+                        %li<>
+                          %a{href: candidate_race.race_href}!= map_svg("states/tiny/#{candidate_race.state_code}")
+
+                .n-pledged-delegates= format_int(candidate_race_day.n_pledged_delegates)
+          - if party_race_day.party_id == 'Dem'
+            %p.instructions Source: AP
+            %p.instructions We calculate pledged delegates using vote counts from all #{race_day.title} states.
+            %p.instructions Click a state to follow its race.
+          - if party_race_day.races_without_leaders.length > 0
+            .states-without-candidates
+              %h5 Still to come:
+              %ul.states<>
+                - party_race_day.races_without_leaders.each do |race|
+                  %li<>
+                    %a{href: race.href}!= map_svg("states/tiny/#{race.state_code}")
