@@ -7,8 +7,9 @@
           %h3 #{party_race_day.party_adjective} Candidates
           .n-pledged-delegates
             %p
-              Total pledged delegates:
-              %strong= party_race_day.n_pledged_delegates
+              %a{href: "#{race_day.href}#summary"}
+                Total pledged delegates:
+                %strong= party_race_day.n_pledged_delegates
 
         .candidates-and-states
           .many-races-legend
