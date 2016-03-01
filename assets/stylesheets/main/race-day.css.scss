@@ -15,12 +15,13 @@ body.race-day {
   }
 
   #scrollfinder {
-    height: 3.5rem;
+    height: 4.5rem;
   }
 
   .dropdown-container {
-    // display: none;
-    // top: -100px;
+    padding: 0.5em 0;
+    margin: 0;
+
     &.fixed {
       position: fixed;
       display: block;
@@ -30,8 +31,6 @@ body.race-day {
       background: #fff;
       box-shadow: 0 4px 2px -2px #ccc;
       z-index: 100;
-      padding: 0.5em 0;
-      margin: 0;
     }
   }
 

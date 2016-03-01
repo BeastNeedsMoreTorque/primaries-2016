@@ -600,8 +600,7 @@
     var $dropdownContainer = $('.dropdown-container');
     function topCheck() {
       if (scrollFinder) {
-        // TODO why 8?
-        $dropdownContainer.toggleClass('fixed', window.scrollY > scrollFinder.offsetTop - 8);
+        $dropdownContainer.toggleClass('fixed', window.scrollY > scrollFinder.offsetTop);
       }
     }
 

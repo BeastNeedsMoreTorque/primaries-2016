@@ -60,7 +60,7 @@ a {
 #main {
   margin: 0 auto;
   padding: 0;
-  max-width: 960px;
+  max-width: $full-desktop-width;
 
   @media (min-width: 401px) {
     // When we have the space, put lots of padding.
