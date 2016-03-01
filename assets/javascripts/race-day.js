@@ -86,6 +86,8 @@
     }
 
     function position_tooltip_near_svg_path(svg_path) {
+      var MinTop = 50; // px above which we don't show anything. 3rem =~ 50px
+
       // Remember: getBoundingClientRect() returns *viewport* coordinates.
       var margin = 10; // px
       var path_rect = svg_path.getBoundingClientRect();
@@ -107,7 +109,7 @@
 
       // y: if the tooltip fits above, show it above. Otherwise, show it below.
       var y;
-      if (path_rect.top - tooltip_rect.height - margin >= 0) {
+      if (path_rect.top - tooltip_rect.height - margin >= MinTop) {
         y = Math.round(path_rect.top - div_rect.top - tooltip_rect.height - margin); // above
       } else {
         y = Math.round(path_rect.bottom - div_rect.top + margin);
