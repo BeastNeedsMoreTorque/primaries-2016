@@ -199,4 +199,9 @@ Race = RubyImmutableStruct.new(
   def title
     "#{state_name} #{party_adjective} #{race_type}"
   end
+
+  # e.g., "Iowa (D)'
+  def title_abbr
+    "#{state_name} (#{party.abbreviation})"
+  end
 end

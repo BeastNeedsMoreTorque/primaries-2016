@@ -1,7 +1,5 @@
-body.race-day {
-  #scrollfinder {
-    height: 4.5rem;
-  }
+body.race-day #scrollfinder {
+  height: 3rem;
 
   .dropdown-container {
     padding: 0.5em 0;
@@ -22,8 +20,8 @@ body.race-day {
   .dropdown-label {
     color: #999999;
     text-transform: uppercase;
-    font-size: 0.8em;
-    margin-bottom: 2px;
+    line-height: 2rem;
+    padding-right: .5rem;
   }
 
   .dropdown.open .dropdown-menu {
@@ -31,40 +29,43 @@ body.race-day {
   }
 
   .dropdown-inner {
-    width: 90%;
     max-width: 30em;
-    margin: auto;
+    padding: 0 10px;
+    margin: 0 auto;
+    display: -webkit-flex;
+    display: flex;
   }
 
-  .dropdown-toggle {
+  .dropdown {
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    height: 2rem;
     position: relative;
+  }
+
+  a.dropdown-toggle {
     display: block;
+    text-align: center;
     box-sizing: border-box;
-    background: none;
     border: 1px solid #ccc;
-    max-width: 30em;
-    margin: 0 auto;
-    padding: 0.5em;
-    font-size: 1em;
+    line-height: 2rem;
+    padding: 0 0.5em;
+    font-size: 1rem;
     font-family: 'Source Sans Pro';
-    cursor: pointer;
-    outline: none;
-    text-align: left;
     text-decoration: none;
-    color: #000;
+    color: inherit;
   }
 
   .caret {
     position: absolute;
-    right: 12px;
-    top: 16px;
+    right: .5rem;
+    top: .75rem;
   }
 
   .dropdown-menu {
     display: none;
     position: absolute;
-    width: 90%;
-    max-width: 30em;
+    width: 100%;
     text-align: center;
     margin: auto;
     background: #fff;
@@ -96,7 +97,7 @@ body.race-day {
     .second {
       display: none;
     }
-    .party-name {
+    .race-title {
       display: none;
     }
   }

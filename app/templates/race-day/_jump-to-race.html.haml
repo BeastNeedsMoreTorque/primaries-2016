@@ -1,18 +1,17 @@
 #scrollfinder
   .dropdown-container#jump-to-race
     %ul.dropdown-inner.nav
-      %li.dropdown-label Jump to
       %li.dropdown
         %a.dropdown-toggle{"data-toggle": "dropdown", href: "#", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}
-          Select
+          Jump to…
           %svg.caret{x: "0", y: "0", width: "10", height: "7"}
             %polygon{points: "10,0 5,7 0,0"}
         %ul.dropdown-menu
           %li
-            %a.dropdown-link{href: "#summary"} Total delegates
+            %a{href: "#summary"} Total delegates
           - race_day.races.group_by(&:state_code).each do |state_code, races|
             - races.each_with_index do |race, i|
               %li{class: (i == 0 ? 'first' : 'second')}
-                %a.dropdown-link{href: '#' + race.anchor}
+                %a{href: "##{race.anchor}"}
                   %span.state-name= race.state_name
-                  %span.party-name= race.title
+                  %span.race-title= race.title_abbr

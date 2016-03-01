@@ -4,4 +4,8 @@ Party = RubyImmutableStruct.new(:database, :id, :name, :adjective, :n_delegates_
   def candidates
     database.candidates.select { |c| c.party_id == id.to_s }
   end
+
+  def abbreviation
+    name[0]
+  end
 end
