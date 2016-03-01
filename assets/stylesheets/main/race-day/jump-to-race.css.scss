@@ -41,6 +41,7 @@ body.race-day #scrollfinder {
     flex-grow: 1;
     height: 2rem;
     position: relative;
+    margin-top: -1px;
   }
 
   a.dropdown-toggle {
@@ -73,7 +74,7 @@ body.race-day #scrollfinder {
     border: 1px solid #ccc;
     border-top: 0;
     z-index: 100;
-    padding: 1em 0 1.2em;
+    padding: .5rem 0;
     max-height: 400px;
     overflow-y: scroll;
     a {
