@@ -109,6 +109,9 @@ a:hover { text-decoration: underline; }
     width: 5rem;
 
     img {
+      display: block;
+      width: 75%; // IE Edge needs a width
+      margin: 0 auto;
       padding-bottom: .5rem;
     }
 
