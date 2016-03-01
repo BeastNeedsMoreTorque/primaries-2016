@@ -9,24 +9,7 @@
     %p.intro-copy= body
 
   - if multi_state?
-    #scrollfinder
-    .dropdown-container#jump-to-race
-      %ul.dropdown-inner.nav
-        %li.dropdown-label Jump to
-        %li.dropdown
-          %a.dropdown-toggle{"data-toggle": "dropdown", href: "#", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}
-            Select
-            %svg.caret{x: "0", y: "0", width: "10", height: "7"}
-              %polygon{points: "10,0 5,7 0,0"}
-          %ul.dropdown-menu
-            %li
-              %a.dropdown-link{href: "#summary"} Total delegates
-            - race_day.races.group_by(&:state_code).each do |state_code, races|
-              - races.each_with_index do |race, i|
-                %li{class: (i == 0 ? 'first' : 'second')}
-                  %a.dropdown-link{href: '#' + race.anchor}
-                    %span.state-name= race.state_name
-                    %span.party-name= race.title
+    != render(partial: 'race-day/jump-to-race', locals: { race_day: race_day })
 
   -# If there are two races in a party, display a summary
   - if multi_state?
