@@ -144,11 +144,6 @@ a:hover { text-decoration: underline; }
     display: flex;
     -webkit-flex-direction: column;
     flex-direction: column;
-
-    ul.candidates {
-      -webkit-flex-grow: 1;
-      flex-grow: 1;
-    }
   }
 
   li.candidate {
@@ -190,6 +185,8 @@ a:hover { text-decoration: underline; }
   }
 
   .instructions {
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
     font-size: .8rem;
     color: $muted;
   }
