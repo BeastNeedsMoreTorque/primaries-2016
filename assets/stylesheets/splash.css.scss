@@ -112,14 +112,22 @@ a:hover { text-decoration: underline; }
       padding-bottom: .5rem;
     }
 
-    .n-pledged-delegates {
+    .instructions {
+      font-size: .8rem;
+      line-height: 1.2;
+      color: white;
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
       display: -webkit-flex;
       display: flex;
       -webkit-flex-direction: column;
       flex-direction: column;
-      -webkit-justify-content: flex-end;
-      justify-content: flex-end;
-      flex-grow: 1;
+      -webkit-justify-content: center;
+      justify-content: center;
+
+      a {
+        text-decoration: underline;
+      }
     }
 
     p {
@@ -144,6 +152,18 @@ a:hover { text-decoration: underline; }
     display: flex;
     -webkit-flex-direction: column;
     flex-direction: column;
+
+    .instructions {
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
+      font-size: .8rem;
+      color: $muted;
+
+      p {
+        margin: 0;
+        padding: .5rem 0 2.25rem;
+      }
+    }
   }
 
   li.candidate {
@@ -182,13 +202,6 @@ a:hover { text-decoration: underline; }
 
   .wins-races, .leads-races {
     display: inline-block;
-  }
-
-  .instructions {
-    -webkit-flex-grow: 1;
-    flex-grow: 1;
-    font-size: .8rem;
-    color: $muted;
   }
 
   h5 {

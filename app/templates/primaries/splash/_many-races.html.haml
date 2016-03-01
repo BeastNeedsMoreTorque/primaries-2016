@@ -5,6 +5,9 @@
         .party-header
           %img{src: image_path("#{party_race_day.party_id}.svg"), alt: ''}
           %h3 #{party_race_day.party_adjective} Candidates
+          .instructions
+            %p Click a state to follow it.
+            %a{href: race_day.href} See all »
           .n-pledged-delegates
             %p
               %a{href: "#{race_day.href}#summary"}
@@ -35,8 +38,7 @@
           - if party_race_day.party_id == 'Dem'
             .instructions
               %p Source: AP
-              %p Click a state to follow its race.
-              %p We project delegate counts in a state once most of its precincts are reporting.
+              %p We predict delegate counts in a state once most of its precincts are reporting.
           - if party_race_day.races_without_leaders.length > 0
             .states-without-candidates
               %h5 Still to come:
