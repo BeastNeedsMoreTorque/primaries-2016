@@ -28,6 +28,10 @@ require 'mkfifo'
 
 FileUtils.mkdir_p(Paths.ProductionDir)
 
+# We never explicitly poll for AP's `election_days`, but we need it or else we
+# won't ever poll for other races. So we'll rm it once every time we start the
+# server; that'll force us to query for it again.
+FileUtils.rm_f("#{Paths.Cache}/election_days")
 for path in [ Paths.ProductionCommands, Paths.ProductionOutput ]
   FileUtils.rm_f(path)
   File.mkfifo(path)
