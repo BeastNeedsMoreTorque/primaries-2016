@@ -21,7 +21,7 @@ require 'set'
 # * race_subcounties: race_id, reporting_unit_id, n_votes, n_precincts_reporting, n_precincts_total
 # * races: id, party_id, state_code, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource
-  NonCountyStateCodes = %w(AK MA ME MN NH VT).to_set
+  NonCountyStateCodes = %w(AK KS MA ME MN NH VT).to_set
 
   CandidateRace = RubyImmutableStruct.new(:id, :candidate_id, :n_votes, :winner)
   CandidateCountyRace = RubyImmutableStruct.new(:candidate_race_id, :candidate_id, :fips_int, :race_id, :n_votes)
