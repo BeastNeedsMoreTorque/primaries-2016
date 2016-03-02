@@ -2,6 +2,10 @@
   %thead
     %tr
       %th.candidate Candidate
+      %th.n-delegates{colspan: 2} Delegates
+      %th.n-pledged-delegates{colspan: 2} Delegates
+      - if race.has_pollster_data?
+        %th.pollster Polling Average 
       %th.n-votes
         - if race.n_votes_th
           = race.n_votes_th
@@ -9,10 +13,6 @@
         - else
           Votes
       %th.percent-vote= '%'
-      %th.n-delegates{colspan: 2} Delegates
-      %th.n-pledged-delegates{colspan: 2} Delegates
-      - if race.has_pollster_data?
-        %th.pollster Polling Average 
   %tbody
     - race.candidate_races.each do |candidate_race|
       - candidate = candidate_race.candidate
@@ -20,8 +20,6 @@
         %td.candidate
           %img{src: image_path("#{candidate.slug}.png"), alt: ''}
           %span.name= candidate.name
-        %td.n-votes= format_int(candidate_race.n_votes)
-        %td.percent-vote= format_percent_or_nil(candidate_race.percent_vote)
         %td.n-delegates= format_int(candidate_race.n_delegates || 0)
         %td.n-delegates-dots!= candidate_race_dot_groups(candidate_race, :n_delegates).to_html
         %td.n-pledged-delegates= format_int(candidate_race.n_pledged_delegates || 0)
@@ -31,6 +29,8 @@
             - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
               .sparkline!= candidate_race.poll_sparkline.to_svg
             %span.percent= format_percent_or_nil(candidate_race.poll_percent)
+        %td.n-votes= format_int(candidate_race.n_votes)
+        %td.percent-vote= format_percent_or_nil(candidate_race.percent_vote)
 
 - if race.n_votes_footnote
   %p.n-votes-footnote.when-precincts-reporting
