@@ -104,7 +104,7 @@ class Database
   end
 
   def today
-    now.to_datetime.new_offset('Eastern').to_date.to_s
+    now.to_datetime.new_offset('Eastern').to_date
   end
 
   # The "production" Database: all default Sources

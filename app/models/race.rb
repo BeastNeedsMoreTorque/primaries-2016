@@ -186,12 +186,24 @@ Race = RubyImmutableStruct.new(
   # * "Results coming 7:00 p.m. EST" (if expect_results_time)
   # * "Results coming soon" (if expect_results_time.nil?)
   def results_coming_s
-    if database.today < race_day_id
+    if database.today < date
       "Results coming #{date.strftime('%B %-d')}"
     elsif expect_results_time.nil?
       "Results coming soon"
     else
       "Results coming #{expect_results_time.to_datetime.new_offset('Eastern').strftime('%l:%M %P %Z').sub('m', '.m.').sub('-05:00', 'EST').sub('-04:00', 'EDT')}"
+    end
+  end
+
+  # Returns "is" or "was", for this sentence:
+  #
+  # "The race #{is_or_was} on March 5"
+  def is_or_was
+    puts [ database.today, date ].inspect
+    if database.today > date
+      'was'
+    else
+      'is'
     end
   end
 
