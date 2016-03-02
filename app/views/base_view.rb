@@ -107,6 +107,20 @@ class BaseView
     @map_svg[path] ||= File.read("#{Paths.Assets}/maps/#{path}.svg")[header_length .. -1]
   end
 
+  # Returns inline <svg> data for the given race.
+  #
+  # Use this instead of map_svg to handle exceptions. For instance, Maine GOP
+  # won't have a mesh or counties.
+  def race_map_svg(race)
+    if race.id == '2016-03-05-GOP-ME'
+      v1 = map_svg("states/#{race.state_code}")
+        .gsub(/<g class="subcounties">.+?<\/g>/m, '')
+        .gsub(/<path class="mesh.+?>/, '')
+    else
+      map_svg("states/#{race.state_code}")
+    end
+  end
+
   def template_name
     t = self.class.name.gsub(/([A-Z])/) { "-#{$1.downcase}" }
     t[1..-6]

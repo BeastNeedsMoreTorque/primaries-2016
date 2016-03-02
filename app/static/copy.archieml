@@ -140,4 +140,10 @@ party: Dem
 text: We don't have vote tallies for this race, but we’re counting delegates.
 
 
+date: 2016-03-05
+state: ME
+party: GOP
+text: The Maine Republican Party only reports statewide results. There is no breakdown by township.
+
+
 :ignore all text after this line
