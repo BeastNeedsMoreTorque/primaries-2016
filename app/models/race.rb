@@ -197,6 +197,7 @@ Race = RubyImmutableStruct.new(
 
   # e.g., 'Iowa Democratic Caucus'
   def title
+    throw "#{race_day_id} #{party_id} #{state_code} race needs a race_type. Update the spreadsheet and run script/update-static-data" if !race_type
     "#{state_name} #{party_adjective} #{race_type}"
   end
 

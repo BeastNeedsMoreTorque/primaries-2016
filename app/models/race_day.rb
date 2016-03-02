@@ -93,14 +93,22 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
   def past?; when_race_day_happens == 'past'; end
   def future?; when_race_day_happens == 'future'; end
 
+  def date_s
+    @date.strftime('%B %-d')
+  end
+
   def title
     if @title
       @title
     elsif @races.length == 1
       @races.first.title
     else
-      raise "Need title for #{self.inspect}"
+      date_s
     end
+  end
+
+  def title_is_just_date_s?
+    title == date_s
   end
 
   def href
