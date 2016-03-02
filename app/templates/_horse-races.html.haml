@@ -3,7 +3,7 @@
     .horse-race{class: "party-#{party.id}", 'data-n-delegates': party.n_delegates_total, 'data-n-delegates-needed': party.n_delegates_needed}
       %h3= party.name
       %ol.candidate-horses
-        - party.candidates.reverse.each do |candidate|
+        - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
           %li.candidate-horse{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, class: (candidate.dropped_out? ? 'dropped-out' : '')}
             .info
               .last-name= candidate.name
