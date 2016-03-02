@@ -199,7 +199,6 @@ Race = RubyImmutableStruct.new(
   #
   # "The race #{is_or_was} on March 5"
   def is_or_was
-    puts [ database.today, date ].inspect
     if database.today > date
       'was'
     else
