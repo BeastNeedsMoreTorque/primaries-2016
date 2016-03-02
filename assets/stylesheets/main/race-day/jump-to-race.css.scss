@@ -76,7 +76,7 @@ body.race-day #scrollfinder {
     z-index: 100;
     padding: .5rem 0;
     max-height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
     a {
       display: block;
       text-decoration: none;
