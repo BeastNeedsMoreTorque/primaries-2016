@@ -20,7 +20,7 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-01	Dem	MA	Primary	2016-03-02T01:00:00Z					
 2016-03-01	GOP	MA	Primary	2016-03-02T01:00:00Z					
 2016-03-01	Dem	MN	Caucus	2016-03-02T01:00:00Z					
-2016-03-01	GOP	MN	Caucus	2016-03-02T02:00:00Z					
+2016-03-01	GOP	MN	Caucus	2016-03-02T01:00:00Z					
 2016-03-01	Dem	OK	Primary	2016-03-02T01:00:00Z					
 2016-03-01	GOP	OK	Primary	2016-03-02T01:00:00Z					
 2016-03-01	Dem	TN	Primary	2016-03-02T01:00:00Z					
