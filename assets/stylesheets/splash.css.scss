@@ -207,6 +207,10 @@ a:hover { text-decoration: underline; }
     ul.states path {
       fill: #e6e6e6;
     }
+
+    li:not(.winner) {
+      opacity: .75;
+    }
   }
 
   .wins-races, .leads-races {
@@ -257,10 +261,6 @@ a:hover { text-decoration: underline; }
 
       a:hover .state-code {
         text-decoration: underline;
-      }
-
-      &:not(.winner) {
-        opacity: .75;
       }
 
       &.winner a::after {
