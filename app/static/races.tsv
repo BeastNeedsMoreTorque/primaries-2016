@@ -13,7 +13,7 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-01	Dem	AS	Caucus			Clinton			
 2016-03-01	Dem	AR	Primary	2016-03-02T01:30:00Z					
 2016-03-01	GOP	AR	Primary	2016-03-02T01:30:00Z					
-2016-03-01	Dem	CO	Caucus	2016-03-02T02:00:00Z					
+2016-03-01	Dem	CO	Caucus	2016-03-02T02:00:00Z		Sanders			
 2016-03-01	Dem	DA	Primary						
 2016-03-01	Dem	GA	Primary	2016-03-02T00:00:00Z					
 2016-03-01	GOP	GA	Primary	2016-03-02T00:00:00Z					
