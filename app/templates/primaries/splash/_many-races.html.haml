@@ -39,11 +39,11 @@
             .instructions
               %p Source: AP
               %p We predict delegate counts in a state once most of its precincts are reporting.
-          - if party_race_day.races_without_leaders.length > 0
+          - if party_race_day.races_without_leaders.reject{|r| r.state_code == 'DA'}.length > 0
             .states-without-candidates
               %h5 Still to come:
               %ul.states<>
-                - party_race_day.races_without_leaders.each do |race|
+                - party_race_day.races_without_leaders.reject{|r| r.state_code == 'DA'}.each do |race|
                   %li{'data-state-code': race.state_code}<>
                     %a{target: '_blank', href: race.href, title: "#{race.state_name}: waiting for results"}<>
                       %span.state-code= race.state_code
