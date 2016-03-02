@@ -27,6 +27,10 @@ module.exports =
     basename: 'tl_2015_66_cousub'
     url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_66_cousub.zip'
     shp_size: 709728
+  ME:
+    basename: 'tl_2015_23_cousub'
+    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_23_cousub.zip'
+    shp_size: 5660856
   MP:
     basename: 'tl_2015_69_cousub'
     url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_69_cousub.zip'
