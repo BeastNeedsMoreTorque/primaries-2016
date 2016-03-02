@@ -50,7 +50,7 @@ module ServerSchedule
   Ticks = [
     election_day('2016-03-01'),
     election_day('2016-03-01'),
-    del_super
+    del_super,
     election_day('2016-03-01'),
     election_day('2016-03-01'),
     pollster
