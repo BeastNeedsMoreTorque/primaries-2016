@@ -112,6 +112,9 @@ class ApElectionDaysSource
               candidate_hash[:winner] == 'X'
             )
           end
+        elsif reporting_unit[:reportingunitName] == 'Maine'
+          # Do nothing. AP's API has a dummy entry that just copies the data
+          # from the 'state' level. We don't want it.
         elsif reporting_unit[:level] == 'subunit' && !NonCountyStateCodes.include?(state_code)
           fips_code = reporting_unit[:fipsCode]
           fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
