@@ -6,57 +6,76 @@
   %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
   %link{rel: 'stylesheet', href: asset_path('mobile-ad.css')}
 
-%body{class: "race-day-#{race_day.when_race_day_happens}"}
+%body
   %div.primary-mobile-ad
     %div.head
-      %h3.main-hed
-        .when-future= "HAPPENING TONIGHT: #{race_day.title}"
-        .when-present= "LIVE RESULTS: #{race_day.title}"
-        .when-past= "RESULTS: #{race_day.title}"
-    .parties-container
-      - race_day.races.each do |race|
-        - leader = race.candidate_races.first
-        .party-container{class: race.party_id}
-          .frontrunner-lbl
-            %img{src: image_path("#{race.party_name.downcase}.svg"), alt: ''}
-            .container
-              -if race.party.id == 'Dem'
-                %p= "DEMOCRATS"
-              -else
-                %p= "REPUBLICANS"
-          .img-stats-container
-            .leading-candidate-img
+      %h1
+        %a{target: '_blank', href: race_day.href}
+          - case race_day.when_race_day_happens
+          - when 'future'
+            HAPPENING SOON: #{race_day.title}
+          - when 'present'
+            LIVE RESULTS: #{race_day.title}
+          - when 'past'
+            RESULTS: #{race_day.title}
+    - if race_day.races.length > 2
+      .many-races
+        - race_day.party_race_days.each do |party_race_day|
+          .party-race-day{'data-party-id': party_race_day.party_id}
+            .party-header
+              %img{src: image_path("#{party_race_day.party_id}.svg"), alt: ''}
+              .party= party_race_day.party_name
+            .map-container
+              != country_map_with_race_day_party_states_highlighted(party_race_day.party_id)
+              %p
+                %a{target: '_blank', href: race_day.href}
+                  %strong #{party_race_day.races.length}
+                  race#{party_race_day.races.length > 1 ? 's' : ''}
+    - else
+      .parties-container
+        - race_day.races.each do |race|
+          - leader = race.candidate_races.first
+          .party-container.race{class: "#{race.party_id} race-#{race.when_race_happens}"}
+            .party-header
+              %img{src: image_path("#{race.party_id}.svg"), alt: ''}
+              .party= race.party_name
+            .leader
               %img{src: image_path("big-headshots/#{leader.candidate.slug}.png"), alt: ''}
-            .leading-candidate-delegates
-              %p.frontrunner-cd= leader.candidate.name
-              -if leader.winner?
-                %p.leads= "WINS"
-              -else 
-                %p.leads= "LEADS"
-          %div.votes-container
-            %span.polling.when-future= "#{format_percent_or_nil(leader.poll_percent)}%"
-            %span.polling.when-future Polling Average 
-            %span.polling.source.when-future
-              %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-            %span.frontrunner-num.when-present.when-past= "#{format_int(leader.n_votes)}"
-            %span.frontrunner-unit.when-present.when-past
-              - if race.n_votes_is_really_n_sdes
-                SDEs *
+              %p
+                - if leader.winner?
+                  #{leader.candidate_last_name} Wins
+                - else
+                  #{leader.candidate_last_name} Leads
+            .votes-container
+              - if race.future?
+                %span.polling= "#{format_percent_or_nil(leader.poll_percent)}%"
+                %span.polling Polling Average 
+                %span.polling.source
+                  %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
               - else
-                %span.frontrunner-unit.when-present.when-past Votes 
-            .frontrunner-num.pct.when-present.when-past= "#{format_percent_or_nil(leader.percent_vote)}%"
+                %span.frontrunner-num= format_int(leader.n_votes)
+                %span.frontrunner-unit
+                  - if race.n_votes_th
+                    = race.n_votes_th
+                    %span.asterisk<> *
+                  - else
+                    Votes
+                %div= "#{format_percent_or_nil(leader.percent_vote)}%"
 
-  - if race_day.races.any?(&:n_votes_is_really_n_sdes)
-    %p.source.sde.when-present.when-past
-      * Iowa Democrats report State Delegate Equivalents (SDEs), predictions of
-      who will attend the state-wide party convention.
+      - race_day.races.reject(&:future?).map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
+        %p.footnote
+          %span.asterisk *
+          = footnote
 
-  .tease-link.when-past
-    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See results"
-  .tease-link.when-present
-    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See live results"
-  .tease-link.when-future
-    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}= "See all candidates"
+  .tease-link
+    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}
+      - case race_day.when_race_day_happens
+      - when 'future'
+        See all candidates
+      - when 'present'
+        See live results
+      - when 'past'
+        See results
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script

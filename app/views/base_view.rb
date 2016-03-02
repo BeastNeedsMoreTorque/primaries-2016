@@ -15,6 +15,8 @@ class BaseView
   def last_date; database.last_date; end
   def copy; database.copy; end
 
+  def social_image_url; absolute_image_path_if_possible('share.png'); end
+
   def layout; nil; end
 
   # Turns Markdown into HTML
@@ -55,39 +57,6 @@ class BaseView
     "#{Months[date.month - 1]} #{date.day}"
   end
 
-  def render_state_race_days_by_date
-    render(partial: 'state-race-days-table', locals: {
-      columns: [
-        [ 'date', 'Date' ],
-        [ 'state', 'State' ],
-        [ 'party', 'Party' ],
-        [ 'n-delegates', 'Delegates' ]
-      ].map { |arr| StateRaceDaysColumn.new(*arr) },
-      hide_repeats_column: 'date',
-      races: races
-    })
-  end
-
-  def render_state_race_days_by_state
-    render(partial: 'state-race-days-table', locals: {
-      columns: [
-        [ 'state', 'State' ],
-        [ 'date', 'Date' ],
-        [ 'party', 'Party' ],
-        [ 'n-delegates', 'Delegates' ]
-      ].map { |arr| StateRaceDaysColumn.new(*arr) },
-      hide_repeats_column: 'state',
-      races: races.sort do |a, b|
-        c1 = a.state_name <=> b.state_name
-        if c1 != 0
-          c1
-        else
-          a.race_day_id <=> b.race_day_id
-        end
-      end
-    })
-  end
-
   Database::CollectionNames.each do |collection_name|
     define_method(collection_name.to_sym) { database.send(collection_name) }
   end
@@ -109,8 +78,8 @@ class BaseView
 
   def asset_path(path); Assets.asset_path(path); end
   def image_path(path); Assets.image_path(path); end
-  def race_months; database.race_days.group_by{ |rd| rd.date.to_s[0...7] }.values; end
   def now; database.now; end
+  def focus_race_day; database.focus_race_day; end
 
   # Tries to return an absolute path to the image -- that is, with the protocol.
   #
@@ -131,13 +100,25 @@ class BaseView
 
   # Returns inline <svg> data from the given `path`
   def map_svg(path)
-    return '' if %w(states/DA).include?(path)
-
     # a .svg file includes a DOCTYPE, but we're including it inline so we don't
     # want it.
     header_length = 137
     @map_svg ||= {}
     @map_svg[path] ||= File.read("#{Paths.Assets}/maps/#{path}.svg")[header_length .. -1]
+  end
+
+  # Returns inline <svg> data for the given race.
+  #
+  # Use this instead of map_svg to handle exceptions. For instance, Maine GOP
+  # won't have a mesh or counties.
+  def race_map_svg(race)
+    if race.id == '2016-03-05-GOP-ME'
+      v1 = map_svg("states/#{race.state_code}")
+        .gsub(/<g class="subcounties">.+?<\/g>/m, '')
+        .gsub(/<path class="mesh.+?>/, '')
+    else
+      map_svg("states/#{race.state_code}")
+    end
   end
 
   def template_name

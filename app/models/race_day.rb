@@ -23,6 +23,7 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
 
   attr_reader(
     :candidate_county_races,
+    :candidate_race_days,
     :candidate_races,
     :candidate_states,
     :candidate_race_subcounties,
@@ -61,11 +62,15 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
     @race_subcounties = @races.flat_map(&:race_subcounties)
   end
 
+  def party_race_days
+    database.party_race_days.find_all_by_race_day_id(id)
+  end
+
   def disabled?; !@enabled; end
   def enabled?; @enabled; end
 
   def today?
-    database.now.to_datetime.new_offset('Eastern').to_date.to_s == id
+    database.today == id
   end
 
   # "past" when all races have finished reporting
@@ -73,16 +78,40 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
   # "future" if no races are reporting
   def when_race_day_happens
     tenses = races.map(&:when_race_happens)
-    if tenses.include? "present"
-      "present"
-    elsif tenses.first == "past"
-      "past"
+
+    if tenses.all? { |t| t == 'past' }
+      'past'
+    elsif tenses.all? { |t| t == 'future' }
+      'future'
     else
-      "future"
+      # If there's one past and one future, the race_day is 'present'
+      'present'
     end
   end
 
   def present?; when_race_day_happens == 'present'; end
   def past?; when_race_day_happens == 'past'; end
   def future?; when_race_day_happens == 'future'; end
+
+  def date_s
+    @date.strftime('%B %-d')
+  end
+
+  def title
+    if @title
+      @title
+    elsif @races.length == 1
+      @races.first.title
+    else
+      date_s
+    end
+  end
+
+  def title_is_just_date_s?
+    title == date_s
+  end
+
+  def href
+    "/2016/primaries/#{id}"
+  end
 end

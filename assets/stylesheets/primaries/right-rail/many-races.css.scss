@@ -1,0 +1,186 @@
+$state-height: 12.5rem;
+$empty-state-height: 8rem;
+
+.many-races {
+  margin: 1rem 0 0;
+  font-size: .8rem;
+
+  &>table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 0;
+  }
+
+  th {
+    padding: 0 0 2px;
+
+    h3 {
+      padding: .5rem 0;
+      font-family: $header-font-family;
+      font-size: 1rem;
+      line-height: 1rem;
+      font-weight: normal;
+      text-transform: uppercase;
+    }
+  }
+
+  &>table>tbody>tr>td {
+    border-top: 2px solid #dfdfdf;
+    padding: 2px 0;
+    vertical-align: top;
+  }
+
+  th[data-party-id] {
+    color: white;
+  }
+
+  th[data-party-id=Dem] h3 { background: $widgetBlue; }
+  th[data-party-id=GOP] h3 { background: $widgetRed; }
+  th[data-party-id]:last-child h3, td[data-party-id]:last-child .color-box {
+    border-left: 6px solid white;
+  }
+
+  .state {
+    width: 1px;
+    padding-right: 6px;
+  }
+
+  .map {
+    text-align: center;
+  }
+
+  svg {
+    display: inline-block;
+    width: 5em;
+    height: 5em;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  td.state {
+    vertical-align: middle;
+  }
+
+  path {
+    fill: none;
+    stroke: black;
+    stroke-width: 10px;
+  }
+
+  h3 {
+    font: inherit;
+    text-transform: none;
+    padding: .5rem 0;
+  }
+
+  .color-box {
+    box-sizing: border-box;
+    width: 100%;
+    height: $state-height; // Should be "100%", but that doesn't work on Chrome 48...
+    padding: 5px;
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+  }
+
+  tr.no-data .color-box {
+    height: $empty-state-height;
+  }
+
+  .race {
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td {
+      background: white;
+      padding: 4px 5px 2px;
+      border-top: 5px solid transparent; // gets overridden by party color
+      border-bottom: 5px solid transparent; // ditto. Also, collapses with top of next
+    }
+
+    td:last-child {
+      text-align: right;
+    }
+  }
+
+  tr.leader td {
+    color: white;
+    font-weight: bold;
+  }
+
+  tr.winner td.candidate::after {
+    content: ' ✓';
+  }
+
+  .source, .n-precincts-reporting {
+    color: $muted;
+    font-size: .75rem;
+    text-align: center;
+    height: 1.4rem; // If we don't set this, the <td> height isn't enough on Chrome 48
+  }
+
+  p.no-polling-data {
+    white-space: nowrap;
+    text-align: center;
+    padding-top: 25%;
+    color: $muted;
+  }
+
+  .linkout {
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    line-height: 1rem;
+    text-align: center;
+
+    // Put the sole child, a.linkout, at the bottom of the box.
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    &::before {
+      display: block;
+      content: ' ';
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
+    }
+
+    a {
+      display: block;
+    }
+  }
+
+  .race.no-data a.linkout {
+    line-height: 8rem;
+    vertical-align: middle;
+  }
+
+  td[data-party-id=Dem] .color-box {
+    background: $widgetLightBlue;
+    td { border-color: $widgetLightBlue; }
+    tr.leader td { background: $widgetBlue; }
+  }
+  td[data-party-id=GOP] .color-box {
+    background: $widgetLightRed;
+    td { border-color: $widgetLightRed; }
+    tr.leader td { background: $widgetRed; }
+  }
+
+  .other-races {
+    margin-top: 1rem;
+
+    ul {
+      margin: 0;
+    }
+
+    li {
+      padding-top: .5rem;
+    }
+  }
+}

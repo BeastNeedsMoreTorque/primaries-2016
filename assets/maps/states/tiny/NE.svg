@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="1000" height="464" viewBox="0 0 1000 464">
+  <path class="state" d="M600,451l-168,1 -195,-5 3,-142 -216,-8 14,-286 216,9 176,3h190l6,10 42,23 20,-17 15,6 48,-4 55,25 12,21 23,4 -2,19 21,49 20,27 -1,39 18,9 -2,18 15,50 2,31 9,35 15,27 19,12 7,28 13,5 -212,8Z"/>
+<text x="500" y="232">NE</text>
+</svg>

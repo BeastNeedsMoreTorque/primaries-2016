@@ -1,20 +1,30 @@
 # A person who wants to be president
-Candidate = RubyImmutableStruct.new(:database, :id, :party_id, :full_name, :name, :n_delegates, :n_unpledged_delegates, :poll_percent, :poll_sparkline, :poll_last_update, :dropped_out_date) do
+Candidate = RubyImmutableStruct.new(:database, :id, :party_id, :full_name, :name, :n_delegates, :n_pledged_delegates, :poll_percent, :poll_sparkline, :poll_last_update, :dropped_out_date) do
   include Comparable
 
   def party; database.parties.find(party_id); end
   def slug; name.downcase.gsub(/[^\w]/, '-'); end
+  def last_name; name; end
 
   def <=>(rhs)
-    c1 = rhs.n_delegates - n_delegates
+    # Sort by: first, not-dropped-out; else, dropped-out date descending
+    c1 = (dropped_out? ? 1.0 / dropped_out_date.mjd : -1) - (rhs.dropped_out? ? 1.0 / rhs.dropped_out_date.mjd : -1)
     if c1 != 0
       c1
     else
-      c2 = rhs.poll_percent && poll_percent && rhs.poll_percent- poll_percent || 0
+      # Sort by number of delegates, descending
+      c2 = rhs.n_delegates - n_delegates
       if c2 != 0
         c2
       else
-        name.<=>(rhs.name)
+        # Sort by polls, descending
+        c3 = (rhs.poll_percent || 0) - (poll_percent || 0)
+        if c3 != 0
+          c3
+        else
+          # Sort alphabetically
+          name.<=>(rhs.name)
+        end
       end
     end
   end

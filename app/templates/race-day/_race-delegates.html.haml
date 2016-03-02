@@ -1,0 +1,16 @@
+.party-state-delegates
+  .n-delegates-dots!= race_assigned_unassigned_delegates_dot_groups_html(race, :n_delegates_with_candidates, :n_delegates_without_candidates)
+  %p.n-delegates
+    %span.n-delegates-with-candidates-int= format_int(race.n_delegates_with_candidates)
+    of
+    %span.n-delegates-int= format_int(race.n_delegates)
+    delegates accounted for in #{race.state_name}.
+
+  .n-pledged-delegates-dots!= race_assigned_unassigned_delegates_dot_groups_html(race, :n_pledged_delegates_with_candidates, :n_pledged_delegates_without_candidates)
+  %p.n-pledged-delegates
+    %span.n-pledged-delegates-with-candidates-int= format_int(race.n_pledged_delegates_with_candidates)
+    of
+    %span.n-pledged-delegates-int= format_int(race.n_pledged_delegates)
+    pledged delegates accounted for in #{race.state_name}.
+
+  != render(partial: 'race-day/include-unpledged-delegates')

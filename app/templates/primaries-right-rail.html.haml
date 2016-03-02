@@ -7,63 +7,32 @@
     %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
     %link{rel: 'stylesheet', href: asset_path('primaries-right-rail.css')}
   %body{class: "race-day-#{race_day.when_race_day_happens}"}
-    .primary-right-rail
-      %div.header
-        %div.line
-        %div.hed
-          %h1.main-hed.when-present= "LIVE RESULTS"
-          %h1.main-hed.when-past= "RESULTS"
-          %h1.main-hed.when-future= "HAPPENING TONIGHT"
-        %div.line
-      %h2.main-hed.sub
-        %a{target: '_blank', href: '/2016/primaries/2016-02-09'}= "#{race_day.title}"
-      %div.container
-        %p.intro.when-future= "Anti-establishment candidates Bernie Sanders and Donald Trump are leading in New Hampshire polls. See how each candidate performs when results arrive later tonight."
-        %p.tease-link.when-future
-          %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See the election calendar
-        %p.tease-link.when-present
-          %a{target: '_blank', href: "/2016/primaries/2016-02-09"} See live updates
-        %p.tease-link.when-past
-          %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See upcoming races
-        - race_day.state_party_races.first[1].each do |party, race, _|#TODO: Look at all races for multi race days!
-          - party_abbrev = party.adjective == 'Democratic' ? "dem" : "gop"
-          .party-container
-            - del_key = "n_#{party.id.downcase}_delegates"
-            %div{'class': "race-name #{party_abbrev}"}
-              %h3= "#{party.adjective.upcase} PRIMARY"
-              %p{class: "#{party.id.downcase}-del-available"}
-                Delegates:
-                = race.n_delegates
-            %table.t-pollster{'data-party-id': party.id}
-              %thead
-                %tr
-                  %th.candidate Candidate
-                  %th.pollster.when-future
-                    .long-table-heading Polling Average
-                  %th.n-votes.when-past.when-present Votes
-                  %th.n-votes-pct.when-past.when-present %
-              %tbody
-                - race.candidate_races.each do |candidate_race|
-                  - candidate = candidate_race.candidate
-                  %tr{'data-candidate-id': candidate.id}
-                    %td.candidate
-                      %img{src: image_path("#{candidate.slug}.png"), alt: ''}
-                      = candidate.full_name
-                      - if candidate_race.winner?
-                        %span.winner ✓
-                    %td.pollster.when-future
-                      - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
-                        .sparkline!= candidate_race.poll_sparkline.to_svg
-                      %span.percent
-                        - if candidate_race.poll_percent.nil?
-                          N/A
-                        - else
-                          = "#{format_percent_or_nil(candidate_race.poll_percent)}%"
-                    %td.n-votes.when-past.when-present= format_int(candidate_race.n_votes)
-                    %td.n-votes-pct.when-past.when-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
-            %div.footnotes
-              %a.footnotes-for-pollster.when-future{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-              %a.footnotes-for-race-day.when-present.when-past{target: '_blank', href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"} Detailed results
+    .header
+      .line
+      .hed
+        %h1.when-race-day-present
+          %a{target: '_blank', href: race_day.href} Live Results
+        %h1.when-race-day-past
+          %a{target: '_blank', href: race_day.href} Results
+        %h1.when-race-day-future
+          %a{target: '_blank', href: race_day.href} Happening Soon
+      .line
+
+    .race-day
+      %h2
+        %a{target: '_blank', href: race_day.href}= race_day.title
+      - if !race_day.today? && !race_day.title_is_just_date_s?
+        %h4.date= race_day.date.strftime('%B %-d')
+      %p.intro= race_day.body
+      %p.tease-link.when-race-day-future.when-race-day-past
+        %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See the election calendar
+      %p.tease-link.when-race-day-present
+        %a{target: '_blank', href: race_day.href} See live updates
+
+      - if race_day.races.length < 4
+        != render(partial: '/primaries/right-rail/few-races', locals: { race_day: race_day })
+      - else
+        != render(partial: '/primaries/right-rail/many-races', locals: { race_day: race_day })
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
@@ -71,5 +40,3 @@
   %script{src: asset_path('primary-right-rail.js')}
   %script{src: asset_path('ga.js')}
   %script{src: asset_path('stats.js')}
-
-

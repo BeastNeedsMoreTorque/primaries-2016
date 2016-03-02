@@ -1,0 +1,31 @@
+body.race-day .race .party-state-delegates {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: .8rem;
+  line-height: 1.5rem;
+
+  .without-candidates {
+    opacity: .35;
+  }
+
+  p {
+    margin: 0;
+    color: $muted;
+  }
+
+  .n-delegates-dots, .n-pledged-delegates-dots {
+    // If there are no delegates (e.g., GOP American Samoa is only unpledged),
+    // don't change height from when there are delegates.
+    min-height: 29px; // 25px for dots, plus 2px border.
+  }
+
+  label {
+    cursor: pointer;
+
+    input {
+      display: inline-block;
+      margin: -2px 0 0;
+      vertical-align: middle;
+    }
+  }
+}

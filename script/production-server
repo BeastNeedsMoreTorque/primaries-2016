@@ -19,6 +19,7 @@ require 'time'
 
 require_relative '../lib/env'
 require_relative '../lib/paths'
+require_relative '../lib/uploader'
 require_relative '../lib/api_sources'
 require_relative '../app/models/database'
 require_relative '../config/schedule'
@@ -27,6 +28,10 @@ require 'mkfifo'
 
 FileUtils.mkdir_p(Paths.ProductionDir)
 
+# We never explicitly poll for AP's `election_days`, but we need it or else we
+# won't ever poll for other races. So we'll rm it once every time we start the
+# server; that'll force us to query for it again.
+FileUtils.rm_f("#{Paths.Cache}/election_days")
 for path in [ Paths.ProductionCommands, Paths.ProductionOutput ]
   FileUtils.rm_f(path)
   File.mkfifo(path)
@@ -40,7 +45,10 @@ class Server
     @output_writer = open(Paths.ProductionOutput, 'a+')
     @output_writer.sync = true
     @real_stderr = $stderr.dup
+    @tick_number = -1
+    @uploader = Uploader.new
 
+    $logger.info('Loading views')
     @views = Dir[File.dirname(__FILE__) + '/../app/views/*.rb'].map do |path|
       if path =~ /base_view.rb$/
         nil
@@ -54,87 +62,119 @@ class Server
   end
 
   def run
-    run_scheduled_tasks
+    FileUtils.rm_rf("#{Paths.Dist}/2016")
 
-    loop { wait_and_handle_command_or_run_scheduled_tasks }
+    $logger.info('Building and uploading assets')
+    Assets.build
+    @uploader.upload_assets
+
+    tick
+
+    loop { wait_and_run_command_or_tick }
   end
 
   private
 
-  def run_scheduled_tasks
-    if RefreshDelegates
-      $logger.info('Updating delegate counts from AP')
-      ignoring_ap_quota_error { ApiSources.poll_del_super }
+  def tick
+    @tick_number += 1
+    task = Ticks[@tick_number % Ticks.length]
+
+    case task
+    when ScheduleMethods::Tick::DelSuper
+      update_del_super
+    when ScheduleMethods::Tick::Pollster
+      update_pollster
+    when ScheduleMethods::Tick::ElectionDay
+      update_election_days([ task.date_s ])
+    when ScheduleMethods::Tick::Nil
+      # do nothing
+    else
+      raise "Invalid tick command: #{task.inspect}"
     end
+  end
 
-    if !RefreshPrimariesRaceDays.empty?
-      $logger.info("Updating race-day results for #{RefreshPrimariesRaceDays.join(', ')} from AP")
-      ignoring_ap_quota_error { ApiSources.poll_dates(RefreshPrimariesRaceDays) }
+  def update_del_super
+    $logger.info('Updating del_super from AP')
+    save_old_ap_cache
+    ignoring_ap_quota_error do
+      ApiSources.poll_del_super
+      render_and_upload
     end
+  end
 
-    if RefreshDelegates || !RefreshPrimariesRaceDays.empty?
-      archive_path = "#{Paths.CacheArchive}/#{Time.now.utc.iso8601}.tar.gz".gsub(':', '-')
-
-      $logger.info("Saving AP data to #{archive_path}")
-      system(
-        'tar',
-        '-C', Paths.Cache,
-        '-zcf', archive_path,
-        "--exclude=pollster*",
-        "--exclude=uglified-javascript",
-        "--exclude=templates",
-        "--exclude=*.etag",
-        '.'
-      )
+  def update_election_days(date_strings)
+    $logger.info("Updating races for #{date_strings} from AP")
+    save_old_ap_cache
+    ignoring_ap_quota_error do
+      ApiSources.poll_dates(date_strings)
+      render_and_upload
     end
+  end
 
-    if RefreshPollsterPrimaries
-      $logger.info('Updating Pollster primaries estimates')
-      ApiSources.poll_pollster_primaries
-    end
+  def update_pollster
+    $logger.info('Updating Pollster primaries estimates')
+    ApiSources.poll_pollster_primaries
+    render_and_upload
+  end
 
-    $logger.info("Wiping old output")
-    FileUtils.rm_rf(Paths.Dist)
-
-    $logger.info("Generating")
-
-    Assets.build
-
+  def render_and_upload
+    $logger.info('Rendering')
     database = Database.load
     for view in @views
       view.generate_all(database)
     end
 
-    $logger.info("Uploading")
-    system("#{Paths.Script}/upload")
+    $logger.info("Uploading changed content")
+    @uploader.upload_content
+
+    $logger.info("Finished uploading")
+  end
+
+  def save_old_ap_cache
+    archive_path = "#{Paths.CacheArchive}/#{Time.now.utc.iso8601}.tar.gz".gsub(':', '-')
+
+    $logger.info("Saving AP data to #{archive_path}")
+    system(
+      'tar',
+      '-C', Paths.Cache,
+      '-zcf', archive_path,
+      "--exclude=pollster*",
+      "--exclude=uglified-javascript",
+      "--exclude=templates",
+      "--exclude=*.etag",
+      '.'
+    )
   end
 
   def ignoring_ap_quota_error(&block)
     begin
       block.call
     rescue RuntimeError => e
-      valid_message = 'HTTP 500'
-      if e.message[0 .. valid_message.length] != valid_message && e.message =~ /QuotaViolation/
-        $logger.info("AP's API reports a quota violation. Falling back to cached results.")
+      # [adam] AP uses a couple of messages for quota violations. I should have
+      # logged them as we received them, so we could make a complete regex. I'll
+      # start doing so now.
+      #
+      # 2016-02-27: HTTP 500 Internal Server Error from server. Body: {"fault":{"faultstring":"Rate limit quota violation. Quota limit exceeded. Identifier : uHK1N6gbkF0HdkZIHWNyXAzttwhqvOlA","detail":{"errorcode":"policies.ratelimit.QuotaViolation"}}}
+      if e.message =~ /^HTTP [45]\d\d.*(Over quota limit|QuotaViolation)/
+        $logger.info("AP's API reports a quota violation. Skipping this tick.")
       else
         raise e
       end
     end
   end
 
-  # Waits up to TimeoutInS seconds for an incoming command, then runs it.
+  # Waits up to TickIntervalInS seconds for an incoming command, then runs it.
   #
-  # If no command arrives, runs scheduled tasks as configured in
-  # `config/schedule.rb`.
-  def wait_and_handle_command_or_run_scheduled_tasks
-    if IO.select([ @command_reader ], nil, nil, TimeoutInS)
-      handle_command
+  # If no command arrives, runs the next tick from `config/schedule.rb`.
+  def wait_and_run_command_or_tick
+    if IO.select([ @command_reader ], nil, nil, TickIntervalInS)
+      run_command
     else
-      run_scheduled_tasks
+      tick
     end
   end
 
-  def handle_command
+  def run_command
     command = @command_reader.gets.strip
     $logger.info("Handling command: #{command}")
 
@@ -143,7 +183,7 @@ class Server
     parts = command.split(/\s+/)
 
     case parts[0]
-    when 'poll_dates' then run_poll_dates(parts[1..-1])
+    when 'poll_dates' then update_election_days(parts[1..-1])
     when 'exit'
       $logger.info("Exiting")
       $stderr.write("\n") # so client can exit -- see below

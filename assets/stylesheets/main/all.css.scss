@@ -1,6 +1,15 @@
 @import '../_variables';
 
+@include precincts-reporting-conditionals;
+
+@font-face {
+  font-family: "Dots";
+  // See assets/fonts/dots.svg for the original
+  src: url("data:application/font-woff;base64,d09GRgABAAAAAASUAAsAAAAABEgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgG+67M2NtYXAAAAFoAAAAVAAAAFTgM0DLZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAIwAAACMU58WQ2hlYWQAAAJQAAAANgAAADYL84jJaGhlYQAAAogAAAAkAAAAJA8BCAZobXR4AAACrAAAABQAAAAUGAABAGxvY2EAAALAAAAADAAAAAwAKABabWF4cAAAAswAAAAgAAAAIAAHABZuYW1lAAAC7AAAAYYAAAGGmUoJ+3Bvc3QAAAR0AAAAIAAAACAAAwAAAAMIAAGQAAUAAAUzBZkAAAEeBTMFmQAAA9cAZgISAAAAAAAAAAAAAAAAgAAAAQAAAAAAAAAAAAAAAAAAAAAAQAAAICIIAAAAAAAIAAAAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAICAi//3//wAAAAAAICAi//3//wAB/+Pf4gADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQEAAQAHAAcAABMAAAEUEhYEMzIkNhI1NAImJCMiBAYCAQB50AEYn58BGNB5edD+6J+f/ujQeQQAn/7o0Hl50AEYn58BGNB5edD+6AAAAAABAAAAAQAABdLB8V8PPPUACwgAAAAAANLqnmYAAAAA0uqeZgAAAAAHAAcAAAAACAACAAAAAAAAAAEAAAgAAAAAAAgAAAAAAAcAAAEAAAAAAAAAAAAAAAAAAAAFCAAAAAAAAAAAAAAACAAAAAgAAQAAAAAAAAoAFAAeAEYAAQAAAAUAFAABAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA4ArgABAAAAAAABAAcAAAABAAAAAAACAAcAYAABAAAAAAADAAcANgABAAAAAAAEAAcAdQABAAAAAAAFAAsAFQABAAAAAAAGAAcASwABAAAAAAAKABoAigADAAEECQABAA4ABwADAAEECQACAA4AZwADAAEECQADAA4APQADAAEECQAEAA4AfAADAAEECQAFABYAIAADAAEECQAGAA4AUgADAAEECQAKADQApGljb21vb24AaQBjAG8AbQBvAG8AblZlcnNpb24gMS4wAFYAZQByAHMAaQBvAG4AIAAxAC4AMGljb21vb24AaQBjAG8AbQBvAG8Abmljb21vb24AaQBjAG8AbQBvAG8AblJlZ3VsYXIAUgBlAGcAdQBsAGEAcmljb21vb24AaQBjAG8AbQBvAG8AbkZvbnQgZ2VuZXJhdGVkIGJ5IEljb01vb24uAEYAbwBuAHQAIABnAGUAbgBlAHIAYQB0AGUAZAAgAGIAeQAgAEkAYwBvAE0AbwBvAG4ALgAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=");
+}
+
 body {
+  position: relative; // for scrollspy
   @include body-copy;
 }
 
@@ -12,7 +21,7 @@ a {
   width: 282px;
   margin: auto;
   padding: 10px;
-  @media (min-width: 500px) {
+  @media (min-width: $narrowest-desktop) {
     width: 420px;
   }
   a {
@@ -24,12 +33,12 @@ a {
     padding: 8px 14px 8px 0;
   }
   .logo__topbar--desktop {
-    @media (max-width: 499px) {
+    @media (max-width: $widest-mobile) {
         display: none;
     }
   }
   .logo__topbar--mobile {
-      @media (min-width: 500px) {
+      @media (min-width: $narrowest-desktop) {
           display: none;
       }
   }
@@ -52,7 +61,7 @@ a {
 #main {
   margin: 0 auto;
   padding: 0;
-  max-width: 960px;
+  max-width: $full-desktop-width;
 
   @media (min-width: 401px) {
     // When we have the space, put lots of padding.
@@ -126,4 +135,44 @@ footer {
   }
 }
 
+.dot-group {
+  font-family: Dots;
+  display: inline-block;
+  vertical-align: top;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+  text-align: left;
+  transform: rotate(-90deg) scaleX(-1) scale(0.5); // top to bottom, right to left
 
+  // I tried rems, but we just *have* to use px here.
+  // Also, notice the scale(0.5). That's because the in-app browser on Android
+  // imposes a minimum font size. We can't set 5px. So we double everything and
+  // shrink the dots. Then we set negative margins to shrink the overall size.
+  margin: -12.5px;
+  font-size: 10px;
+  line-height: 10px;
+  width: 50px;
+  height: 50px;
+  border: 2px solid transparent;
+}
+
+.dot-subgroup {
+  display: inline;
+}
+
+p.include-unpledged-delegates {
+  color: $muted;
+  margin: 0;
+  font-size: .8rem;
+  line-height: 1.5rem;
+  text-align: center;
+
+  input {
+    vertical-align: -2px;
+  }
+
+  label {
+    cursor: pointer;
+  }
+}

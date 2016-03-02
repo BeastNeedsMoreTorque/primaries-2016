@@ -1,4 +1,4 @@
-$(function() {
+function init_state_race_days() {
   $('a[href="#state-race-days-by-date"]').click(function(ev) {
     ev.preventDefault();
     switch_to('date');
@@ -30,13 +30,11 @@ $(function() {
     reset_height();
   }
 
-  wait_for_font_then('Source Sans Pro', function() {
-    if (window.location.hash == '#state-race-days-by-state') {
-      switch_to('state');
-    } else {
-      reset_height();
-    }
-  });
+  if (window.location.hash == '#state-race-days-by-state') {
+    switch_to('state');
+  } else {
+    reset_height();
+  }
 
   $(window).on('resize', reset_height);
-});
+}

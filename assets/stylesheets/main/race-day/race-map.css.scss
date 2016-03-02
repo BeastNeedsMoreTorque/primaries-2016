@@ -5,15 +5,18 @@
     display: block;
     margin: 0 auto;
     max-width: 100%;
+    width: 22em;
+    max-height: 23em;
+    height: auto;
   }
 
   path {
-    fill: white; // avoid a flash of black while loading CSS classes for counties/subcounties
+    fill: none; // avoid a flash of black while loading CSS classes for counties/subcounties
   }
 
   path.state {
     stroke: #ddd;
-    stroke-width: 10; // divided by 10
+    stroke-width: 3; // of 1000
     fill: #fff;
     pointer-events: none; // so it doesn't cause mouseleave
   }
@@ -21,19 +24,19 @@
   path.mesh {
     fill: none;
     stroke: #eee;
-    stroke-width: 10; // divided by 10
+    stroke-width: 3; // of 1000
     pointer-events: none; // so it doesn't cause mouseleave
   }
 
   path.hover {
     stroke: black;
-    stroke-width: 20; // divided by 10
+    stroke-width: 6; // of 1000
     fill: rgba(255, 255, 255, 0.2);
     pointer-events: none; // so it doesn't cause mouseleave
   }
 
   g.subcounties path {
-    stroke-width: 5; // divided by 10
+    stroke-width: 1; // of 1000
   }
 
   g.cities {
@@ -48,7 +51,7 @@
 
   text {
     @include svg-city-label();
-    font-size: 14px;
+    font-size: 40px;
   }
 }
 
@@ -118,16 +121,11 @@
     color: white;
   }
 
-  .n-state-delegate-equivalents { display: none; }
-  &.is-state-delegate-equivalents {
-    th.n-votes { display: none; }
-    th.n-state-delegate-equivalents { display: table-cell; }
-    p.n-state-delegate-equivalents {
-      display: block;
-      font-size: .8rem;
-      color: $muted;
-      margin: .5rem 1rem;
-    }
+  p.n-votes-footnote {
+    display: block;
+    font-size: .8rem;
+    color: $muted;
+    margin: .5rem 1rem;
   }
 
   p.no-precincts-note {
@@ -182,6 +180,6 @@
 }
 
 .race.precincts-reporting .party-state-map path.state {
-  stroke-width: 20px; // The inner half will be hidden by county borders
+  stroke-width: 6; // The inner half will be hidden by county borders
   stroke: #666;
 }

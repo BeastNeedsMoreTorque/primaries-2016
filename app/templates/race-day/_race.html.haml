@@ -1,21 +1,47 @@
-.race{id: "#{race.state_code}-#{race.party_id}", 'data-party-id': race.party_id, 'data-state-code': race.state_code, class: "#{race.when_race_happens} #{race.has_delegate_counts && 'has-delegate-counts' || ''} #{race.n_precincts_reporting > 0 ? '' : 'no-'}precincts-reporting"}
+- html_class = race.when_race_happens
+- if race.has_delegate_counts?
+  - html_class << ' has-delegate-counts'
+- if race.has_pledged_delegate_counts?
+  - html_class << ' has-pledged-delegate-counts'
+- html_class << ' ' + (race.any_precincts_reporting? ? '' : 'no-') + 'precincts-reporting'
+- if !is_today
+  - html_class << ' not-today'
+
+.race{'data-party-id': race.party_id, 'data-state-code': race.state_code, 'data-n-votes-tooltip-th': race.n_votes_tooltip_th, 'data-n-votes-footnote': race.n_votes_footnote, class: html_class}
+  - if is_today
+    -# We only put anchors for today's races. If we put others in, the dropdown
+    -# wouldn't point to them so the scroll spy would get confused.
+    %a.race-anchor{name: race.anchor}
+
   %h3.race-name= race.title
+
   .race-status
-    .status-past
-      %p All precincts reporting
-      %p
-        Last updated:
-        %time{datetime: format_datetime(race.last_updated)}
-    .status-present
-      %button.refresh 0:30
-      %p.n-precincts-reporting &nbsp;
-    .status-future
-      - if race_day.today? && !race.expect_results_time.nil?
-        %p= "Coming #{race.expect_results_time.to_datetime.new_offset('Eastern').strftime('%l:%M %P %Z').sub('m', '.m.').sub('-05:00', 'EST').sub('-04:00', 'EDT')}"
-      - else
-        %p Coming #{race_day.date.strftime('%B %-d, %Y')}
-  %p.text= race.text # may be nil, but we still put the <p> so we can line up the Dem and GOP <p>s
-  .party-state-map
-    != map_svg("states/#{race.state_code}")
-    != render(partial: 'race-day/race-map-legend', locals: { party: race.party })
+    - if is_today
+      .status-past
+        - if race.all_precincts_reporting?
+          %p All precincts reporting
+        - else
+          -# Let JS fill in number of precincts reporting
+          %p.n-precincts-reporting &nbsp;
+        %p
+          Last updated:
+          %time{datetime: race.last_updated.nil? ? '' : format_datetime(race.last_updated)}
+      .status-present
+        %button.refresh 0:30
+        -# Let JS fill in number of precincts reporting
+        %p.n-precincts-reporting &nbsp;
+      .status-future
+        %p= race.results_coming_s
+
+      - if race.text.length > 0
+        %p.text= race.text
+    - else
+      != render(partial: 'race-day/link-to-race-day', locals: { race: race })
+
+  != render(partial: 'race-day/race-map', locals: { race: race })
   != render(partial: 'race-day/race-candidates', locals: { race: race })
+  != render(partial: 'race-day/race-delegates', locals: { race: race })
+
+  - if is_today && race.other_party_race && race.other_party_race.race_day_id != race.race_day_id
+    != render(partial: 'race-day/link-to-race-day', locals: { race: race.other_party_race })
+

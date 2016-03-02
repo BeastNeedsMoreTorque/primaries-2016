@@ -1,5 +1,3 @@
-require_relative './source'
-
 require_relative '../../lib/sparkline'
 
 # Pollster national polls: one for Democrats, one for Republicans
@@ -9,7 +7,7 @@ require_relative '../../lib/sparkline'
 # * candidates: last_name, poll_percent, sparkline, poll_last_update
 # * candidate_states: last_name, state_code, poll_percent, sparkline
 # * party_states: party_id, state_code, slug, last_updated
-class PollsterSource < Source
+class PollsterSource
   Candidate = RubyImmutableStruct.new(:last_name, :poll_percent, :sparkline, :last_updated)
   CandidateState = RubyImmutableStruct.new(:last_name, :state_code, :poll_percent, :sparkline)
 

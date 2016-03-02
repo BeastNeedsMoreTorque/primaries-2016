@@ -1,35 +1,16 @@
-function position_svg_cities() {
-  var $svg = $(this);
-  var $texts = $svg.find('text');
+function position_svg_cities(svgs) {
+  // We'll position all <text>s at once, to avoid repaints. That means going
+  // through all <svg>s before altering the DOM.
+  var tasks = []; // { g: <g>, text: <text>, x: Number, y: Number }
 
-  if ($texts.length == 0) return;
-
-  var viewBoxStrings = $svg[0].getAttribute('viewBox').split(' ');
-  // Assume origin x and y are `0`
-  var width = +viewBoxStrings[2];
-  var height = +viewBoxStrings[3];
-
-  var rects = []; // Array of { x, y, width, height } Objects we've placed
-
-  function rects_intersect(rect1, rect2) {
-    return rect1.x < rect2.x + rect2.width
-      && rect1.x + rect1.width > rect2.x
-      && rect1.y < rect2.y + rect2.height
-      && rect1.height + rect1.y > rect2.y;
-  }
-
-  function rect_fits(rect) {
-    if (rect.x < 0) return false;
-    if (rect.y < 0) return false;
-    if (rect.x + rect.width > width) return false;
-    if (rect.y + rect.height > height) return false;
-
-    return rects.every(function(rect2) { return !rects_intersect(rect, rect2); });
-  }
-
-  function trial_rectangles(x, y, width, height) {
+  function trial_rectangles(original_bbox) {
     var margin_x = 6; // px between dot and text
     var margin_y = 4; // px between dot and text
+
+    var x = original_bbox.x;
+    var y = original_bbox.y;
+    var width = original_bbox.width;
+    var height = original_bbox.height;
 
     var x_height = Math.round(height / 4); // roughly?
     var y_above = Math.round(y - height - margin_y);
@@ -51,7 +32,42 @@ function position_svg_cities() {
     ];
   }
 
-  $texts.get()
+  function rects_intersect(rect1, rect2) {
+    return rect1.x < rect2.x + rect2.width
+      && rect1.x + rect1.width > rect2.x
+      && rect1.y < rect2.y + rect2.height
+      && rect1.height + rect1.y > rect2.y;
+  }
+
+  function build_tasks_for_svg(svg) {
+    var viewBoxStrings = svg.getAttribute('viewBox').split(' ');
+    // Assume origin x and y are `0`
+    var width = +viewBoxStrings[2];
+    var height = +viewBoxStrings[3];
+
+    var ret = [];
+    var rects = []; // Array of { x, y, width, height } Objects we've placed
+
+    function rect_fits(rect) {
+      if (rect.x < 0) return false;
+      if (rect.y < 0) return false;
+      if (rect.x + rect.width > width) return false;
+      if (rect.y + rect.height > height) return false;
+
+      return rects.every(function(rect2) { return !rects_intersect(rect, rect2); });
+    }
+
+    var texts = []; // Array of { text, rect, x, y }
+    Array.prototype.forEach.call(svg.querySelectorAll('text'), function(el) {
+      texts.push({
+        el: el,
+        bbox: el.getBBox()
+      });
+    });
+    if (texts.length == 0) return ret;
+
+    var g = texts[0].el.parentNode;
+
     // Sort from north to south. Otherwise, in a situation like this:
     //
     // +---------------+
@@ -67,36 +83,45 @@ function position_svg_cities() {
     // overlap no matter what.
     //
     // (See Kansas: Topeka and Overland Park.)
-    .sort(function(text1, text2) { return +text1.getAttribute('y') - text2.getAttribute('y'); })
-    .forEach(function(text) {
-      var x = +text.getAttribute('x');
-      var y = +text.getAttribute('y');
-      var rect = text.getBBox();
-      var potential_rects = trial_rectangles(x, y, rect.width, rect.height);
+    texts.sort(function(o1, o2) { return o1.bbox.y - o2.bbox.y; });
+
+    texts.forEach(function(o) {
+      var potential_rects = trial_rectangles(o.bbox);
 
       for (var i = 0; i < potential_rects.length; i++) {
         var r = potential_rects[i];
-        var rect2 = { x: r[1], y: r[2], width: rect.width, height: rect.height };
+        var rect2 = { x: r[1], y: r[2], width: o.bbox.width, height: o.bbox.height };
         if (rect_fits(rect2)) {
           rects.push(rect2);
-          text.setAttribute('x', rect2.x);
-          text.setAttribute('y', rect2.y);
-          text.setAttribute('class', r[0]);
+          ret.push({ g: g, text: o.el, x: rect2.x, y: rect2.y });
           return;
         }
       }
 
-      console.warn('Could not position text', text);
+      console.warn('Could not position text', o);
     });
 
-  // Turn each <text> into a <text class="background"> and <text class="foreground">.
-  var cities = $texts[0].parentNode;
-  $texts.each(function() {
-    var class_name = this.getAttribute('class');
-    var text2 = this.cloneNode(true);
-    this.setAttribute('class', class_name + ' background');
-    text2.setAttribute('class', class_name + ' foreground');
-    cities.appendChild(text2);
+    return ret;
+  }
+
+  Array.prototype.forEach.call(svgs, function(svg) {
+    build_tasks_for_svg(svg).forEach(function(task) {
+      tasks.push(task);
+    });
+  });
+
+  tasks.forEach(function(task) {
+    // Position the <text> according to our calculations
+    task.text.setAttribute('x', task.x);
+    task.text.setAttribute('y', task.y);
+
+    // Copy the <text> into two: a <text class="background" and a <text class="foreground">
+    var text2 = task.text.cloneNode(true);
+
+    task.text.setAttribute('class', 'background');
+    text2.setAttribute('class', 'foreground');
+
+    task.g.appendChild(text2);
   });
 }
 
@@ -116,4 +141,6 @@ function position_svg_cities() {
  * * Must be called on one or more <svg> elements
  * * The <svg> element must have a `viewBox` attribute
  */
-$.fn.position_svg_cities = function() { this.each(position_svg_cities); };
+$.fn.position_svg_cities = function() {
+  position_svg_cities(this);
+};

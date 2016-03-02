@@ -33,7 +33,7 @@
     -webkit-flex: 1 0 auto;
   }
 
-  @media(max-width: 600px) {
+  @media(max-width: $widest-mobile) {
     .previous, .next {
       width: 50%;
     }
@@ -55,7 +55,7 @@
   .label {
     display: block;
     font-size: 0.9em;
-    @media (max-width: 600px) {
+    @media (max-width: $widest-mobile) {
       font-size: 0.8em;
     }
   }
@@ -63,7 +63,7 @@
   .date {
     display: block;
     font-size: 1.4em;
-    @media (max-width: 600px) {
+    @media (max-width: $widest-mobile) {
       font-size: 1em;
     }
   }
@@ -71,21 +71,21 @@
   .previous-inner {
     box-sizing: border-box;
     padding: 18px 24px 18px 24px;
-    @media (max-width: 600px) {
+    @media (max-width: $widest-mobile) {
       padding: 10px 14px 10px 8px;
     }
   }
   .next-inner {
     box-sizing: border-box;
     padding: 18px 14px 18px 24px;
-    @media (max-width: 600px) {
+    @media (max-width: $widest-mobile) {
       padding: 10px 8px 10px 14px;
     }
   }
 
   .calendar a {
     padding: 30px 18px;
-    @media(max-width: 600px) {
+    @media(max-width: $widest-mobile) {
       padding: 10px;
     }
   }

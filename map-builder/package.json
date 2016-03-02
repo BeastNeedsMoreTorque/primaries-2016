@@ -16,14 +16,18 @@
   },
   "homepage": "https://github.com/huffpostdata/election-2016#readme",
   "dependencies": {
+    "babel-regenerator-runtime": "^6.5.0",
     "coffee-script": "^1.10.0",
-    "d3": "^3.5.12",
+    "core-js": "^2.1.1",
+    "d3": "^3.5.15",
     "d3-geo-projection": "^0.2.16",
-    "jsts": "^0.17.0",
-    "shapefile": "^0.3.0",
+    "deep-copy": "^1.1.0",
+    "jsts": "^1.0.0-rc8",
+    "math-float64-exponent": "^1.0.0",
+    "shapefile": "^0.3.1",
     "simple-get": "^1.4.3",
-    "tar-fs": "^1.9.0",
-    "topojson": "^1.6.20",
+    "tar-fs": "^1.10.0",
+    "topojson": "^1.6.24",
     "unzip": "^0.1.11"
   }
 }

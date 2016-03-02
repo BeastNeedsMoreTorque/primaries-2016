@@ -12,6 +12,7 @@ module Assets
     'stats.js' => %w(stats.js),
     'main.js' => %w(
       vendor/jquery-2.2.0.js
+      vendor/dropdown.js
       wait_for_font_then.js
       render_time.js
       format_int.js
@@ -21,7 +22,11 @@ module Assets
       position_svg_cities.js
       countdown.js
       state-race-days.js
+      dot-groups.js
+      race-day-database.js
+      race-day-nodes.js
       race-day.js
+      delegate-summary.js
       all-primaries.js
       social.js
     ),
@@ -29,6 +34,7 @@ module Assets
       vendor/jquery-2.2.0.js
       countdown.js
       format_int.js
+      format_percent.js
       position_svg_cities.js
       splash.js
     ),
@@ -45,9 +51,10 @@ module Assets
   # To refer to `main.css` from a template, write `asset_path('main.css')`.
   StylesheetAssets = %w(
     main.css
-    splash.css
-    primaries-right-rail.css
     mobile-ad.css
+    primaries-linkout-image.css
+    primaries-right-rail.css
+    splash.css
   )
 
   # Assets we serve with a sha1 digest.
@@ -57,7 +64,7 @@ module Assets
   # proxy servers and clients will serve the old version instead of the new one.
   #
   # To refer to `images/clinton.png` from a template, write
-  # `image_path('clinton')`.
+  # `image_path('clinton.png')`.
   DigestAssets = %w(
     images/**/*.{png,jpg,gif,svg}
   )

@@ -3,21 +3,36 @@ require_relative '../../app/views/race_day_view'
 require_relative '../../app/views/race_day_results_view'
 
 describe "calling races", type: :feature do
-  it "should show the winner AP reports normally" do
-    sheets_source = Database.default_sheets_source
-    sheets_source.races.map! { |race| race.merge(huffpost_override_winner_last_name: nil) }
+  def ap_election_days_source_with_winner(candidate_id)
+    source = Database.default_ap_election_days_source
+    source.candidate_races.map! { |cr| cr.merge(winner: cr.candidate_id == candidate_id) }
+    source
+  end
 
-    ap_election_days_source = Database.default_ap_election_days_source
-    ap_election_days_source.candidate_races.map! do |candidate_race|
-      # Rand Paul is the only winner of all races
-      candidate_race.merge(winner: candidate_race.candidate_id == '60208')
-    end
+  def sheets_source_with_winner(last_name)
+    source = Database.default_sheets_source
+    source.races.map! { |race| race.merge(huffpost_override_winner_last_name: last_name) }
+    source
+  end
 
+  def ap_election_days_source_without_winners
+    source = Database.default_ap_election_days_source
+    source.candidate_races.map! { |cr| cr.merge(winner: false) }
+    source
+  end
+
+  def sheets_source_without_winners
+    source = Database.default_sheets_source
+    source.races.map! { |race| race.merge(huffpost_override_winner_last_name: nil) }
+    source
+  end
+
+  it 'should show the winner AP reports normally' do
     database = mock_database(
       '2016-02-01',
       '2016-02-01',
-      sheets_source: sheets_source,
-      ap_election_days_source: ap_election_days_source
+      sheets_source: sheets_source_without_winners,
+      ap_election_days_source: ap_election_days_source_with_winner('60208')
     )
 
     RaceDayView.generate_all(database)
@@ -27,21 +42,12 @@ describe "calling races", type: :feature do
     expect(page.find('tr', text: 'Paul')[:class]).to match(/\bwinner\b/)
   end
 
-  it "should let HuffPost editors override the winner" do
-    sheets_source = Database.default_sheets_source
-    sheets_source.races.map! { |race| race.merge(huffpost_override_winner_last_name: 'Rubio') }
-
-    ap_election_days_source = Database.default_ap_election_days_source
-    ap_election_days_source.candidate_races.map! do |candidate_race|
-      # Rand Paul is the only winner of all races
-      candidate_race.merge(winner: candidate_race.candidate_id == '60208')
-    end
-
+  it 'should let HuffPost editors override the winner' do
     database = mock_database(
       '2016-02-01',
       '2016-02-01',
-      sheets_source: sheets_source,
-      ap_election_days_source: ap_election_days_source
+      sheets_source: sheets_source_with_winner('Rubio'),
+      ap_election_days_source: ap_election_days_source_with_winner('60208')
     )
 
     RaceDayView.generate_all(database)
@@ -52,30 +58,21 @@ describe "calling races", type: :feature do
     expect(page.find('tr', text: 'Rubio')[:class]).to match(/\bwinner\b/)
   end
 
-  it "should mark to the winner in JavaScript as results come in" do
-    sheets_source = Database.default_sheets_source
-    sheets_source.races.map! { |race| race.merge(huffpost_override_winner_last_name: nil) }
-
-    ap_election_days_source = Database.default_ap_election_days_source
-    ap_election_days_source.candidate_races.map! do |candidate_race|
-      candidate_race.merge(winner: false)
-    end
-
+  it 'should mark to the winner in JavaScript as results come in' do
     database = mock_database(
       '2016-02-01',
       '2016-02-01',
-      sheets_source: sheets_source,
-      ap_election_days_source: ap_election_days_source
+      sheets_source: sheets_source_without_winners,
+      ap_election_days_source: ap_election_days_source_without_winners
     )
 
     RaceDayView.generate_all(database) # HTML: no winner
 
-    sheets_source.races.map! { |race| race.merge(huffpost_override_winner_last_name: 'Paul') }
     database2 = mock_database(
       '2016-02-01',
       '2016-02-01',
-      sheets_source: sheets_source,
-      ap_election_days_source: ap_election_days_source
+      sheets_source: sheets_source_with_winner('Paul'),
+      ap_election_days_source: ap_election_days_source_without_winners
     )
     RaceDayResultsView.generate_all(database2) # JSON: Rand Paul is the winner
 

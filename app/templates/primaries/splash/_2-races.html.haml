@@ -1,0 +1,14 @@
+.two-races
+  - race_day.races.each do |race|
+    .race{'data-party-id': race.party_id, id: race.id, class: "race-#{race.when_race_happens} #{race.any_precincts_reporting? ? '' : 'no-'}precincts-reporting"}
+      != render(partial: 'primaries/splash/party-candidate-listing', locals: { race: race })
+
+      .map-precincts-container
+        != render(partial: 'primaries/splash/precincts-reporting', locals: { race: race })
+        .map-container
+          .map!= map_svg("states/#{race.state_code}")
+          .legend-and-status
+            .race-status.when-race-present
+              %button.refresh 0:30
+            != render(partial: 'primaries/splash/map-legend', locals: { leader_name: race.candidate_races.first.candidate_last_name })
+            != render(partial: 'primaries/splash/tease-link', locals: { race: race })

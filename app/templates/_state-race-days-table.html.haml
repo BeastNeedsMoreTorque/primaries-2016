@@ -2,12 +2,18 @@
   %thead
     %tr
       - for column in columns
-        %th{'class': column.html_class}= column.label
+        - case column.html_class
+          - when 'n-delegates-int'
+            %th.n-delegates{colspan: 2}= column.label
+          - when 'n-delegates-dots'
+            -# nothing
+          - else
+            %th{class: column.html_class}= column.label
   %tbody
     - last_value = nil
     - for race in races
       - current_value = race.send(hide_repeats_column)
-      %tr{'class': "#{race.enabled? ? 'enabled' : 'disabled'} #{current_value == last_value ? 'key-repeated' : ''}"}
+      %tr{class: "#{race.enabled? ? 'enabled' : 'disabled'} #{current_value == last_value ? 'key-repeated' : ''}", 'data-party-id': race.party_id}
         - for column in columns
           %td{'class': "#{column.html_class} #{(column.html_class == hide_repeats_column && current_value == last_value) ? 'repeated' : ''}"}
             - case column.html_class
@@ -22,17 +28,15 @@
                 = race.state_name
               - when 'party'
                 = race.party_name[0]
-              - when 'n-delegates'
-                .n-delegates-inner
-                  %span.n-delegates-int= format_int(race.n_delegates)
-                  %div{'class': "dots dots-#{race.party_id.downcase}"}
-                    -# That's a zero-width space (zwsp) between each dot, so they can wrap
-                    = "•" * race.n_delegates
+              - when 'n-delegates-int'
+                = race.n_delegates
+              - when 'n-delegates-dots'
+                != race_simple_dot_groups(race).to_html
         - if !race.enabled?
           %td.disabled-button
         - else
           %td.enabled-button
-            %a.results-button{href: "/2016/primaries/#{race.race_day_id}##{race.state_code}-#{race.party_id}"}
+            %a.results-button{href: race.href}
               %span.results-button-desktop
                 - if race.when_race_happens == 'future'
                   Preview

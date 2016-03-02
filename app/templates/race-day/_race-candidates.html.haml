@@ -2,52 +2,40 @@
   %thead
     %tr
       %th.candidate Candidate
+      %th.n-delegates{colspan: 2} Delegates
+      %th.n-pledged-delegates{colspan: 2} Delegates
+      - if race.has_pollster_data?
+        %th.pollster Polling Average 
       %th.n-votes
-        - if race.n_votes_is_really_n_sdes
-          %abbr{title: 'State Delegate Equivalents'} SDEs
-          %sup> ∗
+        - if race.n_votes_th
+          = race.n_votes_th
+          %span.asterisk> *
         - else
           Votes
       %th.percent-vote= '%'
-      %th.n-delegates Delegates
-      %th.pollster Polling Average 
   %tbody
-    - n_unellipsized = 5 # Changing this? Change race-day.js as well, or page will scroll while loading
     - race.candidate_races.each do |candidate_race|
       - candidate = candidate_race.candidate
-      %tr{'data-candidate-id': candidate.id, 'class': "#{n_unellipsized <= 0 ? 'ellipsized' : ''} #{candidate_race.winner? ? 'winner' : ''}"}
+      %tr{'data-candidate-id': candidate.id, class: (candidate_race.winner? ? 'winner' : '')}
         %td.candidate
           %img{src: image_path("#{candidate.slug}.png"), alt: ''}
           %span.name= candidate.name
+        %td.n-delegates= format_int(candidate_race.n_delegates || 0)
+        %td.n-delegates-dots!= candidate_race_dot_groups(candidate_race, :n_delegates).to_html
+        %td.n-pledged-delegates= format_int(candidate_race.n_pledged_delegates || 0)
+        %td.n-pledged-delegates-dots!= candidate_race_dot_groups(candidate_race, :n_pledged_delegates).to_html
+        - if race.has_pollster_data?
+          %td.pollster
+            - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
+              .sparkline!= candidate_race.poll_sparkline.to_svg
+            %span.percent= format_percent_or_nil(candidate_race.poll_percent)
         %td.n-votes= format_int(candidate_race.n_votes)
         %td.percent-vote= format_percent_or_nil(candidate_race.percent_vote)
-        %td.n-delegates
-          .n-delegates-inner
-            %span.n-delegates-int= format_int(candidate_race.n_delegates)
-            .dots{class: "dots-#{race.party_id}"}= "•" * candidate_race.n_delegates
-        %td.pollster
-          - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
-            .sparkline!= candidate_race.poll_sparkline.to_svg
-          %span.percent= format_percent_or_nil(candidate_race.poll_percent)
-      - n_unellipsized -= 1
--# Add prompt, so there's no resize when $.fn.ellipsize_table() kicks in.
-- if n_unellipsized < 0
-  .ellipsize-table-prompt
 
-- if race.n_votes_is_really_n_sdes
-  %p.state-delegate-equivalents.when-past.when-present
-    %sup ∗
-    The Iowa Democratic Party doesn't report vote counts. It reports State Delegate Equivalents (SDEs), predictions of who will attend the state-wide party convention.
+- if race.n_votes_footnote
+  %p.n-votes-footnote.when-precincts-reporting
+    %span.asterisk *
+    = race.n_votes_footnote
 
-.n-delegates.n-delegates-with-candidates
-  .dots{class: "dots-#{race.party_id}"}
-    %span.with-candidates>= "•" * race.n_delegates_with_candidates
-    %span.without-candidates= "•" * race.n_delegates_without_candidates
-  %p
-    %span.n-delegates-with-candidates-int= format_int(race.n_delegates_with_candidates)
-    of
-    %span.n-delegates-int= format_int(race.n_delegates)
-    delegates accounted for in #{race.state_name}.
-  %p
-    HuffPost counts unpledged delegates who have publicly stated their intent to vote for a candidate.
-    %a{href: '/2016/primaries/about-delegates'} More info &raquo;
+- if race.pollster_last_updated
+  %p.poll-last-updated.when-no-precincts-reporting!= "#{race.state_name} poll averages compiled by <a href=\"//elections.huffingtonpost.com/pollster/#{race.pollster_slug}\">HuffPost Pollster</a> at <time datetime=\"#{format_datetime(race.pollster_last_updated)}\"></time>"

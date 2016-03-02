@@ -1,12 +1,64 @@
 d3 = require('d3')
+deep_copy = require('deep-copy')
 fs = require('fs')
 topojson = require('topojson')
 jsts = require('jsts')
 
 require('d3-geo-projection')(d3)
 
-MaxWidth = 350
-MaxHeight = 350
+MaxWidth = 1000
+MaxHeight = 1000
+MinDistanceBetweenCities = 80 # px, vertically or horizontally
+
+BigTopojsonOptions =
+  'pre-quantization': 10000
+  'post-quantization': 1000
+  'coordinate-system': 'cartesian'
+  'minimum-area': 50
+  'preserve-attached': false
+  'property-transform': (f) -> f.properties
+
+TinyTopojsonOptions =
+  'pre-quantization': 10000
+  'post-quantization': 1000
+  'coordinate-system': 'cartesian'
+  'minimum-area': 200
+  'preserve-attached': false
+  'property-transform': (f) -> {}
+
+# Something akin to a GeoJSON Feature, but the geometry is JSTS.
+#
+# Why? Because we need to do geo transformations. GeoJSON has no useful
+# libraries, and topojson can't handle errors in the geometry.
+class JstsFeature
+  constructor: (@geometry, @properties) ->
+
+  toJSON: ->
+    type: 'Feature'
+    geometry: JSON.parse(JSON.stringify(GeoJSONWriter.write(@geometry)))
+    properties: @properties
+
+class StateFeatureSet
+  constructor: (@jsts_state_multipolygon, @jsts_county_features, @jsts_subcounty_features, @city_features) ->
+
+  # Outputs hash of state, counties, subcounties and cities -- all GeoJSON objects
+  toJSON: ->
+    features = (fs) ->
+      ret = fs.map((f) -> f.toJSON())
+        .filter((f) -> f.geometry?)
+        .filter((f) -> f.geometry.type != 'Polygon' || f.geometry.coordinates[0].length > 0) # MP has a null geometry
+
+    state: { type: 'Feature', geometry: JSON.parse(JSON.stringify(GeoJSONWriter.write(@jsts_state_multipolygon))) }
+    counties: { type: 'FeatureCollection', features: features(@jsts_county_features) }
+    subcounties: { type: 'FeatureCollection', features: features(@jsts_subcounty_features) }
+    cities: { type: 'FeatureCollection', features: @city_features }
+
+GeoJSONReader = new jsts.io.GeoJSONReader()
+GeoJSONWriter = new jsts.io.GeoJSONWriter()
+GeoJSONCRS =
+  type: 'name',
+  properties:
+    name: 'urn:ogc:def:crs:OGC:1.3:CRS84'
 
 geo_loader = require('./geo-loader')
 
@@ -109,6 +161,37 @@ organize_features = (key, features) ->
       features_by_state[state_code] = { cities: [], counties: [], subcounties: [] }
     features_by_state[state_code][key].push(feature)
 
+# AP tallies Alaska votes by congressional district for these states.
+#
+# Our HACK is to overwrite counties with districts. They both look like FIPS
+# codes.
+organize_alaska_districts = (features) ->
+  features_by_state.AK.subcounties = for feature in features
+    p = feature.properties
+
+    type: 'Feature'
+    geometry: feature.geometry
+    properties:
+      GEOID: p.GEOID
+      NAME: p.NAMELSAD
+
+# In some states, AP only reports by congressional district
+#
+# Notice that congressional-district geo IDs have four digits -- just like
+# Alaska FIPS codes. So don't render Alaska and Kansas on the same page! (If you
+# need to, come up with a different encoding scheme for one or the other.)
+organize_congressional_district_features = (state_code, fips_string, all_congressional_district_features) ->
+  features = (f for f in all_congressional_district_features when f.properties.STATEFP == fips_string)
+
+  features_by_state[state_code].subcounties = for feature in features
+    p = feature.properties
+
+    type: 'Feature'
+    geometry: feature.geometry
+    properties:
+      GEOID: p.GEOID
+      NAME: p.NAMELSAD
+
 organize_subcounty_features = (state_code, features) ->
   console.log("Organizing #{state_code} subcounties...")
   for feature in features
@@ -132,7 +215,6 @@ organize_territory_features = (state_code, features) ->
       out_feature = fips_string_to_out_feature[fips_string] =
         type: 'Feature'
         properties:
-          STATE: state_code
           ADMIN_FIPS: fips_string
           NAME: TerritoryFipsCodeNames[fips_string]
         geometry:
@@ -161,14 +243,11 @@ organize_territory_features = (state_code, features) ->
 
   undefined
 
-calculate_projection_width_height = (features) ->
-  feature_collection = { type: 'FeatureCollection', features: features.counties }
-
+calculate_projection_width_height = (state_geojson) ->
   # Calculate projection parameters...
-
   alaska_safe_projection = (arr) -> [ (if arr[0] > 172 then -360 + arr[0] else arr[0]), arr[1] ]
   path1 = d3.geo.path().projection(alaska_safe_projection)
-  ll_bounds = path1.bounds(feature_collection)
+  ll_bounds = path1.bounds(state_geojson)
 
   lon = (ll_bounds[0][0] + ll_bounds[1][0]) / 2
   lat = (ll_bounds[0][1] + ll_bounds[1][1]) / 2
@@ -188,7 +267,7 @@ calculate_projection_width_height = (features) ->
   # Scale to fill the center of the SVG
   # http://stackoverflow.com/questions/14492284/center-a-map-in-d3-given-a-geojson-object
   path2 = d3.geo.path().projection(projection)
-  b = path2.bounds(feature_collection)
+  b = path2.bounds(state_geojson)
 
   width = MaxWidth
   height = MaxHeight
@@ -206,47 +285,23 @@ calculate_projection_width_height = (features) ->
   [ projection, width, height ]
 
 project_features = (features, projection) ->
+  ret = {}
   for key in Object.keys(features)
-    features[key] = d3.geo.project({ type: 'FeatureCollection', features: features[key] }, projection)
-  features
+    ret[key] = d3.geo.project(features[key], projection)
+  ret
 
-topojsonize = (features) ->
+topojsonize = (features_json, options) ->
   # Modeled after topojson's bin/topojson
-  options =
-    'pre-quantization': 2000
-    'post-quantization': 2000
-    'coordinate-system': 'cartesian'
-    'minimum-area': 5
-    'preserve-attached': false
-    'property-transform': (d) ->
-      p = d.properties
-
-      state_code: p.STATE
-      fips_string: p.ADMIN_FIPS # counties only
-      geo_id: p.GEOID # subcounties only
-      name: p.ADMIN_NAME || p.NAME
-      feature: p.FEATURE # cities only; we filter for 'Civil'
-      population: +p.POP_2010 # cities only
-
-  topology = topojson.topology(features, options)
-  topojson.clockwise(topology, options)
-
-  geometries = topology.objects.counties.geometries
-  topology.objects.counties.geometries = for geometry in geometries
-    geometry2 = topojson.mergeArcs(topology, [geometry])
-    geometry2.properties = geometry.properties
-    geometry2
-
+  x = deep_copy(features_json)
+  topology = topojson.topology(x, options)
   topojson.simplify(topology, options)
   topojson.filter(topology, options)
   topojson.prune(topology, options)
   topology
 
 compress_svg_path = (path) ->
-  # First, round to one decimal and multiply by 10
-  #
-  # Do this while we're still dealing with absolute coordinates.
-  path = path.replace(/\.(\d)\d+/g, (__, one_decimal) -> one_decimal)
+  # First off, round everything. That'll give us four decimals, like we want
+  int_path = path.replace(/\.\d+/g, '')
 
   last_point = null
   last_instruction = null
@@ -255,18 +310,39 @@ compress_svg_path = (path) ->
   next_instruction_index = 0
   instr_regex = /([a-zA-Z ])(?:(\d+),(\d+))?/g
 
-  while (match = instr_regex.exec(path)) != null
+  # We want to bundle "v" and "h" instructions together, where applicable.
+  # (There are lots and lots of them in the congressional-district data.)
+  current_line =
+    instruction: null
+    d: null # dx or dy
+
+  flush = () ->
+    if current_line.instruction?
+      out.push("#{current_line.instruction}#{current_line.d}")
+      current_line.instruction = current_line.d = null
+
+  start_or_continue_current_line = (instruction, d) ->
+    if current_line.instruction == instruction && current_line.d * d > 0
+      current_line.d += d
+    else
+      flush()
+      current_line.instruction = instruction
+      current_line.d = d
+
+  while (match = instr_regex.exec(int_path)) != null
     if next_instruction_index != instr_regex.lastIndex - match[0].length
-      throw "Found a non-instruction at position #{next_instruction_index} of path #{path}. Next instruction was at position #{instr_regex.lastIndex}. Aborting."
+      throw new Error("Found a non-instruction at position #{next_instruction_index} of path #{int_path}. Next instruction was at position #{instr_regex.lastIndex}. Aborting.")
     next_instruction_index = instr_regex.lastIndex
 
     switch match[1]
       when 'Z'
+        flush()
         last_instruction = 'Z'
         last_point = null
         out.push('Z')
 
       when 'M'
+        flush()
         point = [ +match[2], +match[3] ]
 
         last_point = point
@@ -284,11 +360,12 @@ compress_svg_path = (path) ->
         if dx != 0 || dy != 0
           if dx == 0
             last_instruction = 'v'
-            out.push("v#{dy}")
+            start_or_continue_current_line('v', dy)
           else if dy == 0
             last_instruction = 'h'
-            out.push("h#{dx}")
+            start_or_continue_current_line('h', dx)
           else
+            flush()
             instruction = if last_instruction == 'l' then ' ' else 'l'
             last_instruction = 'l'
             out.push("#{instruction}#{dx},#{dy}")
@@ -296,11 +373,12 @@ compress_svg_path = (path) ->
         last_point = point
 
       else
-        throw "Need to handle SVG instruction #{match[0]}. Aborting."
+        throw "Need to handle SVG instruction #{match[0]}. Original path: #{path}. Aborting."
 
-  if next_instruction_index != path.length
-    throw "Unhandled SVG instruction at end of path: #{path.slice(next_instruction_index)}"
+  if next_instruction_index != int_path.length
+    throw "Unhandled SVG instruction at end of path: #{int_path.slice(next_instruction_index)}"
 
+  flush()
   out.join('')
 
 distance2 = (p1, p2) ->
@@ -310,53 +388,26 @@ distance2 = (p1, p2) ->
 
 # Returns a <path class="state">
 render_state_path = (path, topology) ->
-  d = path(topojson.mesh(topology, topology.objects.counties, (a, b) -> a == b))
+  d = path(topojson.feature(topology, topology.objects.state))
   d = compress_svg_path(d)
-  '  <path class="state" transform="scale(0.1)" d="' + d + '"/>'
+  '  <path class="state" d="' + d + '"/>'
 
-render_counties_mesh_path = (path, topology) ->
-  mesh = topojson.mesh(topology, topology.objects.counties, (a, b) -> a != b)
+# Returns a <path class="mesh">
+render_mesh_path = (path, topology, key) ->
+  mesh = topojson.mesh(topology, topology.objects[key], (a, b) -> a != b)
   d = path(mesh)
   if d
     d = compress_svg_path(d)
-    '  <path class="mesh" transform="scale(0.1)" d="' + d + '"/>'
-  else
-    # DC, for instance, has no mesh
-    ''
-
-render_subcounties_mesh_path = (path, topology) ->
-  reader = new jsts.io.GeoJSONReader()
-  counties = topojson.merge(topology, topology.objects.counties.geometries)
-  counties_geometry = reader.read(JSON.stringify(counties))
-    .buffer(0) # make valid
-
-  subcounties = topojson.feature(topology, topology.objects.subcounties)
-  mesh_features = { type: 'FeatureCollection', features: [] }
-
-  for feature in subcounties.features
-    geometry = intersect_or_original(feature.geometry, counties_geometry)
-    if geometry?
-      mesh_features.features.push(type: 'Feature', properties: {}, geometry: geometry)
-
-  mesh_topology = topojson.topology(mesh_features: mesh_features)
-  mesh = topojson.mesh(mesh_topology, mesh_topology.objects.mesh_features, (a, b) -> a != b)
-
-  d = path(mesh)
-  if d
-    d = compress_svg_path(d)
-    '  <path class="mesh" transform="scale(0.1)" d="' + d + '"/>'
+    '  <path class="mesh" d="' + d + '"/>'
   else
     # DC, for instance, has no mesh
     ''
 
 # Returns a <g class="counties"> full of <path data-fips-int="...">s
 render_counties_g = (path, topology, geometries) ->
-  ret = [ '  <g class="counties" transform="scale(0.1)">' ]
+  ret = [ '  <g class="counties">' ]
 
   for geometry in geometries
-    # Minnesota has a weird FIPS code, 27000, for Lake Superior
-    continue if /000$/.test(geometry.properties.fips_string)
-
     d = path(topojson.feature(topology, geometry))
     d = compress_svg_path(d)
     ret.push("    <path data-fips-int=\"#{+geometry.properties.fips_string}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
@@ -364,80 +415,38 @@ render_counties_g = (path, topology, geometries) ->
   ret.push('  </g>')
   ret.join('\n')
 
-# Tries to intersect original (a GeoJSON Geometry) with jsts_geometry. If
-# there's an error, or the result is null, returns original.
-intersect_or_original = (original_geojson, jsts_geometry) ->
-  intersect_or_null(original_geojson, jsts_geometry) || original_geojson
-
-intersect_or_null = (original_geojson, jsts_geometry) ->
-  reader = new jsts.io.GeoJSONReader()
-  writer = new jsts.io.GeoJSONWriter()
-
-  try
-    original_geometry = reader.read(JSON.stringify(original_geojson))
-      .buffer(0) # make valid
-    intersection_geometry = jsts_geometry.intersection(original_geometry)
-    ret = writer.write(intersection_geometry)
-    if ret.type == 'GeometryCollection' && ret.geometries.length == 0
-      null
-    else if ret.type == 'Point'
-      null
-    else
-      ret
-  catch e
-    console.warn(e)
-    null
-
 # Returns a <g class="subcounties"> full of <path data-geo-id="...">s
-#
-# This is hard. The subcounty geo data includes water, so we need to intersect
-# it with the *county* geo data, which is correct. But we don't have a tool that
-# would intersect the mesh (a MultiLineString) with the counties (a
-# GeometryCollection or, merged, a MultiPolygon).
-#
-# So we do this:
-#
-# 1. Merge the counties to create a MultiPolygon.
-# 2. Iterate over all subcounties, intersecting with the MultiPolygon and adding
-#    results to a new FeatureCollection.
-# 3. Use Topojson to create a mesh from the new FeatureCollection.
 render_subcounties_g = (path, topology, geometries) ->
-  counties = topojson.merge(topology, topology.objects.counties.geometries)
+  ret = [ '  <g class="subcounties">' ]
 
-  reader = new jsts.io.GeoJSONReader()
-  counties_geometry = reader.read(JSON.stringify(counties))
-    .buffer(0) # make valid
-
-  ret = [ '  <g class="subcounties" transform="scale(0.1)">' ]
-
-  for geometry in geometries when geometry.properties.geo_id.slice(5) != '00000' # geo-id 3301500000 in NH is water
-    feature = topojson.feature(topology, geometry)
-    d = path(intersect_or_original(feature.geometry, counties_geometry))
+  for geometry in geometries
+    d = path(topojson.feature(topology, geometry))
     d = compress_svg_path(d)
     ret.push("    <path data-geo-id=\"#{+geometry.properties.geo_id}\" data-name=\"#{geometry.properties.name}\" d=\"#{d}\"/>")
 
   ret.push('  </g>')
   ret.join('\n')
 
-render_cities_g = (topology, geometries) ->
+render_cities_g = (city_features) ->
   ret = [ '  <g class="cities">' ]
 
   rendered_cities = [] # Track all dots we rendered; ensure we don't render them too close to one another
-  cities = (topojson.feature(topology, geometry) for geometry in topology.objects.cities.geometries)
+  city_features
     .sort (a, b) ->
       # Prefer "Civil" to "Populated Place". Some states (e.g., VI) don't have
       # any cities, so we can't filter.
       p1 = a.properties
       p2 = b.properties
-      ((p1 == 'Civil' && -1 || 0) - (p2 == 'Civil' && -1 || 0)) || p2.population - p1.population || p1.name.localeCompare(p2.name)
-  for city in cities
+      ((p1.feature == 'Civil' && -1 || 0) - (p2.feature == 'Civil' && -1 || 0)) || p2.population - p1.population || p1.name.localeCompare(p2.name)
+
+  for city in city_features
     p = city.geometry.coordinates
 
-    continue if rendered_cities.find((p2) -> distance2(p, p2) < 25 * 25)
+    continue if rendered_cities.find((p2) -> distance2(p, p2) < MinDistanceBetweenCities * MinDistanceBetweenCities)
 
-    x = p[0].toFixed(1)
-    y = p[1].toFixed(1)
-    ret.push("    <circle r=\"3\" cx=\"#{x}\" cy=\"#{y}\"/>")
+    x = p[0].toFixed(0)
+    y = p[1].toFixed(0)
+    ret.push("    <circle r=\"7\" cx=\"#{x}\" cy=\"#{y}\"/>")
     ret.push("    <text x=\"#{x}\" y=\"#{y}\">#{city.properties.name}</text>")
 
     rendered_cities.push(p)
@@ -445,19 +454,16 @@ render_cities_g = (topology, geometries) ->
   ret.push('  </g>')
   ret.join('\n')
 
-render_state_svg = (state_code, features, callback) ->
+render_state_svg = (state_code, feature_set, options, callback) ->
   output_filename = "./output/#{state_code}.svg"
-
-  if !features.counties.length
-    console.log("Skipping #{output_filename} because we have no county paths")
-    return callback(null)
 
   console.log("Rendering #{output_filename}...")
 
-  [ projection, width, height ] = calculate_projection_width_height(features)
-  features = project_features(features, projection)
-  path = d3.geo.path().projection(null)
-  topology = topojsonize(features)
+  features_json = feature_set.toJSON()
+  [ projection, width, height ] = options.projection || calculate_projection_width_height(features_json.state)
+  features_json = project_features(features_json, projection)
+
+  topology = topojsonize(features_json, BigTopojsonOptions)
 
   # Note that our viewBox is width/height multiplied by 10. We round everything to integers to compress
   data = [
@@ -466,20 +472,166 @@ render_state_svg = (state_code, features, callback) ->
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"#{width}\" height=\"#{height}\" viewBox=\"0 0 #{width} #{height}\">"
   ]
 
-  data.push(render_state_path(path, topology, topology.objects.counties))
+  path = d3.geo.path().projection(null)
+
+  data.push(render_state_path(path, topology))
+
   if topology.objects.subcounties?.geometries?.length
     data.push(render_subcounties_g(path, topology, topology.objects.subcounties.geometries))
-    data.push(render_subcounties_mesh_path(path, topology))
+    data.push(render_mesh_path(path, topology, 'subcounties'))
   else
     data.push(render_counties_g(path, topology, topology.objects.counties.geometries))
-    data.push(render_counties_mesh_path(path, topology))
-  if topology.objects.cities.geometries.length
-    data.push(render_cities_g(topology, topology.objects.cities.geometries))
+    data.push(render_mesh_path(path, topology, 'counties'))
+
+  if features_json.cities.features.length
+    data.push(render_cities_g(features_json.cities.features))
 
   data.push('</svg>')
 
   data_string = data.join('\n')
+
   fs.writeFile(output_filename, data_string, callback)
+
+render_tiny_state_svg = (state_code, jsts_state_multipolygon, options, callback) ->
+  output_filename = "./output/tiny/#{state_code}.svg"
+  console.log("Rendering #{output_filename}...")
+
+  features_json = { state: { type: 'Feature', geometry: GeoJSONWriter.write(jsts_state_multipolygon) } }
+  [ projection, width, height ] = options.projection || calculate_projection_width_height(features_json.state)
+  features_json = project_features(features_json, projection)
+  topology = topojsonize(features_json, TinyTopojsonOptions)
+
+  path = d3.geo.path().projection(null)
+
+  # Note that our viewBox is width/height multiplied by 10. We round everything to integers to compress
+  data = [
+    '<?xml version="1.0" encoding="utf-8"?>'
+    '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"#{width}\" height=\"#{height}\" viewBox=\"0 0 #{width} #{height}\">"
+    render_state_path(path, topology)
+    "<text x=\"#{width >> 1}\" y=\"#{height >> 1}\">#{state_code}</text>"
+    "</svg>"
+  ]
+
+  data_string = data.join('\n')
+  fs.writeFile(output_filename, data_string, callback)
+
+# Turns a GeoJSON Geometry into a valid JSTS Geometry
+geojson_geometry_to_jsts_geometry = (geojson_geometry) ->
+  GeoJSONReader.read(geojson_geometry)
+    .buffer(0) # make valid
+
+# Transforms an Array of raw GeoJSON Features (from our geo loader) into an
+# Array of JstsFeatures.
+#
+# Each Feature has "fips_string" and "name" properties.
+grok_input_county_features = (input_county_features) ->
+  for feature in input_county_features
+    p = feature.properties
+
+    new JstsFeature(
+      geojson_geometry_to_jsts_geometry(feature.geometry),
+      {
+        fips_string: p.ADMIN_FIPS
+        name: p.ADMIN_NAME || p.NAME
+      }
+    )
+
+# Calculates the union of all county geometries
+jsts_county_features_to_state_multipolygon = (jsts_county_features) ->
+  jsts_geometries = jsts_county_features.map((f) -> f.geometry)
+  jsts_union(jsts_geometries)
+
+# Calculates the union of the given Array of Geometries.
+#
+# This method is because JSTS is unstable.
+# jsts.operation.union.CascadedPolygonUnion doesn't work, and
+# jsts_geometries.reduce((a, b) -> a.union(b)) is too slow. This is a
+# compromise: not too slow, not too complex.
+jsts_union = (jsts_geometries) ->
+  # divide and conquer
+  switch jsts_geometries.length
+    when 0 then null
+    when 1 then jsts_geometries[0]
+    when 2 then jsts_geometries[0].union(jsts_geometries[1])
+    else
+      mid = jsts_geometries.length >> 1
+      left = jsts_geometries.slice(0, mid)
+      right = jsts_geometries.slice(mid)
+
+      jsts_union([ jsts_union(left), jsts_union(right) ])
+
+# Transforms an Array of raw GeoJSON features (from our geo loader) into an
+# Array of JstsFeatures.
+#
+# Each geometry is intersected with the state MultiPolygon. That's because
+# subcounty geometries are political boundaries: they extend into lakes and
+# oceans.
+#
+# Each Feature has "geo_id" and "name" properties.
+grok_input_subcounty_features = (input_subcounty_features, jsts_state_multipolygon) ->
+  ret = []
+
+  for feature in input_subcounty_features
+    p = feature.properties
+    geometry = geojson_geometry_to_jsts_geometry(feature.geometry)
+    intersected_geometry = geometry.intersection(jsts_state_multipolygon)
+
+    if intersected_geometry.getGeometryType() not in [ 'Polygon', 'MultiPolygon' ]
+      throw new Error("Unexpected geometry type #{intersected_geometry.getGeometryType()}: " + JSON.stringify(intersected_geometry))
+
+    if !intersected_geometry.isEmpty()
+      ret.push(new JstsFeature(
+        intersected_geometry,
+        {
+          geo_id: p.GEOID
+          name: p.ADMIN_NAME || p.NAME
+        }
+      ))
+
+  ret
+
+# Transforms an Array of raw GeoJSON Features (from our geo loader) into an
+# Array of GeoJSON Features.
+#
+# This is basically a pass-through. We filter out non-cities and we set the
+# `name` and `population` properties on the output. Every Feature geometry is a
+# Point.
+grok_input_city_features = (input_city_features) ->
+  for feature in input_city_features
+    p = feature.properties
+    
+    type: 'Feature'
+    geometry: feature.geometry
+    properties:
+      feature: p.FEATURE # We *want* 'Civil', but VT has no cities so we fall back to others
+      name: p.ADMIN_NAME || p.NAME
+      population: +p.POP_2010
+
+# Writes output files for the given state code, reading from
+# features_by_state[state_code]
+render_state = (state_code, callback) ->
+  console.log("#{state_code}:")
+
+  input_county_features = features_by_state[state_code].counties
+  input_subcounty_features = features_by_state[state_code].subcounties
+  input_city_features = features_by_state[state_code].cities
+
+  jsts_county_features = grok_input_county_features(input_county_features)
+  jsts_state_multipolygon = jsts_county_features_to_state_multipolygon(jsts_county_features)
+  jsts_subcounty_features = grok_input_subcounty_features(input_subcounty_features, jsts_state_multipolygon)
+  city_features = grok_input_city_features(input_city_features)
+
+  feature_set = new StateFeatureSet(
+    jsts_state_multipolygon,
+    jsts_county_features,
+    jsts_subcounty_features,
+    city_features
+  )
+
+  render_state_svg state_code, feature_set, {}, (err) ->
+    return callback(err) if err
+    render_tiny_state_svg(state_code, jsts_state_multipolygon, {}, callback)
 
 render_all_states = (callback) ->
   pending_states = Object.keys(features_by_state).sort()
@@ -487,13 +639,47 @@ render_all_states = (callback) ->
   step = ->
     if pending_states.length > 0
       state_code = pending_states.shift()
-      render_state_svg state_code, features_by_state[state_code], (err) ->
-        throw err if err
+      render_state state_code, (err) ->
+        return callback(err) if err
         process.nextTick(step)
     else
       callback(null)
 
-  step()
+  process.nextTick(step)
+
+render_DA = (features, callback) ->
+  # Merge all countries together. We want a MultiPolygon and topojson.mesh()
+  # only returns a MultiLineString.
+  jsts_country_geometries = for f in features
+    new JstsFeature(geojson_geometry_to_jsts_geometry(f.geometry), { fips_string: '0', name: '' })
+  jsts_world_multipolygon = jsts_county_features_to_state_multipolygon(jsts_country_geometries)
+
+  # http://bl.ocks.org/mbostock/3757101
+  projection = d3.geo.azimuthalEqualArea()
+    .clipAngle(180 - 1e-3)
+    .scale(237 * MaxWidth / 960)
+    .translate([ MaxWidth / 2, MaxHeight / 2 ])
+    .precision(.1)
+
+  janky_options =
+    projection: [ projection, MaxWidth, MaxHeight ]
+
+  feature_set = new StateFeatureSet(
+    jsts_world_multipolygon,
+    jsts_country_geometries,
+    [],
+    []
+  )
+
+  render_state_svg 'DA', feature_set, janky_options, (err) ->
+    return callback(err) if err
+    render_tiny_state_svg 'DA', jsts_world_multipolygon, janky_options, (err) ->
+      callback(err)
+
+try
+  fs.mkdirSync('./output/tiny')
+catch e
+  throw e if e.code != 'EEXIST'
 
 geo_loader.load_all_features (err, key_to_features) ->
   throw err if err
@@ -501,12 +687,21 @@ geo_loader.load_all_features (err, key_to_features) ->
   organize_features('cities', key_to_features.cities)
   organize_features('counties', key_to_features.counties)
 
-  [ 'NH' ].forEach (key) ->
+  organize_alaska_districts(key_to_features.AK)
+
+  [ 'MA', 'ME', 'NH', 'VT' ].forEach (key) ->
     organize_subcounty_features(key, key_to_features[key])
 
   [ 'AS', 'GU', 'MP' ].forEach (key) ->
     organize_territory_features(key, key_to_features[key])
 
+  [ [ 'KS', '20' ], [ 'MN', '27' ] ].forEach (arr) ->
+    [ state_code, fips_string ] = arr
+    organize_congressional_district_features(state_code, fips_string, key_to_features.congressional_districts)
+
   render_all_states (err) ->
     throw err if err
-    console.log('Done! Now try `cp output/*.svg ../assets/maps/states/`')
+
+    render_DA key_to_features.DA, (err) ->
+      throw err if err
+      console.log('Done! Now try `cp -r output/* ../assets/maps/states/`')

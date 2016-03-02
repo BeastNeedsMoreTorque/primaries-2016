@@ -40,7 +40,7 @@ body.all-primaries {
       font-weight: bold;
     }
 
-    @media (max-width: 549px) {
+    @media (max-width: $widest-mobile) {
       .label {
         display: block;
         text-align: center;
@@ -61,7 +61,7 @@ body.all-primaries {
       }
     }
 
-    @media (min-width: 550px) {
+    @media (min-width: $narrowest-desktop) {
       background: #f8f8f8;
       .callout {
         position: absolute;

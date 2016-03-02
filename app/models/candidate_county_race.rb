@@ -7,6 +7,8 @@ CandidateCountyRace = RubyImmutableStruct.new(:database, :candidate_id, :fips_in
     @id = "#{@candidate_id}-#{@fips_int}-#{@race_id}"
   end
 
+  def geo_id; fips_int; end
+
   def <=>(rhs)
     if (x = id <=> rhs.id) != 0
       x

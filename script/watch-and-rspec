@@ -6,7 +6,7 @@ require 'bundler/setup'
 require 'listen'
 
 def rspec
-  system('rspec')
+  system('rspec', *ARGV[0..-1])
 end
 
 rspec

@@ -73,7 +73,7 @@ The AP counts _pledged_ delegates when a party reports them. If there’s a vote
 The AP counts _unpledged_ delegates when they declare, on the record, that they will vote for a candidate.
 
 
-We report the sum of the pledged and unpledged delegates in the totals at the top of the page.
+When we write “delegates” on its own, we mean the sum of pledged and unpledged delegates.
 
 
 :end
@@ -99,9 +99,16 @@ date: 2016-02-09
 title: New Hampshire Primaries
 pubbed_dt: Tuesday, Jan. 26, 6:30 PM EST
 body: View election results from the New Hampshire primaries and see how each candidate performed in townships throughout the state.
-
-
 tweet: Sanders and Trump won the New Hampshire primaries. See maps at
+
+
+date: 2016-02-20
+title: Nevada (D) and South Carolina (R)
+tweet: Clinton won Nevada’s Democratic caucus and Trump won South Carolina’s GOP primary. See maps at
+
+
+date: 2016-03-01
+title: Super Tuesday
 [primaries.races]
 This is just for setting race text, given date, state and party.
 
@@ -121,6 +128,22 @@ party: GOP
 text: Republican voters in Iowa turned out in record numbers for the GOP caucus, showing strong support for Ted Cruz. Marco Rubio finished a close third despite lagging well behind Donald Trump in the polls. Other candidates, like Jeb Bush, failed to gain traction with voters.
 
 
+date: 2016-03-01
+state: DA
+party: Dem
+text: Democrats Abroad holds votes in many places worldwide, from March 1 to March 8. We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-03-01
+state: AS
+party: Dem
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-03-05
+state: ME
+party: GOP
+text: The Maine Republican Party only reports statewide results. There is no breakdown by township.
 
 
 :ignore all text after this line

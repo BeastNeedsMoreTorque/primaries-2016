@@ -1,0 +1,105 @@
+body.race-day #scrollfinder {
+  height: 3rem;
+
+  .dropdown-container {
+    padding: 0.5em 0;
+    margin: 0;
+
+    &.fixed {
+      position: fixed;
+      display: block;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      box-shadow: 0 4px 2px -2px #ccc;
+      z-index: 100;
+    }
+  }
+
+  .dropdown-label {
+    color: #999999;
+    text-transform: uppercase;
+    line-height: 2rem;
+    padding-right: .5rem;
+  }
+
+  .dropdown.open .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-inner {
+    max-width: 30em;
+    padding: 0 10px;
+    margin: 0 auto;
+    display: -webkit-flex;
+    display: flex;
+  }
+
+  .dropdown {
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    height: 2rem;
+    position: relative;
+    margin-top: -1px;
+  }
+
+  a.dropdown-toggle {
+    display: block;
+    text-align: center;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    line-height: 2rem;
+    padding: 0 0.5em;
+    font-size: 1rem;
+    font-family: 'Source Sans Pro';
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .caret {
+    position: absolute;
+    right: .5rem;
+    top: .75rem;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    background: #fff;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-top: 0;
+    z-index: 100;
+    padding: .5rem 0;
+    max-height: 400px;
+    overflow-y: auto;
+    a {
+      display: block;
+      text-decoration: none;
+      padding: 0.4em;
+      color: #000;
+      &:hover {
+        background: $widgetLightBlue;
+      }
+    }
+  }
+
+  @media (max-width: 649px) {
+    .state-name {
+      display: none;
+    }
+  }
+
+  @media (min-width: 650px) {
+    .second {
+      display: none;
+    }
+    .race-title {
+      display: none;
+    }
+  }
+}

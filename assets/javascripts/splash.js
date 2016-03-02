@@ -1,119 +1,83 @@
 $(function() {
-  function add_no_results_yet_pattern_to_svg(svg, pattern_id) {
-    var ns = 'http://www.w3.org/2000/svg';
+  function update_svg_from_json($race, race_json) {
+    var leader = race_json.candidates[0];
+    var leader_id = leader.id;
 
-    var defs = document.createElementNS(ns, 'defs');
+    $race.find('.map-container .legend span.name').text(leader.last_name);
 
-    var pattern = document.createElementNS(ns, 'pattern');
-    pattern.setAttributeNS(null, 'id', pattern_id);
-    pattern.setAttributeNS(null, 'width', '50');
-    pattern.setAttributeNS(null, 'height', '50');
-    pattern.setAttributeNS(null, 'patternUnits', 'userSpaceOnUse');
+    var $svg = $race.find('svg');
+    var geos = race_json.geos;
 
-    var rect = document.createElementNS(ns, 'rect');
-    rect.setAttributeNS(null, 'width', '50');
-    rect.setAttributeNS(null, 'height', '50');
-    rect.setAttributeNS(null, 'fill', '#ddd');
+    $svg.find('g.counties path, g.subcounties path').each(function() {
+      var geo_id = this.hasAttribute('data-fips-int') ? this.getAttribute('data-fips-int') : this.getAttribute('data-geo-id');
+      var geo_leader_id = geos[geo_id];
 
-    var path = document.createElementNS(ns, 'path');
-    path.setAttributeNS(null, 'd', 'M-5,5L5,-5M-5,55L55,-5M45,55L55,45');
-    path.setAttributeNS(null, 'stroke-width', '10');
-    path.setAttributeNS(null, 'stroke', '#fff');
+      var class_name;
 
-    pattern.appendChild(rect);
-    pattern.appendChild(path);
-    defs.appendChild(pattern);
-    svg.insertBefore(defs, svg.firstChild);
-  }
+      if (!geo_leader_id) {
+        class_name = 'no-results';
+      } else if (geo_leader_id == leader_id) {
+        class_name = 'candidate-leads';
+      } else {
+        class_name = 'candidate-trails';
+      }
 
-  function fillSvg(data, leaders) {
-    var colors = {
-      Dem: { lead: '#5c6b95', trail: '#d1e0fa' },
-      GOP: { lead: '#bc5c5c', trail: '#f5cfcf' }
-    };
-
-    [ 'Dem', 'GOP' ].forEach(function(party_id) {
-      var party_id_lower = party_id.toLowerCase();
-      var $svg = $('.map-container.' + party_id_lower + ' svg');
-
-      $svg.find('g.counties path, g.subcounties path').each(function() {
-        var geo_id = this.hasAttribute('data-fips-int') ? this.getAttribute('data-fips-int') : this.getAttribute('data-geo-id');
-        var geo_leader = data[geo_id] ? data[geo_id][party_id].leader : null;
-
-        if (geo_leader == null) return;
-
-        if (geo_leader.n_votes > 0) {
-          // Some precincts are reporting. Color the map. (It will never become
-          // uncolored after this.)
-
-          var leader = leaders[party_id];
-
-          if (geo_leader.id == leader.id) {
-            this.setAttribute('fill', colors[party_id].lead);
-          } else {
-            this.setAttribute('fill', colors[party_id].trail);
-          }
-        }
-      });
+      this.setAttribute('class', class_name);
     });
   }
 
-  function updateCandidates(data, tense){
-    $(".party-container.gop .candidate-position-listing table").remove();
-    $(".party-container.dem .candidate-position-listing table").remove();
+  function update_candidates_from_json($race, candidates_json) {
+    var tr_strings = candidates_json.map(function(candidate_json) {
+      return '<tr class="candidate ' + (candidate_json.leader ? 'leader' : '') + ' ' + (candidate_json.winner ? 'winner' : '') + '">'
+        + '<td class="candidate-name">' + candidate_json.last_name + '</td>'
+        + '<td class="n-votes">' + format_int(candidate_json.n_votes || 0) + '</td>'
+        + '<td class="n-votes-pct">' + format_percent(candidate_json.percent_vote || 0) + '%</td>'
+        + '</tr>';
+    });
 
-    ["Dem", "GOP"].forEach(function(party){
-      var table = "" +
-                  "<table>" +
-                    "<tbody>";
-      data.candidates[party].forEach(function(c, i){
-        var row = "" +
-                  "<tr class='candidate "+ (i==0 ? 'leader' : '') + ' ' + (c.winner ? 'winner' : '') + "' data-candidate-id='"+ c.id +"'>" + 
-                    "<td class='candidate-name'>" + c.name + "</td>" +
-                    "<td class='n-votes'>" + format_int(c.votes) + "</td>" +
-                    "<td class='n-votes-pct'>" + (c.pct ? c.pct.toFixed(1) : "0.0") + "%</td>" +
-                  "</tr>";
-        if(i == 0)
-          $(".map-container."+party.toLowerCase()+" .legend span.name").html(c.name)
-        if(i < 3)
-          table += row;
-      });
-      table += "</tbody></table>";
-      $(".party-container."+party.toLowerCase()+" .candidate-position-listing").append(table);
-    })
+    $race.find('.candidate-position-listing tbody').html(tr_strings.join(''));
   }
 
-  function updatePrecinctStats(data){
-    [ 'dem', 'gop' ].forEach(function(party_id_lower) {
-      $container = $('.map-precincts-container.' + party_id_lower);
-      var str = data['reporting_precincts_pct_str_' + party_id_lower];
-      var reporting = str != 'N/A';
+  function update_precincts_reporting_from_json($race, string) {
+    $race.find('.precincts-val').text(string);
+    $race
+      .toggleClass('no-precincts-reporting', string == 'N/A')
+      .toggleClass('precincts-reporting', string != 'N/A');
+  }
 
-      $container.find('.precincts-val').text(str);
-      $container
-        .toggleClass('no-precincts-reporting', !reporting)
-        .toggleClass('precincts-reporting', reporting);
-    });
+  function update_when_race_happens_from_json($race, tense) {
+    $race
+      .removeClass('race-past race-present race-future')
+      .addClass('race-' + tense);
+  }
+
+  function update_race_from_json(race_json) {
+    var $race = $('#' + race_json.id);
+
+    update_when_race_happens_from_json($race, race_json.when_race_happens);
+    update_svg_from_json($race, race_json);
+    update_candidates_from_json($race, race_json.candidates);
+    update_precincts_reporting_from_json($race, race_json.precincts_reporting_percent_s);
   }
 
   function do_poll(callback) {
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
-      var tense = json["when_race_day_happens"];
-
+      var tense = json.when_race_day_happens;
       $("body").removeClass('race-day-past race-day-present race-day-future').addClass("race-day-" + tense);
 
-      fillSvg(json.geos, json.candidates.leaders);
-
-      updateCandidates(json.candidates);
-      updatePrecinctStats(json.precincts);
+      json.races.forEach(update_race_from_json);
     })
       .fail(function() { console.warn('Failed to load', this); })
       .always(callback);
   }
 
-  $("svg").position_svg_cities();
+  function init_splash() {
+    $("svg").position_svg_cities();
 
-  $('button.refresh')
-    .countdown(30, do_poll)
-    .click(); // start right away
+    $('button.refresh')
+      .countdown(30, do_poll)
+      .eq(0).trigger('click.countdown'); // poll immediately on page load, to populate map
+  }
+
+  $('.one-race, .two-races').each(init_splash);
 });

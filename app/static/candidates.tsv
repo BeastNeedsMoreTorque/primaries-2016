@@ -4,13 +4,13 @@ id	party_id	full_name	last_name	dropped_out
 22603	Dem	Martin O'Malley	O'Malley	2016-02-01
 36679	GOP	John Kasich	Kasich	
 61815	GOP	Ted Cruz	Cruz	
-1239	GOP	Jeb Bush	Bush	
-60051	GOP	Chris Christie	Christie	
+1239	GOP	Jeb Bush	Bush	2016-02-20
+60051	GOP	Chris Christie	Christie	2016-02-10
 1752	GOP	Rick Santorum	Santorum	2016-02-03
 8639	GOP	Donald Trump	Trump	
 53044	GOP	Marco Rubio	Rubio	
-64509	GOP	Ben Carson	Carson	
+64509	GOP	Ben Carson	Carson	2016-03-02
 60208	GOP	Rand Paul	Paul	2016-02-03
-60339	GOP	Carly Fiorina	Fiorina	
+60339	GOP	Carly Fiorina	Fiorina	2016-02-10
 1187	GOP	Mike Huckabee	Huckabee	2016-02-01
-45650	GOP	Jim Gilmore	Gilmore	
+45650	GOP	Jim Gilmore	Gilmore	2016-02-12

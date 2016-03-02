@@ -1,109 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="350" height="163" viewBox="0 0 350 163">
-  <path class="state" transform="scale(0.1)" d="M2103,1583l-175,1 -171,2 -216,-2 -216,-1 -218,-4 -278,-6 5,-174 1,-174 7,-152 -214,-7 -288,-10 -253,-12 8,-196 10,-152 5,-152 29,-501 199,12 261,11 260,7 298,9 389,3 346,1 277,-3 20,35 50,22 60,21 50,38 28,-8 27,-44 67,15 29,-18 42,6 23,-9 67,6 41,40 42,3 20,20 20,-7 40,15v14l38,9 -3,21 31,42 47,19 40,-3 -5,73 23,31 14,24 -9,30 28,22 4,38 18,25 35,10 -10,36 38,48 -18,61 17,48 -2,27 37,8 -4,19 30,5 -3,35 -7,20 30,17 -15,63 20,12v55v1l20,34 3,100 -18,22 17,30 26,13 20,63h7l40,87 -13,14 41,13v14l28,8 -1,27 36,29 -8,37 45,25 -269,13 -173,6 -173,6 -175,4 -173,5 -173,3 -173,2"/>
-  <g class="counties" transform="scale(0.1)">
-    <path data-fips-int="31001" data-name="Adams County" d="M2268,1233h1l2,174 -170,2 -1,-170 1,-4Z"/>
-    <path data-fips-int="31003" data-name="Antelope County" d="M2422,534l2,86 -171,4 -4,-86 -3,-175 173,-3Z"/>
-    <path data-fips-int="31005" data-name="Arthur County" d="M1088,882l-216,-5 3,-173 210,4h8Z"/>
-    <path data-fips-int="31007" data-name="Banner County" d="M360,707l-5,131 -7,22 -253,-12 10,-152Z"/>
-    <path data-fips-int="31009" data-name="Blaine County" d="M1554,542l181,1v173l-213,-1h-3v-173Z"/>
-    <path data-fips-int="31011" data-name="Boone County" d="M2424,620l3,88 4,108 -80,9 -22,15 -71,2 -4,-131 -1,-87Z"/>
-    <path data-fips-int="31013" data-name="Box Butte County" d="M616,564l-248,-8 -13,-1 1,-44 -16,-1 8,-173 248,9 7,16 -2,158h15Z"/>
-    <path data-fips-int="31015" data-name="Boyd County" d="M2239,140l4,61 -103,-7 -27,-16 -85,-14 -25,-27 -18,3 -93,43v-97l277,-3 20,35Z"/>
-    <path data-fips-int="31017" data-name="Brown County" d="M1647,202l90,19v148h7v174h-9l-181,-1 3,-173h-6l1,-174 -6,-33 23,19 62,18Z"/>
-    <path data-fips-int="31019" data-name="Buffalo County" d="M2088,1061h10l3,174 -1,4 -42,10 -32,10 -99,-4 -60,-4h-30l-4,-15v-173h82Z"/>
-    <path data-fips-int="31021" data-name="Burt County" d="M3066,718l-123,3v-28l-40,1 -7,-137 94,-3 13,-16 18,25 35,10 -10,36 38,48Z"/>
-    <path data-fips-int="31023" data-name="Butler County" d="M2777,843l6,203h-1l-173,5 -5,-174 43,4 28,3 62,-20 40,-23Z"/>
-    <path data-fips-int="31025" data-name="Cass County" d="M3169,1027v1l20,34 3,100 -237,9 -4,-115 44,-2 9,-15 35,24 64,-38Z"/>
-    <path data-fips-int="31027" data-name="Cedar County" d="M2715,190l7,204 -130,4 -2,-43 -43,1 -5,-206 23,-9 67,6 41,40Z"/>
-    <path data-fips-int="31029" data-name="Chase County" d="M1105,1232l-2,173 -269,-6 1,-174Z"/>
-    <path data-fips-int="31031" data-name="Cherry County" d="M1546,85v77l6,33 -1,174h6l-3,173h-35l-214,-3 -217,-6 -214,-7 -14,-1 7,-172 -12,-5 5,-167h-6l5,-108 298,9Z"/>
-    <path data-fips-int="31033" data-name="Cheyenne County" d="M629,848l9,22 -4,87 -6,109 -288,-10 5,-38 3,-158 7,-22Z"/>
-    <path data-fips-int="31035" data-name="Clay County" d="M2441,1229l3,175 -171,3h-2l-2,-174Z"/>
-    <path data-fips-int="31037" data-name="Colfax County" d="M2730,699l40,-1 7,143 -40,23 -62,20 -28,-3 -3,-179Z"/>
-    <path data-fips-int="31039" data-name="Cuming County" d="M2797,523l99,-3v37l7,137 -133,4 -40,1 -7,-174Z"/>
-    <path data-fips-int="31041" data-name="Custer County" d="M1908,715h4v149l5,25 -2,174h-82h-126h-176l-4,-4 2,-170h-7v-174l213,1Z"/>
-    <path data-fips-int="31043" data-name="Dakota County" d="M2861,304l47,19 40,-3 -5,73 23,31 -136,3 -2,-122Z"/>
-    <path data-fips-int="31045" data-name="Dawes County" d="M599,66l-5,107h7l-5,173 -248,-9 -13,-1 5,-174h-7l5,-107Z"/>
-    <path data-fips-int="31047" data-name="Dawson County" d="M1707,1063h126v173l4,15 -5,-2 -82,-5 -21,-8h-107l-91,-1v-172Z"/>
-    <path data-fips-int="31049" data-name="Deuel County" d="M844,963l-2,109v1l-214,-7 6,-109Z"/>
-    <path data-fips-int="31051" data-name="Dixon County" d="M2861,304l-33,1 2,122 -35,9 -73,2v-44l-7,-204 20,20 20,-7 40,15v14l38,9 -3,21Z"/>
-    <path data-fips-int="31053" data-name="Dodge County" d="M2903,694l40,-1v28l5,81 47,63 -54,2h-8l-28,-18 -52,4 -76,-10v-2l-7,-143Z"/>
-    <path data-fips-int="31055" data-name="Douglas County" d="M2995,865l146,-5 -7,20 30,17 -15,63 -150,7 -9,-33 -49,-67Z"/>
-    <path data-fips-int="31057" data-name="Dundy County" d="M1110,1405l-3,174 -278,-6 5,-174 269,6Z"/>
-    <path data-fips-int="31059" data-name="Fillmore County" d="M2614,1225l5,174 -173,5h-2l-3,-175Z"/>
-    <path data-fips-int="31061" data-name="Franklin County" d="M2101,1409l2,174 -175,1v-173Z"/>
-    <path data-fips-int="31063" data-name="Frontier County" d="M1531,1235l91,1v131h-45v44h-38h-20l-194,-2h-5l1,-175Z"/>
-    <path data-fips-int="31065" data-name="Furnas County" d="M1752,1411h3l2,175 -216,-2 -2,-173h38Z"/>
-    <path data-fips-int="31067" data-name="Gage County" d="M2960,1303l5,129 5,131 -173,6 -5,-175 -2,-87Z"/>
-    <path data-fips-int="31069" data-name="Garden County" d="M850,569l-6,134 31,1 -3,173h-28v86l-210,-6 4,-87 -9,-22 5,-152 -15,-21 4,-111Z"/>
-    <path data-fips-int="31071" data-name="Garfield County" d="M2078,540l3,173 -169,2h-4l-1,-173Z"/>
-    <path data-fips-int="31073" data-name="Gosper County" d="M1750,1244l2,167h-175v-44h45v-131h107Z"/>
-    <path data-fips-int="31075" data-name="Grant County" d="M1088,533l-3,175 -210,-4 -31,-1 6,-134 22,1 2,-44Z"/>
-    <path data-fips-int="31077" data-name="Greeley County" d="M2258,842v43l-170,2h-2l-3,-174 171,-2Z"/>
-    <path data-fips-int="31079" data-name="Hall County" d="M2263,1059l3,86v1l2,87 -167,2 -3,-174Z"/>
-    <path data-fips-int="31081" data-name="Hamilton County" d="M2436,1056l5,173 -172,4h-1l-2,-87v-1l57,-64 58,-47 31,-12 22,-29Z"/>
-    <path data-fips-int="31083" data-name="Harlan County" d="M1928,1411v173l-171,2 -2,-175Z"/>
-    <path data-fips-int="31085" data-name="Hayes County" d="M1321,1234l-1,175 -210,-4h-7l2,-173h38Z"/>
-    <path data-fips-int="31087" data-name="Hitchcock County" d="M1320,1409h5v174l-218,-4 3,-174Z"/>
-    <path data-fips-int="31089" data-name="Holt County" d="M2243,201l3,162 3,175 -171,2 -171,2h-5v-174l-5,-32v-142l-5,-10v-1l93,-43 18,-3 25,27 85,14 27,16Z"/>
-    <path data-fips-int="31091" data-name="Hooker County" d="M1305,539l-2,173 -210,-4h-8l3,-175Z"/>
-    <path data-fips-int="31093" data-name="Howard County" d="M2258,885h1l4,174 -165,2h-10v-174Z"/>
-    <path data-fips-int="31095" data-name="Jefferson County" d="M2792,1394l5,175 -175,4 -3,-174Z"/>
-    <path data-fips-int="31097" data-name="Johnson County" d="M3111,1296l5,130 -15,2h-2l-134,4 -5,-129Z"/>
-    <path data-fips-int="31099" data-name="Kearney County" d="M2101,1409l-173,2 -1,-156 99,4 32,-10 42,-10Z"/>
-    <path data-fips-int="31101" data-name="Keith County" d="M1142,884l-4,166 7,29 -303,-7 2,-109v-86h28l216,5Z"/>
-    <path data-fips-int="31103" data-name="Keya Paha County" d="M1647,201l-16,-2 -62,-18 -23,-19v-77l346,1v97v1l-44,10 -58,33 -53,-6Z"/>
-    <path data-fips-int="31105" data-name="Kimball County" d="M348,860l-3,158 -5,38 -253,-12 8,-196Z"/>
-    <path data-fips-int="31107" data-name="Knox County" d="M2542,150l5,206 -128,4 -173,3 -3,-162 -4,-61 60,21 50,38 28,-8 27,-44 67,15 29,-18Z"/>
-    <path data-fips-int="31109" data-name="Lancaster County" d="M2783,1046l167,-5 1,15 4,115 5,132 -170,4 -5,-86 -3,-175Z"/>
-    <path data-fips-int="31111" data-name="Lincoln County" d="M1349,887l173,2h7l-2,170 4,4v172l-210,-1 -178,-2 2,-153 -7,-29 4,-166Z"/>
-    <path data-fips-int="31113" data-name="Logan County" d="M1519,715h3v174l-173,-2 4,-174Z"/>
-    <path data-fips-int="31115" data-name="Loup County" d="M1907,542l1,173 -173,1v-173h9l158,-1Z"/>
-    <path data-fips-int="31117" data-name="McPherson County" d="M1303,712l50,1 -4,174 -207,-3 -54,-2 5,-174Z"/>
-    <path data-fips-int="31119" data-name="Madison County" d="M2595,529l4,174 -172,5 -3,-88 -2,-86Z"/>
-    <path data-fips-int="31121" data-name="Merrick County" d="M2519,910v1l-17,12 -40,32 -28,37v1l-22,29 -31,12 -58,47 -57,64 -3,-86 -4,-174 7,65 65,-1 18,-15 130,-11v-43h40Z"/>
-    <path data-fips-int="31123" data-name="Morrill County" d="M629,848l-274,-10 5,-131 8,-151 248,8h7l-4,111 15,21Z"/>
-    <path data-fips-int="31125" data-name="Nance County" d="M2479,880v43l-130,11 -18,15 -65,1 -7,-65h-1v-43l71,-2 22,-15 80,-9 46,-3Z"/>
-    <path data-fips-int="31127" data-name="Nemaha County" d="M3312,1418l-174,8h-22l-5,-130 126,-6h7l40,87 -13,14 41,13Z"/>
-    <path data-fips-int="31129" data-name="Nuckolls County" d="M2444,1404h2l3,174 -173,3 -3,-174Z"/>
-    <path data-fips-int="31131" data-name="Otoe County" d="M3192,1162l-18,22 17,30 26,13 20,63h7h-7l-126,6 -151,7 -5,-132Z"/>
-    <path data-fips-int="31133" data-name="Pawnee County" d="M3099,1428h2l15,-2h22l5,131 -173,6 -5,-131Z"/>
-    <path data-fips-int="31135" data-name="Perkins County" d="M1145,1079l-2,153h-38l-270,-7 7,-152v-1Z"/>
-    <path data-fips-int="31137" data-name="Phelps County" d="M1832,1249l5,2h30l60,4 1,156h-173h-3l-2,-167Z"/>
-    <path data-fips-int="31139" data-name="Pierce County" d="M2592,398l3,131 -173,5 -3,-174 128,-4 43,-1Z"/>
-    <path data-fips-int="31141" data-name="Platte County" d="M2644,702l3,179 -43,-4 -85,33v-30h-40l-2,-67 -46,3 -4,-108 172,-5Z"/>
-    <path data-fips-int="31143" data-name="Polk County" d="M2609,1051l-173,5 -2,-63v-1l28,-37 40,-32 17,-12v-1l85,-33Z"/>
-    <path data-fips-int="31145" data-name="Red Willow County" d="M1539,1411l2,173 -216,-1v-174l194,2Z"/>
-    <path data-fips-int="31147" data-name="Richardson County" d="M3312,1418l28,8 -1,27 36,29 -8,37 45,25 -269,13 -5,-131Z"/>
-    <path data-fips-int="31149" data-name="Rock County" d="M1902,542l-158,1v-174h-7v-148l53,6 58,-33 44,-10 5,10v142l5,32Z"/>
-    <path data-fips-int="31151" data-name="Saline County" d="M2614,1225l171,-4 5,86 2,87 -173,5Z"/>
-    <path data-fips-int="31153" data-name="Sarpy County" d="M3149,960l20,12v55l-66,-2 -64,38 -35,-24 -5,-72Z"/>
-    <path data-fips-int="31155" data-name="Saunders County" d="M2853,853l52,-4 28,18h8l49,67 9,33 5,72 -9,15 -44,2 -1,-15 -167,5 -6,-203Z"/>
-    <path data-fips-int="31157" data-name="Scotts Bluff County" d="M355,555l13,1 -8,151 -255,-11 5,-152Z"/>
-    <path data-fips-int="31159" data-name="Seward County" d="M2782,1046l3,175 -171,4 -5,-174Z"/>
-    <path data-fips-int="31161" data-name="Sheridan County" d="M859,73l-5,108h6l-5,167 12,5 -7,172 14,1 -2,44 -22,-1 -227,-5h-7v-44h-15l2,-158 -7,-16 5,-173h-7l5,-107Z"/>
-    <path data-fips-int="31163" data-name="Sherman County" d="M2086,887h2v174l-173,2 2,-174Z"/>
-    <path data-fips-int="31165" data-name="Sioux County" d="M348,337l-8,173 16,1 -1,44 -245,-11 29,-501 199,12 -5,107h7l-5,174Z"/>
-    <path data-fips-int="31167" data-name="Stanton County" d="M2723,525l7,174 -86,3 -45,1 -4,-174Z"/>
-    <path data-fips-int="31169" data-name="Thayer County" d="M2619,1399l3,174 -173,5 -3,-174Z"/>
-    <path data-fips-int="31171" data-name="Thomas County" d="M1519,542v173l-166,-2 -50,-1 2,-173Z"/>
-    <path data-fips-int="31173" data-name="Thurston County" d="M2830,427l136,-3 14,24 -9,30 28,22 4,38 -13,16 -94,3v-37l-99,3 -2,-87Z"/>
-    <path data-fips-int="31175" data-name="Valley County" d="M2081,713h2l3,174 -169,2 -5,-25v-149Z"/>
-    <path data-fips-int="31177" data-name="Washington County" d="M3066,718l17,48 -2,27 37,8 -4,19 30,5 -3,35 -146,5 -47,-63 -5,-81Z"/>
-    <path data-fips-int="31179" data-name="Wayne County" d="M2722,394v44l73,-2 2,87 -74,2 -128,4 -3,-131Z"/>
-    <path data-fips-int="31181" data-name="Webster County" d="M2271,1407h2l3,174 -173,2 -2,-174Z"/>
-    <path data-fips-int="31183" data-name="Wheeler County" d="M2253,624l1,87 -171,2h-2l-3,-173 171,-2Z"/>
-    <path data-fips-int="31185" data-name="York County" d="M2609,1051l5,174 -173,4 -5,-173Z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="1000" height="464" viewBox="0 0 1000 464">
+  <path class="state" d="M600,451h-49l-49,1h-62l-62,-1 -62,-1 -79,-3 1,-49 1,-49 1,-44 -61,-1 -82,-3 -73,-4 2,-56 3,-43 2,-44 7,-143 59,3 74,3 74,3 108,3h267l6,10 14,5 17,8 11,10 14,-6 6,-11 15,6 7,-4 15,1 9,-4 17,3 12,11 13,1 30,13 1,8 10,12 13,5h11l-2,19 7,10 2,16 10,6v10l2,7 13,3 -4,9 11,15 -5,18 4,21 12,2 -4,6 11,2 -1,10 -2,7 8,3 -3,18 5,3v17l5,9 2,29 -6,7 13,12 2,18 6,-1 7,-2 -6,10 6,4 2,16 10,9 9,3v8l8,7 -1,13 13,5 -78,3 -50,2 -49,2 -49,1 -49,2 -51,1Z"/>
+  <g class="counties">
+    <path data-fips-int="31001" data-name="Adams County" d="M647,351v49l-47,2v-50Z"/>
+    <path data-fips-int="31003" data-name="Antelope County" d="M691,151v25l-48,1 -1,-25 -1,-50h49Z"/>
+    <path data-fips-int="31005" data-name="Arthur County" d="M311,251l-62,-2 1,-49 60,1h2Z"/>
+    <path data-fips-int="31007" data-name="Banner County" d="M102,201l-1,37 -1,7 -74,-4 3,-43Z"/>
+    <path data-fips-int="31009" data-name="Blaine County" d="M444,154h51v49h-62v-49Z"/>
+    <path data-fips-int="31011" data-name="Boone County" d="M691,176l2,25 1,30 -24,3 -8,5h-18l-1,-37v-25Z"/>
+    <path data-fips-int="31013" data-name="Box Butte County" d="M176,160l-71,-2 -4,-1 1,-12 -4,-7 1,-43 71,3h2v45Z"/>
+    <path data-fips-int="31015" data-name="Boyd County" d="M640,38l1,18 -30,-2 -8,-4 -24,-4 -7,-8 -33,13 1,-28h80l6,10Z"/>
+    <path data-fips-int="31017" data-name="Brown County" d="M496,62v42h2v50h-54l1,-50h-2l-1,-59 14,9 20,3Z"/>
+    <path data-fips-int="31019" data-name="Buffalo County" d="M595,302h4l1,50v1l-19,5 -31,-1 -25,-1 -1,-54h22Z"/>
+    <path data-fips-int="31021" data-name="Burt County" d="M875,204l-35,1v-8h-12l-1,-39 26,-1 5,-5 2,7 13,3 -4,9 11,15Z"/>
+    <path data-fips-int="31023" data-name="Butler County" d="M792,240l2,58 -50,1 -1,-50 13,2 7,1 29,-13Z"/>
+    <path data-fips-int="31025" data-name="Cass County" d="M905,293l5,9 2,29 -68,3 -3,-33 13,-1 4,-4 10,7 18,-11Z"/>
+    <path data-fips-int="31027" data-name="Cedar County" d="M776,53l1,58 -36,2 -2,-13 -12,1 -2,-59 9,-4 17,3 12,11Z"/>
+    <path data-fips-int="31029" data-name="Chase County" d="M315,350v50l-77,-2 1,-49Z"/>
+    <path data-fips-int="31031" data-name="Cherry County" d="M442,23v22l1,59h2l-1,50h-11l-60,-1 -62,-2 -62,-2h-3v-50l-1,-12 -1,-37 1,-30 108,3Z"/>
+    <path data-fips-int="31033" data-name="Cheyenne County" d="M180,241l1,31 -2,32 -82,-3 2,-16 1,-40 1,-7Z"/>
+    <path data-fips-int="31035" data-name="Clay County" d="M696,350l1,50h-50v-49Z"/>
+    <path data-fips-int="31037" data-name="Colfax County" d="M779,199l12,-1 1,41 -29,13 -7,-1 -1,-51Z"/>
+    <path data-fips-int="31039" data-name="Cuming County" d="M798,148l28,-1 1,11 1,39 -37,1 -12,1 -1,-50Z"/>
+    <path data-fips-int="31041" data-name="Custer County" d="M545,203v38l2,12 -1,49h-109l-1,-49h-2l1,-50h60Z"/>
+    <path data-fips-int="31043" data-name="Dakota County" d="M817,86l13,5h11l-2,19 7,10 -39,1v-33Z"/>
+    <path data-fips-int="31045" data-name="Dawes County" d="M171,17l-1,81 -71,-3 -3,-2 1,-43 -2,-5 2,-31Z"/>
+    <path data-fips-int="31047" data-name="Dawson County" d="M524,302l1,54 -25,-2 -6,-2h-57v-50Z"/>
+    <path data-fips-int="31049" data-name="Deuel County" d="M240,274v31l-61,-1 2,-32Z"/>
+    <path data-fips-int="31051" data-name="Dixon County" d="M817,86l-10,2v33l-9,3h-20l-1,-13 -1,-58 30,13 1,8Z"/>
+    <path data-fips-int="31053" data-name="Dodge County" d="M828,197h12v8l3,26 12,15 -16,1 -12,-6 -14,2 -21,-3v-1l-1,-41Z"/>
+    <path data-fips-int="31055" data-name="Douglas County" d="M855,246l42,-1 -2,7 8,3 -3,18 -43,2 -4,-11 -14,-17Z"/>
+    <path data-fips-int="31057" data-name="Dundy County" d="M317,400l-1,50 -79,-3 1,-49 77,2Z"/>
+    <path data-fips-int="31059" data-name="Fillmore County" d="M745,349l3,49 -50,2h-1l-1,-50Z"/>
+    <path data-fips-int="31061" data-name="Franklin County" d="M600,402v49h-49l-1,-49Z"/>
+    <path data-fips-int="31063" data-name="Frontier County" d="M437,352h26v37h-12v13h-75v-51Z"/>
+    <path data-fips-int="31065" data-name="Furnas County" d="M500,402h2v50h-62v-50h11Z"/>
+    <path data-fips-int="31067" data-name="Gage County" d="M845,371l1,37 1,37 -49,2 -1,-50h1l-1,-25Z"/>
+    <path data-fips-int="31069" data-name="Garden County" d="M242,162l-1,38h9l-1,49h-8l-1,25 -59,-2 -1,-31v-43l-3,-4 1,-34Z"/>
+    <path data-fips-int="31071" data-name="Garfield County" d="M593,153v50h-48v-49Z"/>
+    <path data-fips-int="31073" data-name="Gosper County" d="M500,354v48h-49v-13h12v-37h31Z"/>
+    <path data-fips-int="31075" data-name="Grant County" d="M311,151l-1,50 -60,-1h-9l1,-38h7v-13Z"/>
+    <path data-fips-int="31077" data-name="Greeley County" d="M644,239v13h-49l-1,-49 49,-1Z"/>
+    <path data-fips-int="31079" data-name="Hall County" d="M646,301l1,25v25l-47,1 -1,-50Z"/>
+    <path data-fips-int="31081" data-name="Hamilton County" d="M696,301v49l-49,1v-25l15,-18 15,-13 10,-3 8,-10Z"/>
+    <path data-fips-int="31083" data-name="Harlan County" d="M550,402l1,49 -49,1v-50Z"/>
+    <path data-fips-int="31085" data-name="Hayes County" d="M376,351v51l-59,-2h-2v-50l11,1Z"/>
+    <path data-fips-int="31087" data-name="Hitchcock County" d="M376,402h2v49l-62,-1 1,-50Z"/>
+    <path data-fips-int="31089" data-name="Holt County" d="M641,56v46l1,50 -49,1 -48,1h-1l-3,-50v-50l-2,-3 33,-13 7,8 24,4 8,4Z"/>
+    <path data-fips-int="31091" data-name="Hooker County" d="M373,153l-1,50 -60,-2h-2l1,-50Z"/>
+    <path data-fips-int="31093" data-name="Howard County" d="M644,252h1l1,49 -47,1h-4v-50Z"/>
+    <path data-fips-int="31095" data-name="Jefferson County" d="M798,397h-1l1,50 -49,1 -1,-50 49,-1Z"/>
+    <path data-fips-int="31097" data-name="Johnson County" d="M887,369l2,37 -43,2 -1,-37Z"/>
+    <path data-fips-int="31099" data-name="Kearney County" d="M600,402h-50v-45l31,1 19,-5Z"/>
+    <path data-fips-int="31101" data-name="Keith County" d="M326,251l-1,50 2,6 -87,-2v-31l1,-25h8l62,2Z"/>
+    <path data-fips-int="31103" data-name="Keya Paha County" d="M540,23l-1,28 -11,4 -17,9 -15,-2 -20,-5 -20,-3 -14,-9v-22Z"/>
+    <path data-fips-int="31105" data-name="Kimball County" d="M100,245l-1,40 -2,16 -73,-4 2,-56Z"/>
+    <path data-fips-int="31107" data-name="Knox County" d="M725,42l2,59 -37,1h-49v-46l-1,-18 17,8 11,10 14,-6 6,-11 15,6 7,-4Z"/>
+    <path data-fips-int="31109" data-name="Lancaster County" d="M841,301l3,33 1,37 -48,1 -1,-24 -2,-50 47,-2Z"/>
+    <path data-fips-int="31111" data-name="Lincoln County" d="M385,252l49,1h2l1,49v50l-61,-1h-50l1,-44 -2,-6 1,-50Z"/>
+    <path data-fips-int="31113" data-name="Logan County" d="M433,203h2l-1,50 -49,-1v-49Z"/>
+    <path data-fips-int="31115" data-name="Loup County" d="M545,154v49h-50v-49h49Z"/>
+    <path data-fips-int="31117" data-name="McPherson County" d="M372,203h13v49l-59,-1h-15l1,-50Z"/>
+    <path data-fips-int="31119" data-name="Madison County" d="M742,150v50l-49,1 -2,-25v-25Z"/>
+    <path data-fips-int="31121" data-name="Merrick County" d="M719,259l-18,16 -6,7 -8,10 -10,3 -15,13 -15,18 -1,-25 -1,-49 1,18h19l5,-4 38,-3v-13h10Z"/>
+    <path data-fips-int="31123" data-name="Morrill County" d="M180,241l-79,-3 1,-37 3,-43 71,2h2l-1,34 3,4Z"/>
+    <path data-fips-int="31125" data-name="Nance County" d="M708,250v13l-38,3 -5,4h-19l-1,-18h-1v-13h18l8,-5 24,-3h13Z"/>
+    <path data-fips-int="31127" data-name="Nemaha County" d="M946,404l-50,2h-7l-2,-37 40,-2 7,-2 -6,10 6,4 2,16Z"/>
+    <path data-fips-int="31129" data-name="Nuckolls County" d="M697,400h1l2,50 -51,1 -1,-51Z"/>
+    <path data-fips-int="31131" data-name="Otoe County" d="M912,331l-6,7 13,12 2,18 6,-1 -40,2 -42,2 -1,-37Z"/>
+    <path data-fips-int="31133" data-name="Pawnee County" d="M889,406h7l1,37 -50,2 -1,-37Z"/>
+    <path data-fips-int="31135" data-name="Perkins County" d="M327,307l-1,44 -11,-1 -76,-1 1,-44Z"/>
+    <path data-fips-int="31137" data-name="Phelps County" d="M525,356l25,1v45h-50v-48Z"/>
+    <path data-fips-int="31139" data-name="Pierce County" d="M741,113l1,37 -51,1 -1,-49 37,-1 12,-1Z"/>
+    <path data-fips-int="31141" data-name="Platte County" d="M755,200l1,51 -13,-2 -24,10 -1,-9h-10l-1,-19h-13l-1,-30 49,-1Z"/>
+    <path data-fips-int="31143" data-name="Polk County" d="M744,299l-48,2 -1,-19 6,-7 18,-16 24,-10Z"/>
+    <path data-fips-int="31145" data-name="Red Willow County" d="M440,402v50l-62,-1v-49Z"/>
+    <path data-fips-int="31147" data-name="Richardson County" d="M946,404l9,3v8l8,7 -1,13 13,5 -78,3 -1,-37Z"/>
+    <path data-fips-int="31149" data-name="Rock County" d="M544,154h-46v-50h-2v-42l15,2 17,-9 11,-4 2,3v50Z"/>
+    <path data-fips-int="31151" data-name="Saline County" d="M745,349l51,-1 1,24 1,25h-1l-49,1Z"/>
+    <path data-fips-int="31153" data-name="Sarpy County" d="M900,273l5,3v17l-19,-1 -18,11 -10,-7 -1,-21Z"/>
+    <path data-fips-int="31155" data-name="Saunders County" d="M839,247l14,17 4,11 1,21 -4,4 -13,1v-5l-47,2 -2,-58 21,3 14,-2Z"/>
+    <path data-fips-int="31157" data-name="Scotts Bluff County" d="M101,157l4,1 -3,43 -73,-3 2,-44Z"/>
+    <path data-fips-int="31159" data-name="Seward County" d="M794,298l2,50 -51,1 -1,-50Z"/>
+    <path data-fips-int="31161" data-name="Sheridan County" d="M245,20l-1,30 1,37 1,12v50h3v13h-7l-64,-2h-2l-4,-17v-45h-2l1,-81Z"/>
+    <path data-fips-int="31163" data-name="Sherman County" d="M595,252v50h-49l1,-49Z"/>
+    <path data-fips-int="31165" data-name="Sioux County" d="M99,95l-1,43 4,7 -1,12 -70,-3 7,-143 59,3 -2,31 2,5 -1,43Z"/>
+    <path data-fips-int="31167" data-name="Stanton County" d="M778,149l1,50 -24,1h-13v-50Z"/>
+    <path data-fips-int="31169" data-name="Thayer County" d="M748,398l1,50 -49,2 -2,-50Z"/>
+    <path data-fips-int="31171" data-name="Thomas County" d="M433,154v49h-61l1,-50Z"/>
+    <path data-fips-int="31173" data-name="Thurston County" d="M846,120l2,16 10,6v10l-5,5 -26,1 -1,-11 -28,1v-24l9,-3Z"/>
+    <path data-fips-int="31175" data-name="Valley County" d="M593,203h1l1,49 -48,1 -2,-12v-38Z"/>
+    <path data-fips-int="31177" data-name="Washington County" d="M875,204l4,21 12,2 -4,6 11,2 -1,10 -42,1 -12,-15 -3,-26Z"/>
+    <path data-fips-int="31179" data-name="Wayne County" d="M777,111l1,13h20v24l-20,1 -36,1 -1,-37Z"/>
+    <path data-fips-int="31181" data-name="Webster County" d="M647,400h1l1,51h-49v-49Z"/>
+    <path data-fips-int="31183" data-name="Wheeler County" d="M643,177v25l-49,1h-1v-50l49,-1Z"/>
+    <path data-fips-int="31185" data-name="York County" d="M744,299l1,50 -49,1v-49Z"/>
   </g>
-  <path class="mesh" transform="scale(0.1)" d="M105,696l255,11 -5,131 -7,22 -253,-12M2239,140l4,61 -103,-7 -27,-16 -85,-14 -25,-27 -18,3 -93,43v-97M1647,202l90,19v148h7v174h-9M1554,542l181,1v173l-213,-1h-3v-173h35l3,-173h-6l1,-174 -6,-33 23,19 62,18 16,2M3066,718l-123,3v-28l-40,1 -7,-137 94,-3 13,-16M2943,721l5,81 47,63 -54,2h-8l-28,-18 -52,4 -76,-10 6,203h-1l-173,5 -5,-174 43,4 28,3 62,-20 40,-23v2M3192,1162l-237,9 -4,-115 44,-2 9,-15 35,24 64,-38 66,2M2715,190l7,204 -130,4 -2,-43 -43,1 -5,-206M835,1225l270,7 -2,173 -269,-6M1546,85v77M2098,1061l165,-2 3,86v1l2,87h1l2,174 -170,2 -1,-170 -42,10 -32,10 -99,-4 -60,-4h-30l-4,-15v-173h82l173,-2h10l3,174 167,-2M1519,542l-214,-3 -217,-6 -214,-7 -14,-1 7,-172 -12,-5 5,-167h-6l5,-108M355,838l274,10 9,22 -4,87 -6,109M340,1056l5,-38 3,-158M2269,1233l172,-4 3,175 -171,3h-2M2647,881l-3,-179 86,-3 40,-1 7,143M2730,699l-7,-174 74,-2 99,-3v37M2903,694l-133,4M1735,716l173,-1h4v149l5,25 -2,174M1833,1063h-126h-176l-4,-4 2,-170h-7v-174M2966,424l-136,3 -2,-122 33,-1M599,66l-5,107h7l-5,173M348,337l-13,-1 5,-174h-7l5,-107M1837,1251l-5,-2 -82,-5 -21,-8h-107l-91,-1v-172M634,957l210,6 -2,109v1M2830,427l-35,9 -73,2v-44M2995,865l146,-5M3149,960l-150,7 -9,-33 -49,-67M1103,1405h7l-3,174M2266,1145l57,-64 58,-47 31,-12 22,-29 2,63 5,173 173,-4 5,174 -173,5h-2M1928,1584v-173l173,-2 2,174M1622,1236v131h-45v44h-38h-20l-194,-2h-5l1,-175 210,1M1577,1411h175h3l2,175M1541,1584l-2,-173M2797,1569l-5,-175 -2,-87 170,-4 5,129 5,131M629,848l5,-152 -15,-21 4,-111 227,5 -6,134 31,1 210,4h8l-5,174 -216,-5h-28v86M1908,715l-1,-173 171,-2 3,173 -169,2M1750,1244l2,167M1088,533l-3,175M850,569l22,1 2,-44M2258,842v43l-170,2h-2l-3,-174 171,-2M1320,1409l-210,-4M1105,1232h38l178,2M1325,1409v174M2243,201l3,162M2249,538l-171,2M1907,542h-5v-174l-5,-32v-142l-5,-10v-1M1305,539l-2,173 -210,-4M2258,885h1l4,174M2088,1061v-174M2622,1573l-3,-174 173,-5M2424,620l-171,4 -4,-86 -3,-175 173,-3 3,174 2,86 3,88 4,108 -80,9 -22,15 -71,2 -4,-131 -1,-87M2955,1171l5,132 151,-7 5,130 -15,2h-2l-134,4M1755,1411h173l-1,-156M1088,882l54,2 -4,166 7,29 -303,-7M1892,184l-44,10 -58,33 -53,-6M2547,356l-128,4M2783,1046l167,-5 1,15M2790,1307l-5,-86 -3,-175M1142,884l207,3 173,2M1143,1232l2,-153M1349,887l4,-174 166,2M1744,543l158,-1M1303,712l50,1M2422,534l173,-5 4,174 -172,5M872,877l3,-173M2259,885l7,65 65,-1 18,-15 130,-11v-43h40v30v1l-17,12 -40,32 -28,37v1M360,707l8,-151M616,564l-248,-8 -13,-1 1,-44 -16,-1 8,-173 248,9 7,16 -2,158h15v44h7M2431,816l46,-3 2,67M3312,1418l-174,8h-22M3111,1296l126,-6h7M2446,1404l3,174M2276,1581l-3,-174M3138,1426l5,131M2604,877l-85,33M2599,703l45,-1M2614,1225l-5,-174 -173,5M2614,1225l171,-4M3004,1039l-5,-72M110,544l245,11M1917,889l169,-2M2592,398l3,131 128,-4M2797,523l-2,-87M2081,713h2M2100,1239l1,-4"/>
+  <path class="mesh" d="M29,198l73,3 -1,37 -1,7 -74,-4M691,176l2,25 1,30 -24,3 -8,5h-18l-1,-37v-25M640,38l1,18 -30,-2 -8,-4 -24,-4 -7,-8 -33,13 1,-28M444,154h51v49h-62v-49h11l1,-50h-2l-1,-59 14,9 20,3 20,5v42h2v50h-3M875,204l-35,1v-8h-12l-1,-39 26,-1 5,-5M840,205l3,26 12,15 -16,1 -12,-6 -14,2 -21,-3 2,58 -50,1 -1,-50 13,2 7,1 29,-13v1M912,331l-68,3 -3,-33 13,-1 4,-4 10,7 18,-11 19,1M776,53l1,58 -36,2 -2,-13 -12,1 -2,-59M239,349l76,1v50l-77,-2M442,23v22M433,154l-60,-1 -62,-2 -62,-2h-3v-50l-1,-12 -1,-37 1,-30M101,238l79,3 1,31 -2,32M97,301l2,-16 1,-40M647,351l49,-1 1,50h-50M756,251l-1,-51 24,-1 12,-1 1,41M779,199l-1,-50 20,-1 28,-1 1,11M828,197l-37,1M495,203h50v38l2,12 -1,49M524,302h-87l-1,-49h-2l1,-50M846,120l-39,1v-33l10,-2M171,17l-1,81M99,95l-3,-2 1,-43 -2,-5 2,-31M525,356l-25,-2 -6,-2h-57v-50M181,272l59,2v31M807,121l-9,3h-20l-1,-13M855,246l42,-1M900,273l-43,2 -4,-11 -14,-17M315,400h2l-1,50M647,326l15,-18 15,-13 10,-3 8,-10 1,19v49l49,-1 3,49 -50,2h-1M551,451l-1,-49h50v49M463,352v37h-12v13h-75v-51l61,1M451,402h51v50M440,452v-50M798,447l-1,-50h1l-1,-25 48,-1 1,37 1,37M180,241v-43l-3,-4 1,-34 64,2 -1,38h9M249,249h-8l-1,25M642,152l-49,1v50h-48v-49l48,-1M500,354v48M311,151l-1,50M242,162h7v-13M644,239v13h-49l-1,-49 49,-1M376,402l-59,-2M315,350l11,1h50M378,402v49M641,56v46M373,153l-1,50 -60,-2M644,252h1l1,49M547,253l48,-1M749,448l-1,-50 49,-1M844,334l1,37 42,-2 2,37 -43,2M599,302l47,-1 1,25v74l-47,2v-49l-19,5 -31,-1 -25,-1 -1,-54h75l1,50 47,-1M502,402h48v-45M311,251l-62,-2 1,-49 60,1h2l-1,50h15l-1,50 2,6 -87,-2M545,154h-1l-3,-50v-50l-2,-3 -11,4 -17,9 -15,-2M727,101l-37,1M797,372l-1,-24 -2,-50 47,-2v5M326,251l59,1 49,1M326,351l1,-44M385,252v-49h48M498,154h46M372,203h13M691,151v25l-48,1 -1,-25 -1,-50h49l1,49 51,-1v50l-49,1M645,252l1,18h19l5,-4 38,-3v-13h10l1,9 -18,16 -6,7M102,201l3,-43M176,160l-71,-2 -4,-1 1,-12 -4,-7 1,-43 71,3h2v45l4,17h2M694,231h13l1,19M946,404l-50,2h-7M887,369l40,-2M698,400l2,50M649,451l-1,-51M896,406l1,37M743,249l-24,10M742,200h13M745,349l-1,-50 -48,2M745,349l51,-1M858,296l-1,-21M31,154l70,3M741,113l1,37 36,-1M798,148v-24M593,203h1M600,353v-1M595,302v-50"/>
   <g class="cities">
-    <circle r="3" cx="314.5" cy="92.7"/>
-    <text x="314.5" y="92.7">Omaha</text>
-    <circle r="3" cx="287.9" cy="116.7"/>
-    <text x="287.9" y="116.7">Lincoln</text>
-    <circle r="3" cx="224.3" cy="112.0"/>
-    <text x="224.3" y="112.0">Grand Island</text>
+    <circle r="7" cx="898" cy="264"/>
+    <text x="898" y="264">Omaha</text>
+    <circle r="7" cx="822" cy="333"/>
+    <text x="822" y="333">Lincoln</text>
+    <circle r="7" cx="641" cy="319"/>
+    <text x="641" y="319">Grand Island</text>
   </g>
 </svg>

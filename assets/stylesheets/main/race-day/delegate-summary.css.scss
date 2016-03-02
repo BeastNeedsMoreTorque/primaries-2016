@@ -1,0 +1,196 @@
+body.race-day .delegate-summary {
+  .party-delegate-summaries {
+    @include party-stuff-side-by-side-when-wide();
+  }
+
+  &>p {
+    padding: 0 10px;
+  }
+
+  table.candidate-delegates {
+    white-space: nowrap;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 5px 10px;
+    }
+
+    th {
+      text-align: left;
+      border-bottom: 1px solid black;
+    }
+
+    td {
+      vertical-align: top;
+      border-bottom: 1px solid #ccc;
+    }
+
+    td.candidate {
+      width: 6rem;
+
+      img {
+        display: inline-block;
+        height: 2rem;
+        vertical-align: middle;
+        padding-right: .25rem;
+      }
+
+      span {
+        display: inline-block;
+        height: 2rem;
+        line-height: 2rem;
+      }
+    }
+     
+    th.n-delegates, th.n-pledged-delegates {
+      padding-right: 0; // on mobile, it's a squeezer
+    }
+
+    td.n-delegates-int, td.n-pledged-delegates-int {
+      width: 2rem;
+      height: 2rem;
+      padding-right: .25rem;
+      line-height: 2rem;
+      text-align: right;
+    }
+
+    td.n-delegates-dots, td.n-pledged-delegates-dots {
+      width: 100%;
+      padding-top: .5rem;
+      white-space: normal;
+    }
+  }
+
+  .state-delegates ul {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: center;
+    justify-content: center;
+    text-align: center;
+
+    li {
+      padding-top: .5rem;
+      width: 2.2rem;
+      cursor: pointer;
+    }
+
+    .name {
+      display: none;
+    }
+
+    .map {
+      display: inline-block;
+    }
+
+    svg {
+      width: 2.1rem;
+      height: 2.1rem;
+    }
+
+    path {
+      fill: #e6e6e6;
+    }
+
+    text {
+      text-anchor: middle;
+      alignment-baseline: middle;
+      font-family: $body-font-family;
+      font-weight: bold;
+      font-size: 400px;
+    }
+  }
+
+  li .n-delegates, li .n-pledged-delegates {
+    color: $muted;
+    font-size: .8rem;
+  }
+
+  .party-delegate-summary[data-party-id=Dem] {
+    text {
+      fill: $strongDem;
+    }
+
+    .n-delegates-dots, .n-pledged-delegates-dots {
+      color: $strongDem;
+    }
+  }
+
+  .party-delegate-summary[data-party-id=GOP] {
+    text {
+      fill: $strongGOP;
+    }
+
+    .n-delegates-dots, .n-pledged-delegates-dots {
+      color: $strongGOP;
+    }
+  }
+
+  .party-delegate-summary.state-highlighted {
+    .dot-group :not(.highlight) {
+      opacity: .5;
+      color: $muted;
+    }
+
+    .state-delegates li:not(.highlight) {
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1);
+      opacity: .5;
+    }
+  }
+
+  p.include-unpledged-delegates {
+    padding-top: .5rem;
+  }
+
+  .state-delegates {
+    position: relative; // for the tooltip
+  }
+}
+
+.delegate-summary-tooltip {
+  box-sizing: border-box;
+  font-size: .8rem;
+  text-align: center;
+  padding: .4rem 2rem; // 2rem on the right for an "x"; on the left for centering
+  line-height: 1.4rem;
+  border: 1px solid #ccc;
+  left: 5%;
+  width: 90%;
+  box-shadow: 0 0 10px #ccc;
+  position: absolute;
+  background: white;
+  color: $muted;
+
+  p {
+    display: inline;
+    margin: 0;
+    padding: 0;
+  }
+
+  a.jump-to-race {
+    white-space: nowrap;
+    padding: 0 .5rem; // .5rem on both side, so if it wraps it centers
+  }
+
+  a.close {
+    text-decoration: none;
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    right: 1px; // for the border
+    top: 1px; // for the border
+    padding: .4rem;
+    font-size: 1rem;
+    width: 1.4rem;
+    height: 1.5rem;
+  }
+}
+
+body.race-day.show-delegates .party-delegate-summary {
+  .n-pledged-delegates-int, .n-pledged-delegates-dots { display: none; }
+}
+body.race-day.show-pledged-delegates .party-delegate-summary {
+  .n-delegates-int, .n-delegates-dots { display: none; }
+}

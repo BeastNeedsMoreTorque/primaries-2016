@@ -1,5 +1,3 @@
-require_relative './source'
-
 # A Source that comes from ArchieML copy>
 #
 # The input will be parsed as ArchieML.
@@ -11,7 +9,7 @@ require_relative './source'
 # * races: race_day_id, party_id, state_code, text, over
 # * primaries_landing_page_copy (String)
 # * primaries_delegates_explainer (String)
-class CopySource < Source
+class CopySource
   RaceDay = RubyImmutableStruct.new(:id, :title, :body, :tweet, :pubbed_dt, :updated_dt_or_nil)
   Race = RubyImmutableStruct.new(:race_day_id, :party_id, :state_code, :text, :over) do
     attr_reader(:id)
@@ -21,7 +19,7 @@ class CopySource < Source
     end
   end
 
-  attr_reader(:raw_data, :landing_page_copy, :delegates_explainer)
+  attr_reader(:raw_data, :landing_page_copy, :delegates_explainer, :races, :race_days)
 
   def initialize(archieml_string)
     @raw_data = Archieml.load(archieml_string)

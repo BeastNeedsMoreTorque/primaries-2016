@@ -1,0 +1,6 @@
+%p.link-to-race-day
+  The #{race.title} #{race.is_or_was} on
+  - if race.enabled?
+    %a{href: race.href}= race.date.strftime('%B %-d')
+  - else
+    %span.disabled= race.date.strftime('%B %-d')

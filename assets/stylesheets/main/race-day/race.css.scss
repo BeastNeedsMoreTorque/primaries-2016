@@ -1,7 +1,12 @@
 @import '../../_variables';
 
 body.race-day .race {
-  margin-bottom: 2rem;
+  padding: 2rem 0;
+  width: 100%; // Not sure why this makes a difference :S
+
+  h3 {
+    font-size: 1.5rem;
+  }
 
   h2, h3 {
     text-align: center;
@@ -9,10 +14,25 @@ body.race-day .race {
 
   .race-status {
     text-align: center;
-    padding: .2rem 1rem;
+    padding: 0;
+    font-style: italic;
 
     .status-past, .status-present, .status-future {
       display: none;
+
+      // status-past has two <p>s. present has one <p>, one <button>. Future has
+      // just a <p>. Make them all the same height.
+      //
+      // A <button> is ~1.5rem (the border, which uses px, throws it off a bit.)
+      // So we make the <p> 1.5rem also, and throw them in a flexbox so they're
+      // centered. Add a bit of padding to be safe.
+      height: 3.5rem;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-justify-content: center;
+      justify-content: center;
     }
 
     button.refresh {
@@ -20,22 +40,67 @@ body.race-day .race {
     }
 
     p {
-      font-style: italic;
-      margin: .2rem auto;
+      margin: 0;
+      padding: .1rem 1rem;
+    }
+
+    p.text {
+      font-style: normal;
     }
   }
 
   // Show the current status
   &.past .race-status .status-past,
   &.future .race-status .status-future,
-  &.present .race-status .status-present { display: block; }
+  &.present .race-status .status-present {
+    display: -webkit-flex;
+    display: flex;
+  }
 
   .race-name {
-    margin: 5px 0 15px;
+    margin: 0;
   }
 
   .party-state-map {
     position: relative;
+  }
+
+  &:not(.not-today) .link-to-race-day {
+    @media(min-width: $narrowest-desktop) {
+      // This link appears on mobile only. On desktop, we'll show the entire
+      // other race, faded.
+      display: none;
+    }
+
+    margin: 0;
+    padding: 2rem 1rem 0;
+    color: $muted;
+    text-align: center;
+    font-style: italic;
+  }
+
+  &.not-today {
+    @media(max-width: $widest-mobile) {
+      // Hide the section entirely on mobile. We'll show a .link-to-race-day
+      // within today's .race instead.
+      display: none;
+    }
+
+    .link-to-race-day {
+      margin: 0;
+    }
+
+    h3,
+    .party-state-map,
+    table.candidates,
+    .poll-last-updated,
+    .n-votes-footnote,
+    div.party-state-delegates {
+      cursor: default;
+      opacity: .3;
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1);
+    }
   }
 
   &[data-party-id=Dem] {

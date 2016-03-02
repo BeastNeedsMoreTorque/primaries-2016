@@ -16,13 +16,21 @@ $twitterBlue: #c0deed ;
 
 $splash-ele-bg: #eee;
 
-$red: #E82C0C;
-$blue: #0E61E5;
+$red: #e82c0c;
+$blue: #0e61e5;
 
-$widgetRed: #B72727;
-$widgetBlue: #1559D1;
+$widgetRed: #b72727;
+$widgetBlue: #1559d1;
 $widgetLightRed: lighten($widgetRed, 45%);
 $widgetLightBlue: lighten($widgetBlue, 45%);
+
+$header-font-family: ProximaNovaCond-Extrabld, Arial, Helvetica, sans-serif;
+$huffpo-font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+$body-font-family: Source Sans Pro, Arial, Helvetica, sans-serif;
+
+$narrowest-desktop: 661px;
+$widest-mobile: 660px;
+$full-desktop-width: 960px;
 
 @mixin no-results-swatch {
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="%23ddd"/><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1" stroke="white"/></svg>');
@@ -38,20 +46,16 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 
 @mixin body-copy {
 	margin: 0;
-	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+  font-family: $body-font-family;
 	background-color: #fff;
 }
 
 @mixin huffpo-body-copy {
-  font-family: Helvetica Neue,Helvetica,Arial,sans-serif;  
+  font-family: $huffpo-font-family;
 }
 
 @mixin header-copy {
-	font-family: ProximaNovaCond-Extrabld, Arial, Helvetica, sans-serif;
-}
-
-@mixin rail-link-out {
-  .tease-link { @include tease-link(); }
+  font-family: $header-font-family;
 }
 
 @mixin precincts-reporting-conditionals {
@@ -63,23 +67,37 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 
 @mixin tense-conditionals {
   .race-day-past {
-    .when-future:not(.when-past),
-    .when-present:not(.when-past) { display: none;}
+    .when-race-day-future:not(.when-race-day-past),
+    .when-race-day-present:not(.when-race-day-past) { display: none;}
   }
 
   .race-day-present {
-    .when-future:not(.when-present),
-    .when-past:not(.when-present) { display: none;}
+    .when-race-day-future:not(.when-race-day-present),
+    .when-race-day-past:not(.when-race-day-present) { display: none;}
   }
 
   .race-day-future {
-    .when-past:not(.when-future),
-    .when-present:not(.when-future) { display: none; }
+    .when-race-day-past:not(.when-race-day-future),
+    .when-race-day-present:not(.when-race-day-future) { display: none; }
+  }
+
+  .race-past {
+    .when-race-future:not(.when-race-past),
+    .when-race-present:not(.when-race-past) { display: none;}
+  }
+
+  .race-present {
+    .when-race-future:not(.when-race-present),
+    .when-race-past:not(.when-race-present) { display: none;}
+  }
+
+  .race-future {
+    .when-race-past:not(.when-race-future),
+    .when-race-present:not(.when-race-future) { display: none; }
   }
 }
 
 @mixin tease-link {
-
   display: -webkit-flex;
   display: flex;
   -webkit-align-items: center;
@@ -154,16 +172,18 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 
   .sparkline {
     vertical-align: middle;
+    width: 3rem;
+    height: 1rem;
   }
 
   .sparkline + .percent {
     display: inline-block;
-    width: 3em;
+    width: 2.75em;
   }
 }
 
 @mixin widget-base {
-  @include huffpo-body-copy;
+  font-family: $huffpo-font-family;
 
   a {
     color: #2e7061;
@@ -171,7 +191,7 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
 
   h1, h2, h3, h4{
     &.main-hed {
-      @include header-copy;
+      font-family: $header-font-family;
     }
   }
 
@@ -202,7 +222,7 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
     }
 	}
 
-	@include rail-link-out;
+  .tease-link { @include tease-link(); }
 }
 
 @mixin footnotes {
@@ -215,9 +235,8 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   }
 }
 
-
 @mixin ellipsized-table {
-  tr.ellipsized {
+  &.ellipsized tr.ellipsized {
     display: none;
   }
 
@@ -244,10 +263,6 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   }
 }
 
-@mixin mobile-ad-base {
-	@include widget-base;
-}
-
 @mixin svg-city-label {
   // JavaScript will position this text correctly; only JavaScript can
   // measure the width, because only JavaScript has the font.
@@ -262,7 +277,7 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   &.background {
     fill: none;
     stroke: white;
-    stroke-width: 3px;
+    stroke-width: 6px;
   }
 
   &.foreground {
@@ -302,14 +317,27 @@ $widgetLightBlue: lighten($widgetBlue, 45%);
   vertical-align: middle;
 }
 
-@mixin dots-inline-block {
-  display: inline-block; // so they wrap at a small line height
-  font-size: 1rem;       // all dots are the same size
-  white-space: normal;   // in case parents have white-space: nowrap
-  line-height: .4;
-  margin-top: -.25rem;   // because line-height makes things weird
+@mixin party-stuff-side-by-side-when-wide {
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
 
-  word-break: break-all;     // what you'd expect
-  word-wrap: break-word;     // IE Edge
-  overflow-wrap: break-word; // CSS3 equivalent of word-wrap
+  &>* {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+
+    @media (min-width: $narrowest-desktop) {
+      width: 50%;
+      &:first-child {
+        padding-right: 20px;
+      }
+      &:last-child {
+        padding-left: 20px;
+      }
+    }
+  }
 }

@@ -1,12 +1,23 @@
 -# Called with a RaceDayPageGenerator::HtmlContext
 #main
   %h1= hed
-  %h3.date-hed= race_day.date.strftime('%B %-d, %Y')
+
+  - if !race_day.title_is_just_date_s?
+    %h3.date-hed= race_day.date.strftime('%B %-d, %Y')
 
   != render(partial: 'share-buttons')
 
   - if body
     %p.intro-copy= body
+
+  - if multi_state?
+    != render(partial: 'race-day/jump-to-race', locals: { race_day: race_day })
+
+  -# If there are two races in a party, display a summary
+  - if multi_state?
+    != render(partial: 'race-day/delegate-summary', locals: { race_day: race_day })
+
+    %h2 And Now, The Races
 
   %ul.states
     - race_day.state_party_races.each do |state, party_races|
@@ -15,11 +26,11 @@
           - party_races.each do |party, race, other_races|
             %li.party-state{'data-party-id': party.id, 'data-state-code': state.code}
               - if !race.nil?
-                != render(partial: 'race-day/race', locals: { race: race })
-                - other_races.each do |other_race|
-                  != render(partial: 'race-day/other-race-below-race', locals: { race: other_race })
+                != render(partial: 'race-day/race', locals: { race: race, is_today: true })
+                - if other_races.length > 0
+                  != render(partial: 'race-day/other-races-below-race', locals: { races: other_races })
               - elsif other_races.length > 0
-                != render(partial: 'race-day/other-races', locals: { races: other_races })
+                != render(partial: 'race-day/race', locals: { race: other_races.first, is_today: false })
               - else
                 != render(partial: 'race-day/no-races', locals: { state: state, party: party })
 

@@ -18,7 +18,7 @@ Urls.each do |basename, url|
   output_filename = "#{Paths.StaticData}/#{basename}"
 
   open(url, 'r') do |input|
-    text = input.read
+    text = input.read.force_encoding('utf-8')
     IO.write("#{Paths.StaticData}/#{basename}", text, encoding: 'utf-8')
   end
 
