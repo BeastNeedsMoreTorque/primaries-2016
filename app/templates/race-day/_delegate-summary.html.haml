@@ -18,7 +18,7 @@
           %thead
             %tr
               %th.candidate Candidate
-              %th.n-delegates{colspan: 2} Delegates
+              %th.n-delegates{colspan: 2} Delegates (With Unpledged)
               %th.n-pledged-delegates{colspan: 2} Pledged Delegates
           %tbody
             - party_candidate_states.group_by(&:candidate).each do |candidate, candidate_states|
