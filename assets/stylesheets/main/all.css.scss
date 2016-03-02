@@ -142,14 +142,18 @@ footer {
   word-wrap: break-word;
   word-break: break-all;
   white-space: normal;
-  text-align: left; transform: rotate(-90deg) scaleX(-1); // top to bottom, right to left
+  text-align: left;
+  transform: rotate(-90deg) scaleX(-1) scale(0.5); // top to bottom, right to left
 
-  // I tried rems, but we just *have* to use px here. I think Chrome
-  // enforces a minimum font size when we use rems, but not when we use px.
-  font-size: 5px;
-  line-height: 5px;
-  width: 25px;
-  height: 25px;
+  // I tried rems, but we just *have* to use px here.
+  // Also, notice the scale(0.5). That's because the in-app browser on Android
+  // imposes a minimum font size. We can't set 5px. So we double everything and
+  // shrink the dots. Then we set negative margins to shrink the overall size.
+  margin: -12.5px;
+  font-size: 10px;
+  line-height: 10px;
+  width: 50px;
+  height: 50px;
   border: 2px solid transparent;
 }
 
