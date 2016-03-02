@@ -98,7 +98,7 @@
     }
   }
 
-  ol.candidate-mouths {
+  ol.candidate-targets {
     display: -webkit-flex;
     display: flex;
     -webkit-justify-content: space-around;
@@ -108,7 +108,7 @@
     list-style: none;
   }
 
-  li.candidate-mouth {
+  li.candidate-target {
     img {
       display: inline-block;
       height: 4rem;

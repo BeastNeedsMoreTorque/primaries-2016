@@ -11,9 +11,9 @@
             .visual
               .background
               .marker{style: "left: #{(candidate.n_delegates || 0).to_f / party.n_delegates_needed * 100}%"}
-                %img{src: image_path("horses/#{candidate.slug}.png"), alt: ''}
+                %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: ''}
 
-      %ol.candidate-mouths
-        - party.candidates.reverse.each do |candidate|
-          %li.candidate-mouth{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, class: (candidate.dropped_out? ? 'dropped-out' : '')}
-            %img{src: image_path("mouths/#{candidate.slug}.png"), alt: ''}
+      %ol.candidate-targets
+        - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
+          %li.candidate-target{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, class: (candidate.dropped_out? ? 'dropped-out' : '')}
+            %img{src: image_path("horses/#{candidate.slug}-target.png"), alt: ''}
