@@ -146,8 +146,12 @@ class Server
     begin
       block.call
     rescue RuntimeError => e
-      valid_message = 'HTTP 500'
-      if e.message[0 .. valid_message.length] != valid_message && e.message =~ /Over quota limit/
+      # [adam] AP uses a couple of messages for quota violations. I should have
+      # logged them as we received them, so we could make a complete regex. I'll
+      # start doing so now.
+      #
+      # 2016-02-27: HTTP 500 Internal Server Error from server. Body: {"fault":{"faultstring":"Rate limit quota violation. Quota limit exceeded. Identifier : uHK1N6gbkF0HdkZIHWNyXAzttwhqvOlA","detail":{"errorcode":"policies.ratelimit.QuotaViolation"}}}
+      if e.message =~ /^HTTP [45]\d\d.*(Over quota limit|QuotaViolation)/
         $logger.info("AP's API reports a quota violation. Skipping this tick.")
       else
         raise e
