@@ -350,18 +350,18 @@
       function buildPattern(id_fragment, color) {
         var pattern = document.createElementNS(ns, 'pattern');
         pattern.setAttributeNS(null, 'id', 'pattern-' + party_id + '-' + state_code + '-' + id_fragment);
-        pattern.setAttributeNS(null, 'width', '10');
-        pattern.setAttributeNS(null, 'height', '10');
+        pattern.setAttributeNS(null, 'width', '20');
+        pattern.setAttributeNS(null, 'height', '20');
         pattern.setAttributeNS(null, 'patternUnits', 'userSpaceOnUse');
 
         var rect = document.createElementNS(ns, 'rect');
-        rect.setAttributeNS(null, 'width', '10');
-        rect.setAttributeNS(null, 'height', '10');
+        rect.setAttributeNS(null, 'width', '20');
+        rect.setAttributeNS(null, 'height', '20');
         rect.setAttributeNS(null, 'fill', color);
 
         var path = document.createElementNS(ns, 'path');
-        path.setAttributeNS(null, 'd', 'M-1,1L1,-1M-1,11L11,-1M9,11L11,9');
-        path.setAttributeNS(null, 'stroke-width', '2');
+        path.setAttributeNS(null, 'd', 'M-2,2L2,-2M-2,22L22,-2M18,22L22,18');
+        path.setAttributeNS(null, 'stroke-width', '3');
         path.setAttributeNS(null, 'stroke', 'white');
 
         pattern.appendChild(rect);
