@@ -62,10 +62,10 @@
                     Votes
                 %div= "#{format_percent_or_nil(leader.percent_vote)}%"
 
-  - race_day.races.reject(&:future?).map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
-    %p.footnote
-      %span.asterisk *
-      = footnote
+      - race_day.races.reject(&:future?).map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
+        %p.footnote
+          %span.asterisk *
+          = footnote
 
   .tease-link
     %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}
