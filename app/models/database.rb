@@ -103,6 +103,10 @@ class Database
     "#<Database>"
   end
 
+  def today
+    now.to_datetime.new_offset('Eastern').to_date.to_s
+  end
+
   # The "production" Database: all default Sources
   def self.load
     copy_source = default_copy_source

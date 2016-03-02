@@ -70,7 +70,7 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
   def enabled?; @enabled; end
 
   def today?
-    database.now.to_datetime.new_offset('Eastern').to_date.to_s == id
+    database.today == id
   end
 
   # "past" when all races have finished reporting

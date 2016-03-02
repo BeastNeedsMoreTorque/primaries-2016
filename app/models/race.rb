@@ -186,7 +186,7 @@ Race = RubyImmutableStruct.new(
   # * "Results coming 7:00 p.m. EST" (if expect_results_time)
   # * "Results coming soon" (if expect_results_time.nil?)
   def results_coming_s
-    if !today?
+    if database.today < race_day_id
       "Results coming #{date.strftime('%B %-d')}"
     elsif expect_results_time.nil?
       "Results coming soon"
