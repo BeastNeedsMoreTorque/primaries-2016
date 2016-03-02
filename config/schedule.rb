@@ -45,10 +45,15 @@ module ServerSchedule
 
   # On election night, do something like this:
   #
-  TickIntervalInS = 60 # AAAH, live updates on production and live testing on staging
+  TickIntervalInS = 10
 
   Ticks = [
-    election_day('2016-03-08')
+    election_day('2016-03-01'),
+    election_day('2016-03-01'),
+    del_super,
+    election_day('2016-03-01'),
+    election_day('2016-03-01'),
+    pollster
   ]
   #
   # ... that will update votes five times per minute (average once per 12s) and
