@@ -175,10 +175,15 @@ organize_alaska_districts = (features) ->
       GEOID: p.GEOID
       NAME: p.NAMELSAD
 
-# On the Friday before Super Tuesday, AP decided to report MN results by
-# congressional district.
-organize_minnesota_districts = (features) ->
-  features_by_state.MN.subcounties = for feature in features when feature.properties.STATEFP == '27'
+# In some states, AP only reports by congressional district
+#
+# Notice that congressional-district geo IDs have four digits -- just like
+# Alaska FIPS codes. So don't render Alaska and Kansas on the same page! (If you
+# need to, come up with a different encoding scheme for one or the other.)
+organize_congressional_district_features = (state_code, fips_string, all_congressional_district_features) ->
+  features = (f for f in all_congressional_district_features when f.properties.STATEFP == fips_string)
+
+  features_by_state[state_code].subcounties = for feature in features
     p = feature.properties
 
     type: 'Feature'
@@ -305,6 +310,25 @@ compress_svg_path = (path) ->
   next_instruction_index = 0
   instr_regex = /([a-zA-Z ])(?:(\d+),(\d+))?/g
 
+  # We want to bundle "v" and "h" instructions together, where applicable.
+  # (There are lots and lots of them in the congressional-district data.)
+  current_line =
+    instruction: null
+    d: null # dx or dy
+
+  flush = () ->
+    if current_line.instruction?
+      out.push("#{current_line.instruction}#{current_line.d}")
+      current_line.instruction = current_line.d = null
+
+  start_or_continue_current_line = (instruction, d) ->
+    if current_line.instruction == instruction && current_line.d * d > 0
+      current_line.d += d
+    else
+      flush()
+      current_line.instruction = instruction
+      current_line.d = d
+
   while (match = instr_regex.exec(int_path)) != null
     if next_instruction_index != instr_regex.lastIndex - match[0].length
       throw new Error("Found a non-instruction at position #{next_instruction_index} of path #{int_path}. Next instruction was at position #{instr_regex.lastIndex}. Aborting.")
@@ -312,11 +336,13 @@ compress_svg_path = (path) ->
 
     switch match[1]
       when 'Z'
+        flush()
         last_instruction = 'Z'
         last_point = null
         out.push('Z')
 
       when 'M'
+        flush()
         point = [ +match[2], +match[3] ]
 
         last_point = point
@@ -334,11 +360,12 @@ compress_svg_path = (path) ->
         if dx != 0 || dy != 0
           if dx == 0
             last_instruction = 'v'
-            out.push("v#{dy}")
+            start_or_continue_current_line('v', dy)
           else if dy == 0
             last_instruction = 'h'
-            out.push("h#{dx}")
+            start_or_continue_current_line('h', dx)
           else
+            flush()
             instruction = if last_instruction == 'l' then ' ' else 'l'
             last_instruction = 'l'
             out.push("#{instruction}#{dx},#{dy}")
@@ -351,6 +378,7 @@ compress_svg_path = (path) ->
   if next_instruction_index != int_path.length
     throw "Unhandled SVG instruction at end of path: #{int_path.slice(next_instruction_index)}"
 
+  flush()
   out.join('')
 
 distance2 = (p1, p2) ->
@@ -660,13 +688,16 @@ geo_loader.load_all_features (err, key_to_features) ->
   organize_features('counties', key_to_features.counties)
 
   organize_alaska_districts(key_to_features.AK)
-  organize_minnesota_districts(key_to_features.congressional_districts)
 
   [ 'MA', 'NH', 'VT' ].forEach (key) ->
     organize_subcounty_features(key, key_to_features[key])
 
   [ 'AS', 'GU', 'MP' ].forEach (key) ->
     organize_territory_features(key, key_to_features[key])
+
+  [ [ 'KS', '20' ], [ 'MN', '27' ] ].forEach (arr) ->
+    [ state_code, fips_string ] = arr
+    organize_congressional_district_features(state_code, fips_string, key_to_features.congressional_districts)
 
   render_all_states (err) ->
     throw err if err

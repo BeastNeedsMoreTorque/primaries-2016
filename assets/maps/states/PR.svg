@@ -48,7 +48,7 @@
     <path data-fips-int="72093" data-name="Maricao Municipio" d="M392,126h10l10,6 -6,12 -11,-5h-13l-18,3 -24,-12 10,-4 14,-7Z"/>
     <path data-fips-int="72095" data-name="Maunabo Municipio" d="M756,190l-20,12 -13,-5 -2,-11 -9,-1 -4,-12 16,7 26,5Z"/>
     <path data-fips-int="72099" data-name="Moca Municipio" d="M347,51l-8,14 4,10 -6,7 -23,-6 -3,2 -1,-26 12,-17 14,-9Z"/>
-    <path data-fips-int="72101" data-name="Morovis Municipio" d="M572,69l5,4 -5,14 -10,11 -16,3 -3,-11 3,-17 -3,-14h6h18Z"/>
+    <path data-fips-int="72101" data-name="Morovis Municipio" d="M572,69l5,4 -5,14 -10,11 -16,3 -3,-11 3,-17 -3,-14h24Z"/>
     <path data-fips-int="72103" data-name="Naguabo Municipio" d="M785,92l12,9 18,1 -4,5 12,5 -2,6 -8,4 -2,7 -9,-4 -7,5 -10,-2 2,-5 -11,-4 -12,2 -2,-5 6,-18 -3,-4 11,-8Z"/>
     <path data-fips-int="72105" data-name="Naranjito Municipio" d="M632,79l1,15 -8,8 -14,3 -16,-1 9,-8 3,-22 21,-1Z"/>
     <path data-fips-int="72107" data-name="Orocovis Municipio" d="M582,107v17l-6,-2 -2,9 -15,4 -10,-5h-9l-18,9h-9l2,-4 11,-5 -2,-19 5,-10 13,4 4,-4 16,-3 10,-11v7Z"/>
@@ -69,7 +69,7 @@
     <path data-fips-int="72143" data-name="Vega Alta Municipio" d="M594,21l-1,9 7,10 -2,14 -5,6 -13,4 -3,9 -5,-4 11,-38 -1,-13Z"/>
     <path data-fips-int="72145" data-name="Vega Baja Municipio" d="M582,18l1,13 -11,38 -5,-10h-18l2,-14v-28l21,-2Z"/>
     <path data-fips-int="72149" data-name="Villalba Municipio" d="M549,130l9,11 -4,24 -18,-2 -12,1 -4,-6 2,-19 18,-9Z"/>
-    <path data-fips-int="72151" data-name="Yabucoa Municipio" d="M775,169l-14,6v15h-5l-6,-5 -26,-5 -16,-7 -7,-6 11,-7 12,2 6,-11h16h8l9,13Z"/>
+    <path data-fips-int="72151" data-name="Yabucoa Municipio" d="M775,169l-14,6v15h-5l-6,-5 -26,-5 -16,-7 -7,-6 11,-7 12,2 6,-11h24l9,13Z"/>
     <path data-fips-int="72153" data-name="Yauco Municipio" d="M427,146l-5,7 3,9 -6,7 -7,38 -5,4h-2l-1,-15 -8,-10 -5,-8 -8,-22 -1,-17h13l11,5 6,-12h4Z"/>
     <path data-fips-int="72037" data-name="Ceiba Municipio" d="M831,90l3,10 12,10 -7,7 -18,1 2,-6 -12,-5 4,-5 -18,-1 -12,-9 3,-4 1,-3 13,12 7,-7Z"/>
     <path data-fips-int="72049" data-name="Culebra Municipio" d="M940,73l16,-1 10,10 -5,5 -8,-6v9l-20,-23Z"/>
