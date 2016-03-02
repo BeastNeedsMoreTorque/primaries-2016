@@ -41,6 +41,10 @@ body.race-day .delegate-summary {
         line-height: 2rem;
       }
     }
+     
+    th.n-delegates, th.n-pledged-delegates {
+      padding-right: 0; // on mobile, it's a squeezer
+    }
 
     td.n-delegates-int, td.n-pledged-delegates-int {
       width: 2rem;
