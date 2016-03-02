@@ -10,21 +10,24 @@
     .header
       .line
       .hed
-        %h1.when-race-day-present Live Results
-        %h1.when-race-day-past Results
-        %h1.when-race-day-future Happening Soon
+        %h1.when-race-day-present
+          %a{target: '_blank', href: race_day.href} Live Results
+        %h1.when-race-day-past
+          %a{target: '_blank', href: race_day.href} Results
+        %h1.when-race-day-future
+          %a{target: '_blank', href: race_day.href} Happening Soon
       .line
 
     .race-day
       %h2
-        %a{target: '_blank', href: '/2016/primaries/2016-02-09'}= race_day.title
-      - if !race_day.today?
+        %a{target: '_blank', href: race_day.href}= race_day.title
+      - if !race_day.today? && !race_day.title_is_just_date_s?
         %h4.date= race_day.date.strftime('%B %-d')
       %p.intro= race_day.body
       %p.tease-link.when-race-day-future.when-race-day-past
         %a{target: '_blank', href: "/2016/primaries#state-race-days-by-date"} See the election calendar
       %p.tease-link.when-race-day-present
-        %a{target: '_blank', href: "/2016/primaries/#{race_day.id}"} See live updates
+        %a{target: '_blank', href: race_day.href} See live updates
 
       - if race_day.races.length < 4
         != render(partial: '/primaries/right-rail/few-races', locals: { race_day: race_day })
