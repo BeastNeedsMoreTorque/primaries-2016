@@ -16,7 +16,7 @@
 
         .candidates-and-states
           .many-races-legend
-            %h3 Leaders
+            %h3!= 'Leaders, <span class="winner">✓</span>Winners'
             .n-pledged-delegates Pledged delegates
           %ul.candidates
             - party_race_day.candidate_race_days.each_with_index do |candidate_race_day, i|

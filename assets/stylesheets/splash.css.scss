@@ -51,6 +51,7 @@ a:hover { text-decoration: underline; }
     display: flex;
     padding-top: .5rem;
     font-size: .8rem;
+    line-height: 1rem;
     font-weight: bold;
     
     h3 {
@@ -58,6 +59,12 @@ a:hover { text-decoration: underline; }
       font: inherit;
       -webkit-flex-grow: 1;
       flex-grow: 1;
+    }
+
+    span.winner {
+      font-size: 1.2rem;
+      line-height: 1em;
+      vertical-align: -.1rem;
     }
   }
 
@@ -250,6 +257,10 @@ a:hover { text-decoration: underline; }
 
       a:hover .state-code {
         text-decoration: underline;
+      }
+
+      &:not(.winner) {
+        opacity: .75;
       }
 
       &.winner a::after {
@@ -513,7 +524,7 @@ a:hover { text-decoration: underline; }
 
   ul.states text, .races-on-map path.today { fill: $widgetBlue; }
   li.candidate { border-top-color: $widgetLightBlue; }
-  ul.states a { color: $widgetBlue; }
+  ul.states a, span.winner { color: $widgetBlue; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightBlue;
@@ -546,7 +557,7 @@ a:hover { text-decoration: underline; }
 
   ul.states text, .races-on-map path.today { fill: $widgetRed; }
   li.candidate { border-top-color: $widgetLightRed; }
-  ul.states a { color: $widgetRed; }
+  ul.states a, span.winner { color: $widgetRed; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightRed;
