@@ -11,9 +11,9 @@
     Here&rsquo;s a breakdown of the delegates from tonight&rsquo;s states.
 
   .party-delegate-summaries
-    - race_day.candidate_states.group_by(&:party).each do |party, party_candidate_states|
-      .party-delegate-summary{'data-party-id': party.id}
-        %h3= party.name
+    - race_day.party_race_days.each do |party_race_day|
+      .party-delegate-summary{'data-party-id': party_race_day.party_id}
+        %h3= party_race_day.party_name
         %table.candidate-delegates
           %thead
             %tr
@@ -21,53 +21,47 @@
               %th.n-delegates{colspan: 2} Delegates (With Unpledged)
               %th.n-pledged-delegates{colspan: 2} Pledged Delegates
           %tbody
-            - party_candidate_states.group_by(&:candidate).each do |candidate, candidate_states|
-              %tr{'data-candidate-id': candidate.id}
+            - party_race_day.candidate_race_days.each do |candidate_race_day|
+              %tr{'data-candidate-id': candidate_race_day.candidate_id}
                 %td.candidate
-                  %img{src: image_path("big-headshots/#{candidate.slug}.png"), alt: ''}
-                  %span= candidate.last_name
-                %td.n-delegates-int= candidate_states.map(&:n_delegates).reduce(0, :+)
+                  %img{src: image_path("big-headshots/#{candidate_race_day.candidate_slug}.png"), alt: ''}
+                  %span= candidate_race_day.candidate_last_name
+                %td.n-delegates-int= format_int(candidate_race_day.n_delegates)
                 %td.n-delegates-dots
-                  - for dot_group in candidate_states_to_dot_groups(candidate_states, :has_delegates?, :n_delegates)
+                  - for dot_group in candidate_states_to_dot_groups(candidate_race_day.candidate_states, :has_delegates?, :n_delegates)
                     .dot-group<>
                       - for dot_subgroup in dot_group.dot_subgroups
                         %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                           = '•' * dot_subgroup.n_dots
-                %td.n-pledged-delegates-int= candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
+                %td.n-pledged-delegates-int= format_int(candidate_race_day.n_pledged_delegates)
                 %td.n-pledged-delegates-dots
-                  - for dot_group in candidate_states_to_dot_groups(candidate_states, :has_pledged_delegates?, :n_pledged_delegates)
+                  - for dot_group in candidate_states_to_dot_groups(candidate_race_day.candidate_states, :has_pledged_delegates?, :n_pledged_delegates)
                     .dot-group<>
                       - for dot_subgroup in dot_group.dot_subgroups
                         %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                           = '•' * dot_subgroup.n_dots
             %tr.up-for-grabs
-              - races = race_day.races.select{ |r| r.party_id == party.id }
-              - n_delegates_total = races.map(&:n_delegates).reduce(0, :+)
-              - n_delegates_without_candidates = races.map(&:n_delegates_without_candidates).reduce(0, :+)
-              - n_pledged_delegates_total = races.map(&:n_pledged_delegates).reduce(0, :+)
-              - n_pledged_delegates_without_candidates = races.map(&:n_pledged_delegates_without_candidates).reduce(0, :+)
               %td.candidate
                 %span Up for grabs
-              %td.n-delegates-int= n_delegates_without_candidates
+              %td.n-delegates-int= party_race_day.n_delegates_up_for_grabs
               %td.n-delegates-dots
-                - for dot_group in races_to_unassigned_dot_groups(races, :has_delegates_without_candidates?, :n_delegates_without_candidates)
+                - for dot_group in races_to_unassigned_dot_groups(party_race_day.races, :has_delegates_without_candidates?, :n_delegates_without_candidates)
                   .dot-group<>
                     - for dot_subgroup in dot_group.dot_subgroups
                       %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                         = '•' * dot_subgroup.n_dots
-              %td.n-pledged-delegates-int= n_pledged_delegates_without_candidates
+              %td.n-pledged-delegates-int= party_race_day.n_pledged_delegates_up_for_grabs
               %td.n-pledged-delegates-dots
-                - for dot_group in races_to_unassigned_dot_groups(races, :has_pledged_delegates_without_candidates?, :n_pledged_delegates_without_candidates)
+                - for dot_group in races_to_unassigned_dot_groups(party_race_day.races, :has_pledged_delegates_without_candidates?, :n_pledged_delegates_without_candidates)
                   .dot-group<>
                     - for dot_subgroup in dot_group.dot_subgroups
                       %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                         = '•' * dot_subgroup.n_dots
         .state-delegates
           %ul
-            - party_candidate_states.group_by(&:state).each do |state, candidate_states|
-              - party_state = candidate_states.first.party_state
-              %li{'data-state-code': state.code, 'data-state-name': state.name, 'data-n-delegates': party_state.n_delegates, 'data-n-pledged-delegates': party_state.n_pledged_delegates, 'data-n-delegates-with-candidates': party_state.n_delegates_with_candidates, 'data-n-pledged-delegates-with-candidates': party_state.n_pledged_delegates_with_candidates, 'data-race-href': "##{party_state.state_code}-#{party_state.party_id}"}
-                .map!= map_svg("states/tiny/#{state.code}")
+            - party_race_day.party_states.each do |party_state|
+              %li{'data-state-code': party_state.state_code, 'data-state-name': party_state.state_name, 'data-n-delegates': party_state.n_delegates, 'data-n-pledged-delegates': party_state.n_pledged_delegates, 'data-n-delegates-with-candidates': party_state.n_delegates_with_candidates, 'data-n-pledged-delegates-with-candidates': party_state.n_pledged_delegates_with_candidates, 'data-race-href': "##{party_state.state_code}-#{party_state.party_id}"}
+                .map!= map_svg("states/tiny/#{party_state.state_code}")
                 .n-delegates= format_int(party_state.n_delegates)
                 .n-pledged-delegates= format_int(party_state.n_pledged_delegates)
 

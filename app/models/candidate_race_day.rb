@@ -12,6 +12,7 @@ CandidateRaceDay = RubyImmutableStruct.new(:database, :candidate_id, :race_day_i
 
   def candidate_last_name; candidate.last_name; end
   def candidate_slug; candidate.slug; end
+  def candidate_states; candidate_races.map(&:candidate_state); end
   def party_id; candidate.party_id; end
 
   def leads_candidate_races

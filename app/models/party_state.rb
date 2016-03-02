@@ -20,4 +20,7 @@ PartyState = RubyImmutableStruct.new(:database, :party_id, :state_code, :n_deleg
   def pollster_href
     "//elections.huffingtonpost.com/pollster/#{pollster_slug}"
   end
+
+  def state; database.states.find!(state_code); end
+  def state_name; state.name; end
 end
