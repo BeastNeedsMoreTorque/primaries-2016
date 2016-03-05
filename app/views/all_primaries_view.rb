@@ -63,4 +63,11 @@ class AllPrimariesView < BaseView
       end
     })
   end
+
+  # The stuff within a d="..." in an SVG <path> for the given state
+  def state_svg_outline_path(state_code)
+    svg = map_svg("states/tiny/#{state_code}")
+    svg =~ /<path class="state" d="([^"]+)"/
+    $1
+  end
 end

@@ -4,7 +4,7 @@
       %h3= party.name
       %ol.candidate-horses
         - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
-          %li.candidate-horse{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, class: (candidate.dropped_out? ? 'dropped-out' : '')}
+          %li.candidate-horse{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, 'data-n-unpledged-delegates': candidate.n_unpledged_delegates, class: (candidate.dropped_out? ? 'dropped-out' : '')}
             .info
               .last-name= candidate.name
               .n-delegates= format_int(candidate.n_delegates)
@@ -17,3 +17,14 @@
         - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
           %li.candidate-target{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, class: (candidate.dropped_out? ? 'dropped-out' : '')}
             %img{src: image_path("horses/#{candidate.slug}-target.png"), alt: ''}
+
+      .json-data= party.horse_race_data.to_json
+
+      -# As for state descriptions: they rely on assets. (Really, we should put
+      -# the SVG data in the models, but meh.) So we'll draw them as HTML and
+      -# hide it.
+      .json-state-paths
+        - state_codes = party.party_race_days_with_pledged_delegates.flat_map(&:races).map(&:state_code)
+        = state_codes.map{ |code| [ code, state_svg_outline_path(code) ] }.to_h.to_json
+
+      %button.play Step!

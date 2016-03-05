@@ -30,4 +30,8 @@ Candidate = RubyImmutableStruct.new(:database, :id, :party_id, :full_name, :name
   end
 
   def dropped_out?; !dropped_out_date.nil?; end
+
+  def n_unpledged_delegates
+    n_delegates - n_pledged_delegates
+  end
 end
