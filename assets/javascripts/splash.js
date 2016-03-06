@@ -38,11 +38,14 @@ $(function() {
     $race.find('.candidate-position-listing tbody').html(tr_strings.join(''));
   }
 
-  function update_precincts_reporting_from_json($race, string) {
+  function update_precincts_reporting_from_json($race, when_race_happens, string) {
+    var on = when_race_happens != 'future' && string != 'N/A' && string != '0%';
+
     $race.find('.precincts-val').text(string);
     $race
-      .toggleClass('no-precincts-reporting', string == 'N/A')
-      .toggleClass('precincts-reporting', string != 'N/A');
+      .toggleClass('no-precincts-reporting', !on)
+      .toggleClass('precincts-reporting', on)
+      ;
   }
 
   function update_when_race_happens_from_json($race, tense) {
@@ -57,7 +60,8 @@ $(function() {
     update_when_race_happens_from_json($race, race_json.when_race_happens);
     update_svg_from_json($race, race_json);
     update_candidates_from_json($race, race_json.candidates);
-    update_precincts_reporting_from_json($race, race_json.precincts_reporting_percent_s);
+    console.log(race_json);
+    update_precincts_reporting_from_json($race, race_json.when_race_happens, race_json.precincts_reporting_percent_s);
   }
 
   function do_poll(callback) {
