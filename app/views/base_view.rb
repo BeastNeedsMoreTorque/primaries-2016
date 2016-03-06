@@ -107,17 +107,23 @@ class BaseView
     @map_svg[path] ||= File.read("#{Paths.Assets}/maps/#{path}.svg")[header_length .. -1]
   end
 
+  # Returns inline <svg> data without any counties/subcounties/grid
+  def map_svg_without_geos(path)
+    map_svg(path)
+      .gsub(/<g class="(sub)?counties">.+?<\/g>/m, '')
+      .gsub(/<path class="mesh.+?>/, '')
+  end
+
   # Returns inline <svg> data for the given race.
   #
   # Use this instead of map_svg to handle exceptions. For instance, Maine GOP
   # won't have a mesh or counties.
   def race_map_svg(race)
-    svg = map_svg("states/#{race.state_code}")
+    path = "states/#{race.state_code}"
     if race.tabulates_votes?
+      map_svg(path)
     else
-      map_svg("states/#{race.state_code}")
-        .gsub(/<g class="subcounties">.+?<\/g>/m, '')
-        .gsub(/<path class="mesh.+?>/, '')
+      map_svg_without_geos(path)
     end
   end
 

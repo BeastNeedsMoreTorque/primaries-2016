@@ -27,6 +27,28 @@ a {
   color: #2e7061;
 }
 
+.map {
+  padding: .5rem;
+
+  svg {
+    max-width: 100%;
+    max-height: 8em;
+  }
+
+  path {
+    fill: white;
+    stroke: #ccc;
+    stroke-width: 5px;
+  }
+
+  text {
+    font-family: $huffpo-font-family;
+    font-size: 60px;
+    baseline-shift: 20px;
+    text-anchor: middle;
+  }
+}
+
 .source, .footnote {
 	font-size: .8rem;
   text-align: center;
@@ -38,10 +60,10 @@ a {
 .parties-container {
 	display: -webkit-flex;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  -webkit-align-items: center;
+  -webkit-align-items: stretch;
+  align-items: stretch;
   -webkit-justify-content: center;
+  justify-content: center;
   margin: 5px 0;
 }
 
