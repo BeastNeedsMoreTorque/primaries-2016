@@ -31,7 +31,7 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-01	GOP	VT	Primary	2016-03-02T00:00:00Z	TRUE				
 2016-03-01	Dem	VA	Primary	2016-03-02T00:00:00Z	TRUE				
 2016-03-01	GOP	VA	Primary	2016-03-02T00:00:00Z	TRUE	Trump			
-2016-03-05	Dem	KS	Caucus	2016-03-06T00:00:00Z					
+2016-03-05	Dem	KS	Caucus	2016-03-06T00:00:00Z	TRUE	Sanders			
 2016-03-05	GOP	KS	Caucus	2016-03-05T20:00:00Z					
 2016-03-05	GOP	KY	Caucus	2016-03-06T00:00:00Z					
 2016-03-05	Dem	LA	Primary	2016-03-06T02:00:00Z					
