@@ -429,7 +429,7 @@ a:hover { text-decoration: underline; }
 
   path.state {
     stroke: #999;
-    stroke-width: 10; // divided by 10
+    stroke-width: 3;
     fill: #fff;
     pointer-events: none; // so it doesn't cause mouseleave
   }
@@ -437,14 +437,7 @@ a:hover { text-decoration: underline; }
   path.mesh {
     fill: none;
     stroke: #eee;
-    stroke-width: 10; // divided by 10
-    pointer-events: none; // so it doesn't cause mouseleave
-  }
-
-  path.hover {
-    stroke: black;
-    stroke-width: 20; // divided by 10
-    fill: rgba(255, 255, 255, 0.2);
+    stroke-width: 3;
     pointer-events: none; // so it doesn't cause mouseleave
   }
 
@@ -459,7 +452,7 @@ a:hover { text-decoration: underline; }
   }
 
   text {
-    font-size: 20px;
+    font-size: 50px;
     @include svg-city-label();
 
     &.background {
