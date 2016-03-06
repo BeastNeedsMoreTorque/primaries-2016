@@ -8,6 +8,7 @@ $(function() {
 
     race_json.candidates.forEach(function(candidate_json, i) {
       var o = candidate_id_to_tr_and_position[candidate_json.id];
+      if (!o) return;
       var tr = o.tr;
 
       if (o.position != i) {
