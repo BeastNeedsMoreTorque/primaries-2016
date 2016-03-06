@@ -216,4 +216,8 @@ Race = RubyImmutableStruct.new(
   def title_abbr
     "#{state_name} (#{party.abbreviation})"
   end
+
+  def tabulates_votes?
+    state.is_actual_state? && id != '2016-03-05-GOP-ME'
+  end
 end
