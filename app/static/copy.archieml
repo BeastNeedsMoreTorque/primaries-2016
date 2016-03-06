@@ -146,4 +146,10 @@ party: GOP
 text: The Maine Republican Party only reports statewide results. There is no breakdown by township.
 
 
+date: 2016-03-06
+state: PR
+party: GOP
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
 :ignore all text after this line
