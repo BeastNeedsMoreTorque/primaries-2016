@@ -3,7 +3,7 @@ $(function() {
     var leader = race_json.candidates[0];
     var leader_id = leader.id;
 
-    $race.find('.map-container .legend span.name').text(leader.last_name);
+    $race.find('ul.legend span.name').text(leader.last_name);
 
     var $svg = $race.find('svg');
     var geos = race_json.geos;
