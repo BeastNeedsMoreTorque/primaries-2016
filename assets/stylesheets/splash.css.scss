@@ -362,6 +362,17 @@ a:hover { text-decoration: underline; }
   }
 }
 
+.other-races {
+  text-align: center;
+  padding-top: 1rem;
+
+  p, ul, li {
+    margin: 0;
+    padding: 0;
+    display: inline;
+  }
+}
+
 .tease-link {
   margin: 0;
   a {

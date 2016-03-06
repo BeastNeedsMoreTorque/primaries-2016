@@ -17,9 +17,9 @@
       %h1.main-hed.when-race-day-future
         %a{target: '_blank', href: race_day.href}= "HAPPENING SOON: #{race_day.title}"
     .line
-  - if race_day.races.length == 1
+  - if race_day.tabulated_races.length == 1
     != render(partial: 'primaries/splash/1-race', locals: { race_day: race_day })
-  - elsif race_day.races.length == 2
+  - elsif race_day.tabulated_races.length == 2
     != render(partial: 'primaries/splash/2-races', locals: { race_day: race_day })
   - else
     != render(partial: 'primaries/splash/many-races', locals: { race_day: race_day })
