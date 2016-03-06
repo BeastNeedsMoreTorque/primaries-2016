@@ -28,7 +28,7 @@ CandidateRace = RubyImmutableStruct.new(:database, :candidate_id, :race_id, :n_v
   def race; database.races.find!(@race_id); end
   def race_pct_precincts_reporting; race.pct_precincts_reporting; end
   def race_href; race.href; end
-  def winner?; (ap_says_winner && id != '8639-2016-03-05-GOP-LA') || huffpost_says_winner; end
+  def winner?; ap_says_winner || huffpost_says_winner; end
   def leader?; @leader || winner?; end
 
   # A String of HTML classes.
