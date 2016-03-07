@@ -119,6 +119,11 @@ a {
   box-sizing: border-box;
   flex: 1 1 auto;
   -webkit-flex: 1 1 auto;
+  -webkit-display: flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+
   &:first-child { border-right: 3px solid white; }
   &:last-child { border-left: 3px solid white; }
 	width: 50%;
@@ -152,8 +157,12 @@ a {
 }
 
 .leader {
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
   display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
   -webkit-align-items: center;
   align-items: center;
   -webkit-justify-content: center;
@@ -162,7 +171,9 @@ a {
   text-transform: uppercase;
 
   img {
+    display: block;
     width: 40px;
+    height: 60px;
     padding: 10px;
   }
 }

@@ -56,13 +56,15 @@
                     %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
                 - else
                   %span.frontrunner-num= format_int(leader.n_votes)
-                  %span.frontrunner-unit
-                    - if race.n_votes_th
-                      = race.n_votes_th
-                      %span.asterisk<> *
-                    - else
-                      Votes
-                  %div= "#{format_percent_or_nil(leader.percent_vote)}%"
+                  - if !leader.percent_vote.nil? && leader.percent_votes > 0
+                    -# Don't show vote percentage in territories, where we don't count votes
+                    %span.frontrunner-unit
+                      - if race.n_votes_th
+                        = race.n_votes_th
+                        %span.asterisk<> *
+                      - else
+                        Votes
+                    %div= "#{format_percent_or_nil(leader.percent_vote)}%"
             - else
               .map!= map_svg_without_geos("states/#{race.state_code}")
 
