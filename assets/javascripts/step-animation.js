@@ -8,11 +8,11 @@
  */
 function build_race_transform_matrix(i, n, w) {
   return [
-    300 / 1000,
+    150 / 1000,
     0,
     0,
-    300 / 1000,
-    (i + 0.5) * w / n - 300 / 2,
+    150 / 1000,
+    (i + 0.5) * w / n - 150 / 2,
     0
   ];
 }
@@ -299,7 +299,7 @@ StepAnimation.prototype.show_dots = function() {
     ctx.fill();
   }
 
-  this.animate_step(10000, step, function() { _this.end(); });
+  this.animate_step(3000, step, function() { _this.end(); });
 };
 
 StepAnimation.prototype.end = function() {
