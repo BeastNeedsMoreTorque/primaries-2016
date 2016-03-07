@@ -1,9 +1,10 @@
 PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
-  attr_reader(:id, :candidate_races, :candidate_states, :races, :party_states, :n_delegates, :n_pledged_delegates)
+  attr_reader(:id, :candidate_races, :candidate_states, :race_day, :races, :party_states, :n_delegates, :n_pledged_delegates)
 
   def after_initialize
     @id = "#{@party_id}-#{@race_day_id}"
     @races = @database.races.find_all_by_party_race_day_id(@id)
+    @race_day = @database.race_days.find!(@race_day_id)
     @candidate_races = @races.flat_map(&:candidate_races)
     @candidate_states = @races.flat_map(&:candidate_states)
     @party_states = @races.map(&:party_state)
@@ -24,7 +25,11 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
   end
 
   def n_pledged_delegates_up_for_grabs
-    n_pledged_delegates - candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
+    n_pledged_delegates - n_pledged_delegates_with_candidates
+  end
+
+  def n_pledged_delegates_with_candidates
+    candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
 
   def races_without_leaders
@@ -33,5 +38,14 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
     candidate_races.map(&:race)
       .reject { |r| used_state_codes.include?(r.state_code) }
       .uniq
+  end
+
+  def horse_race_data
+    {
+      title: race_day.title,
+      n_pledged_delegates: n_pledged_delegates,
+      n_pledged_delegates_up_for_grabs: n_pledged_delegates_up_for_grabs,
+      races: races.map(&:horse_race_data)
+    }
   end
 end

@@ -27,6 +27,7 @@ module Assets
       race-day-nodes.js
       race-day.js
       delegate-summary.js
+      horse-race.js
       all-primaries.js
       social.js
     ),

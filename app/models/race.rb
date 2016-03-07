@@ -224,4 +224,13 @@ Race = RubyImmutableStruct.new(
   def tabulates_votes?
     state.is_actual_state? && id != '2016-03-05-GOP-ME'
   end
+
+  def horse_race_data
+    {
+      state_code: state_code,
+      state_name: state_name,
+      n: n_pledged_delegates_with_candidates,
+      candidate_n_delegates: candidate_races.select{ |cr| cr.n_pledged_delegates > 0 }.map{ |cr| [ cr.candidate_id, cr.n_pledged_delegates ] }.to_h
+    }
+  end
 end

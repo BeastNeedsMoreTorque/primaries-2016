@@ -214,7 +214,7 @@ class Database
         )
       end
 
-    all.sort
+    all.sort!
 
     CandidateCountyRaces.new(all)
   end
@@ -247,7 +247,7 @@ class Database
         )
       end
 
-    all.sort
+    all.sort!
 
     CandidateRaceSubcounties.new(all)
   end

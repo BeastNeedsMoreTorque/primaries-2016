@@ -1,4 +1,8 @@
 .horse-races {
+  .horse-race {
+    position: relative;
+  }
+
   ol.candidate-horses {
     margin: 6rem 0 0;
     padding: 0 1rem;
@@ -90,6 +94,7 @@
     bottom: .75rem;
 
     img {
+      display: block;
       position: absolute;
       right: 0;
       width: 8rem;
@@ -111,7 +116,15 @@
   li.candidate-target {
     img {
       display: inline-block;
-      height: 4rem;
+      width: 75px;
+      height: 132px;
     }
   }
+
+  canvas {
+    position: absolute;
+    bottom: 0;
+  }
+
+  .json-data, .json-state-paths { display: none; }
 }
