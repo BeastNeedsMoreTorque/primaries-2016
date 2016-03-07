@@ -38,14 +38,14 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-05	GOP	LA	Primary	2016-03-06T02:00:00Z	TRUE				
 2016-03-05	GOP	ME	Caucus	2016-03-05T18:00:00Z	TRUE				
 2016-03-05	Dem	NE	Caucus	2016-03-06T01:00:00Z	TRUE				
-2016-03-06	Dem	ME	Caucus	2016-03-07T01:00:00Z			SCDs	SCDs	The Maine Democratic Party doesn't report vote counts. It reports State Convention Delegates (SCDs).
-2016-03-06	GOP	PR	Primary						
-2016-03-08	GOP	HI	Caucus						
-2016-03-08	GOP	ID	Primary						
-2016-03-08	Dem	MI	Primary						
-2016-03-08	GOP	MI	Primary						
-2016-03-08	Dem	MS	Primary						
-2016-03-08	GOP	MS	Primary						
+2016-03-06	Dem	ME	Caucus	2016-03-07T01:00:00Z	TRUE		SCDs	SCDs	The Maine Democratic Party doesn't report vote counts. It reports State Convention Delegates (SCDs).
+2016-03-06	GOP	PR	Primary		TRUE				
+2016-03-08	GOP	HI	Caucus	2016-03-09T06:00:00Z					
+2016-03-08	GOP	ID	Primary	2016-03-09T03:00:00Z					
+2016-03-08	Dem	MI	Primary	2016-03-09T01:00:00Z					
+2016-03-08	GOP	MI	Primary	2016-03-09T01:00:00Z					
+2016-03-08	Dem	MS	Primary	2016-03-09T01:00:00Z					
+2016-03-08	GOP	MS	Primary	2016-03-09T01:00:00Z					
 2016-03-12	GOP	DC	Caucus						
 2016-03-12	GOP	GU	Convention						
 2016-03-12	Dem	MP	Caucus						

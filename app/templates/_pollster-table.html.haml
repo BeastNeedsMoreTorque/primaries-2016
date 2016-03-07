@@ -17,8 +17,8 @@
           %td.candidate
             %img{src: image_path("#{candidate.slug}.png"), alt: ''}
             = candidate.full_name
-          %td.n-delegates= candidate.n_delegates || 0
-          %td.n-pledged-delegates= candidate.n_pledged_delegates || 0
+          %td.n-delegates= format_int(candidate.n_delegates || 0)
+          %td.n-pledged-delegates= format_int(candidate.n_pledged_delegates || 0)
           %td.pollster
             - if candidate.dropped_out_date
               .dropped-out= "Withdrew #{format_date(candidate.dropped_out_date)}"

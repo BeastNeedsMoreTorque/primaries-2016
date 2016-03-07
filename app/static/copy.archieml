@@ -156,4 +156,52 @@ party: GOP
 text: We don't have vote tallies for this race, but we’re counting delegates.
 
 
+date: 2016-03-12
+state: GU
+party: GOP
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-03-12
+state: MP
+party: Dem
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-03-15
+state: MP
+party: GOP
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-03-19
+state: VI
+party: GOP
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-03-22
+state: AS
+party: GOP
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-05-07
+state: GU
+party: Dem
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-06-04
+state: VI
+party: Dem
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-06-05
+state: PR
+party: Dem
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
 :ignore all text after this line
