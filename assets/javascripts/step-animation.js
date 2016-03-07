@@ -13,7 +13,7 @@ function build_race_transform_matrix(i, n, w) {
     0,
     70 / 1000,
     (i + 0.5) * w / n - 70 / 2,
-    0
+    150
   ];
 }
 
