@@ -166,6 +166,8 @@ Race = RubyImmutableStruct.new(
       else
         'past'
       end
+    elsif !state.is_actual_state? && candidate_races.first.n_pledged_delegates > 0
+      'past'
     elsif !expect_results_time.nil? && database.now >= expect_results_time
       # If AP says results are coming, say it's present. That way we'll see the
       # little refresh countdowns.

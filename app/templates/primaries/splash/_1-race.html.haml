@@ -12,11 +12,4 @@
     .map!= map_svg("states/#{race.state_code}")
 
     != render(partial: 'primaries/splash/map-legend', locals: { leader_name: race.candidate_races.first.candidate_last_name })
-  - other_races = race_day.races.reject(&:tabulates_votes?)
-  - if other_races.length > 0
-    .other-races
-      %p
-        Also today:
-      %ul
-        - for other_race in other_races
-          %a{target: '_blank', href: other_race.href}= other_race.title
+  != render(partial: 'primaries/splash/other-races', locals: { races: race_day.races.reject(&:tabulates_votes?) })
