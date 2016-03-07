@@ -8,11 +8,11 @@
  */
 function build_race_transform_matrix(i, n, w) {
   return [
-    150 / 1000,
+    70 / 1000,
     0,
     0,
-    150 / 1000,
-    (i + 0.5) * w / n - 150 / 2,
+    70 / 1000,
+    (i + 0.5) * w / n - 70 / 2,
     0
   ];
 }
@@ -260,7 +260,7 @@ StepAnimation.prototype.show_dots = function() {
       if (!els) continue;
 
       var target_el = els.target;
-      var target_xy = { x: target_el.offsetLeft, y: 250 };
+      var target_xy = { x: target_el.offsetLeft - 10, y: 255 };
       candidate_dots.push(new AnimatedDotSet(candidate_id, target_xy, partial_dot_sets[candidate_id]));
     }
 
