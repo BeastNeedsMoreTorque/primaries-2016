@@ -419,28 +419,36 @@ StepAnimation.prototype.show_dots = function() {
     var candidates = [];
 
     for (var id in race.candidate_n_delegates) {
-      candidates.push({ id: id, n: race.candidate_n_delegates[id] });
+      var n = race.candidate_n_delegates[id];
+      if (n == 0) continue;
+
+      var line = candidate_state_line(id, race.state_code, transform_matrix);
+      if (!line) continue;
+
+      candidates.push({ id: id, n_dots_remaining: n, line: line, dot_positions: [] });
     }
 
-    var n = candidates.reduce(function(s, c) { return s + c.n; }, 0);
+    var n = candidates.reduce(function(s, c) { return s + c.n_dots_remaining; }, 0);
     var step = 1 / n;
     var t = step /2;
 
-    for (var i = 0; i < candidates.length; i++) {
-      var c = candidates[i];
-      var line = candidate_state_line(c.id, race.state_code, transform_matrix);
-      if (!line) continue;
+    // Interweave candidate dots: give the dots round-robin to the candidates
+    var remaining = candidates.slice(0);
+    while (remaining.length > 0) {
+      var candidate = remaining.shift();
+      candidate.dot_positions.push(t);
+      t += step;
+      candidate.n_dots_remaining -= 1;
 
-      var relative_dot_positions = [];
-      for (var j = 0; j < c.n; j++) {
-        relative_dot_positions.push(t);
-        t += step;
+      if (candidate.n_dots_remaining > 0) {
+        remaining.push(candidate);
       }
-      line.place_dots(relative_dot_positions);
-      ret.push(line);
     }
 
-    return ret;
+    return candidates.map(function(c) {
+      c.line.place_dots(c.dot_positions);
+      return c.line;
+    });
   }
 
   function step(t) {
