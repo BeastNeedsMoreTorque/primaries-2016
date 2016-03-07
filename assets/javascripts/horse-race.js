@@ -238,6 +238,26 @@ Line.prototype.get_dot_coordinates = function(t) {
 }
 
 /**
+ * The number of dots that have a position less than `t * len`.
+ *
+ * In vernacular: the number of dots that have entered the hole.
+ */
+Line.prototype.get_n_dots_before = function(t) {
+  var n = 0;
+  var cutoff = t * this.len;
+
+  var dots = this.dot_positions;
+
+  for (var i = 0; i < dots.length; i++) {
+    if (dots[i] > cutoff) {
+      return i;
+    }
+  }
+
+  return dots.length;
+};
+
+/**
  * Builds a Line from an initial {x,y} point and an SVG Path description.
  */
 Line.parse = function(p1, d, transform_matrix) {
@@ -411,7 +431,9 @@ StepAnimation.prototype.show_dots = function() {
     var inverse_matrix = invert_transform_matrix(transform_matrix);
     var xy = matrix_multiply(inverse_matrix, [ x, y, 1 ]);
 
-    return Line.parse({ x: xy[0], y: xy[1] }, _this.horse_race.state_paths[state_code], transform_matrix);
+    var line = Line.parse({ x: xy[0], y: xy[1] }, _this.horse_race.state_paths[state_code], transform_matrix);
+    line.candidate_id = candidate_id;
+    return line;
   }
 
   function race_dot_lines(race, transform_matrix) {
@@ -473,9 +495,13 @@ StepAnimation.prototype.show_dots = function() {
       }
     }
 
+    t = Math.pow(t, 0.5);
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
     ctx.fillStyle = 'blue';
+
+    var candidate_n_complete = {}; // id -> complete
 
     for (var i = 0; i < dot_lines.length; i++) {
       var dot_line = dot_lines[i];
@@ -494,6 +520,22 @@ StepAnimation.prototype.show_dots = function() {
       }
 
       ctx.fill();
+
+      if (!candidate_n_complete.hasOwnProperty(dot_line.candidate_id)) {
+        candidate_n_complete[dot_line.candidate_id] = 0;
+      }
+      candidate_n_complete[dot_line.candidate_id] += dot_line.get_n_dots_before(t);
+    }
+
+    for (var candidate_id in candidate_n_complete) {
+      var n_complete = candidate_n_complete[candidate_id];
+      if (n_complete > 0) {
+        var candidate = _this.candidates[candidate_id];
+        var n_delegates = candidate.start_n_delegates + n_complete;
+        var percent = 100 * n_delegates / _this.horse_race.data.n_delegates_needed;
+        candidate.els.n_delegates.textContent = format_int(n_delegates);
+        candidate.els.marker.style.left = percent + '%';
+      }
     }
 
     ctx.restore();
@@ -504,16 +546,7 @@ StepAnimation.prototype.show_dots = function() {
     }
   }
 
-  this.animate_step(2000, step, function() { _this.move_horses(); });
-};
-
-StepAnimation.prototype.move_horses = function() {
-  var _this = this;
-
-  function step(t) {
-  }
-
-  this.animate_step(1000, step, function() { _this.end(); });
+  this.animate_step(2000, step, function() { _this.end(); });
 };
 
 StepAnimation.prototype.end = function() {
@@ -522,6 +555,9 @@ StepAnimation.prototype.end = function() {
 
   for (var id in this.candidates) {
     var c = this.candidates[id];
+
+    this.horse_race.candidates_up_to_now[id].n_delegates = c.end_n_delegates;
+
     var percent = 100 * c.end_n_delegates / this.horse_race.data.n_delegates_needed;
     c.els.n_delegates.textContent = format_int(c.end_n_delegates);
     c.els.marker.style.left = percent + '%';
