@@ -1,5 +1,5 @@
 .one-race
-  - race = race_day.races.first
+  - race = race_day.tabulated_races.first
   .race{'data-party-id': race.party_id, id: race.id, class: "race-#{race.when_race_happens} #{race.any_precincts_reporting? ? '' : 'no-'}precincts-reporting"}
     != render(partial: 'primaries/splash/party-candidate-listing', locals: { race: race })
 
@@ -12,3 +12,4 @@
     .map!= map_svg("states/#{race.state_code}")
 
     != render(partial: 'primaries/splash/map-legend', locals: { leader_name: race.candidate_races.first.candidate_last_name })
+  != render(partial: 'primaries/splash/other-races', locals: { races: race_day.races.reject(&:tabulates_votes?) })

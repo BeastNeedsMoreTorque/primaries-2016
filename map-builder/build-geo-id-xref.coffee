@@ -6,7 +6,16 @@
 fs = require('fs')
 geo_loader = require('./geo-loader')
 
-compare_rows = (a, b) -> a.fips_int - b.fips_int || a.name.localeCompare(b.name)
+normalize_name = (name) ->
+  name
+    .replace(/ Plt\.?/, '')
+    .replace(/St./, 'Saint')
+    .replace(/ (Cty|Dst|Islands?|Townships?|Vot|Vtng|Votng)/g, '')
+    .replace(/'?s\b/, '')
+    .toLowerCase()
+
+compare_rows = (a, b) ->
+  a.fips_int - b.fips_int || normalize_name(a.name).localeCompare(normalize_name(b.name))
 
 load_geo_rows = (state_code, callback) ->
   geo_loader.load_features state_code, (err, features) ->

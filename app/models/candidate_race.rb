@@ -28,7 +28,19 @@ CandidateRace = RubyImmutableStruct.new(:database, :candidate_id, :race_id, :n_v
   def race; database.races.find!(@race_id); end
   def race_pct_precincts_reporting; race.pct_precincts_reporting; end
   def race_href; race.href; end
-  def winner?; ap_says_winner || huffpost_says_winner; end
+
+  def winner?
+    if ap_says_winner
+      true
+    elsif huffpost_says_winner
+      true
+    elsif !state.is_actual_state? && n_pledged_delegates == race.candidate_races.first.n_pledged_delegates && n_pledged_delegates > 0
+      true
+    else
+      false
+    end
+  end
+
   def leader?; @leader || winner?; end
 
   # A String of HTML classes.
@@ -60,6 +72,11 @@ CandidateRace = RubyImmutableStruct.new(:database, :candidate_id, :race_id, :n_v
     # Sort by state next. State *name*, not state *code*: we need sorted state
     # names in delegate-summary.
     x = state_name <=> rhs.state_name
+    return x if x != 0
+
+    # Same race? The most pledged delegates means top, even if there are no
+    # votes (because for some territories, we never count votes).
+    x = rhs.n_pledged_delegates <=> n_pledged_delegates
     return x if x != 0
 
     # Same race? The one with most votes comes on top

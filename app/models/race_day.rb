@@ -62,6 +62,10 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
     @race_subcounties = @races.flat_map(&:race_subcounties)
   end
 
+  def tabulated_races
+    races.select(&:tabulates_votes?)
+  end
+
   def party_race_days
     database.party_race_days.find_all_by_race_day_id(id)
   end

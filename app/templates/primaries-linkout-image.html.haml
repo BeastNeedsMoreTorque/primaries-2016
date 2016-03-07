@@ -30,28 +30,29 @@
   - for race in race_day.races
     - fill = { 'Dem' => '#1559d1', 'GOP' => '#b72727' }[race.party_id]
     .race{id: race.id, class: race.party_id}
-      %svg{xmlns: 'http://www.w3.org/2000/svg', 'xmlns:xlink': 'http://www.w3.org/1999/xlink', viewBox: '0 0 350 350'}
+      %svg{xmlns: 'http://www.w3.org/2000/svg', 'xmlns:xlink': 'http://www.w3.org/1999/xlink', viewBox: '0 0 700 700'}
         %style
           :plain
             g.counties, g.subcounties, g.cities { display: none; }
 
             path.state {
-              stroke: 20px solid black;
+              stroke: #ccc;
+              stroke-width: 2px;
               fill: #{fill};
             }
 
             path.mesh {
               fill: none;
               stroke: white;
-              stroke-width: 10px;
+              stroke-width: 2px;
             }
 
         %g.state{transform: 'translate(0 0)'}
-          != map_svg("states/#{race.state_code}").gsub(/(width|height)="\d+"/) { "#{$1}=\"350\"" }
+          != race_map_svg(race).gsub(/(width|height)="\d+"/) { "#{$1}=\"700\"" }
 
         -# Translate to the center, minus half the width/height of the images
         -# Circle center: (175, 175)
-        %g.headshots{transform: "translate(#{175 - 48*0.5} #{175 - 72*0.5})"}
+        %g.headshots{transform: "translate(#{350 - 160*0.5} #{350 - 240*0.5})"}
           -# We'll draw the candidates' faces in a circle around the state.
           -#
           -# Remedial Polar Coordinates: https://en.wikipedia.org/wiki/Polar_coordinate_system
@@ -69,10 +70,10 @@
 
           - step = 2 * Math::PI / race.candidate_races.length
           - phi = step / 10 # get it off-center
-          - r = 140 # px radius
+          - r = 240 # px radius
 
           - for candidate_race in race.candidate_races
-            %image{x: (r * Math.cos(phi)), y: (r * Math.sin(phi)), width: 48, height: 72, 'xlink:href': inline_image_path("#{candidate_race.candidate_slug}.png")}
+            %image{x: (r * Math.cos(phi)), y: (r * Math.sin(phi)), width: 160, height: 240, 'xlink:href': inline_image_path("big-headshots/#{candidate_race.candidate_slug}.png")}
             - phi += step
 
       %button.download-as-png Download as .png
@@ -93,16 +94,16 @@
         img.onload = function() {
           var canvas = document.createElement('canvas');
 
-          // The square image is 350x350. We'll also have a 4:3 view. Look
+          // The square image is 700x700. We'll also have a 4:3 view. Look
           // good with both by drawing in the middle of the bigger one.
-          var width = Math.ceil(350 * 4 / 3);
+          var width = Math.ceil(700 * 4 / 3);
           canvas.width = width;
-          canvas.height = 350;
-          var x = Math.floor((width - 350) / 2);
+          canvas.height = 700;
+          var x = Math.floor((width - 700) / 2);
 
           var ctx = canvas.getContext('2d');
           ctx.fillStyle = 'white';
-          ctx.fillRect(0, 0, width, 350);
+          ctx.fillRect(0, 0, width, 700);
           ctx.drawImage(img, x, 0);
 
           var pngDataUri = canvas.toDataURL('image/png');

@@ -44,6 +44,8 @@ class PrimariesSplashResultsView < BaseView
       when_race_happens: race.when_race_happens,
       candidates: race.candidate_races.map { |cr| candidate_race_h(cr) },
       geos: race_geos_h(race),
+      n_precincts_reporting: race.n_precincts_reporting,
+      n_precincts_total: race.n_precincts_total,
       precincts_reporting_percent_s: race.pct_precincts_reporting
     }
   end

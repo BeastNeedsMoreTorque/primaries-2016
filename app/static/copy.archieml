@@ -109,6 +109,10 @@ tweet: Clinton won Nevada’s Democratic caucus and Trump won South Carolina’s
 
 date: 2016-03-01
 title: Super Tuesday
+
+
+date: 2016-03-06
+title: Maine (D) and Puerto Rico (R)
 [primaries.races]
 This is just for setting race text, given date, state and party.
 
@@ -144,6 +148,12 @@ date: 2016-03-05
 state: ME
 party: GOP
 text: The Maine Republican Party only reports statewide results. There is no breakdown by township.
+
+
+date: 2016-03-06
+state: PR
+party: GOP
+text: We don't have vote tallies for this race, but we’re counting delegates.
 
 
 :ignore all text after this line
