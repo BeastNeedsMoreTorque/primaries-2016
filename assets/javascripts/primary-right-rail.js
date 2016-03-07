@@ -1,9 +1,14 @@
 $(function() {
   function update_race_from_json($race, race_json) {
     var candidate_id_to_tr_and_position = {}; // { candidate_id -> { tr: HTMLElement, position: 3 } }
+    var reporting = (race_json.n_precincts_reporting || 0) > 0;
     $race.find('tr[data-candidate-id]').each(function(i) {
       candidate_id_to_tr_and_position[this.getAttribute('data-candidate-id')] = { tr: this, position: i };
     });
+    $race
+      .toggleClass('no-precincts-reporting', !reporting)
+      .toggleClass('precincts-reporting', reporting)
+      ;
     var need_reorder = false;
 
     race_json.candidates.forEach(function(candidate_json, i) {
@@ -44,7 +49,7 @@ $(function() {
 
   function getData(){
     $.getJSON('/2016/primaries/widget-results.json', function(json) {
-      tense = json["when_race_day_happens"];
+      var tense = json.when_race_day_happens;
       $("body").removeClass().addClass("race-day-" + tense);
       update_races_from_json(json);
     })

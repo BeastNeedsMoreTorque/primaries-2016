@@ -456,7 +456,7 @@ a:hover { text-decoration: underline; }
     @include svg-city-label();
 
     &.background {
-      stroke-width: 4px;
+      stroke-width: 8px;
     }
   }
 }
@@ -479,13 +479,15 @@ a:hover { text-decoration: underline; }
   white-space: wrap;
   font-size: .75rem;
   max-width: 11rem;
-  padding: 0 10px 10px;
+  padding-top: .5rem;
 }
 
 .candidate-position-listing {
   padding: 10px;
   display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
   -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
@@ -497,6 +499,7 @@ a:hover { text-decoration: underline; }
     border-collapse: collapse;
     font-size: .8rem;
     line-height: 1rem;
+    white-space: nowrap;
 
 		.candidate {
 	    font-weight: bold;

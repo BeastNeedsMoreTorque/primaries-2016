@@ -1,6 +1,6 @@
 .few-races
   - race_day.races.each do |race|
-    .race{id: race.id, 'data-party-id': race.party_id}
+    .race{id: race.id, 'data-party-id': race.party_id, class: race.any_precincts_reporting? ? 'precincts-reporting' : 'no-precincts-reporting'}
       .race-name
         %h3
           %a{target: '_blank', href: race.href}= race.title
@@ -14,10 +14,15 @@
           %thead
             %tr
               %th.candidate Candidate
-              %th.pollster.when-race-day-future
+              %th.pollster.when-no-precincts-reporting
                 .long-table-heading Polling Average
-              %th.n-votes.when-race-day-past.when-race-day-present Votes
-              %th.n-votes-pct.when-race-day-past.when-race-day-present %
+              %th.n-votes.when-precincts-reporting
+                - if race.n_votes_th
+                  = race.n_votes_th
+                  %span.asterisk> *
+                - else
+                  Votes
+              %th.n-votes-pct.when-precincts-reporting %
           %tbody
             - race.candidate_races.each do |candidate_race|
               - candidate = candidate_race.candidate
@@ -25,7 +30,7 @@
                 %td.candidate
                   %img{src: image_path("#{candidate.slug}.png"), alt: ''}
                   = candidate.full_name
-                %td.pollster.when-race-day-future
+                %td.pollster.when-no-precincts-reporting
                   - if candidate_race.poll_sparkline && !candidate_race.poll_sparkline.empty?
                     .sparkline!= candidate_race.poll_sparkline.to_svg
                   %span.percent
@@ -33,8 +38,12 @@
                       N/A
                     - else
                       = "#{format_percent_or_nil(candidate_race.poll_percent)}%"
-                %td.n-votes.when-race-day-past.when-race-day-present= format_int(candidate_race.n_votes)
-                %td.n-votes-pct.when-race-day-past.when-race-day-present= "#{format_percent_or_nil(candidate_race.percent_vote)}"
+                %td.n-votes.when-precincts-reporting= format_int(candidate_race.n_votes)
+                %td.n-votes-pct.when-precincts-reporting= "#{format_percent_or_nil(candidate_race.percent_vote)}"
         .footnotes
-          %a.footnotes-for-pollster.when-race-day-future{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-          %a.footnotes-for-race-day.when-race-day-present.when-race-day-past{target: '_blank', href: race.href} Detailed results
+          %a.footnotes-for-pollster.when-no-precincts-reporting{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
+          %a.footnotes-for-race-day.when-precincts-reporting{target: '_blank', href: race.href} Detailed results
+        - if race.n_votes_footnote
+          %p.n-votes-footnote.when-precincts-reporting
+            %span.asterisk *
+            = race.n_votes_footnote
