@@ -34,33 +34,39 @@
     - else
       .parties-container
         - race_day.races.each do |race|
-          - leader = race.candidate_races.first
           .party-container.race{class: "#{race.party_id} race-#{race.when_race_happens}"}
             .party-header
               %img{src: image_path("#{race.party_id}.svg"), alt: ''}
               .party= race.party_name
-            .leader
-              %img{src: image_path("big-headshots/#{leader.candidate.slug}.png"), alt: ''}
-              %p
-                - if leader.winner?
-                  #{leader.candidate_last_name} Wins
-                - else
-                  #{leader.candidate_last_name} Leads
-            .votes-container
-              - if race.future?
-                %span.polling= "#{format_percent_or_nil(leader.poll_percent)}%"
-                %span.polling Polling Average 
-                %span.polling.source
-                  %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-              - else
-                %span.frontrunner-num= format_int(leader.n_votes)
-                %span.frontrunner-unit
-                  - if race.n_votes_th
-                    = race.n_votes_th
-                    %span.asterisk<> *
+
+            - leader = race.candidate_races.first
+            - if leader.n_pledged_delegates > 0 || (!leader.n_votes.nil? && leader.n_votes > 0) || (!leader.poll_percent.nil? && leader.poll_percent > 0)
+              .leader
+                %img{src: image_path("big-headshots/#{leader.candidate.slug}.png"), alt: ''}
+                %p
+                  - if leader.winner?
+                    #{leader.candidate_last_name} Wins
                   - else
-                    Votes
-                %div= "#{format_percent_or_nil(leader.percent_vote)}%"
+                    #{leader.candidate_last_name} Leads
+              .votes-container
+                - if race.future?
+                  %span.polling= "#{format_percent_or_nil(leader.poll_percent)}%"
+                  %span.polling Polling Average 
+                  %span.polling.source
+                    %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
+                - else
+                  %span.frontrunner-num= format_int(leader.n_votes)
+                  - if !leader.percent_vote.nil? && leader.percent_vote > 0
+                    -# Don't show vote percentage in territories, where we don't count votes
+                    %span.frontrunner-unit
+                      - if race.n_votes_th
+                        = race.n_votes_th
+                        %span.asterisk<> *
+                      - else
+                        Votes
+                    %div= "#{format_percent_or_nil(leader.percent_vote)}%"
+            - else
+              .map!= map_svg_without_geos("states/#{race.state_code}")
 
       - race_day.races.reject(&:future?).map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
         %p.footnote

@@ -296,25 +296,41 @@
 
     function refresh_svg_classes(svg, table, party_id, state_code) {
       var $candidate_tr = $(table).find('tbody tr.highlight-on-map');
+      var class_name;
       if ($candidate_tr.length == 0) {
         $candidate_tr = $(table).find('tbody tr:first');
         $candidate_tr.addClass('highlight-on-map');
       }
-
       var candidate_id = $candidate_tr.attr('data-candidate-id');
       var pattern_id_start = 'pattern-' + party_id + '-' + state_code + '-';
-
-      $(svg).find('g.counties path:not(.hover), g.subcounties path:not(.hover)').each(function() {
-        var geo_id = this.getAttribute('data-fips-int') || this.getAttribute('data-geo-id');
-        var class_name = lookup_candidate_class(party_id, geo_id, candidate_id);
-        this.setAttribute('class', class_name);
-
-        if (class_name == 'candidate-leads' || class_name == 'candidate-trails') {
-          this.setAttribute('style', 'fill: url(#' + pattern_id_start + class_name + ')');
+      if (state_code === 'ME' && party_id == 'GOP') {
+        var race_info = database.races_by_ids.GOP.ME;
+        if (candidate_id === $(table).find('tbody tr:first').attr('data-candidate-id')) {
+          class_name = race_info['n_precincts_reporting'] !== race_info['n_precincts_total'] ? 'candidate-leads' : 'candidate-wins';
         } else {
-          this.setAttribute('style', '');
+          class_name = race_info['n_precincts_reporting'] !== race_info['n_precincts_total'] ? 'candidate-trails' : 'candidate-loses';
         }
-      });
+        $(svg).find('path.state').each(function() {
+          this.setAttribute('class', class_name + ' state');
+          if (class_name == 'candidate-leads' || class_name == 'candidate-trails') {
+            this.setAttribute('style', 'fill: url(#' + pattern_id_start + class_name + ')');
+          } else {
+            this.setAttribute('style', '');
+          }
+        });
+      } else {
+        $(svg).find('g.counties path:not(.hover), g.subcounties path:not(.hover)').each(function() {
+          var geo_id = this.getAttribute('data-fips-int') || this.getAttribute('data-geo-id');
+          var class_name = lookup_candidate_class(party_id, geo_id, candidate_id);
+          this.setAttribute('class', class_name);
+
+          if (class_name == 'candidate-leads' || class_name == 'candidate-trails') {
+            this.setAttribute('style', 'fill: url(#' + pattern_id_start + class_name + ')');
+          } else {
+            this.setAttribute('style', '');
+          }
+        });
+      }
     }
 
     /**

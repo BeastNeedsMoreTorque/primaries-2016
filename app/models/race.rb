@@ -120,8 +120,10 @@ Race = RubyImmutableStruct.new(
   def has_pledged_delegates_without_candidates?; n_pledged_delegates_without_candidates > 0; end
 
   def pct_precincts_reporting
-    reporting_str = if n_precincts_total.nil? || n_precincts_total == 0
+    reporting_str = if n_precincts_total.nil?
       'N/A'
+    elsif n_precincts_reporting == 0
+      '0%'
     elsif n_precincts_reporting == n_precincts_total
       '100%'
     else
@@ -164,6 +166,8 @@ Race = RubyImmutableStruct.new(
       else
         'past'
       end
+    elsif !state.is_actual_state? && candidate_races.first.n_pledged_delegates > 0
+      'past'
     elsif !expect_results_time.nil? && database.now >= expect_results_time
       # If AP says results are coming, say it's present. That way we'll see the
       # little refresh countdowns.
@@ -215,6 +219,10 @@ Race = RubyImmutableStruct.new(
   # e.g., "Iowa (D)'
   def title_abbr
     "#{state_name} (#{party.abbreviation})"
+  end
+
+  def tabulates_votes?
+    state.is_actual_state? && id != '2016-03-05-GOP-ME'
   end
 
   def horse_race_data

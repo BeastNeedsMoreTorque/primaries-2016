@@ -48,11 +48,30 @@ module ServerSchedule
   TickIntervalInS = 10
 
   Ticks = [
-    election_day('2016-03-01'),
-    election_day('2016-03-01'),
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
     del_super,
-    election_day('2016-03-01'),
-    election_day('2016-03-01'),
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
+    election_day('2016-03-05'),
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
+    del_super,
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
+    election_day('2016-03-05'),
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
+    del_super,
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
+    election_day('2016-03-05'),
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
+    election_day('2016-03-06'),
     pollster
   ]
   #

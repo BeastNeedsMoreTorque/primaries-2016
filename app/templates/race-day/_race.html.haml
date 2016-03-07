@@ -20,12 +20,14 @@
       .status-past
         - if race.all_precincts_reporting?
           %p All precincts reporting
-        - else
+        - elsif race.any_precincts_reporting?
           -# Let JS fill in number of precincts reporting
           %p.n-precincts-reporting &nbsp;
-        %p
-          Last updated:
-          %time{datetime: race.last_updated.nil? ? '' : format_datetime(race.last_updated)}
+        - if !race.last_updated.nil?
+          -# Territories never report. Oh well.
+          %p
+            Last updated:
+            %time{datetime: format_datetime(race.last_updated)}
       .status-present
         %button.refresh 0:30
         -# Let JS fill in number of precincts reporting
