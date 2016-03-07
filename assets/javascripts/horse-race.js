@@ -318,27 +318,30 @@ function build_race_transform_matrix(i, n, w) {
 }
 
 function invert_transform_matrix(m) {
-  // https://ardoris.wordpress.com/2008/07/18/general-formula-for-the-inverse-of-a-3x3-matrix/
-  var
-    a = m[0],
-    b = m[1],
-    c = m[2],
-    d = m[3],
-    e = m[4],
-    f = m[5], // g = 0, h = 0, i = 1
-    det = a * e - b * d,
-    invDet = 1 / det;
+  // https://github.com/simonsarris/Canvas-tutorials/blob/master/transform.js
+  //
+  // Sheesh, it's hard to get this right. <canvas> has a weird ordering in the
+  // Array.
 
-  var ret = [
-    invDet * e,
-    invDet * -b,
-    invDet * (b * f - c * e),
-    invDet * -d,
-    invDet * a,
-    invDet * (c * d - a * f)
+  var invDet = 1 / (m[0] * m[3] - m[1] * m[2]);
+  return [
+    invDet * m[3],
+    -invDet * m[1],
+    -invDet * m[2],
+    invDet * m[0],
+    invDet * (m[2] * m[5] - m[3] * m[4]),
+    invDet * (m[1] * m[4] - m[0] * m[5])
   ];
+}
 
-  return ret;
+function matrix_multiply(matrix, coords) {
+  var x = coords[0];
+  var y = coords[1];
+
+  return [
+    x * matrix[0] + y * matrix[2] + matrix[4],
+    x * matrix[1] + y * matrix[3] + matrix[5]
+  ];
 }
 
 StepAnimation.prototype.show_states = function() {
@@ -397,17 +400,18 @@ StepAnimation.prototype.show_dots = function() {
   var dot_lines;
 
   function candidate_state_line(candidate_id, state_code, transform_matrix) {
-    var target_el = _this.horse_race.candidate_els[candidate_id].target;
+    var els = _this.horse_race.candidate_els[candidate_id];
+    if (!els) return null;
+
+    var target_el = els.target;
 
     var x = target_el.offsetLeft;
-    var y = 300;
+    var y = 250;
 
     var inverse_matrix = invert_transform_matrix(transform_matrix);
-    var mx = inverse_matrix[0] * x + inverse_matrix[2];
-    var my = inverse_matrix[3] * y + inverse_matrix[5];
+    var xy = matrix_multiply(inverse_matrix, [ x, y, 1 ]);
 
-    console.log(transform_matrix, inverse_matrix, x, y, mx, my);
-    return Line.parse({ x: mx, y: my }, _this.horse_race.state_paths[state_code], transform_matrix);
+    return Line.parse({ x: xy[0], y: xy[1] }, _this.horse_race.state_paths[state_code], transform_matrix);
   }
 
   function race_dot_lines(race, transform_matrix) {
@@ -425,6 +429,8 @@ StepAnimation.prototype.show_dots = function() {
     for (var i = 0; i < candidates.length; i++) {
       var c = candidates[i];
       var line = candidate_state_line(c.id, race.state_code, transform_matrix);
+      if (!line) continue;
+
       var relative_dot_positions = [];
       for (var j = 0; j < c.n; j++) {
         relative_dot_positions.push(t);
