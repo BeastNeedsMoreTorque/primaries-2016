@@ -114,6 +114,64 @@ function build_canvas(parent_div) {
 }
 
 /**
+ * A candidate and its group of dots.
+ *
+ * Each dot will animate from its start position to its end one.
+ */
+function AnimatedDotSet(candidate_id, target_xy, dots) {
+  this.candidate_id = candidate_id;
+  this.target_xy = target_xy;
+  this.dots = dots;
+
+  this._scratch = this.dots.map(function(xy) {
+    var dx = xy.x - target_xy.x;
+    var dy = xy.y - target_xy.y;
+    var d = Math.sqrt(dx * dx + dy * dy);
+
+    return {
+      x: xy.x,
+      y: xy.y,
+      dx: dx,
+      dy: dy,
+      d: d
+    };
+  });
+
+  this._max_d = Math.max.apply(null, this._scratch.map(function(x) { return x.d; }));
+}
+
+/**
+ * Returns {x, y} Objects for time t, where t is between 0 and 1.
+ *
+ * At t=1, all dot positions are 
+ */
+AnimatedDotSet.prototype.get_dots_at = function(t) {
+  // Move the farthest dot linearly; move the rest at the same speed.
+  var d_so_far = t * this._max_d;
+
+  var ret = [];
+
+  for (var i = 0; i < this._scratch.length; i++) {
+    var scratch = this._scratch[i];
+
+    if (scratch.d > d_so_far) {
+      var m = d_so_far / scratch.d;
+      ret.push({ x: scratch.x - scratch.dx * m, y: scratch.y - scratch.dy * m });
+    }
+  }
+
+  return ret;
+};
+
+/**
+ * Returns number of dots that have disappeared by time t.
+ */
+AnimatedDotSet.prototype.get_n_dots_completed_at = function(t) {
+  var d_so_far = t * this._max_d;
+  return this._scratch.reduce(function(s, x) { return s + (x.d > d_so_far ? 0 : 1); }, 0);
+};
+
+/**
  * A point on a line segment.
  *
  * Each segment has a length, so we can position dots along them. Each segment
@@ -337,23 +395,6 @@ function build_race_transform_matrix(i, n, w) {
   ];
 }
 
-function invert_transform_matrix(m) {
-  // https://github.com/simonsarris/Canvas-tutorials/blob/master/transform.js
-  //
-  // Sheesh, it's hard to get this right. <canvas> has a weird ordering in the
-  // Array.
-
-  var invDet = 1 / (m[0] * m[3] - m[1] * m[2]);
-  return [
-    invDet * m[3],
-    -invDet * m[1],
-    -invDet * m[2],
-    invDet * m[0],
-    invDet * (m[2] * m[5] - m[3] * m[4]),
-    invDet * (m[1] * m[4] - m[0] * m[5])
-  ];
-}
-
 function matrix_multiply(matrix, coords) {
   var x = coords[0];
   var y = coords[1];
@@ -404,39 +445,15 @@ StepAnimation.prototype.show_states = function() {
 
 StepAnimation.prototype.show_dots = function() {
   var _this = this;
-  var canvas, width, ctx;
-
-  /*
-   * We'll draw dots evently along the state's path, then we'll make them
-   * follow that path, then gravitate towards the candidate's hole.
-   *
-   * In broad strokes:
-   *
-   * * Initialization: for each [candidate,state] pair, compute a "path" String
-   *   and figure out the position of each dot along the string.
-   * * Animation: for each animation step, tweak the dot positions along the
-   *   path. Trace the path anew, putting dots in the new positions.
-   */
-  var dot_lines;
 
   function candidate_state_line(candidate_id, state_code, transform_matrix) {
-    var els = _this.horse_race.candidate_els[candidate_id];
-    if (!els) return null;
-
-    var target_el = els.target;
-
-    var x = target_el.offsetLeft;
-    var y = 250;
-
-    var inverse_matrix = invert_transform_matrix(transform_matrix);
-    var xy = matrix_multiply(inverse_matrix, [ x, y, 1 ]);
-
-    var line = Line.parse({ x: xy[0], y: xy[1] }, _this.horse_race.state_paths[state_code], transform_matrix);
+    var line = Line.parse({ x: 0, y: 0 }, _this.horse_race.state_paths[state_code], transform_matrix);
     line.candidate_id = candidate_id;
     return line;
   }
 
-  function race_dot_lines(race, transform_matrix) {
+  // Builds [ { candidate_id: 'id', dots: Array[{x,y}] } ] for a race.
+  function candidate_race_dots(race, transform_matrix) {
     var ret = [];
     var candidates = [];
 
@@ -469,49 +486,73 @@ StepAnimation.prototype.show_dots = function() {
 
     return candidates.map(function(c) {
       c.line.place_dots(c.dot_positions);
-      return c.line;
+      return {
+        candidate_id: c.id,
+        dots: c.line.get_dot_coordinates(0)
+      };
     });
   }
 
-  function step(t) {
-    if (!canvas) {
-      var div = _this.horse_race.els.div;
-      canvas = _this.dot_canvas = build_canvas(div);
-      width = canvas.width;
-      ctx = canvas.getContext('2d');
-    }
+  var canvas;         // <canvas>
+  var width;          // width of <canvas>
+  var ctx;            // 2d context
+  var candidate_dots; // Array[AnimatedDotSet]
 
-    if (!dot_lines) {
-      dot_lines = [];
+  function initialize() {
+    var div = _this.horse_race.els.div;
+    canvas = _this.dot_canvas = build_canvas(div);
+    width = canvas.width;
+    ctx = canvas.getContext('2d');
 
-      var races = _this.race_day.races;
-      for (var i = 0; i < races.length; i++) {
-        var transform = build_race_transform_matrix(i, races.length, canvas.width);
-        var lines = race_dot_lines(races[i], transform);
+    var races = _this.race_day.races;
+    var partial_dot_sets = {}; // candidate_id -> Array of dots
+    for (var i = 0; i < races.length; i++) {
+      var transform = build_race_transform_matrix(i, races.length, canvas.width);
+      var race_dots = candidate_race_dots(races[i], transform);
 
-        for (var j = 0; j < lines.length; j++) {
-          dot_lines.push(lines[j]);
+      for (var j = 0; j < race_dots.length; j++) {
+        var dots = race_dots[j];
+        if (!partial_dot_sets.hasOwnProperty(dots.candidate_id)) {
+          partial_dot_sets[dots.candidate_id] = [];
         }
+
+        var transformed_dots = dots.dots.map(function(xy) {
+          return {
+            x: xy.x * transform[0] + xy.y * transform[2] + transform[4],
+            y: xy.x * transform[1] + xy.y * transform[3] + transform[5]
+          };
+        });
+
+        partial_dot_sets[dots.candidate_id] = partial_dot_sets[dots.candidate_id].concat(transformed_dots);
       }
     }
 
-    t = Math.pow(t, 0.5);
+    candidate_dots = [];
+    for (var candidate_id in partial_dot_sets) {
+      var els = _this.horse_race.candidate_els[candidate_id];
+      if (!els) continue;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
+      var target_el = els.target;
+      var target_xy = { x: target_el.offsetLeft, y: 250 };
+      candidate_dots.push(new AnimatedDotSet(candidate_id, target_xy, partial_dot_sets[candidate_id]));
+    }
+
+    _this.state_canvas.parentNode.removeChild(_this.state_canvas);
+    _this.state_canvas = null;
+  }
+
+  function step(t) {
+    if (!ctx) initialize();
+
     ctx.fillStyle = 'blue';
+    ctx.beginPath();
 
-    var candidate_n_complete = {}; // id -> complete
+    var radius = 3; // px
 
-    for (var i = 0; i < dot_lines.length; i++) {
-      var dot_line = dot_lines[i];
+    for (var i = 0; i < candidate_dots.length; i++) {
+      var dot_set = candidate_dots[i];
+      var dots = dot_set.get_dots_at(t);
 
-      ctx.beginPath();
-      ctx.setTransform.apply(ctx, dot_line.transform_matrix);
-
-      var radius = 10;
-
-      var dots = dot_line.get_dot_coordinates(t);
       for (var j = 0; j < dots.length; j++) {
         var dot = dots[j];
         ctx.moveTo(dot.x, dot.y);
@@ -519,34 +560,19 @@ StepAnimation.prototype.show_dots = function() {
         ctx.closePath();
       }
 
-      ctx.fill();
-
-      if (!candidate_n_complete.hasOwnProperty(dot_line.candidate_id)) {
-        candidate_n_complete[dot_line.candidate_id] = 0;
-      }
-      candidate_n_complete[dot_line.candidate_id] += dot_line.get_n_dots_before(t);
+      var n_complete = dot_set.get_n_dots_completed_at(t);
+      var candidate = _this.candidates[dot_set.candidate_id];
+      var n_delegates = candidate.start_n_delegates + n_complete;
+      var percent = 100 * n_delegates / _this.horse_race.data.n_delegates_needed;
+      candidate.els.n_delegates.textContent = format_int(n_delegates);
+      candidate.els.marker.style.left = percent + '%';
     }
 
-    for (var candidate_id in candidate_n_complete) {
-      var n_complete = candidate_n_complete[candidate_id];
-      if (n_complete > 0) {
-        var candidate = _this.candidates[candidate_id];
-        var n_delegates = candidate.start_n_delegates + n_complete;
-        var percent = 100 * n_delegates / _this.horse_race.data.n_delegates_needed;
-        candidate.els.n_delegates.textContent = format_int(n_delegates);
-        candidate.els.marker.style.left = percent + '%';
-      }
-    }
-
-    ctx.restore();
-
-    if (_this.state_canvas) {
-      _this.state_canvas.parentNode.removeChild(_this.state_canvas);
-      _this.state_canvas = null;
-    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fill();
   }
 
-  this.animate_step(2000, step, function() { _this.end(); });
+  this.animate_step(10000, step, function() { _this.end(); });
 };
 
 StepAnimation.prototype.end = function() {
