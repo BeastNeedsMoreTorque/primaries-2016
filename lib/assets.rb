@@ -27,9 +27,12 @@ module Assets
       race-day-nodes.js
       race-day.js
       delegate-summary.js
+      social.js
+      animated-dot-set.js
+      dot-line.js
+      step-animation.js
       horse-race.js
       all-primaries.js
-      social.js
     ),
     'splash.js' => %w(
       vendor/jquery-2.2.0.js
