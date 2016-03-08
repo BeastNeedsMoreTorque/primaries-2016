@@ -1,6 +1,8 @@
 $muted: #666;
 $tableBorderColor: #eee;
 
+$candidate-colors: ('trump': #ff8101, 'cruz': #994fa1, 'rubio': #f482be, 'kasich': #a8572c, 'carson': #cb416b, 'clinton': #66c2a5, 'sanders': #8da0cb);
+
 $strongDem: #5c6b95;
 $weakDem: #9facd0;
 $strongGOP: #bc5c5c;
@@ -204,7 +206,7 @@ $full-desktop-width: 960px;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    
+
     display: -webkit-flex;
     -webkit-flex-direction: row;
     -webkit-justify-content: center;

@@ -48,6 +48,7 @@ function CountyRace(line) {
   this.n_votes = +arr[2];
   this.n_precincts_reporting = +arr[3];
   this.n_precincts_total = +arr[4];
+  this.leader_slug = arr[5];
 }
 
 function Party(line) {
@@ -89,6 +90,7 @@ function RaceSubcounty(line) {
   this.n_votes = +arr[2];
   this.n_precincts_reporting = +arr[3];
   this.n_precincts_total = +arr[4];
+  this.leader_slug = arr[5];
 }
 
 var RaceDayTables = [

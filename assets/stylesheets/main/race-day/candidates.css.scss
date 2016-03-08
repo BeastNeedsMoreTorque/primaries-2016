@@ -9,6 +9,7 @@ body.race-day table.candidates {
 
   th {
     padding-bottom: .5rem;
+    border-bottom: 1px solid black;
   }
 
   td, th {
@@ -22,8 +23,13 @@ body.race-day table.candidates {
     line-height: 2.25rem;
   }
 
-  th {
-    border-bottom: 1px solid black;
+  @each $slug, $color in $candidate-colors {
+    tr[data-candidate-slug=#{$slug}] {
+      td.percent-vote {
+        color: white;
+        background: $color;
+      }
+    }
   }
 
   .pollster {

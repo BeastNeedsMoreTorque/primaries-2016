@@ -53,6 +53,12 @@
     @include svg-city-label();
     font-size: 40px;
   }
+
+  @each $slug, $color in $candidate-colors {
+    path.#{$slug}-wins {
+      fill: $color;
+    }
+  }
 }
 
 .race-tooltip {

@@ -5,7 +5,7 @@
       %th.n-delegates{colspan: 2} Delegates
       %th.n-pledged-delegates{colspan: 2} Delegates
       - if race.has_pollster_data?
-        %th.pollster Polling Average 
+        %th.pollster Polling Average
       %th.n-votes
         - if race.n_votes_th
           = race.n_votes_th
@@ -16,7 +16,7 @@
   %tbody
     - race.candidate_races.each do |candidate_race|
       - candidate = candidate_race.candidate
-      %tr{'data-candidate-id': candidate.id, class: (candidate_race.winner? ? 'winner' : '')}
+      %tr{'data-candidate-id': candidate.id, 'data-candidate-slug': candidate.slug, class: (candidate_race.winner? ? 'winner' : '')}
         %td.candidate
           %img{src: image_path("#{candidate.slug}.png"), alt: ''}
           %span.name= candidate.name
