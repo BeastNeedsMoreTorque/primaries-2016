@@ -1,3 +1,5 @@
+$horse-width: 8rem;
+
 .horse-races {
   .horse-race {
     position: relative;
@@ -5,44 +7,20 @@
 
   ol.candidate-horses {
     margin: 6rem 0 0;
-    padding: 0 1rem;
+    padding: 0;
     list-style: none;
   }
 
   li.candidate-horse {
-    display: -webkit-flex;
-    display: flex;
+    position: relative;
     line-height: 1.5rem;
     height: 1.5rem;
-
-    .info {
-      width: 6rem;
-      margin-top: -.8rem;
-      margin-right: 8rem;
-      font-size: .8rem;
-      text-align: center;
-      font-weight: bold;
-
-      display: -webkit-flex;
-      display: flex;
-      -webkit-justify-content: space-between;
-      justify-content: space-between;
-    }
-
-    .visual {
-      -webkit-flex: 1 1 auto;
-      flex: 1 1 auto;
-      margin-top: -.8rem;
-      position: relative;
-      z-index: 0; // set z-index contexts for background+marker
-    }
+    margin-left: $horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
 
     .background {
       position: relative;
-      margin-left: -6rem;
-      margin-right: -1rem;
       height: 2.5rem;
-      z-index: 1;
+      margin-left: -$horse-width * 19 / 20;
 
       // The shadow is the same for all three backgrounds, so write it once
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><defs><filter id="blur"><feGaussianBlur stdDeviation="0.3" result="blur"/></filter></defs><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" fill="black" filter="url(#blur)"/></svg>') repeat-x bottom left;
@@ -91,16 +69,57 @@
   .marker {
     position: absolute;
     left: 100%;
-    bottom: .75rem;
+    bottom: -.25rem;
 
     img {
       display: block;
       position: absolute;
       right: 0;
-      width: 8rem;
-      height: 6rem;
+      width: $horse-width;
+      height: $horse-width * 3 / 4; // image aspect ratio
       bottom: 0;
     }
+  }
+
+  .speech-bubble {
+    display: none;
+    position: absolute;
+    top: -10rem;
+    left: -3rem;
+    float: left;
+    padding: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    background: white;
+    border: 2px solid $muted;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+    white-space: nowrap;
+
+    &::before, &::after {
+      content: ' ';
+      position: absolute;
+      left: 1rem;
+      bottom: -13px;
+      width: 0;
+      height: 0;
+      border: 6px solid transparent;
+    }
+
+    &::before {
+      border-color: $muted transparent transparent $muted;
+    }
+
+    &::after {
+      bottom: -8px;
+      border-width: 4px;
+      margin-left: 2px;
+      border-color: white transparent transparent white;
+    }
+  }
+
+  .marker:hover .speech-bubble {
+    display: block;
   }
 
   ol.candidate-targets {

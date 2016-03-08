@@ -82,25 +82,35 @@ function build_canvas(parent_div) {
 function StepAnimation(horse_race, step_number) {
   this.horse_race = horse_race;
   this.step_number = step_number;
-  this.cancel = false;
+  this.ended = false;
 
   var race_day = this.race_day = horse_race.data.race_days[step_number];
-  var candidates = this.candidates = {};
 
-  for (var candidate_id in horse_race.candidates_up_to_now) {
-    var c = horse_race.candidates_up_to_now[candidate_id];
-    var n_delegates = race_day.races.reduce(function(s, r) { return s + (r.candidate_n_delegates[candidate_id] || 0); }, 0);
-
-    candidates[candidate_id] = {
-      els: c.els,
-      start_n_delegates: c.n_delegates,
-      end_n_delegates: c.n_delegates + n_delegates
-    };
+  var candidate_id_to_n_delegates = {};
+  if (race_day) {
+    race_day.candidates.forEach(function(c) {
+      candidate_id_to_n_delegates[c.id] = c.n_delegates;
+    });
+  } else {
+    horse_race.candidates.forEach(function(c) {
+      candidate_id_to_n_delegates[c.id] = c.data.n_unpledged_delegates;
+    });
   }
+
+  horse_race.candidates.forEach(function(candidate) {
+    candidate.n_delegates_start = candidate.n_delegates;
+    candidate.n_delegates_end = candidate.n_delegates + (candidate_id_to_n_delegates[candidate.id] || 0);
+  });
+
+  this.candidates = horse_race.candidates;
 }
 
 StepAnimation.prototype.start = function() {
-  this.show_states();
+  if (this.race_day) {
+    this.show_states();
+  } else {
+    this.add_unpledged_delegates();
+  }
 };
 
 /**
@@ -115,7 +125,7 @@ StepAnimation.prototype.animate_step = function(duration, step, next_step) {
   var _this = this;
 
   function do_step() {
-    if (_this.cancel) { return next_step(); }
+    if (_this.ended) return;
 
     var t = new Date() - t1;
     var fraction = Math.min(1, t / duration);
@@ -132,6 +142,21 @@ StepAnimation.prototype.animate_step = function(duration, step, next_step) {
   window.requestAnimationFrame(do_step);
 };
 
+StepAnimation.prototype.add_unpledged_delegates = function() {
+  var _this = this;
+
+  function step(t) {
+    _this.candidates.forEach(function(candidate) {
+      var d = candidate.n_delegates_end - candidate.n_delegates_start;
+      candidate.n_delegates = candidate.n_delegates_start + Math.round(d * t);
+    });
+
+    _this.horse_race.refresh_candidate_els();
+  }
+
+  this.animate_step(1000, step, function() { _this.end(); });
+};
+
 StepAnimation.prototype.show_states = function() {
   var _this = this;
 
@@ -144,7 +169,7 @@ StepAnimation.prototype.show_states = function() {
 
       var ctx = canvas.getContext('2d');
 
-      var races = _this.race_day.races;
+      var races = _this.race_day ? _this.race_day.races : [];
       var paths = _this.horse_race.state_paths;
 
       for (var i = 0; i < races.length; i++) {
@@ -182,17 +207,15 @@ StepAnimation.prototype.show_dots = function() {
   // Builds [ { candidate_id: 'id', dots: Array[{x,y}] } ] for a race.
   function candidate_race_dots(race, transform_matrix) {
     var ret = [];
-    var candidates = [];
 
-    for (var id in race.candidate_n_delegates) {
-      var n = race.candidate_n_delegates[id];
-      if (n == 0) continue;
-
-      var line = candidate_state_line(id, race.state_code, transform_matrix);
-      if (!line) continue;
-
-      candidates.push({ id: id, n_dots_remaining: n, line: line, dot_positions: [] });
-    }
+    var candidates = race.candidates
+      .filter(function(c) { return c.n_delegates > 0; })
+      .map(function(candidate) {
+        var line = candidate_state_line(candidate.id, race.state_code, transform_matrix);
+        return line ? { id: candidate.id, n_dots_remaining: candidate.n_delegates, line: line, dot_positions: [] } : null;
+      })
+      .filter(function(arr) { return !!arr; })
+      ;
 
     var n = candidates.reduce(function(s, c) { return s + c.n_dots_remaining; }, 0);
     var step = 1 / n;
@@ -223,6 +246,7 @@ StepAnimation.prototype.show_dots = function() {
   var canvas;         // <canvas>
   var width;          // width of <canvas>
   var ctx;            // 2d context
+  var candidates_by_id = {};
   var candidate_dots; // Array[AnimatedDotSet]
 
   function initialize() {
@@ -254,20 +278,19 @@ StepAnimation.prototype.show_dots = function() {
       }
     }
 
-    var max_n_dots = Object.keys(partial_dot_sets).reduce(function(s, k) {
-      var n_dots = partial_dot_sets[k].length;
-      return s > n_dots ? s : n_dots;
-    }, 0);
+    var max_n_dots = _this.candidates.reduce(function(s, c) { var n = partial_dot_sets[c.id].length; return s > n ? s : n; }, 0);
 
-    candidate_dots = [];
-    for (var candidate_id in partial_dot_sets) {
-      var els = _this.horse_race.candidate_els[candidate_id];
-      if (!els) continue;
+    candidate_dots = _this.candidates.map(function(candidate) {
+      var target_el = candidate.els.target;
+      var target_xy = { x: target_el.offsetLeft - 10, y: 250 };
+      var raw_dots = partial_dot_sets[candidate.id];
 
-      var target_el = els.target;
-      var target_xy = { x: target_el.offsetLeft - 10, y: 255 };
-      candidate_dots.push(new AnimatedDotSet(candidate_id, target_xy, partial_dot_sets[candidate_id], max_n_dots));
-    }
+      return new AnimatedDotSet(candidate.id, target_xy, raw_dots, max_n_dots);
+    });
+
+    _this.candidates.forEach(function(candidate) {
+      candidates_by_id[candidate.id] = candidate;
+    });
 
     _this.state_canvas.parentNode.removeChild(_this.state_canvas);
     _this.state_canvas = null;
@@ -281,8 +304,7 @@ StepAnimation.prototype.show_dots = function() {
 
     var radius = 3; // px
 
-    for (var i = 0; i < candidate_dots.length; i++) {
-      var dot_set = candidate_dots[i];
+    candidate_dots.forEach(function(dot_set) {
       var dots = dot_set.get_dots_at(t);
 
       for (var j = 0; j < dots.length; j++) {
@@ -293,35 +315,34 @@ StepAnimation.prototype.show_dots = function() {
       }
 
       var n_complete = dot_set.get_n_dots_completed_at(t);
-      var candidate = _this.candidates[dot_set.candidate_id];
-      var n_delegates = candidate.start_n_delegates + n_complete;
-      var percent = 100 * n_delegates / _this.horse_race.data.n_delegates_needed;
-      candidate.els.n_delegates.textContent = format_int(n_delegates);
-      candidate.els.marker.style.left = percent + '%';
-    }
+      var candidate = candidates_by_id[dot_set.candidate_id];
+      candidate.n_delegates = candidate.n_delegates_start + n_complete;
+    });
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fill();
+
+    _this.horse_race.refresh_candidate_els();
   }
 
-  this.animate_step(Math.sqrt(this.race_day.n_pledged_delegates) * 80, step, function() { _this.end(); });
+  var duration = this.race_day ? Math.sqrt(this.race_day.n_pledged_delegates) * 80 : 1000;
+  this.animate_step(duration, step, function() { _this.end(); });
 };
 
+/**
+ * Called at the end of animation. You may also call it at any time to abort
+ * all further rendering.
+ */
 StepAnimation.prototype.end = function() {
+  if (this.ended) return;
+  this.ended = true;
+
   if (this.state_canvas) this.state_canvas.parentNode.removeChild(this.state_canvas);
   if (this.dot_canvas) this.dot_canvas.parentNode.removeChild(this.dot_canvas);
 
-  for (var id in this.candidates) {
-    var c = this.candidates[id];
+  this.candidates.forEach(function(candidate) {
+    candidate.n_delegates = candidate.n_delegates_end;
+  });
 
-    this.horse_race.candidates_up_to_now[id].n_delegates = c.end_n_delegates;
-
-    var percent = 100 * c.end_n_delegates / this.horse_race.data.n_delegates_needed;
-    c.els.n_delegates.textContent = format_int(c.end_n_delegates);
-    c.els.marker.style.left = percent + '%';
-  }
-};
-
-StepAnimation.prototype.skip_to_end = function() {
-  this.cancel = true;
+  this.horse_race.refresh_candidate_els();
 };

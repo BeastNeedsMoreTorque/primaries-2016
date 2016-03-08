@@ -5,18 +5,17 @@
       %ol.candidate-horses
         - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
           %li.candidate-horse{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, 'data-n-unpledged-delegates': candidate.n_unpledged_delegates, class: (candidate.dropped_out? ? 'dropped-out' : '')}
-            .info
-              .last-name= candidate.name
-              .n-delegates= format_int(candidate.n_delegates)
-            .visual
-              .background
-              .marker{style: "left: #{(candidate.n_delegates || 0).to_f / party.n_delegates_needed * 100}%"}
-                %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: ''}
+            .marker{style: "left: #{(candidate.n_delegates || 0).to_f / party.n_delegates_needed * 100}%"}
+              %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: ''}
+              .speech-bubble
+            .background
 
       %ol.candidate-targets
         - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
-          %li.candidate-target{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, class: (candidate.dropped_out? ? 'dropped-out' : '')}
+          %li.candidate-target{'data-candidate-id': candidate.id}
+            .last-name= candidate.name
             %img{src: image_path("horses/#{candidate.slug}-target.png"), alt: ''}
+            .n-delegates= format_int(candidate.n_delegates)
 
       .json-data= party.horse_race_data.to_json
 

@@ -230,7 +230,9 @@ Race = RubyImmutableStruct.new(
       state_code: state_code,
       state_name: state_name,
       n: n_pledged_delegates_with_candidates,
-      candidate_n_delegates: candidate_races.select{ |cr| cr.n_pledged_delegates > 0 }.map{ |cr| [ cr.candidate_id, cr.n_pledged_delegates ] }.to_h
+      candidates: candidate_races
+        .select { |cr| cr.n_pledged_delegates > 0 }
+        .map { |cr| { id: cr.candidate_id, n_delegates: cr.n_pledged_delegates } }
     }
   end
 end
