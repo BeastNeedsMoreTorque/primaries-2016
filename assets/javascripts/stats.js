@@ -6,7 +6,7 @@ var isMobile = function(agent){return /(android|bb\d+|meego).+mobile|avantgo|bad
 bN_cfg = {
   h: location.hostname,
   p: {
-    "dL_ch": (isMobile ? "us.hpmgpol_mb" : "us.hpmgpol",
+    "dL_ch": (isMobile ? "us.hpmgpol_mb" : "us.hpmgpol"),
     "dL_dpt": "data",
     "cobrand": "HuffPost",
     "dL_blogID": "2",
