@@ -1,24 +1,10 @@
-.race-map-legend{'data-party-id': party.id}
-  .no-results
+%ul.race-map-legend
+  %li
     .swatch
     .label No precincts reporting
-  .candidate-wins
-    .swatch
-    .label
-      %span.candidate-name
-      wins
-  .candidate-leads
-    .swatch
-    .label
-      %span.candidate-name
-      leads
-  .candidate-trails
-    .swatch
-    .label
-      %span.candidate-name
-      trails
-  .candidate-loses
-    .swatch
-    .label
-      %span.candidate-name
-      loses
+  - race.candidate_races.map(&:candidate).sort_by(&:last_name).each do |candidate|
+    %li{'data-candidate': candidate.slug}
+      .swatch
+        .wins
+        .leads
+      .label #{candidate.last_name} wins/leads

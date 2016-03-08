@@ -1,68 +1,67 @@
 @import '../../_variables';
 
-.race-map-legend {
+ul.race-map-legend {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-justify-content: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
   font-size: .9rem;
   line-height: 1rem;
   height: 4rem;
   text-align: center;
 
-  &>* {
-    display: none;
-    padding: .25rem .25rem 0;
-  }
+  li {
+    display: none; // on page load
+    &.enabled {
+      display: -webkit-flex;
+      display: flex;
+    }
 
-  &.has-candidate-wins .candidate-wins,
-  &.has-candidate-leads .candidate-leads,
-  &.has-candidate-trails .candidate-trails,
-  &.has-candidate-loses .candidate-loses,
-  &.has-no-results .no-results {
-    display: -webkit-inline-flex;
-    display: inline-flex;
+    white-space: nowrap;
+    padding: .25rem .25rem 0;
     height: 1rem;
   }
 
   .swatch {
-    display: inline-block;
+    display: -webkit-flex;
+    display: flex;
     box-sizing: border-box; // for "no-results" white
-    border: 1px solid white;
-    width: 1rem;
+    border: 1px solid transparent;
+    width: 2rem;
     height: 1rem;
+    line-height: 1rem;
     margin-right: .2rem;
     margin-bottom: -.15rem; // drop below the baseline
+
+    * {
+      width: 50%;
+      height: 100%;
+    }
   }
 
-  .label {
-    display: block;
+  @each $candidate-slug, $color in $candidate-colors {
+    li[data-candidate="#{$candidate-slug}"] {
+      .swatch {
+        background: $color;
+      }
+    }
   }
 
-  .no-results .swatch {
+  li:not([data-candidate]) .swatch {
+    width: 1rem;
     background: white;
-    border: 1px solid $tableBorderColor;
+    border-color: $tableBorderColor;
   }
 
-  .candidate-trails .swatch {
+  .leads {
     // We make this image a bit blurry (non-integer stroke-width) because the
     // map itself is blurry (it's stretched to fit).
-    background: $undecided url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1.1" stroke="white"/></svg>');
-  }
-
-  .candidate-loses .swatch {
-    background: $undecided;
-  }
-
-  &[data-party-id=Dem] .candidate-wins .swatch {
-    background: $strongDem;
-  }
-
-  &[data-party-id=GOP] .candidate-wins .swatch {
-    background: $strongGOP;
-  }
-
-  &[data-party-id=Dem] .candidate-leads .swatch {
-    background: $strongDem url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1.1" stroke="white"/></svg>');
-  }
-
-  &[data-party-id=GOP] .candidate-leads .swatch {
-    background: $strongGOP url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1.1" stroke="white"/></svg>');
+    background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><path d="M-.5,-.5L.5,-.5M-.5,5.5L5.5,-.5M4.5,5.5L5.5,4.5" stroke-width="1.1" stroke="white"/></svg>');
   }
 }

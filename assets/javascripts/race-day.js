@@ -243,25 +243,27 @@
     }
     on_database_change.push(refresh_geo_class_names);
 
-    /**
-     * Returns a Boolean indicating whether any precincts are reporting.
-     */
-    function race_has_results(party_id, state_code) {
-      var o1 = database.races_by_ids[party_id];
-      if (!o1) return false;
-      var o2 = o1[state_code];
-      if (!o2) return false;
-      return o2.n_precincts_reporting > 0;
-    }
+    function refresh_svg_legend(svg) {
+      var legend = svg.nextElementSibling;
+      var used_path_classes = {};
+      var used_slugs = {};
 
-    function refresh_svg_legend(svg, table) {
-      var $legend = $(svg.nextElementSibling);
-      var candidate_name = $('tbody tr.highlight-on-map td.candidate span.name', table).text();
-
-      [ 'no-results', 'candidate-wins', 'candidate-leads', 'candidate-trails', 'candidate-loses' ].forEach(function(klass) {
-        $legend.toggleClass('has-' + klass, $('path.' + klass, svg).length > 0);
+      Array.prototype.forEach.call(svg.querySelectorAll('g.counties path:not(.hover), g.subcounties path:not(.hover)'), function(path) {
+        used_path_classes[path.getAttribute('class')] = null;
       });
-      $legend.find('.candidate-name').text(candidate_name || '');
+
+      Object.keys(used_path_classes).forEach(function(key) {
+        if (key == 'no-results') {
+          used_slugs[''] = null;
+        } else {
+          used_slugs[key.substring(0, key.indexOf('-'))] = null;
+        }
+      });
+
+      Array.prototype.forEach.call(legend.querySelectorAll('li'), function(li) {
+        var slug = li.getAttribute('data-candidate') || '';
+        li.setAttribute('class', used_slugs.hasOwnProperty(slug) ? 'enabled' : 'disabled');
+      });
     }
 
     /**
@@ -325,23 +327,20 @@
       svg.insertBefore(defs, svg.firstChild);
     }
 
-    function monitor_svg(svg, table, party_id, state_code) {
+    function monitor_svg(svg, party_id, state_code) {
       add_patterns_to_svg(svg);
 
       on_database_change.push(function() {
-        if (race_has_results(party_id, state_code)) {
-          refresh_svg_legend(svg, table);
-        }
+        refresh_svg_legend(svg);
       });
     }
 
     $('.race:not(.not-today) .party-state-map svg').each(function() {
       var $race = $(this).closest('.race');
-      var $table = $race.find('table');
       var party_id = $race.attr('data-party-id');
       var state_code = $race.attr('data-state-code');
 
-      monitor_svg(this, $table[0], party_id, state_code);
+      monitor_svg(this, party_id, state_code);
     });
   }
 
