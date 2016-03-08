@@ -9,94 +9,102 @@
  * farthest point, so they don't all complete at the same time. We time it such
  * that at t=0.5, the first point is already complete (so we're pulling them all
  * by half the distance to the closest one).
+ *
+ * @param candidate_id Candidate ID String
+ * @param target_xy { x, y } in the <canvas> where all these dots will go
+ * @param dots Array of { x, y } dot start positions
+ * @param max_n_dots Maximum `dots.length` across all candidates. We use this
+ *                   so a candidate with fewer dots will complete its animation
+ *                   before t=1; the "winner" animates longer than the "losers"
  */
-function AnimatedDotSet(candidate_id, target_xy, dots) {
+function AnimatedDotSet(candidate_id, target_xy, dots, max_n_dots) {
   this.candidate_id = candidate_id;
   this.target_xy = target_xy;
   this.dots = dots;
+  this.max_n_dots = max_n_dots;
 
-  this._scratch = this.dots.map(function(xy, i) {
-    // Cubic Bézier curve
-    // https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Cubic_B.C3.A9zier_curves
-    //
-    // It's really hard to calculate curve length -- http://math.stackexchange.com/questions/12186/arc-length-of-b%C3%A9zier-curves
-    // ... so we'll just assume dots which are further have longer curves. Heck,
-    // that's probably even true.
-
+  this._scratch = this.dots.map(function(xy) {
     var dx = xy.x - target_xy.x;
     var dy = xy.y - target_xy.y;
     var d = Math.sqrt(dx * dx + dy * dy);
 
     return {
-      x1: xy.x,
-      y1: xy.y,
-      x2: xy.x,
-      y2: xy.y + - 100,
-      x3: target_xy.x,
-      y3: target_xy.y - 100 - i * 3,
-      x4: target_xy.x,
-      y4: target_xy.y,
+      x: xy.x,
+      y: xy.y,
+      dx: dx,
+      dy: dy,
       d: d
     };
   });
+
+  this._scratch.sort(function(p1, p2) { return p1.d - p2.d; });
 }
 
 /**
  * Returns {x, y} Objects for time t, where t is between 0 and 1.
  *
- * At t=1, all dot positions are 
+ * At t=0.1000001, each candidate's first dot will complete.
+ * At t=1, returns the empty Array: all objects have finished their animation.
  */
 AnimatedDotSet.prototype.get_dots_at = function(t) {
   if (this._last_get_dots_at && this._last_get_dots_at.t == t) {
     return this._last_get_dots_at.ret;
   }
 
-  var scratch2 = [], i, p;
-
-  var A = (1 - t) * (1 - t) * (1 - t);
-  var B = 3 * (1 - t) * (1 - t) * t;
-  var C = 3 * (1 - t) * t * t;
-  var D = t * t * t;
-
-  for (i = 0; i < this._scratch.length; i++) {
-    p = this._scratch[i];
-    var x = A * p.x1 + B * p.x2 + C * p.x3 + D * p.x4;
-    var y = A * p.y1 + B * p.y2 + C * p.y3 + D * p.y4;
-    var dx = p.x4 - x;
-    var dy = p.y4 - y;
-
-    scratch2.push({
-      spline_x: x,
-      spline_y: y,
-      end_x: p.x4,
-      end_y: p.y4,
-      dx: dx,
-      dy: dy,
-      d: Math.sqrt(dx * dx + dy * dy)
-    });
-  }
-
-  // We'll move every point towards x by the same amount
-  var ds = scratch2.map(function(x) { return x.d; });
-  var max_d = Math.max.apply(null, ds);
-  var move_d = 2 * t * max_d;
+  var n_dots_in, dot_t;
+  var NoDotsT = 0.1;
+  var Damping = 0.9; // so we can see dots going to Trump from far left
 
   var ret = [];
 
-  for (i = 0; i < scratch2.length; i++) {
-    p = scratch2[i];
+  // Number of dots in at time t, t >= NoDotsT:
+  // n_dots_in = max_n_dots * (t - NoDotsT) / (1 - NoDotsT)
+  //
+  // ... which lets us calculate that time n dots will be in:
+  // t = NoDotsT + n_dots_in * (1 - NoDotsT) / max_n_dots
 
-    if (p.d > move_d) {
-      ret.push({
-        x: p.spline_x + dx * move_d / p.d,
-        y: p.spline_y + dy * move_d / p.d
-      });
-    }
+  if (t < NoDotsT) {
+    n_dots_in = 0;
+    dot_t = t / NoDotsT;
+  } else {
+    var n_dots_in_real = (t - NoDotsT) / (1 - NoDotsT) * this.max_n_dots;
+    n_dots_in = Math.floor(n_dots_in_real);
 
-    if (i == 0) {
-      console.log(p, ret[ret.length - 1]);
-    }
+    // Calculate how far towards the destination our next dot should be.
+    var last_dot_t = NoDotsT + n_dots_in * (1 - NoDotsT) / this.max_n_dots;
+    var next_dot_t = NoDotsT + (n_dots_in + 1) * (1 - NoDotsT) / this.max_n_dots;
+
+    // Okay, so I'm not so sure of myself here. But I think this is okay.
+    //
+    // The possible values:
+    //
+    // * t / next_dot_t: how far along we are to the next dot going in.
+    //   Rationale: if t =~ next_dot_t, we want that dot to be very close to
+    //   its destination.
+    // * t / last_dot_t * Damping: how far along the previous dot was at a `t`
+    //   very close to this one.
+    //   Rationale: if t =~ last_dot_t, we don't want dot_t to be _lower_ for
+    //   the next dot than it was in a previous frame.
+    // * 1: maximum `dot_t`.
+    //   Rationale: `t / last_dot_t * Damping` might be > 1.
+    //
+    // It's possible for this function to "jitter". That's okay -- we're
+    // simulating a smooth animation curve (really slow to compute) with very
+    // cheap math.
+    dot_t = Math.max(Math.min(1, t / last_dot_t * Damping), t / next_dot_t);
   }
+
+  this._scratch.forEach(function(p, i) {
+    if (i < n_dots_in) {
+      // Hide the dot
+    } else {
+      ret.push({
+        x: p.x - p.dx * dot_t,
+        y: p.y - p.dy * dot_t
+      });
+      dot_t *= Damping;
+    }
+  });
 
   this._last_get_dots_at = {
     t: t,

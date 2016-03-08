@@ -254,6 +254,11 @@ StepAnimation.prototype.show_dots = function() {
       }
     }
 
+    var max_n_dots = Object.keys(partial_dot_sets).reduce(function(s, k) {
+      var n_dots = partial_dot_sets[k].length;
+      return s > n_dots ? s : n_dots;
+    }, 0);
+
     candidate_dots = [];
     for (var candidate_id in partial_dot_sets) {
       var els = _this.horse_race.candidate_els[candidate_id];
@@ -261,7 +266,7 @@ StepAnimation.prototype.show_dots = function() {
 
       var target_el = els.target;
       var target_xy = { x: target_el.offsetLeft - 10, y: 255 };
-      candidate_dots.push(new AnimatedDotSet(candidate_id, target_xy, partial_dot_sets[candidate_id]));
+      candidate_dots.push(new AnimatedDotSet(candidate_id, target_xy, partial_dot_sets[candidate_id], max_n_dots));
     }
 
     _this.state_canvas.parentNode.removeChild(_this.state_canvas);
@@ -299,7 +304,7 @@ StepAnimation.prototype.show_dots = function() {
     ctx.fill();
   }
 
-  this.animate_step(3000, step, function() { _this.end(); });
+  this.animate_step(Math.sqrt(this.race_day.n_pledged_delegates) * 80, step, function() { _this.end(); });
 };
 
 StepAnimation.prototype.end = function() {
