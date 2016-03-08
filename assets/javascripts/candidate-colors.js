@@ -1,7 +1,7 @@
 var CandidateColors = {
   Dem: {
-    clinton: '#66c2a5',
-    sanders: '#8da0cb'
+    clinton: '#a6c281',
+    sanders: '#84c9ec'
   },
   GOP: {
     trump: '#91344c',
