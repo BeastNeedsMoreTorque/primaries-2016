@@ -27,7 +27,7 @@ body.race-day table.candidates {
 
   @each $slug, $color in $candidate-colors {
     tr[data-candidate-slug=#{$slug}] {
-      td.percent-vote {
+      td.candidate .inner {
         color: white;
         background: $color;
       }
@@ -41,19 +41,34 @@ body.race-day table.candidates {
   td.candidate {
     text-align: left;
     position: relative;
-    padding-left: .5rem;
+    padding: 0;
+
+    .inner {
+      border: .75rem solid white;
+      border-left-width: 0;
+      line-height: 1.25rem;
+      padding-left: 2.5rem;
+      max-width: 7rem;
+    }
+
+    span {
+      padding-left: .5rem;
+      padding-right: .5rem;
+    }
 
     img {
-      width: 1.5rem;
-      height: 2.25rem;
-      padding-right: .5rem;
-      vertical-align: middle;
+      display: block;
+      position: absolute;
+      width: 1.9rem;
+      height: 2.85rem;
+      left: .5rem;
+      top: 0;
     }
 
     padding-right: 0; // goes with .n-delegates padding-left: 0;
   }
 
-  tr.winner td.candidate::after {
+  tr.winner td.candidate span::after {
     color: inherit;
     content: '✓';
   }
@@ -90,10 +105,8 @@ body.race-day table.candidates {
     padding-right: .5rem;
     padding-left: 0;
     line-height: 25px;
+    color: $dots-with-candidates-color;
   }
-
-  tr.highlight-on-map td.n-delegates-dots,
-  tr.highlight-on-map td.n-pledged-delegates-dots { color: white; }
 }
 
 body.race-day .race {
@@ -117,18 +130,6 @@ body.race-day .race {
   }
 }
 
-body.race-day .race[data-party-id="Dem"] {
-  td.n-delegates-dots,
-  td.n-pledged-delegates-dots,
-  .dot-group .with-candidates { color: $strongDem; }
-}
-
-body.race-day .race[data-party-id="GOP"] {
-  td.n-delegates-dots,
-  td.n-pledged-delegates-dots,
-  .dot-group .with-candidates { color: $strongGOP; }
-}
-
 body.race-day .race:not(.has-delegate-counts) table.candidates {
   .n-delegates, .n-delegates-dots { display: none; }
 }
@@ -140,5 +141,4 @@ body.race-day .race.no-precincts-reporting {
   .n-votes, .percent-vote { display: none; }
 }
 
-body.race-day .race.precincts-reporting:not(.not-today) table.candidates td { cursor: pointer; }
 body.race-day .race.precincts-reporting table.candidates .pollster { display: none; }

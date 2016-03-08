@@ -225,15 +225,14 @@
 
         var o = paths[geo_race.party_id][geo_race.geo_id];
         if (o) {
-          console.log(class_name, o);
           var path = o.path;
           path.setAttribute('class', class_name);
 
-          if (/-leads/.test(class_name)) {
+          if (/-leads$/.test(class_name)) {
             // TODO geo_race.state_code, or change the ID of the pattern?
-            //var pattern_id_start = 'pattern-' + geo_race.party_id + '-' + geo_race.state_code + '-';
+            var pattern_id_start = 'pattern-' + geo_race.party_id + '-' + geo_race.state_code + '-';
 
-            //path.setAttribute('style', 'fill: url(#' + pattern_id_start + class_name + ')');
+            path.setAttribute('style', 'fill: url(#' + pattern_id_start + class_name + ')');
           } else {
             path.setAttribute('style', '');
           }
@@ -241,7 +240,6 @@
       }
       database.county_races.forEach(function(geo_race) { refresh_geo_class_names_inner(geo_race, nodes.county_races); });
       database.race_subcounties.forEach(function(geo_race) { refresh_geo_class_names_inner(geo_race, nodes.race_subcounties); });
-
     }
     on_database_change.push(refresh_geo_class_names);
 
@@ -319,9 +317,10 @@
 
       var defs = document.createElementNS(ns, 'defs');
 
-      //to change --> colors for each candidate, individual leaders e.g trump-leads
-      // defs.appendChild(buildPattern('candidate-leads', leads_color));
-      // defs.appendChild(buildPattern('candidate-trails', trails_color));
+      Object.keys(CandidateColors[party_id]).forEach(function(candidate_slug) {
+        var color = CandidateColors[party_id][candidate_slug];
+        defs.appendChild(buildPattern(candidate_slug + '-leads', color));
+      });
 
       svg.insertBefore(defs, svg.firstChild);
     }

@@ -25,6 +25,7 @@ module Assets
       dot-groups.js
       race-day-database.js
       race-day-nodes.js
+      candidate-colors.js
       race-day.js
       delegate-summary.js
       all-primaries.js

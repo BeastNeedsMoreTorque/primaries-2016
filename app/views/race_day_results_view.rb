@@ -61,8 +61,8 @@ class RaceDayResultsView < BaseView
   end
 
   def county_race_csv
-    header = "fips_int,party_id,n_votes,n_precincts_reporting,n_precincts_total,leader_slug\n"
-    data = race_day.county_races.map{ |cr| "#{cr.fips_int},#{cr.party_id},#{cr.n_votes},#{cr.n_precincts_reporting},#{cr.n_precincts_total},#{cr.leader_slug}" }.join("\n")
+    header = "fips_int,party_id,state_code,n_votes,n_precincts_reporting,n_precincts_total,leader_slug\n"
+    data = race_day.county_races.map{ |cr| "#{cr.fips_int},#{cr.party_id},#{cr.state_code},#{cr.n_votes},#{cr.n_precincts_reporting},#{cr.n_precincts_total},#{cr.leader_slug}" }.join("\n")
     header + data
   end
 
@@ -75,8 +75,8 @@ class RaceDayResultsView < BaseView
   end
 
   def race_subcounty_csv
-    header = "party_id,geo_id,n_votes,n_precincts_reporting,n_precincts_total,leader_slug\n"
-    data = race_day.race_subcounties.map{ |ps| "#{ps.party_id},#{ps.geo_id},#{ps.n_votes},#{ps.n_precincts_reporting},#{ps.n_precincts_total},#{ps.leader_slug}" }.join("\n")
+    header = "party_id,state_code,geo_id,n_votes,n_precincts_reporting,n_precincts_total,leader_slug\n"
+    data = race_day.race_subcounties.map{ |ps| "#{ps.party_id},#{ps.state_code},#{ps.geo_id},#{ps.n_votes},#{ps.n_precincts_reporting},#{ps.n_precincts_total},#{ps.leader_slug}" }.join("\n")
     header + data
   end
 
