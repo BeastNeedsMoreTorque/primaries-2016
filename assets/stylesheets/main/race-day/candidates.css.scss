@@ -21,6 +21,8 @@ body.race-day table.candidates {
     border-bottom: 1px solid #ccc;
     height: 2.25rem; // because that's the height of the <img>
     line-height: 2.25rem;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
   }
 
   @each $slug, $color in $candidate-colors {
@@ -85,7 +87,8 @@ body.race-day table.candidates {
   td.n-delegates-dots, td.n-pledged-delegates-dots {
     padding-left: 0;
     white-space: normal;
-    padding: .5rem .5rem .5rem 0;
+    padding-right: .5rem;
+    padding-left: 0;
     line-height: 25px;
   }
 

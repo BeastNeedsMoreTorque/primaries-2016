@@ -149,6 +149,8 @@ a:hover { text-decoration: underline; }
     h3 { // more specificity
       text-align: center;
       white-space: normal;
+      flex-grow: 1;
+      -webkit-flex-grow: 1;
     }
   }
 
@@ -165,18 +167,28 @@ a:hover { text-decoration: underline; }
     .instructions {
       -webkit-flex-grow: 1;
       flex-grow: 1;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: column;
+      flex-direction: column;
       font-size: .8rem;
       color: $muted;
 
       p {
         margin: 0;
-        padding: .5rem 0 1rem;
-
-        &:last-child {
-          padding-bottom: 0;
-        }
+        padding: .5rem 0 0;
+        -webkit-flex-grow: 1;
+        flex-grow: 1;
       }
     }
+  }
+
+  p.instructions2 {
+    padding-top: .5rem;
+    font-size: .8rem;
+    line-height: 1.2;
+    color: $muted;
+    margin: 0;
   }
 
   li.candidate {
@@ -350,6 +362,17 @@ a:hover { text-decoration: underline; }
   }
 }
 
+.other-races {
+  text-align: center;
+  padding-top: 1rem;
+
+  p, ul, li {
+    margin: 0;
+    padding: 0;
+    display: inline;
+  }
+}
+
 .tease-link {
   margin: 0;
   a {
@@ -406,7 +429,7 @@ a:hover { text-decoration: underline; }
 
   path.state {
     stroke: #999;
-    stroke-width: 10; // divided by 10
+    stroke-width: 3;
     fill: #fff;
     pointer-events: none; // so it doesn't cause mouseleave
   }
@@ -414,14 +437,7 @@ a:hover { text-decoration: underline; }
   path.mesh {
     fill: none;
     stroke: #eee;
-    stroke-width: 10; // divided by 10
-    pointer-events: none; // so it doesn't cause mouseleave
-  }
-
-  path.hover {
-    stroke: black;
-    stroke-width: 20; // divided by 10
-    fill: rgba(255, 255, 255, 0.2);
+    stroke-width: 3;
     pointer-events: none; // so it doesn't cause mouseleave
   }
 
@@ -436,11 +452,11 @@ a:hover { text-decoration: underline; }
   }
 
   text {
-    font-size: 20px;
+    font-size: 50px;
     @include svg-city-label();
 
     &.background {
-      stroke-width: 4px;
+      stroke-width: 8px;
     }
   }
 }
@@ -463,13 +479,16 @@ a:hover { text-decoration: underline; }
   white-space: wrap;
   font-size: .75rem;
   max-width: 11rem;
-  padding: 0 10px 10px;
+  padding-top: .5rem;
+  color: $muted;
 }
 
 .candidate-position-listing {
   padding: 10px;
   display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
   -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
@@ -481,6 +500,7 @@ a:hover { text-decoration: underline; }
     border-collapse: collapse;
     font-size: .8rem;
     line-height: 1rem;
+    white-space: nowrap;
 
 		.candidate {
 	    font-weight: bold;
@@ -528,7 +548,7 @@ a:hover { text-decoration: underline; }
 
   ul.states text, .races-on-map path.today { fill: $widgetBlue; }
   li.candidate { border-top-color: $widgetLightBlue; }
-  ul.states a, span.winner { color: $widgetBlue; }
+  ul.states a, span.winner, p.instructions2 a { color: $widgetBlue; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightBlue;
@@ -561,7 +581,7 @@ a:hover { text-decoration: underline; }
 
   ul.states text, .races-on-map path.today { fill: $widgetRed; }
   li.candidate { border-top-color: $widgetLightRed; }
-  ul.states a, span.winner { color: $widgetRed; }
+  ul.states a, span.winner, p.instructions2 a { color: $widgetRed; }
 
   .candidate-position-listing {
 	  background-color: $widgetLightRed;

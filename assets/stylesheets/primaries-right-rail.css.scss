@@ -3,6 +3,7 @@
 @import 'primaries/right-rail/few-races.css.scss';
 @import 'primaries/right-rail/many-races.css.scss';
 
+@include precincts-reporting-conditionals;
 @include tense-conditionals;
 
 .sparkline {
@@ -56,6 +57,11 @@ div.rail-banner {
 .footnotes {
   @include footnotes;
   margin-top: 5px;
+}
+
+p.n-votes-footnote {
+  font-size: .8rem;
+  color: $muted;
 }
 
 .sparkline {
