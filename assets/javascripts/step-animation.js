@@ -3,17 +3,21 @@
  *
  * Assumes:
  *
- * * output is 300x300, input is 1000,1000.
- * * races should be evenly spaced in `w` pixels total, and this one is race number `i` of `n`
+ * * input is 1000,1000
+ * * output is 30x30px
+ * * races should be centered in an area with width `w`
+ * * this race is number `i` of `n`
  */
 function build_race_transform_matrix(i, n, w) {
+  var StateWidth = 30; // px
+
   return [
-    70 / 1000,
+    StateWidth / 1000,
     0,
     0,
-    70 / 1000,
-    (i + 0.5) * w / n - 70 / 2,
-    50
+    StateWidth / 1000,
+    w / 2 - n * StateWidth / 2 + i * StateWidth,
+    100
   ];
 }
 
@@ -192,10 +196,10 @@ StepAnimation.prototype.show_states = function() {
     if (!canvas) { initialize(); }
 
     canvas.style.opacity = t;
-    canvas.style.marginBottom = ((1 - Math.sqrt(t)) * -100) + 'px';
+    canvas.style.marginBottom = ((1 - Math.sqrt(t)) * -50) + 'px';
   }
 
-  this.animate_step(500, step, function() { _this.show_dots(); });
+  this.animate_step(300, step, function() { _this.show_dots(); });
 };
 
 StepAnimation.prototype.show_dots = function() {
@@ -285,7 +289,7 @@ StepAnimation.prototype.show_dots = function() {
 
     candidate_dots = _this.candidates.map(function(candidate) {
       var target_el = candidate.els.target;
-      var target_xy = { x: target_el.offsetLeft + 37, y: 53 };
+      var target_xy = { x: target_el.offsetLeft + 37, y: 58 };
       var raw_dots = partial_dot_sets[candidate.id];
 
       return new AnimatedDotSet(candidate.id, target_xy, raw_dots, max_n_dots);
@@ -330,8 +334,8 @@ StepAnimation.prototype.show_dots = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fill();
 
-    _this.state_canvas.style.opacity = Math.pow(1 - t, 2);
-    _this.state_canvas.style.marginBottom = (Math.sqrt(t) * 20) + 'px';
+    _this.state_canvas.style.opacity = 0.5 * Math.pow(1 - t, 2);
+    _this.state_canvas.style.marginBottom = (Math.sqrt(t) * 10) + 'px';
 
     _this.horse_race.refresh_candidate_els();
   }

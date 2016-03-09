@@ -227,23 +227,23 @@ $horse-width: 8rem;
 
   li.race {
     display: inline-block;
-    padding: .25rem;
+    padding: .25rem 0;
     position: relative;
-    width: 2rem;
-    height: 2rem;
+    width: 1.6rem;
+    height: 1.6rem;
 
     .state-code {
       position: absolute;
-      line-height: 2rem;
-      width: 2rem;
+      line-height: 1.6rem;
+      width: 1.6rem;
       font-weight: bold;
     }
   }
 
   .map {
     svg {
-      height: 2rem;
-      width: 2rem;
+      height: 1.6rem;
+      width: 1.6rem;
     }
 
     path {

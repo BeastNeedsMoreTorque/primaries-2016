@@ -99,7 +99,7 @@ AnimatedDotSet.prototype.get_dots_at = function(t) {
       // Hide the dot
     } else {
       ret.push({
-        x: p.x - p.dx * dot_t,
+        x: p.x - p.dx * Math.sqrt(dot_t),
         y: p.y - p.dy * dot_t
       });
       dot_t *= Damping;
