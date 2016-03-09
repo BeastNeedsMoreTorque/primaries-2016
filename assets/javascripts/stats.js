@@ -16,10 +16,9 @@ bN_cfg = {
   }
 }
 
-console.log(isMobile, bN_cfg)
 function runOmni() {
   s_265.pfxID = 'hpo';
-  s_265.channel = 'us.hpmgpol';
+  s_265.channel = (isMobile ? "us.hpmgpol_mb" : "us.hpmgpol");
   s_265.linkInternalFilters = 'javascript:,huffingtonpost.com';
   s_265.prop16 = 'page';
   s_265.prop1 = 'elections';
