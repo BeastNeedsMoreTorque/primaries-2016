@@ -129,6 +129,8 @@ $horse-width: 8rem;
     justify-content: space-around;
     padding: .5rem 0 0;
     list-style: none;
+    -webkit-perspective: 500px;
+    perspective: 500px;
   }
 
   .party-Dem li.candidate-target {
@@ -143,6 +145,30 @@ $horse-width: 8rem;
     text-align: center;
     padding: .5rem;
     box-shadow: 0 0 10px #aaa;
+    -webkit-transform-origin: top;
+    transform-origin: top;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
+    -webkit-transition-property: -webkit-transform;
+    transition-property: transform;
+
+    &.adding {
+      -webkit-transition-timing-function: ease-out;
+      transition-timing-function: ease-out;
+      -webkit-transform: rotateX(-7deg);
+      transform: rotateX(-7deg);
+    }
+
+    &.settling, &.idle {
+      -webkit-transition-timing-function: ease-in-out;
+      transition-timing-function: ease-in-out;
+      -moz-animation-duration: .3s;
+      -webkit-animation-duration: .3s;
+      animation-duration: .3s;
+      -moz-animation-name: candidate-settle;
+      -webkit-animation-name: candidate-settle;
+      animation-name: candidate-settle;
+    }
 
     img {
       display: inline-block;
@@ -157,4 +183,17 @@ $horse-width: 8rem;
   }
 
   .json-data, .json-state-paths { display: none; }
+}
+
+@-moz-keyframes candidate-settle {
+  75% { transform: rotateX(3deg); }
+  100% { transform: rotateX(0); }
+}
+@-webkit-keyframes candidate-settle {
+  75% { transform: rotateX(3deg); }
+  100% { transform: rotateX(0); }
+}
+@keyframes candidate-settle {
+  75% { transform: rotateX(3deg); }
+  100% { transform: rotateX(0); }
 }

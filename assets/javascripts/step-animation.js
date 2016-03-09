@@ -284,7 +284,7 @@ StepAnimation.prototype.show_dots = function() {
 
     candidate_dots = _this.candidates.map(function(candidate) {
       var target_el = candidate.els.target;
-      var target_xy = { x: target_el.offsetLeft - 10, y: 217 };
+      var target_xy = { x: target_el.offsetLeft - 10, y: 213 };
       var raw_dots = partial_dot_sets[candidate.id];
 
       return new AnimatedDotSet(candidate.id, target_xy, raw_dots, max_n_dots);
@@ -319,6 +319,14 @@ StepAnimation.prototype.show_dots = function() {
       var n_complete = dot_set.get_n_dots_completed_at(t);
       var candidate = candidates_by_id[dot_set.candidate_id];
       candidate.n_delegates = candidate.n_delegates_start + n_complete;
+
+      if (candidate.n_delegates == candidate.n_delegates_start) {
+        candidate.swing_state = 'idle';
+      } else if (candidate.n_delegates == candidate.n_delegates_end) {
+        candidate.swing_state = 'settling';
+      } else {
+        candidate.swing_state = 'adding';
+      }
     });
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -344,6 +352,7 @@ StepAnimation.prototype.end = function() {
 
   this.candidates.forEach(function(candidate) {
     candidate.n_delegates = candidate.n_delegates_end;
+    candidate.swing_state = 'idle';
   });
 
   this.horse_race.refresh_candidate_els();
