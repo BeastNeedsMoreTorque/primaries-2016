@@ -144,6 +144,10 @@ $horse-width: 8rem;
     width: 5rem;
     height: 6.5rem;
 
+    &.adding {
+      background: #ffc;
+    }
+
     .last-name {
       font-weight: bold;
       height: 1rem;
