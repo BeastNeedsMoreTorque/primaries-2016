@@ -257,24 +257,26 @@ StepAnimation.prototype.show_dots = function() {
 
     var races = _this.race_day.races;
     var partial_dot_sets = {}; // candidate_id -> Array of dots
+    _this.candidates.forEach(function(c) { partial_dot_sets[c.id] = []; });
+
+    console.log(partial_dot_sets);
+
     for (var i = 0; i < races.length; i++) {
       var transform = build_race_transform_matrix(i, races.length, canvas.width);
       var race_dots = candidate_race_dots(races[i], transform);
 
       for (var j = 0; j < race_dots.length; j++) {
         var dots = race_dots[j];
-        if (!partial_dot_sets.hasOwnProperty(dots.candidate_id)) {
-          partial_dot_sets[dots.candidate_id] = [];
-        }
+        var arr = partial_dot_sets[dots.candidate_id];
 
-        var transformed_dots = dots.dots.map(function(xy) {
-          return {
+        if (!arr) continue; // the candidate got delegates but we're not showing him/her in the horse race
+
+        dots.dots.forEach(function(xy) {
+          arr.push({
             x: xy.x * transform[0] + xy.y * transform[2] + transform[4],
             y: xy.x * transform[1] + xy.y * transform[3] + transform[5]
-          };
+          });
         });
-
-        partial_dot_sets[dots.candidate_id] = partial_dot_sets[dots.candidate_id].concat(transformed_dots);
       }
     }
 
@@ -282,7 +284,7 @@ StepAnimation.prototype.show_dots = function() {
 
     candidate_dots = _this.candidates.map(function(candidate) {
       var target_el = candidate.els.target;
-      var target_xy = { x: target_el.offsetLeft - 10, y: 250 };
+      var target_xy = { x: target_el.offsetLeft - 10, y: 217 };
       var raw_dots = partial_dot_sets[candidate.id];
 
       return new AnimatedDotSet(candidate.id, target_xy, raw_dots, max_n_dots);

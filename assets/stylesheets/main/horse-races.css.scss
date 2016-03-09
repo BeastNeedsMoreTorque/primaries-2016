@@ -127,16 +127,27 @@ $horse-width: 8rem;
     display: flex;
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    margin: 1rem 0 0 7rem;
-    padding: 0;
+    padding: .5rem 0 0;
     list-style: none;
   }
 
+  .party-Dem li.candidate-target {
+    background: #47b8cd;
+  }
+  .party-GOP li.candidate-target {
+    background: #f17973;
+  }
+
   li.candidate-target {
+    color: white;
+    text-align: center;
+    padding: .5rem;
+    box-shadow: 0 0 10px #aaa;
+
     img {
       display: inline-block;
-      width: 75px;
-      height: 132px;
+      width: 60px;
+      height: 105px;
     }
   }
 
