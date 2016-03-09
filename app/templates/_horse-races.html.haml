@@ -2,13 +2,18 @@
   - parties.each do |party|
     .horse-race{class: "party-#{party.id}", 'data-n-delegates': party.n_delegates_total, 'data-n-delegates-needed': party.n_delegates_needed}
       %h3= party.name
+
+      .n-delegates-needed #{format_int(party.n_delegates_needed)} delegates to win
+
       %ol.candidate-horses
         - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
           %li.candidate-horse{'data-candidate-id': candidate.id, 'data-n-delegates': candidate.n_delegates, 'data-n-unpledged-delegates': candidate.n_unpledged_delegates, class: (candidate.dropped_out? ? 'dropped-out' : '')}
+            .background
             .marker{style: "left: #{(candidate.n_delegates || 0).to_f / party.n_delegates_needed * 100}%"}
               %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: ''}
               .speech-bubble
-            .background
+        %li.extra-layer
+          .background
 
       %ol.candidate-targets
         - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
