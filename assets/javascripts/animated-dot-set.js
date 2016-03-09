@@ -52,7 +52,7 @@ AnimatedDotSet.prototype.get_dots_at = function(t) {
   }
 
   var n_dots_in, dot_t;
-  var NoDotsT = 0.1;
+  var NoDotsT = 0.2;
   var Damping = 0.9; // so we can see dots going to Trump from far left
 
   var ret = [];

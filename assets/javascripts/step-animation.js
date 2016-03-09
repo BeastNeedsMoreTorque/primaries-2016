@@ -13,7 +13,7 @@ function build_race_transform_matrix(i, n, w) {
     0,
     70 / 1000,
     (i + 0.5) * w / n - 70 / 2,
-    150
+    50
   ];
 }
 
@@ -61,7 +61,7 @@ function draw_path(ctx, path) {
 
 function build_canvas(parent_div) {
   var w = parent_div.clientWidth;
-  var h = 300;
+  var h = 200;
 
   var canvas = document.createElement('canvas');
   canvas.width = w;
@@ -162,34 +162,37 @@ StepAnimation.prototype.show_states = function() {
 
   var canvas;
 
-  function step(t) {
-    if (!canvas) {
-      var div = _this.horse_race.els.div;
-      canvas = _this.state_canvas = build_canvas(div);
+  function initialize() {
+    var div = _this.horse_race.els.div;
+    canvas = _this.state_canvas = build_canvas(div);
 
-      var ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext('2d');
 
-      var races = _this.race_day ? _this.race_day.races : [];
-      var paths = _this.horse_race.state_paths;
+    var races = _this.race_day ? _this.race_day.races : [];
+    var paths = _this.horse_race.state_paths;
 
-      for (var i = 0; i < races.length; i++) {
-        var race = races[i];
+    for (var i = 0; i < races.length; i++) {
+      var race = races[i];
 
-        ctx.save();
+      ctx.save();
 
-        var transform = build_race_transform_matrix(i, races.length, canvas.width);
-        ctx.setTransform.apply(ctx, transform);
+      var transform = build_race_transform_matrix(i, races.length, canvas.width);
+      ctx.setTransform.apply(ctx, transform);
 
-        draw_path(ctx, paths[race.state_code]);
-        ctx.strokeStyle = 'blue';
-        ctx.lineWidth = 10;
-        ctx.stroke();
+      draw_path(ctx, paths[race.state_code]);
+      ctx.strokeStyle = 'blue';
+      ctx.lineWidth = 5;
+      ctx.stroke();
 
-        ctx.restore();
-      }
+      ctx.restore();
     }
+  }
+
+  function step(t) {
+    if (!canvas) { initialize(); }
 
     canvas.style.opacity = t;
+    canvas.style.marginBottom = ((1 - Math.sqrt(t)) * -100) + 'px';
   }
 
   this.animate_step(500, step, function() { _this.show_dots(); });
@@ -259,8 +262,6 @@ StepAnimation.prototype.show_dots = function() {
     var partial_dot_sets = {}; // candidate_id -> Array of dots
     _this.candidates.forEach(function(c) { partial_dot_sets[c.id] = []; });
 
-    console.log(partial_dot_sets);
-
     for (var i = 0; i < races.length; i++) {
       var transform = build_race_transform_matrix(i, races.length, canvas.width);
       var race_dots = candidate_race_dots(races[i], transform);
@@ -284,7 +285,7 @@ StepAnimation.prototype.show_dots = function() {
 
     candidate_dots = _this.candidates.map(function(candidate) {
       var target_el = candidate.els.target;
-      var target_xy = { x: target_el.offsetLeft - 10, y: 213 };
+      var target_xy = { x: target_el.offsetLeft + 37, y: 53 };
       var raw_dots = partial_dot_sets[candidate.id];
 
       return new AnimatedDotSet(candidate.id, target_xy, raw_dots, max_n_dots);
@@ -293,9 +294,6 @@ StepAnimation.prototype.show_dots = function() {
     _this.candidates.forEach(function(candidate) {
       candidates_by_id[candidate.id] = candidate;
     });
-
-    _this.state_canvas.parentNode.removeChild(_this.state_canvas);
-    _this.state_canvas = null;
   }
 
   function step(t) {
@@ -331,6 +329,9 @@ StepAnimation.prototype.show_dots = function() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fill();
+
+    _this.state_canvas.style.opacity = Math.pow(1 - t, 2);
+    _this.state_canvas.style.marginBottom = (Math.sqrt(t) * 20) + 'px';
 
     _this.horse_race.refresh_candidate_els();
   }

@@ -179,10 +179,79 @@ $horse-width: 8rem;
 
   canvas {
     position: absolute;
+    left: 0;
     bottom: 0;
+    z-index: 0;
   }
 
   .json-data, .json-state-paths { display: none; }
+
+  ol.race-days, ol.races {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
+  }
+
+  ol.race-days {
+    position: relative;
+    overflow: hidden;
+    padding-left: 50%;
+    padding-right: 50%;
+    z-index: 1; // Above <canvas>, below targets
+  }
+
+  li.race-day {
+    display: inline-block;
+    padding: 0 .5rem;
+    text-align: center;
+    border-right: 1px solid #eee;
+    &:last-child { border-right: none; }
+
+    &.has-pledged-delegates {
+      cursor: pointer;
+    }
+
+    &.has-no-pledged-delegates, &.after-active, &.before-active {
+      opacity: .5;
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1);
+    }
+
+    h4 {
+      font: inherit;
+      font-weight: bold;
+      margin: 0;
+    }
+  }
+
+  li.race {
+    display: inline-block;
+    padding: .25rem;
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+
+    .state-code {
+      position: absolute;
+      line-height: 2rem;
+      width: 2rem;
+      font-weight: bold;
+    }
+  }
+
+  .map {
+    svg {
+      height: 2rem;
+      width: 2rem;
+    }
+
+    path {
+      fill: #ddd;
+    }
+
+    text { display: none; }
+  }
 }
 
 @-moz-keyframes candidate-settle {

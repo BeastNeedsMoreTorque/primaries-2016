@@ -17,6 +17,16 @@
             %img{src: image_path("horses/#{candidate.slug}-target.png"), alt: ''}
             .n-delegates= format_int(candidate.n_delegates)
 
+      %ol.race-days
+        - party.party_race_days.each do |party_race_day|
+          %li.race-day{'data-race-day-id': party_race_day.race_day_id, class: party_race_day.n_pledged_delegates_with_candidates > 0 ? 'has-pledged-delegates' : 'has-no-pledged-delegates'}
+            %h4= party_race_day.date_s
+            %ol.races<>
+              - party_race_day.races.each do |race|
+                %li.race{'data-state-code': race.state_code}<>
+                  .state-code= race.state_code
+                  .map!= map_svg("states/tiny/#{race.state_code}")
+
       .json-data= party.horse_race_data.to_json
 
       -# As for state descriptions: they rely on assets. (Really, we should put

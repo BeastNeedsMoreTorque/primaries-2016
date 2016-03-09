@@ -364,7 +364,9 @@ class Database
 
     for party in parties
       for race_day in race_days
-        all << PartyRaceDay.new(self, party.id, race_day.id)
+        if race_day.races.any? { |r| r.party_id == party.id }
+          all << PartyRaceDay.new(self, party.id, race_day.id)
+        end
       end
     end
 

@@ -11,6 +11,7 @@ function index_objects_by(array, property) {
 function HorseRace(div) {
   this.els = {
     div: div,
+    race_days: div.querySelector('ol.race-days'),
     play: div.querySelector('button.play')
   };
 
@@ -47,12 +48,19 @@ function HorseRace(div) {
 
   this.listen();
   this.step_number = this.data.race_days.length;
-  this.refresh_candidate_els();
+  this.refresh();
 }
 
 HorseRace.prototype.listen = function() {
   var _this = this;
+
   this.els.play.addEventListener('click', function() { _this.play(); });
+
+  $(this.els.race_days).on('click', 'li.has-pledged-delegates', function(ev) {
+    ev.preventDefault();
+    _this.step_number = $(ev.currentTarget).prevAll().length;
+    _this.refresh();
+  });
 };
 
 HorseRace.prototype.play = function() {
@@ -63,10 +71,37 @@ HorseRace.prototype.play = function() {
 
   if (this.step_number == this.data.race_days.length) {
     this.reset();
-    this.refresh_candidate_els();
+    this.refresh();
   }
 
   this.step();
+};
+
+HorseRace.prototype.refresh = function() {
+  this.refresh_active_race_day();
+  this.refresh_candidate_els();
+};
+
+HorseRace.prototype.refresh_active_race_day = function() {
+  var active_index;
+
+  if (this.step_number == this.data.race_days.length) {
+    active_index = this.step_number - 1;
+  } else {
+    active_index = this.step_number;
+  }
+
+  var race_days_el = this.els.div.querySelector('ol.race-days');
+  $(race_days_el).children().removeClass('active after-active before-active');
+  var $active_li = $(race_days_el).children().eq(active_index);
+  
+  $active_li.addClass('active');
+  $active_li.prevAll().addClass('before-active');
+  $active_li.nextAll().addClass('after-active');
+  var active_li = $active_li.get(0);
+  var left = active_li.offsetLeft + active_li.clientWidth * 0.5 - race_days_el.clientWidth * 0.5;
+  $(race_days_el).stop(true);
+  $(race_days_el).animate({ scrollLeft: left });
 };
 
 HorseRace.prototype.refresh_candidate_els = function() {
@@ -103,6 +138,7 @@ HorseRace.prototype.step = function() {
   var race_day = this.data.race_days[this.step_number];
 
   this.step_number += 1;
+  this.refresh_active_race_day();
 
   this.animation = new StepAnimation(this, this.step_number);
   this.animation.start();
