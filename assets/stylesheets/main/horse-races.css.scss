@@ -21,6 +21,7 @@ $horse-width: 8rem;
       position: relative;
       height: 2.5rem;
       margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
+      z-index: 0;
 
       // The shadow is the same for all three backgrounds, so write it once
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><defs><filter id="blur"><feGaussianBlur stdDeviation="0.3" result="blur"/></filter></defs><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" fill="black" filter="url(#blur)"/></svg>') repeat-x bottom left;
@@ -33,6 +34,22 @@ $horse-width: 8rem;
         position: relative;
         height: 100%;
       }
+
+      &::before {
+        content: ' ';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" fill="yellow"/></svg>') repeat-x bottom left;
+        opacity: 0;
+      }
+    }
+
+    &.adding .background::before {
+      opacity: .1;
     }
 
     &:nth-child(3n) .background {

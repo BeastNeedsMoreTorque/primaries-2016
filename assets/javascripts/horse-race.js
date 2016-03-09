@@ -37,6 +37,7 @@ function HorseRace(div) {
     candidates_by_id[id] = {
       id: id,
       els: {
+        row: el,
         marker: el.querySelector('.marker'),
         speech_bubble: el.querySelector('.speech-bubble')
       },
@@ -172,6 +173,7 @@ HorseRace.prototype.refresh_candidate_els = function() {
     candidate.els.speech_bubble.innerHTML = sentence_html;
     candidate.els.n_delegates.innerText = format_int(candidate.n_delegates);
 
+    candidate.els.row.className = 'candidate-horse ' + candidate.animation_state;
     candidate.els.marker.className = 'marker ' + candidate.animation_state;
     candidate.els.target.className = 'candidate-target ' + candidate.animation_state;
   });
