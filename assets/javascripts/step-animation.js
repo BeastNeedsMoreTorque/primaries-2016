@@ -320,7 +320,7 @@ StepAnimation.prototype.show_dots = function() {
     ctx.fillStyle = 'blue';
     ctx.beginPath();
 
-    var radius = 3; // px
+    var radius = 2.5; // px
 
     candidate_dots.forEach(function(dot_set) {
       var dots = dot_set.get_dots_at(t);
