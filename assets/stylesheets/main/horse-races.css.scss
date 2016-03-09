@@ -130,54 +130,81 @@ $horse-width: 8rem;
     display: flex;
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    padding: 1.5rem 0 1rem;
+    padding: 1.5rem 0;
     margin: 0;
     list-style: none;
     -webkit-perspective: 500px;
     perspective: 500px;
   }
 
-  .party-Dem li.candidate-target {
-    background: #47b8cd;
-  }
-  .party-GOP li.candidate-target {
-    background: #f17973;
-  }
-
   li.candidate-target {
-    color: white;
+    position: relative;
+    background: white;
     text-align: center;
-    padding: .5rem;
-    box-shadow: 0 0 10px #aaa;
-    -webkit-transform-origin: top;
-    transform-origin: top;
-    -webkit-transition-duration: .2s;
-    transition-duration: .2s;
-    -webkit-transition-property: -webkit-transform;
-    transition-property: transform;
+    width: 5rem;
+    height: 6.5rem;
 
-    &.adding {
-      -webkit-transition-timing-function: ease-out;
-      transition-timing-function: ease-out;
-      -webkit-transform: rotateX(-7deg);
-      transform: rotateX(-7deg);
-    }
-
-    &.idle {
-      -webkit-transition-timing-function: ease-in-out;
-      transition-timing-function: ease-in-out;
-      -moz-animation-duration: .3s;
-      -webkit-animation-duration: .3s;
-      animation-duration: .3s;
-      -moz-animation-name: candidate-settle;
-      -webkit-animation-name: candidate-settle;
-      animation-name: candidate-settle;
+    .last-name {
+      font-weight: bold;
+      height: 1rem;
+      line-height: 1rem;
     }
 
     img {
-      display: inline-block;
-      width: 60px;
-      height: 105px;
+      display: block;
+      width: 3rem;
+      height: 4rem;
+      margin: 0 auto;
+    }
+
+    .n-delegates {
+      text-align: right;
+      padding-right: 2rem;
+      height: 1rem;
+      line-height: 1rem;
+    }
+
+    .target {
+      position: absolute;
+      width: 1rem;
+      height: 1rem;
+      right: .5rem;
+      bottom: .5rem;
+      border-radius: .5rem;
+      background: #bbb;
+      box-sizing: border-box;
+      border: 2px solid white;
+      z-index: 0; // so ::before and ::after go behind it
+
+      &::before, &::after {
+        position: absolute;
+        z-index: -1;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: .5rem;
+      }
+
+      &::before {
+        content: '';
+        box-shadow: 1px 1px 4px black;
+      }
+
+      &::after {
+        content: '';
+        box-shadow: 2px 2px 5px black;
+        transition: opacity .15s cubic-bezier(0, 1, 1, 1);
+      }
+    }
+
+    &.adding .target {
+      background: #d0d459;
+      border-color: yellow;
+
+      &::after {
+        opacity: 0;
+      }
     }
   }
 
@@ -281,19 +308,6 @@ $horse-width: 8rem;
       background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>');
     }
   }
-}
-
-@-moz-keyframes candidate-settle {
-  75% { transform: rotateX(3deg); }
-  100% { transform: rotateX(0); }
-}
-@-webkit-keyframes candidate-settle {
-  75% { transform: rotateX(3deg); }
-  100% { transform: rotateX(0); }
-}
-@keyframes candidate-settle {
-  75% { transform: rotateX(3deg); }
-  100% { transform: rotateX(0); }
 }
 
 @-moz-keyframes horse-move {

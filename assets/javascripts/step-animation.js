@@ -298,8 +298,12 @@ StepAnimation.prototype.show_dots = function() {
     var max_n_dots = _this.candidates.reduce(function(s, c) { var n = partial_dot_sets[c.id].length; return s > n ? s : n; }, 0);
 
     candidate_dots = _this.candidates.map(function(candidate) {
-      var target_el = candidate.els.target;
-      var target_xy = { x: target_el.offsetLeft + 37, y: 58 };
+      var el = candidate.els.target.querySelector('.target');
+      var target_xy = {
+        x: el.offsetLeft + el.offsetWidth / 2 + el.parentNode.offsetLeft,
+        y: 80
+      };
+      console.log(el, target_xy, el.offsetLeft, el.offsetWidth, el.offsetTop, el.offsetHeight);
       var raw_dots = partial_dot_sets[candidate.id];
 
       return new AnimatedDotSet(candidate.id, target_xy, raw_dots, max_n_dots);

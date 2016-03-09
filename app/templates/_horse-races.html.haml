@@ -15,6 +15,7 @@
           %li.candidate-target{'data-candidate-id': candidate.id}
             .last-name= candidate.name
             %img{src: image_path("horses/#{candidate.slug}-target.png"), alt: ''}
+            .target
             .n-delegates= format_int(candidate.n_delegates)
 
       %ol.race-days
