@@ -4,12 +4,12 @@
  * Assumes:
  *
  * * input is 1000,1000
- * * output is 30x30px
+ * * output is 25x25px
  * * races should be centered in an area with width `w`
  * * this race is number `i` of `n`
  */
 function build_race_transform_matrix(i, n, w) {
-  var StateWidth = 30; // px
+  var StateWidth = 25; // px
 
   return [
     StateWidth / 1000,
