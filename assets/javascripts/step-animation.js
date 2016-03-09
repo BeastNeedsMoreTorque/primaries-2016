@@ -111,7 +111,7 @@ function StepAnimation(horse_race, step_number) {
 
 StepAnimation.prototype.start = function() {
   if (this.race_day) {
-    this.show_states();
+    this.wait_to_show_states();
   } else {
     this.add_unpledged_delegates();
   }
@@ -159,6 +159,16 @@ StepAnimation.prototype.add_unpledged_delegates = function() {
   }
 
   this.animate_step(1000, step, function() { _this.end(); });
+};
+
+StepAnimation.prototype.wait_to_show_states = function() {
+  var _this = this;
+
+  window.setTimeout(function() {
+    if (_this.ended) return;
+
+    _this.show_states();
+  }, 400);
 };
 
 StepAnimation.prototype.show_states = function() {
@@ -323,11 +333,11 @@ StepAnimation.prototype.show_dots = function() {
       candidate.n_delegates = candidate.n_delegates_start + n_complete;
 
       if (candidate.n_delegates == candidate.n_delegates_start) {
-        candidate.swing_state = 'idle';
+        candidate.animation_state = 'idle';
       } else if (candidate.n_delegates == candidate.n_delegates_end) {
-        candidate.swing_state = 'settling';
+        candidate.animation_state = 'idle';
       } else {
-        candidate.swing_state = 'adding';
+        candidate.animation_state = 'adding';
       }
     });
 

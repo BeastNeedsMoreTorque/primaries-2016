@@ -42,7 +42,7 @@ function HorseRace(div) {
       },
       data: data_by_candidate_id[id],
       n_delegates: data.n_delegates, // When we animate, this property will animate
-      swing_state: 'idle'            // When we animate, it'll go 'idle' -> 'adding' -> 'settling' -> 'idle'
+      animation_state: 'idle'        // When we animate, it'll go 'idle' -> 'adding' -> 'idle'
     };
   });
 
@@ -172,7 +172,8 @@ HorseRace.prototype.refresh_candidate_els = function() {
     candidate.els.speech_bubble.innerHTML = sentence_html;
     candidate.els.n_delegates.innerText = format_int(candidate.n_delegates);
 
-    candidate.els.target.className = 'candidate-target ' + candidate.swing_state;
+    candidate.els.marker.className = 'marker ' + candidate.animation_state;
+    candidate.els.target.className = 'candidate-target ' + candidate.animation_state;
   });
 };
 
