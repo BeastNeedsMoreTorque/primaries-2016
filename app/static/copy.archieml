@@ -156,6 +156,12 @@ party: GOP
 text: We don't have vote tallies for this race, but we’re counting delegates.
 
 
+date: 2016-03-10
+state: VI
+party: GOP
+text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
 date: 2016-03-12
 state: GU
 party: GOP
@@ -170,12 +176,6 @@ text: We don't have vote tallies for this race, but we’re counting delegates.
 
 date: 2016-03-15
 state: MP
-party: GOP
-text: We don't have vote tallies for this race, but we’re counting delegates.
-
-
-date: 2016-03-19
-state: VI
 party: GOP
 text: We don't have vote tallies for this race, but we’re counting delegates.
 
