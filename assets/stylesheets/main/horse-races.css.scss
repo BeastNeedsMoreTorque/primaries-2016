@@ -127,7 +127,8 @@ $horse-width: 8rem;
     display: flex;
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    padding: .5rem 0 0;
+    padding: 1.5rem 0 1rem;
+    margin: 0;
     list-style: none;
     -webkit-perspective: 500px;
     perspective: 500px;
@@ -250,6 +251,32 @@ $horse-width: 8rem;
     }
 
     text { display: none; }
+  }
+
+  button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 3rem;
+    width: 3rem;
+    z-index: 2; // above the <canvas>
+
+    &::after {
+      content: ' ';
+      display: block;
+      width: 2rem;
+      height: 2rem;
+      background-size: stretch;
+      background-repeat: no-repeat;
+    }
+
+    &.play::after {
+      background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>');
+    }
+
+    &.pause::after {
+      background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>');
+    }
   }
 }
 

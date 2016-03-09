@@ -65,7 +65,7 @@ function draw_path(ctx, path) {
 
 function build_canvas(parent_div) {
   var w = parent_div.clientWidth;
-  var h = 200;
+  var h = 175;
 
   var canvas = document.createElement('canvas');
   canvas.width = w;
@@ -360,5 +360,5 @@ StepAnimation.prototype.end = function() {
     candidate.swing_state = 'idle';
   });
 
-  this.horse_race.refresh_candidate_els();
+  this.horse_race.on_step_end();
 };

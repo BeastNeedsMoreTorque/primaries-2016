@@ -12,11 +12,20 @@ function HorseRace(div) {
   this.els = {
     div: div,
     race_days: div.querySelector('ol.race-days'),
-    play: div.querySelector('button.play')
+    button: div.querySelector('button')
   };
 
+  this.playing = false;
+
   this.data = JSON.parse(div.querySelector('.json-data').textContent);
-  this.state_paths = JSON.parse(div.querySelector('.json-state-paths').textContent);
+
+  var state_paths = this.state_paths = {}; // state-code -> svg path "d"
+  Array.prototype.forEach.call(div.querySelectorAll('li.race'), function(el) {
+    var state_code = el.getAttribute('data-state-code');
+    var path = el.querySelector('path');
+    state_paths[state_code] = path.getAttribute('d');
+  });
+
   this.step_number = this.data.race_days.length;
 
   var data_by_candidate_id = index_objects_by(this.data.candidates, 'id');
@@ -54,7 +63,15 @@ function HorseRace(div) {
 HorseRace.prototype.listen = function() {
   var _this = this;
 
-  this.els.play.addEventListener('click', function() { _this.play(); });
+  this.els.button.addEventListener('click', function(ev) {
+    if (ev.currentTarget.className == 'play') {
+      _this.play();
+      ev.currentTarget.className = 'pause';
+    } else {
+      _this.pause();
+      ev.currentTarget.className = 'play';
+    }
+  });
 
   $(this.els.race_days).on('click', 'li.has-pledged-delegates', function(ev) {
     ev.preventDefault();
@@ -64,10 +81,11 @@ HorseRace.prototype.listen = function() {
 };
 
 HorseRace.prototype.play = function() {
-  if (this.animation) {
-    this.animation.end();
-    this.animation = null;
-  }
+  if (this.animation) return;
+  if (this.playing) throw new Error('How are we playing if there is no animation?');
+
+  this.playing = true;
+  this.els.button.className = 'pause';
 
   if (this.step_number == this.data.race_days.length) {
     this.reset();
@@ -75,6 +93,30 @@ HorseRace.prototype.play = function() {
   }
 
   this.step();
+};
+
+HorseRace.prototype.on_step_end = function() {
+  this.animation = null;
+
+  this.refresh();
+
+  if (this.playing && this.step_number == this.data.race_days.length) {
+    this.pause();
+  }
+
+  if (this.playing) {
+    this.step();
+  }
+};
+
+HorseRace.prototype.pause = function() {
+  this.playing = false;
+
+  if (this.animation) {
+    this.animation.end();
+  }
+
+  this.els.button.className = 'play';
 };
 
 HorseRace.prototype.refresh = function() {
