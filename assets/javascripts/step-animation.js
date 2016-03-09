@@ -335,7 +335,7 @@ StepAnimation.prototype.show_dots = function() {
     ctx.fill();
 
     _this.state_canvas.style.opacity = 0.5 * Math.pow(1 - t, 2);
-    _this.state_canvas.style.marginBottom = (Math.sqrt(t) * 10) + 'px';
+    _this.state_canvas.style.marginBottom = (Math.sqrt(t) * 5) + 'px';
 
     _this.horse_race.refresh_candidate_els();
   }

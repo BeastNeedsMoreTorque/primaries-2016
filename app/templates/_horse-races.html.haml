@@ -25,7 +25,7 @@
                 %li.race{'data-state-code': race.state_code}<>
                   .state-code= race.state_code
                   .map!= map_svg("states/tiny/#{race.state_code}")
-            %h4= party_race_day.date_s
+            %h4= party_race_day.date.strftime('%b %-d')
 
       .json-data= party.horse_race_data.to_json
 

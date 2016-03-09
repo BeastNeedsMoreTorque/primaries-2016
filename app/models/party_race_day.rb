@@ -16,6 +16,7 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
     database.candidate_race_days.find_all_by_race_day_id(@race_day_id).select { |crd| crd.party_id === @party_id }
   end
 
+  def date; race_day.date; end
   def date_s; race_day.date_s; end
   def party; database.parties.find!(party_id); end
   def party_adjective; party.adjective; end

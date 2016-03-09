@@ -181,7 +181,7 @@ $horse-width: 8rem;
     position: absolute;
     left: 0;
     bottom: 0;
-    z-index: 0;
+    z-index: 1; // above race-days
   }
 
   .json-data, .json-state-paths { display: none; }
@@ -198,7 +198,6 @@ $horse-width: 8rem;
     overflow: hidden;
     padding-left: 50%;
     padding-right: 50%;
-    z-index: 1; // Above <canvas>, below targets
   }
 
   li.race-day {
