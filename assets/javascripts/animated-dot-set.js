@@ -22,6 +22,7 @@ function AnimatedDotSet(candidate_id, target_xy, dots, max_n_dots) {
   this.target_xy = target_xy;
   this.dots = dots;
   this.max_n_dots = max_n_dots;
+  this.is_winner = dots.length == max_n_dots;
 
   this._scratch = this.dots.map(function(xy) {
     var dx = xy.x - target_xy.x;

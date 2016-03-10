@@ -1,3 +1,48 @@
+var Interjections = [
+  'All right!',
+  'Bam!',
+  'Behold!',
+  'Faster!',
+  'Giddyup!',
+  'Golly!',
+  'Go go go!',
+  'Ha-ha!',
+  'Hey now!',
+  'Hooray!',
+  'Hot dog!',
+  'Howdy!',
+  'Hurrah!',
+  'Huzzah!',
+  'Onwards!',
+  'Whoa!',
+  'Whoopee!',
+  'Yahoo!',
+  'Yay!',
+  'Yeah!',
+  'Yee-haw!',
+  'Yes!',
+  'Yippee!'
+];
+
+var last_interjection_index = Interjections.length - 1;
+function next_interjection() {
+  last_interjection_index += 1;
+
+  if (last_interjection_index === Interjections.length) {
+    last_interjection_index = 0;
+
+    // Fisher-Yates shuffle
+    for (var i = Interjections.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var x = Interjections[i];
+      Interjections[i] = Interjections[j];
+      Interjections[j] = x;
+    }
+  }
+
+  return Interjections[last_interjection_index];
+}
+
 /**
  * Builds a transform for race i of n.
  *
@@ -332,6 +377,10 @@ StepAnimation.prototype.show_dots = function() {
         candidate.animation_state = 'idle';
       } else {
         candidate.animation_state = 'adding';
+
+        if (dot_set.is_winner && !candidate.speech_bubble_html) {
+          candidate.speech_bubble_html = next_interjection();
+        }
       }
     });
 
@@ -362,6 +411,7 @@ StepAnimation.prototype.end = function() {
   this.candidates.forEach(function(candidate) {
     candidate.n_delegates = candidate.n_delegates_end;
     candidate.animation_state = 'idle';
+    candidate.speech_bubble_html = null;
   });
 
   this.horse_race.on_step_end();

@@ -43,6 +43,7 @@ function HorseRace(div) {
       },
       data: data_by_candidate_id[id],
       n_delegates: data.n_delegates, // When we animate, this property will animate
+      speech_bubble_html: null,      // While adding, there's sometimes a speech bubble
       animation_state: 'idle'        // When we animate, it'll go 'idle' -> 'adding' -> 'idle'
     };
   });
@@ -297,34 +298,36 @@ HorseRace.prototype.refresh_active_race_day = function() {
   this.els.race_day_right.style.width = Math.max(0, race_days_el.clientWidth - race_day_left + left - active_li.getBoundingClientRect().width) + 'px';
 };
 
+HorseRace.prototype.build_candidate_speech_bubble = function(candidate, max_n_delegates) {
+  var in_past = this.step_position === this.steps.length - 1;
+
+  if (candidate.speech_bubble_html) {
+    return candidate.speech_bubble_html; // "Yee-haw!", etc.
+  } else if (candidate.n_delegates >= this.data.n_delegates_needed) {
+    return "I'm the presumptive nominee!";
+  } else if (candidate.n_delegates == max_n_delegates) {
+    var n_remaining = this.data.n_delegates_needed - candidate.n_delegates;
+    return 'I ' + (in_past ? 'needed' : 'need') + ' <strong>' + format_int(n_remaining) + ' more ' + (n_remaining > 1 ? 'delegates' : 'delegate') + '</strong> to win.';
+  } else {
+    var n_behind = max_n_delegates - candidate.n_delegates;
+    return 'I' + (in_past ? ' was' : "'m") + ' behind by <strong>' + format_int(n_behind) + ' ' + (n_behind > 1 ? 'delegates' : 'delegate') + '</strong>';
+  }
+};
+
 HorseRace.prototype.refresh_candidate_els = function() {
-  var left; // fraction [0 .. 1]
-  var sentence;
-  var in_past = (this.step_number !== null);
+  var _this = this;
 
   var n_delegates_needed = this.data.n_delegates_needed;
   var max_n_delegates = this.candidates.reduce(function(max, c) { return c.n_delegates > max ? c.n_delegates : max; }, 0);
 
   this.candidates.forEach(function(candidate) {
-    if (candidate.n_delegates >= n_delegates_needed) {
-      left = 1;
-      sentence_html = "I'm the presumptive nominee!";
-    } else if (candidate.n_delegates == max_n_delegates) {
-      var n_remaining = n_delegates_needed - candidate.n_delegates;
-      left = candidate.n_delegates / n_delegates_needed;
-      sentence_html = 'I ' + (in_past ? 'needed' : 'need') + ' <strong>' + format_int(n_remaining) + ' more ' + (n_remaining > 1 ? 'delegates' : 'delegate') + '</strong> to win.';
-    } else {
-      var n_behind = max_n_delegates - candidate.n_delegates;
-      left = candidate.n_delegates / n_delegates_needed;
-      sentence_html = 'I' + (in_past ? ' was' : "'m") + ' behind by <strong>' + format_int(n_behind) + ' ' + (n_behind > 1 ? 'delegates' : 'delegate') + '</strong>';
-    }
-
+    var left = Math.min(1, candidate.n_delegates / n_delegates_needed);
     candidate.els.marker.style.left = (100 * left) + '%';
-    candidate.els.speech_bubble.innerHTML = sentence_html;
+    candidate.els.speech_bubble.innerHTML = _this.build_candidate_speech_bubble(candidate, max_n_delegates);
     candidate.els.n_delegates.innerText = format_int(candidate.n_delegates);
 
     candidate.els.row.className = 'candidate-horse ' + candidate.animation_state;
-    candidate.els.marker.className = 'marker ' + candidate.animation_state;
+    candidate.els.marker.className = 'marker ' + candidate.animation_state + (candidate.speech_bubble_html ? ' force-speech-bubble' : '');
     candidate.els.target.className = 'candidate-target ' + candidate.animation_state;
   });
 };
