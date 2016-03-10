@@ -170,7 +170,7 @@ HorseRace.prototype.on_calendar_mousedown = function(ev) {
 
   function jump_to_clicked_race_day(e) {
     var node = e.target;
-    while (node && !node.classList.contains('race-day') && !node.classList.contains('unpledged-delegates')) {
+    while (node.parentNode != document && !node.classList.contains('race-day') && !node.classList.contains('unpledged-delegates')) {
       node = node.parentNode;
     }
 
