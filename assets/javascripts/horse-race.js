@@ -107,10 +107,12 @@ HorseRace.prototype.listen = function() {
     }
   });
 
-  $(this.els.race_days).on('click', 'li', function(ev) {
+  $(this.els.race_days).on('click', 'li.race-day, li.unpledged-delegates', function(ev) {
     if (ev.target.tagName != 'A') {
       ev.preventDefault();
+
       _this.pause();
+
       var step_position = $(ev.currentTarget).prevAll().length;
       if (step_position < _this.steps.length) {
         _this.set_step_position(step_position + 1);
