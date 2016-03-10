@@ -5,3 +5,4 @@
         .state-code= race.state_code
         .map!= map_svg("states/tiny/#{race.state_code}")
   %h4= party_race_day.date.strftime('%b %-d')
+  %a{href: party_race_day.race_day_href} details

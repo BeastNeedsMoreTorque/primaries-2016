@@ -108,11 +108,13 @@ HorseRace.prototype.listen = function() {
   });
 
   $(this.els.race_days).on('click', 'li', function(ev) {
-    ev.preventDefault();
-    _this.pause();
-    var step_position = $(ev.currentTarget).closest('li.race-day, li.unpledged-delegates').prevAll().length;
-    if (step_position < _this.steps.length) {
-      _this.set_step_position(step_position + 1);
+    if (ev.target.tagName != 'A') {
+      ev.preventDefault();
+      _this.pause();
+      var step_position = $(ev.currentTarget).prevAll().length;
+      if (step_position < _this.steps.length) {
+        _this.set_step_position(step_position + 1);
+      }
     }
   });
 };
@@ -206,12 +208,12 @@ HorseRace.prototype.refresh_active_race_day = function() {
   $active_li.nextAll().addClass('after-active');
   var active_li = $active_li.get(0);
   var race_day_left = active_li.offsetLeft;
-  var left = race_day_left + active_li.clientWidth * 0.5 - race_days_el.clientWidth * 0.5;
+  var left = Math.floor(race_day_left + active_li.getBoundingClientRect().width * 0.5 - race_days_el.getBoundingClientRect().width * 0.5);
   $(race_days_el).stop(true);
   $(race_days_el).animate({ scrollLeft: left });
 
   this.els.race_day_left.style.width = (race_day_left - left) + 'px';
-  this.els.race_day_right.style.width = (race_days_el.clientWidth - race_day_left + left - active_li.clientWidth) + 'px';
+  this.els.race_day_right.style.width = (race_days_el.clientWidth - race_day_left + left - active_li.getBoundingClientRect().width) + 'px';
 };
 
 HorseRace.prototype.refresh_candidate_els = function() {

@@ -21,6 +21,7 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
   def party; database.parties.find!(party_id); end
   def party_adjective; party.adjective; end
   def party_name; party.name; end
+  def race_day_href; race_day.href; end
 
   def n_delegates_up_for_grabs
     n_delegates - candidate_states.map(&:n_delegates).reduce(0, :+)
