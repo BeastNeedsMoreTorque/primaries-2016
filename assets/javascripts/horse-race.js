@@ -94,6 +94,95 @@ HorseRace.prototype.load_steps = function() {
   }
 };
 
+HorseRace.prototype.on_calendar_mousedown = function(ev) {
+  function event_to_xy(e) {
+    if (e.changedTouches) {
+      var touch = e.changedTouches[0];
+      return { x: touch.clientX, y: touch.clientY };
+    } else {
+      return { x: e.clientX, y: e.clientY };
+    }
+  }
+
+  if (this.touching) return;
+  this.touching = true;
+
+  this.pause();
+
+  var _this = this;
+  var race_day_el = ev.currentTarget;
+  var scroll_left = race_day_el.scrollLeft;
+  var start_xy = event_to_xy(ev);
+  var DragThresholdSquared = 36; // square of number of pixels movement to indicate we're dragging
+  var dragging = false; // false if we move our mouse far enough
+
+  function maybe_reposition_calendar(ev2) {
+    var end_xy = event_to_xy(ev2);
+    var dx = end_xy.x - start_xy.x;
+
+    if (!dragging && dx * dx > DragThresholdSquared) {
+      dragging = true;
+    }
+
+    if (dragging) {
+      race_day_el.scrollLeft = scroll_left - dx;
+    }
+  };
+
+  function jump_to_centered_race_day() {
+    var offset_x = race_day_el.scrollLeft + race_day_el.clientWidth / 2;
+
+    for (var i = 0; i < race_day_el.childNodes.length; i++) {
+      var li = race_day_el.childNodes[i]; // Assume no whitespace between <li>s
+      if (li.offsetLeft + li.offsetWidth > offset_x) {
+        _this.set_step_position(Math.min(_this.steps.length, i + 1));
+        return;
+      }
+    }
+  }
+
+  function jump_to_clicked_race_day(e) {
+    var node = e.target;
+    while (node && !node.classList.contains('race-day') && !node.classList.contains('unpledged-delegates')) {
+      node = node.parentNode;
+    }
+
+    if (node) {
+      var index = Array.prototype.indexOf.call(node.parentNode.childNodes, node);
+      if (index != -1) {
+        _this.set_step_position(index + 1);
+      }
+    }
+  };
+
+  function on_mouseup(ev2) {
+    document.removeEventListener('mousemove', maybe_reposition_calendar);
+    document.removeEventListener('mouseup', on_mouseup);
+    document.removeEventListener('touchmove', maybe_reposition_calendar);
+    document.removeEventListener('touchend', on_mouseup);
+
+    _this.touching = false;
+
+    if (dragging) {
+      maybe_reposition_calendar(ev2);
+      jump_to_centered_race_day();
+    } else {
+      if (ev2.target.tagName == 'A') {
+        // do nothing. Let the browser treat it as a normal click
+      } else {
+        jump_to_clicked_race_day(ev2);
+      }
+    }
+  }
+
+  document.addEventListener('mousemove', maybe_reposition_calendar);
+  document.addEventListener('mouseup', on_mouseup);
+  document.addEventListener('touchmove', maybe_reposition_calendar);
+  document.addEventListener('touchend', on_mouseup);
+
+  ev.preventDefault(); // avoid dragging/selecting
+};
+
 HorseRace.prototype.listen = function() {
   var _this = this;
 
@@ -107,18 +196,8 @@ HorseRace.prototype.listen = function() {
     }
   });
 
-  $(this.els.race_days).on('click', 'li.race-day, li.unpledged-delegates', function(ev) {
-    if (ev.target.tagName != 'A') {
-      ev.preventDefault();
-
-      _this.pause();
-
-      var step_position = $(ev.currentTarget).prevAll().length;
-      if (step_position < _this.steps.length) {
-        _this.set_step_position(step_position + 1);
-      }
-    }
-  });
+  this.els.race_days.addEventListener('mousedown', function(ev) { _this.on_calendar_mousedown(ev); });
+  this.els.race_days.addEventListener('touchstart', function(ev) { _this.on_calendar_mousedown(ev); });
 };
 
 /**
@@ -214,8 +293,8 @@ HorseRace.prototype.refresh_active_race_day = function() {
   $(race_days_el).stop(true);
   $(race_days_el).animate({ scrollLeft: left });
 
-  this.els.race_day_left.style.width = (race_day_left - left) + 'px';
-  this.els.race_day_right.style.width = (race_days_el.clientWidth - race_day_left + left - active_li.getBoundingClientRect().width) + 'px';
+  this.els.race_day_left.style.width = Math.max(0, race_day_left - left) + 'px';
+  this.els.race_day_right.style.width = Math.max(0, race_days_el.clientWidth - race_day_left + left - active_li.getBoundingClientRect().width) + 'px';
 };
 
 HorseRace.prototype.refresh_candidate_els = function() {
