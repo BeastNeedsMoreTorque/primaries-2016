@@ -89,6 +89,7 @@ HorseRace.prototype.play = function() {
 
   this.playing = true;
   this.els.button.className = 'pause';
+  $(this.els.div).addClass('animating');
 
   if (this.step_number == this.data.race_days.length) {
     this.reset();
@@ -114,6 +115,7 @@ HorseRace.prototype.on_step_end = function() {
 
 HorseRace.prototype.pause = function() {
   this.playing = false;
+  $(this.els.div).removeClass('animating');
 
   if (this.animation) {
     this.animation.end();

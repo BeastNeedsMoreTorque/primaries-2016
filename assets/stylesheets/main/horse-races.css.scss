@@ -200,10 +200,11 @@ $horse-width: 8rem;
     }
 
     .n-delegates {
-      text-align: right;
-      padding-right: 2rem;
+      text-align: center;
       height: 1rem;
       line-height: 1rem;
+      padding-right: 0; // We'll only show the .target during animation
+      transition: padding-right .2s ease-in-out;
     }
 
     .target {
@@ -217,6 +218,8 @@ $horse-width: 8rem;
       box-sizing: border-box;
       border: 2px solid white;
       z-index: 0; // so ::before and ::after go behind it
+      transition: opacity .2s ease-in-out;
+      opacity: 0; // We'll only show it during animation
 
       &::before, &::after {
         position: absolute;
@@ -247,6 +250,13 @@ $horse-width: 8rem;
       &::after {
         opacity: 0;
       }
+    }
+  }
+
+  .horse-race.animating {
+    li.candidate-target {
+      .n-delegates { padding-right: 2rem; }
+      .target { opacity: 1; }
     }
   }
 
