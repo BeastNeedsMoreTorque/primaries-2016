@@ -9,10 +9,13 @@ function HorseRaceStep(step_number, type, label, previous_step_candidate_n_deleg
 
   this_step_candidates_array.forEach(function(c) {
     var n_delegates_start = previous_step_candidate_n_delegates_map[c.id].n_delegates_end;
+
     m[c.id] = {
+      n_delegates: c.n_delegates,
       n_delegates_start: n_delegates_start,
       n_delegates_end: n_delegates_start + c.n_delegates
     };
+
     n_delegates += c.n_delegates;
 
     if (c.n_delegates > max_n_delegates) {
