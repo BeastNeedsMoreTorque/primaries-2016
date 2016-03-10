@@ -12,6 +12,8 @@ function HorseRace(div) {
   this.els = {
     div: div,
     race_days: div.querySelector('ol.race-days'),
+    race_day_left: div.querySelector('.race-day-selector .left'),
+    race_day_right: div.querySelector('.race-day-selector .right'),
     button: div.querySelector('button')
   };
 
@@ -134,7 +136,7 @@ HorseRace.prototype.refresh_active_race_day = function() {
     active_index = this.step_number;
   }
 
-  var race_days_el = this.els.div.querySelector('ol.race-days');
+  var race_days_el = this.els.race_days;
   $(race_days_el).children().removeClass('active after-active before-active');
   var $active_li = $(race_days_el).children().eq(active_index);
   
@@ -142,9 +144,13 @@ HorseRace.prototype.refresh_active_race_day = function() {
   $active_li.prevAll().addClass('before-active');
   $active_li.nextAll().addClass('after-active');
   var active_li = $active_li.get(0);
-  var left = active_li.offsetLeft + active_li.clientWidth * 0.5 - race_days_el.clientWidth * 0.5;
+  var race_day_left = active_li.offsetLeft;
+  var left = race_day_left + active_li.clientWidth * 0.5 - race_days_el.clientWidth * 0.5;
   $(race_days_el).stop(true);
   $(race_days_el).animate({ scrollLeft: left });
+
+  this.els.race_day_left.style.width = (race_day_left - left) + 'px';
+  this.els.race_day_right.style.width = (race_days_el.clientWidth - race_day_left + left - active_li.clientWidth) + 'px';
 };
 
 HorseRace.prototype.refresh_candidate_els = function() {

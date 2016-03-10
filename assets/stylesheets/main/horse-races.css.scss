@@ -3,6 +3,7 @@ $horse-width: 8rem;
 .horse-races {
   .horse-race {
     position: relative;
+    margin-bottom: 5rem;
   }
 
   .n-delegates-needed {
@@ -276,17 +277,17 @@ $horse-width: 8rem;
     display: inline-block;
     padding: 0 .5rem;
     text-align: center;
-    border-right: 1px solid #eee;
+    border-right: 1px solid #ccc;
     &:last-child { border-right: none; }
 
-    &.has-pledged-delegates {
+    &.has-pledged-delegates:not(.active) {
       cursor: pointer;
     }
 
-    &.has-no-pledged-delegates, &.after-active, &.before-active {
-      opacity: .5;
-      -webkit-filter: grayscale(1);
-      filter: grayscale(1);
+    &.has-no-pledged-delegates {
+      opacity: .3;
+      // Remember, the .race-day-selector has its own semitransparent overlay
+      // too. So this is very faint indeed.
     }
 
     h4 {
@@ -308,6 +309,37 @@ $horse-width: 8rem;
       line-height: 1.6rem;
       width: 1.6rem;
       font-weight: bold;
+    }
+  }
+
+  .race-day-selector {
+    z-index: 2;
+    pointer-events: none;
+    position: absolute;
+    bottom: 0;
+    height: 3.5rem;
+    left: 0;
+    right: 0;
+
+    .left, .right {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      background: white;
+      transition: width .4s ease-in-out;
+      opacity: .7;
+    }
+
+    .left {
+      left: 0;
+      width: 100px;
+      border-right: 1px solid #333;
+    }
+
+    .right {
+      right: 0;
+      width: 100px;
+      border-left: 1px solid #333;
     }
   }
 
