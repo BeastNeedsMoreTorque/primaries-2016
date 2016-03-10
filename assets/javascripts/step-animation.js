@@ -204,7 +204,7 @@ StepAnimation.prototype.wait_to_show_states = function() {
     if (_this.ended) return;
 
     _this.show_states();
-  }, 400);
+  }, 100);
 };
 
 StepAnimation.prototype.show_states = function() {
