@@ -1,6 +1,7 @@
-function HorseRaceStep(step_number, type, previous_step_candidate_n_delegates_map, this_step_candidates_array) {
+function HorseRaceStep(step_number, type, label, previous_step_candidate_n_delegates_map, this_step_candidates_array) {
   this.step_number = step_number; // first step is number 0
   this.type = type;
+  this.label = label;
 
   var m = this.candidate_n_delegates_map = {};
   var n_delegates = 0;

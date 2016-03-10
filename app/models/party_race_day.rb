@@ -50,6 +50,7 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
   def horse_race_data
     {
       title: race_day.title,
+      date_s: race_day.date_s,
       n_pledged_delegates: n_pledged_delegates,
       races: races.map(&:horse_race_data),
       candidates: candidate_race_days

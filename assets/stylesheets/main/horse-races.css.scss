@@ -95,6 +95,43 @@ $horse-width: 8rem;
     }
   }
 
+  .bars {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative; // for z-index
+    top: -.5rem;
+    opacity: 1;
+    transition: opacity .1s linear;
+
+    li {
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+      height: .25rem;
+      background: transparent;
+
+      &.current-step {
+        background: yellow;
+      }
+    }
+
+    left: -$horse-width * 0.5;
+  }
+
+  .bar-label {
+    font-size: .8rem;
+    opacity: 1;
+    transition: opacity .1s linear;
+    position: relative;
+    color: white;
+    text-align: center;
+    margin-left: -$horse-width * 19 / 20;
+    z-index: 1; // on top of the start line, on mobile
+  }
+
   .marker {
     position: absolute;
     z-index: 1;
@@ -255,6 +292,8 @@ $horse-width: 8rem;
   }
 
   .horse-race.animating {
+    .bar-label { opacity: 0; }
+    .bars { opacity: 0; }
     li.candidate-target {
       .n-delegates { padding-right: 2rem; }
       .target { opacity: 1; }
@@ -285,6 +324,10 @@ $horse-width: 8rem;
     height: 5rem;
     padding-left: 50%;
     padding-right: 50%;
+  }
+
+  .bar-label {
+    position: relative;
   }
 
   li.race-day, li.unpledged-delegates {

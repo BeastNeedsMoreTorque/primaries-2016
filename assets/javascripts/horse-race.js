@@ -11,6 +11,7 @@ function index_objects_by(array, property) {
 function HorseRace(div) {
   this.els = {
     div: div,
+    bar_label: div.querySelector('.bar-label'),
     race_days: div.querySelector('ol.race-days'),
     race_day_left: div.querySelector('.race-day-selector .left'),
     race_day_right: div.querySelector('.race-day-selector .right'),
@@ -29,7 +30,7 @@ function HorseRace(div) {
   });
 
   var data_by_candidate_id = index_objects_by(this.data.candidates, 'id');
-  var candidates_by_id = {};
+  var candidates_by_id = this.candidates_by_id = {};
 
   Array.prototype.forEach.call(div.querySelectorAll('li.candidate-horse'), function(el) {
     var id = el.getAttribute('data-candidate-id');
@@ -78,20 +79,45 @@ function HorseRace(div) {
 HorseRace.prototype.load_steps = function() {
   var steps = this.steps = [];
 
+  var _this = this;
+
   var current_candidates = {};
-  this.candidates.forEach(function(c) { current_candidates[c.id] = { n_delegates_end: 0 }; });
+  this.candidates.forEach(function(c) {
+    current_candidates[c.id] = { n_delegates_end: 0 };
+    var els = _this.candidates_by_id[c.id].els;
+
+    els.bars = document.createElement('ul');
+    els.bars.className = 'bars';
+    els.row.appendChild(els.bars);
+  });
 
   this.data.race_days.forEach(function(rd, i) {
-    var step = new HorseRaceStep(i, 'race-day', current_candidates, rd.candidates);
+    // Add bars behind the horses for each step.
+    rd.candidates.forEach(function(rdc) {
+      var els = _this.candidates_by_id[rdc.id].els;
+      var bar = document.createElement('li');
+      bar.style.width = 100 * rdc.n_delegates / _this.data.n_delegates_needed + '%';
+      els.bars.appendChild(bar);
+    });
+
+    console.log(rd);
+    var step = new HorseRaceStep(i, 'race-day', 'Yellow bars show pledged delegates won ' + rd.date_s, current_candidates, rd.candidates);
     steps.push(step);
     current_candidates = step.candidate_n_delegates_map;
   });
 
   if (this.data.candidates.some(function(c) { return c.n_unpledged_delegates > 0; })) {
-    var step_candidates = this.data.candidates.map(function(c) {
-      return { id: c.id, n_delegates: c.n_unpledged_delegates };
+    var step_candidates = [];
+
+    this.data.candidates.forEach(function(c) {
+      step_candidates.push({ id: c.id, n_delegates: c.n_unpledged_delegates });
+      var els = _this.candidates_by_id[c.id].els;
+      var bar = document.createElement('li');
+      bar.style.width = 100 * c.n_unpledged_delegates / _this.data.n_delegates_needed + '%';
+      els.bars.appendChild(bar);
     });
-    steps.push(new HorseRaceStep(steps.length, 'unpledged', current_candidates, step_candidates));
+
+    steps.push(new HorseRaceStep(steps.length, 'unpledged', 'Yellow bars show unpledged delegates', current_candidates, step_candidates));
   }
 };
 
@@ -151,7 +177,7 @@ HorseRace.prototype.on_calendar_mousedown = function(ev) {
     if (node) {
       var index = Array.prototype.indexOf.call(node.parentNode.childNodes, node);
       if (index != -1) {
-        _this.set_step_position(index + 1);
+        _this.set_step_position(Math.min(_this.steps.length, index + 1));
       }
     }
   };
@@ -296,6 +322,8 @@ HorseRace.prototype.refresh_active_race_day = function() {
 
   this.els.race_day_left.style.width = Math.max(0, race_day_left - left) + 'px';
   this.els.race_day_right.style.width = Math.max(0, race_days_el.clientWidth - race_day_left + left - active_li.getBoundingClientRect().width) + 'px';
+
+  this.els.bar_label.innerText = this.steps[li_index].label;
 };
 
 HorseRace.prototype.build_candidate_speech_bubble = function(candidate, max_n_delegates) {
@@ -329,6 +357,10 @@ HorseRace.prototype.refresh_candidate_els = function() {
     candidate.els.row.className = 'candidate-horse ' + candidate.animation_state;
     candidate.els.marker.className = 'marker ' + candidate.animation_state + (candidate.speech_bubble_html ? ' force-speech-bubble' : '');
     candidate.els.target.className = 'candidate-target ' + candidate.animation_state;
+
+    $(candidate.els.bars).children()
+      .removeClass('current-step')
+      .eq(Math.max(0, _this.step_position - 1)).addClass('current-step');
   });
 };
 
