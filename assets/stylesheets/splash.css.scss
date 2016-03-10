@@ -371,6 +371,18 @@ a:hover { text-decoration: underline; }
     padding: 0;
     display: inline;
   }
+
+  ul {
+    padding-left: .5rem;
+  }
+
+  li::after {
+    content: ', ';
+  }
+
+  li:last-child::after {
+    content: '';
+  }
 }
 
 .tease-link {
