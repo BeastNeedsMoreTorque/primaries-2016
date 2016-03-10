@@ -45,9 +45,11 @@ function CountyRace(line) {
 
   this.geo_id = +arr[0];
   this.party_id = arr[1];
-  this.n_votes = +arr[2];
-  this.n_precincts_reporting = +arr[3];
-  this.n_precincts_total = +arr[4];
+  this.state_code = arr[2];
+  this.n_votes = +arr[3];
+  this.n_precincts_reporting = +arr[4];
+  this.n_precincts_total = +arr[5];
+  this.leader_slug = arr[6];
 }
 
 function Party(line) {
@@ -85,10 +87,12 @@ function RaceSubcounty(line) {
   var arr = line.split(',');
 
   this.party_id = arr[0];
-  this.geo_id = +arr[1];
-  this.n_votes = +arr[2];
-  this.n_precincts_reporting = +arr[3];
-  this.n_precincts_total = +arr[4];
+  this.state_code = arr[1];
+  this.geo_id = +arr[2];
+  this.n_votes = +arr[3];
+  this.n_precincts_reporting = +arr[4];
+  this.n_precincts_total = +arr[5];
+  this.leader_slug = arr[6];
 }
 
 var RaceDayTables = [

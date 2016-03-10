@@ -43,7 +43,7 @@ var encoded_dot_groups_html = null;
   simple_dot_groups_html = function simple_dot_group_html(n_dots) {
     var htmls = [];
 
-    if (n_dots > DotsPerGroup) {
+    if (n_dots >= DotsPerGroup) {
       htmls.push(dot_groups(Math.floor(n_dots / DotsPerGroup), dot_string(DotsPerGroup)));
     }
 

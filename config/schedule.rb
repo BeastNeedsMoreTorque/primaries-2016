@@ -16,7 +16,7 @@ module ServerSchedule
   # (If we didn't wait until *after* the task finishes, we could end up
   # bunching API requests together, which could exhaust our quota. Better too
   # few requests than too many, because they're more likely to succeed.)
-  TickIntervalInS = 2*60 # every 2min
+  TickIntervalInS = 1*60 # every 1min
 
   # The list of ticks.
   #
@@ -36,6 +36,8 @@ module ServerSchedule
   Ticks = [
    del_super,
    pollster,
+   election_day('2016-03-10'),
+   election_day('2016-03-08'),
    election_day('2016-03-06'),
    election_day('2016-03-05'),
    election_day('2016-03-01'),
@@ -48,16 +50,16 @@ module ServerSchedule
 
   # On election night, do something like this:
   #
-  # TickIntervalInS = 10
+  #TickIntervalInS = 10
   #
-  # Ticks = [
-  #   election_day('2016-03-06'),
-  #   election_day('2016-03-06'),
-  #   election_day('2016-03-06'),
-  #   election_day('2016-03-06'),
-  #   election_day('2016-03-06'),
-  #   del_super
-  # ]
+  #Ticks = [
+  #  election_day('2016-03-08'),
+  #  election_day('2016-03-08'),
+  #  election_day('2016-03-08'),
+  #  election_day('2016-03-08'),
+  #  election_day('2016-03-08'),
+  #  pollster
+  #]
   #
   # ... that will update votes five times per minute (average once per 12s) and
   # delegate counts once a minute. Total: 7 API requests per minute.

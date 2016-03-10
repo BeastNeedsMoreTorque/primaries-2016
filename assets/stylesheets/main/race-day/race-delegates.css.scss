@@ -4,8 +4,12 @@ body.race-day .race .party-state-delegates {
   font-size: .8rem;
   line-height: 1.5rem;
 
+  .with-candidates {
+    color: $dots-with-candidates-color;
+  }
+
   .without-candidates {
-    opacity: .35;
+    color: $dots-without-candidates-color;
   }
 
   p {

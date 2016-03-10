@@ -53,7 +53,8 @@ function RaceDayNodes() {
       };
     });
 
-    o = county_races[party_id] = {};
+    if (!county_races.hasOwnProperty(party_id)) county_races[party_id] = {};
+    o = county_races[party_id];
     Array.prototype.forEach.call(raceEl.querySelectorAll('g.counties path'), function(path) {
       var fips_int = path.getAttribute('data-fips-int');
       o[fips_int] = {
@@ -61,7 +62,8 @@ function RaceDayNodes() {
       };
     });
 
-    o = race_subcounties[party_id] = {};
+    if (!race_subcounties.hasOwnProperty(party_id)) race_subcounties[party_id] = {};
+    o = race_subcounties[party_id];
     Array.prototype.forEach.call(raceEl.querySelectorAll('g.subcounties path'), function(path) {
       var geo_id = path.getAttribute('data-geo-id');
       o[geo_id] = {
