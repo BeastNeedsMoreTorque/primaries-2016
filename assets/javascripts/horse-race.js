@@ -42,7 +42,8 @@ function HorseRace(div) {
         marker: el.querySelector('.marker'),
         speech_bubble: el.querySelector('.speech-bubble')
       },
-      data: data_by_candidate_id[id],
+      data: data,
+      slug: data.slug,
       n_delegates: data.n_delegates, // When we animate, this property will animate
       speech_bubble_html: null,      // While adding, there's sometimes a speech bubble
       animation_state: 'idle'        // When we animate, it'll go 'idle' -> 'adding' -> 'idle'
@@ -100,7 +101,6 @@ HorseRace.prototype.load_steps = function() {
       els.bars.appendChild(bar);
     });
 
-    console.log(rd);
     var step = new HorseRaceStep(i, 'race-day', 'Yellow bars show pledged delegates won ' + rd.date_s, current_candidates, rd.candidates);
     steps.push(step);
     current_candidates = step.candidate_n_delegates_map;
@@ -318,7 +318,7 @@ HorseRace.prototype.refresh_active_race_day = function() {
   var race_day_left = active_li.offsetLeft;
   var left = Math.floor(race_day_left + active_li.getBoundingClientRect().width * 0.5 - race_days_el.getBoundingClientRect().width * 0.5);
   $(race_days_el).stop(true);
-  $(race_days_el).animate({ scrollLeft: left });
+  $(race_days_el).animate({ scrollLeft: left }, { duration: 200 });
 
   this.els.race_day_left.style.width = Math.max(0, race_day_left - left) + 'px';
   this.els.race_day_right.style.width = Math.max(0, race_days_el.clientWidth - race_day_left + left - active_li.getBoundingClientRect().width) + 'px';

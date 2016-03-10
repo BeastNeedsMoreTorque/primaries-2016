@@ -141,7 +141,7 @@ $horse-width: 8rem;
     height: $horse-width * 3 / 4; // image aspect ratio
     margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
 
-    transition: left .1s linear, transform .1s linear;
+    transition: left .2s linear, transform .2s linear;
     -webkit-transform-origin: bottom 10%;
     transform-origin: bottom 10%;
 
@@ -242,7 +242,7 @@ $horse-width: 8rem;
       height: 1rem;
       line-height: 1rem;
       padding-right: 0; // We'll only show the .target during animation
-      transition: padding-right .1s ease-in-out;
+      transition: padding-right .2s ease-in-out;
     }
 
     .target {
@@ -256,7 +256,7 @@ $horse-width: 8rem;
       box-sizing: border-box;
       border: 2px solid white;
       z-index: 0; // so ::before and ::after go behind it
-      transition: opacity .1s ease-in-out;
+      transition: opacity .2s ease-in-out;
       opacity: 0; // We'll only show it during animation
 
       &::before, &::after {
@@ -412,7 +412,7 @@ $horse-width: 8rem;
       position: absolute;
       top: 0;
       bottom: 0;
-      transition: width .1s ease-in-out;
+      transition: width .2s ease-in-out;
     }
 
     .left {

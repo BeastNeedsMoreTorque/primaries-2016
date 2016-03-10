@@ -11,3 +11,10 @@ var CandidateColors = {
     carson: '#a85d59'
   }
 };
+
+var CandidateColorsNoParties = {};
+Object.keys(CandidateColors).forEach(function(key) {
+  Object.keys(CandidateColors[key]).forEach(function(slug) {
+    CandidateColorsNoParties[slug] = CandidateColors[key][slug];
+  });
+});

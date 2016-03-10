@@ -53,27 +53,27 @@ AnimatedDotSet.prototype.get_dots_at = function(t) {
   }
 
   var n_dots_in, dot_t;
-  var NoDotsT = 0.2;
-  var Damping = 0.9; // so we can see dots going to Trump from far left
+  var no_dots_t = Math.log2(this.max_n_dots) * 0.03;
+  var Damping = 0.8; // so we can see dots going to Trump from far left
 
   var ret = [];
 
-  // Number of dots in at time t, t >= NoDotsT:
-  // n_dots_in = max_n_dots * (t - NoDotsT) / (1 - NoDotsT)
+  // Number of dots in at time t, t >= no_dots_t:
+  // n_dots_in = max_n_dots * (t - no_dots_t) / (1 - no_dots_t)
   //
   // ... which lets us calculate that time n dots will be in:
-  // t = NoDotsT + n_dots_in * (1 - NoDotsT) / max_n_dots
+  // t = no_dots_t + n_dots_in * (1 - no_dots_t) / max_n_dots
 
-  if (t < NoDotsT) {
+  if (t < no_dots_t) {
     n_dots_in = 0;
-    dot_t = t / NoDotsT;
+    dot_t = t / no_dots_t;
   } else {
-    var n_dots_in_real = (t - NoDotsT) / (1 - NoDotsT) * this.max_n_dots;
+    var n_dots_in_real = (t - no_dots_t) / (1 - no_dots_t) * this.max_n_dots;
     n_dots_in = Math.floor(n_dots_in_real);
 
     // Calculate how far towards the destination our next dot should be.
-    var last_dot_t = NoDotsT + n_dots_in * (1 - NoDotsT) / this.max_n_dots;
-    var next_dot_t = NoDotsT + (n_dots_in + 1) * (1 - NoDotsT) / this.max_n_dots;
+    var last_dot_t = no_dots_t + n_dots_in * (1 - no_dots_t) / this.max_n_dots;
+    var next_dot_t = no_dots_t + (n_dots_in + 1) * (1 - no_dots_t) / this.max_n_dots;
 
     // Okay, so I'm not so sure of myself here. But I think this is okay.
     //

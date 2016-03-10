@@ -61,7 +61,7 @@ function build_race_transform_matrix(i, n, w) {
     0,
     0,
     StateWidth / 1000,
-    w / 2 - n * StateWidth / 2 + i * StateWidth,
+    Math.round(w / 2 - n * StateWidth / 2 + i * StateWidth) + 1, // 1 for left border
     100
   ];
 }
@@ -204,7 +204,7 @@ StepAnimation.prototype.wait_to_show_states = function() {
     if (_this.ended) return;
 
     _this.show_states();
-  }, 100);
+  }, 200);
 };
 
 StepAnimation.prototype.show_states = function() {
@@ -230,7 +230,7 @@ StepAnimation.prototype.show_states = function() {
       ctx.setTransform.apply(ctx, transform);
 
       draw_path(ctx, paths[race.state_code]);
-      ctx.strokeStyle = 'blue';
+      ctx.strokeStyle = '#666';
       ctx.lineWidth = 5;
       ctx.stroke();
 
@@ -331,8 +331,6 @@ StepAnimation.prototype.show_dots = function() {
       }
     }
 
-    var max_n_dots = _this.candidates.reduce(function(s, c) { var n = partial_dot_sets[c.id].length; return s > n ? s : n; }, 0);
-
     candidate_dots = _this.candidates.map(function(candidate) {
       var el = candidate.els.target.querySelector('.target');
       var target_xy = {
@@ -341,7 +339,7 @@ StepAnimation.prototype.show_dots = function() {
       };
       var raw_dots = partial_dot_sets[candidate.id];
 
-      return new AnimatedDotSet(candidate.id, target_xy, raw_dots, max_n_dots);
+      return new AnimatedDotSet(candidate.id, target_xy, raw_dots, _this.step.max_candidate_n_delegates);
     });
 
     _this.candidates.forEach(function(candidate) {
@@ -352,13 +350,17 @@ StepAnimation.prototype.show_dots = function() {
   function step(t) {
     if (!ctx) initialize();
 
-    ctx.fillStyle = 'blue';
-    ctx.beginPath();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     var radius = 2.5; // px
 
     candidate_dots.forEach(function(dot_set) {
       var dots = dot_set.get_dots_at(t);
+
+      var candidate = candidates_by_id[dot_set.candidate_id];
+
+      ctx.beginPath();
+      ctx.fillStyle = CandidateColorsNoParties[candidate.slug];
 
       for (var j = 0; j < dots.length; j++) {
         var dot = dots[j];
@@ -368,7 +370,6 @@ StepAnimation.prototype.show_dots = function() {
       }
 
       var n_complete = dot_set.get_n_dots_completed_at(t);
-      var candidate = candidates_by_id[dot_set.candidate_id];
       candidate.n_delegates = candidate.n_delegates_start + n_complete;
 
       if (candidate.n_delegates == candidate.n_delegates_start) {
@@ -382,10 +383,9 @@ StepAnimation.prototype.show_dots = function() {
           candidate.speech_bubble_html = next_interjection();
         }
       }
-    });
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fill();
+      ctx.fill();
+    });
 
     _this.state_canvas.style.opacity = 0.5 * Math.pow(1 - t, 2);
     _this.state_canvas.style.marginBottom = (Math.sqrt(t) * 5) + 'px';
@@ -393,7 +393,7 @@ StepAnimation.prototype.show_dots = function() {
     _this.horse_race.refresh_candidate_els();
   }
 
-  var duration = Math.sqrt(this.n_delegates) * 80;
+  var duration = Math.log2(this.step.n_delegates) * 200;
   this.animate_step(duration, step, function() { _this.end(); });
 };
 
