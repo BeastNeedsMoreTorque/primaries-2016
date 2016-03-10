@@ -236,7 +236,7 @@ StepAnimation.prototype.show_states = function() {
     } else {
       ctx.save();
       ctx.strokeStyle = '#666';
-      ctx.arc(canvas.width / 2, 120, 20, 0, 2 * Math.PI);
+      ctx.arc(canvas.width / 2, 110, 15, 0, 2 * Math.PI);
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.restore();
@@ -357,10 +357,10 @@ StepAnimation.prototype.show_dots = function() {
   function initialize_with_unpledged_delegates() {
     var phi = 0;
     var d_phi = 2 * Math.PI / _this.step.n_delegates;
-    var r = 20;
+    var r = 15;
     var c = {
       x: canvas.width / 2,
-      y: 120
+      y: 110
     };
 
     candidate_dots = _this.candidates.map(function(candidate) {
