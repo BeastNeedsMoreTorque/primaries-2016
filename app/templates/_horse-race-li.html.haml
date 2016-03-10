@@ -1,0 +1,7 @@
+%li.race-day{'data-race-day-id': party_race_day.race_day_id, class: class_name}<>
+  %ol.races<>
+    - party_race_day.races.each do |race|
+      %li.race{'data-state-code': race.state_code}<>
+        .state-code= race.state_code
+        .map!= map_svg("states/tiny/#{race.state_code}")
+  %h4= party_race_day.date.strftime('%b %-d')

@@ -190,7 +190,8 @@ class Database
         pollster_candidate ? pollster_candidate.poll_percent : nil,
         pollster_candidate ? pollster_candidate.sparkline : nil,
         pollster_candidate ? pollster_candidate.last_updated : nil,
-        sheet_candidate.dropped_out_date_or_nil
+        sheet_candidate.dropped_out_date_or_nil,
+        sheet_candidate.in_horse_race
       )
     end
 

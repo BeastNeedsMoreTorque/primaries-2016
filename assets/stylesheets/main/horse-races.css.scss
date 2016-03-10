@@ -262,6 +262,7 @@ $horse-width: 8rem;
 
   canvas {
     position: absolute;
+    pointer-events: none;
     left: 0;
     bottom: 0;
     z-index: 1; // above race-days
@@ -283,18 +284,19 @@ $horse-width: 8rem;
     padding-right: 50%;
   }
 
-  li.race-day {
+  li.race-day, li.unpledged-delegates {
     display: inline-block;
     padding: 0 .5rem;
     text-align: center;
     border-right: 1px solid #ccc;
     &:last-child { border-right: none; }
+    cursor: pointer;
 
-    &.has-pledged-delegates:not(.active) {
-      cursor: pointer;
+    &.active, &.has-no-delegates {
+      cursor: default;
     }
 
-    &.has-no-pledged-delegates {
+    &.has-no-delegates {
       opacity: .3;
       // Remember, the .race-day-selector has its own semitransparent overlay
       // too. So this is very faint indeed.

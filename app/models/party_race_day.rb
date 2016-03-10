@@ -34,6 +34,10 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
     candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
 
+  def n_unpledged_delegates_with_candidates
+    candidate_states.map(&:n_unpledged_delegates).reduce(0, :+)
+  end
+
   def races_without_leaders
     used_state_codes = candidate_races.select(&:leader?).map(&:state_code).to_set
 
@@ -48,6 +52,7 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
       n_pledged_delegates: n_pledged_delegates,
       races: races.map(&:horse_race_data),
       candidates: candidate_race_days
+        .select(&:candidate_in_horse_race?)
         .map { |crd| { id: crd.candidate_id, n_delegates: crd.n_pledged_delegates } }
     }
   end

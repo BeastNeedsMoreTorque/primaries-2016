@@ -31,6 +31,7 @@ module Assets
       animated-dot-set.js
       dot-line.js
       step-animation.js
+      horse-race-step.js
       horse-race.js
       all-primaries.js
     ),
