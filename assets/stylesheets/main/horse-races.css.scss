@@ -19,7 +19,7 @@ $horse-width: 8rem;
     margin: 1rem 0 -1rem;
     padding: 6rem .75rem 0 0;
     list-style: none;
-    background: #efe;
+    background: #DCF4FA;
     position: relative;
 
     &::after {
@@ -72,24 +72,25 @@ $horse-width: 8rem;
       }
     }
 
+    .background::after {
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" fill="%239DCF89"/></svg>');
+    }
+
     &:nth-child(3n) .background {
       background-position-x: 0;
       &::after {
-        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" fill="%23393"/></svg>');
         background-position-x: 0;
       }
     }
     &:nth-child(3n + 1) .background {
       background-position-x: .2rem;
       &::after {
-        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" fill="%236a6"/></svg>');
         background-position-x: .2rem;
       }
     }
     &:nth-child(3n + 2) .background {
       background-position-x: .1rem;
       &::after {
-        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" fill="%238c8"/></svg>');
         background-position-x: .1rem;
       }
     }
