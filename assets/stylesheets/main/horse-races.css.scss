@@ -296,12 +296,6 @@ $horse-width: 8rem;
       cursor: default;
     }
 
-    &.has-no-delegates {
-      opacity: .3;
-      // Remember, the .race-day-selector has its own semitransparent overlay
-      // too. So this is very faint indeed.
-    }
-
     h4 {
       font: inherit;
       font-weight: bold;
@@ -337,21 +331,21 @@ $horse-width: 8rem;
       position: absolute;
       top: 0;
       bottom: 0;
-      background: white;
       transition: width .4s ease-in-out;
-      opacity: .7;
     }
 
     .left {
       left: 0;
       width: 100px;
       border-right: 1px solid #333;
+      background: rgba(255, 255, 255, 0.7);
     }
 
     .right {
       right: 0;
       width: 100px;
       border-left: 1px solid #333;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 1));
     }
   }
 
