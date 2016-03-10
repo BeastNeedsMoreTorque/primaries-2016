@@ -104,7 +104,7 @@ $horse-width: 8rem;
     position: relative; // for z-index
     top: -.5rem;
     opacity: 1;
-    transition: opacity .1s linear;
+    transition: opacity .2s linear;
 
     li {
       margin: 0;
@@ -124,7 +124,7 @@ $horse-width: 8rem;
   .bar-label {
     font-size: .8rem;
     opacity: 1;
-    transition: opacity .1s linear;
+    transition: opacity .2s linear;
     position: relative;
     color: white;
     text-align: center;
