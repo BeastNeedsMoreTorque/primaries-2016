@@ -111,7 +111,7 @@ HorseRace.prototype.listen = function() {
     ev.preventDefault();
     _this.pause();
     var step_position = $(ev.currentTarget).closest('li.race-day, li.unpledged-delegates').prevAll().length;
-    if (step_position <= _this.steps.length) {
+    if (step_position < _this.steps.length) {
       _this.set_step_position(step_position + 1);
     }
   });
@@ -161,9 +161,10 @@ HorseRace.prototype.play = function() {
 HorseRace.prototype.on_step_end = function() {
   this.animation = null;
 
-  if (!this.playing) return; // User clicked to stop animating
-
-  if (this.step_position === this.steps.length - 1) {
+  if (!this.playing) {
+    // User clicked to stop animating
+    this.set_step_position(this.step_position + 1);
+  } else if (this.step_position === this.steps.length - 1) {
     this.pause();
     // Set step position after pause, so refresh_active_race_day keeps us on the
     // correct <li>. (See comments about li_index.)
@@ -179,7 +180,6 @@ HorseRace.prototype.pause = function() {
 
   if (this.animation) {
     this.animation.end();
-    this.set_step_position(this.step_position + 1);
   }
 
   $(this.els.div).removeClass('animating');
