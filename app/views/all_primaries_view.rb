@@ -35,8 +35,7 @@ class AllPrimariesView < BaseView
         [ 'date', 'Date' ],
         [ 'state', 'State' ],
         [ 'party', 'Party' ],
-        [ 'n-delegates-int', 'Delegates' ],
-        [ 'n-delegates-dots', 'Delegates' ]
+        [ 'winner', 'Winner' ]
       ].map { |arr| StateRaceDaysColumn.new(*arr) },
       hide_repeats_column: 'date',
       races: races
@@ -46,21 +45,15 @@ class AllPrimariesView < BaseView
   def render_state_race_days_by_state
     render(partial: 'state-race-days-table', locals: {
       columns: [
-        [ 'state', 'State' ],
         [ 'date', 'Date' ],
+        [ 'state', 'State' ],
         [ 'party', 'Party' ],
-        [ 'n-delegates-int', 'Delegates' ],
-        [ 'n-delegates-dots', 'Delegates' ]
+        [ 'n-delegates-int', 'Total Delegates' ],
+        [ 'n-delegates-dots', 'Total Delegates' ],
+        [ 'button', '' ]
       ].map { |arr| StateRaceDaysColumn.new(*arr) },
-      hide_repeats_column: 'state',
-      races: races.sort do |a, b|
-        c1 = a.state_name <=> b.state_name
-        if c1 != 0
-          c1
-        else
-          a.race_day_id <=> b.race_day_id
-        end
-      end
+      hide_repeats_column: 'date',
+      races: races
     })
   end
 end

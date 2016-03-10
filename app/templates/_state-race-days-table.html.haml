@@ -24,6 +24,9 @@
                 - else
                   %span.disabled
                     %time{datetime: race.race_day_id}= format_date(race.date)
+              - when 'winner'
+                - if race.winner_or_nil
+                  %img{class: "#{race.winner_or_nil.candidate_slug}", alt: "#{race.winner_or_nil.candidate_last_name}", src: image_path(race.winner_or_nil.candidate_slug + '.png')}
               - when 'state'
                 = race.state_name
               - when 'party'
@@ -32,15 +35,16 @@
                 = race.n_delegates
               - when 'n-delegates-dots'
                 != race_simple_dot_groups(race).to_html
-        - if !race.enabled?
-          %td.disabled-button
-        - else
-          %td.enabled-button
-            %a.results-button{href: race.href}
-              %span.results-button-desktop
-                - if race.when_race_happens == 'future'
-                  Preview
+              - when 'button'
+                - if !race.enabled?
+                  %td.disabled-button
                 - else
-                  Results
-              »
+                  %td.enabled-button
+                    %a.results-button{href: race.href}
+                      %span.results-button-desktop
+                        - if race.when_race_happens == 'future'
+                          Preview
+                        - else
+                          Results
+                      »
       - last_value = current_value

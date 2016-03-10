@@ -15,10 +15,15 @@
     }
   }
 
+  th {
+    text-align: left;
+    padding: .3rem .5rem;
+  }
+
   td {
     border-top: 1px solid $tableBorderColor;
-    vertical-align: top;
-    padding: .5rem;
+    vertical-align: middle;
+    padding: .3rem .5rem;
     &.state {
       padding-right: 0;
     }
@@ -29,11 +34,19 @@
         color: #000;
       }
     }
-    &.party {
-      text-align: center;
+    &.winner {
+      img {
+        height: 25px;
+      }
     }
     &.repeated * {
       visibility: hidden;
+    }
+  }
+
+  @each $candidate in $candidate-colors {
+    img.#{$candidate} {
+      border: 5px solid $candidate;
     }
   }
 
@@ -78,6 +91,8 @@
 
   table {
     border-collapse: collapse;
+    width: 100%;
+    max-width: 800px;
     margin: 0 auto;
   }
 

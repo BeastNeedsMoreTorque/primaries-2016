@@ -90,6 +90,20 @@ module DotGroupHelper
     candidate_state_dot_sets_to_dot_groups(dot_sets)
   end
 
+  # For a given state, returns dot groups by candidate ID
+  #
+  # e.g.:
+  #
+  #   party_state = database.party_states.find!('Dem-IA')
+  #   html = party_state_dot_groups(party_state, :n_delegates)
+  def party_state_dot_groups(party_state, method)
+    dot_subgroups = party_state.candidate_states.map do |candidate_state|
+      DotSubgroup.new(candidate_state.candidate_id, candidate_state.send(method))
+    end
+
+    group_dot_subgroups(dot_subgroups).to_html('data-candidate-id')
+  end
+
   def races_to_unassigned_dot_groups(races, include_method, method)
     dot_sets = races.select(&include_method).map do |race|
       CandidateStateDotSet.new(nil, race.state_code, race.send(method))

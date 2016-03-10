@@ -1,11 +1,5 @@
 .state-race-days
-  .state-race-days-toggle
-    %a.by-date.selected{href: '#state-race-days-by-date'} Sort by date
-    %a.by-state{href: '#state-race-days-by-state'} Sort by state
 
   .both-tables
-    .flipper.date-selected
-      #state-race-days-by-date.selected
-        != render_state_race_days_by_date
-      #state-race-days-by-state
-        != render_state_race_days_by_state
+    != render_state_race_days_by_date
+    != render_state_race_days_by_state

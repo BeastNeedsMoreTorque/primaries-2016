@@ -33,6 +33,11 @@ Race = RubyImmutableStruct.new(
   # Something to put after the "#" in a URL
   attr_reader(:anchor)
 
+  def winner_or_nil
+    leader = candidate_races.first
+    leader.winner? ? leader : nil
+  end
+
   def after_initialize
     @id = "#{race_day_id}-#{party_id}-#{state_code}"
     @party_race_day_id = "#{@party_id}-#{@race_day_id}"
