@@ -21,7 +21,8 @@ Dates in pubbed and updated look like “Tuesday, Jan. 26, 6:30 PM EST” and ar
 
 hed: Presidential Primaries
 pubbed_dt: Tuesday, Jan. 26, 6:30 PM EST
-body: See which candidates are leading the pack for their party’s nomination, find election dates and watch live updates on election nights.
+updated_dt: Thursday, Mar. 10, 6:28 PM EST
+body: See which candidates lead the pack for their party’s nomination, look up election dates and watch live updates on election nights.
 twitter: Check out HuffPost's 2016 elections dashboard for live updates on primary nights 
 
 
@@ -172,6 +173,12 @@ date: 2016-03-12
 state: MP
 party: Dem
 text: We don't have vote tallies for this race, but we’re counting delegates.
+
+
+date: 2016-03-12
+state: WY
+party: GOP
+text: Wyoming Republicans vote for national delegates, not a presidential preference. That lets us count 12 delegates by March 12. Another 14 delegates will be pledged at the statewide convention on April 14.
 
 
 date: 2016-03-15

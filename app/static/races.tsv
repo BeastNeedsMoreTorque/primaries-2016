@@ -47,8 +47,9 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-08	Dem	MS	Primary	2016-03-09T01:00:00Z					
 2016-03-08	GOP	MS	Primary	2016-03-09T01:00:00Z					
 2016-03-10	GOP	VI	Caucus						
-2016-03-12	GOP	DC	Caucus						
+2016-03-12	GOP	DC	Caucus	2016-03-12T21:00:00Z					
 2016-03-12	GOP	GU	Convention						
+2016-03-12	GOP	WY	Caucus	2016-03-12T15:00:00Z					
 2016-03-12	Dem	MP	Caucus						
 2016-03-15	Dem	FL	Primary						
 2016-03-15	GOP	FL	Primary						

@@ -53,7 +53,7 @@ class SheetsSource
   def initialize(candidates_tsv, parties_tsv, races_tsv, race_days_tsv, states_tsv)
     @candidates = candidates_tsv.split(/\r?\n/)[1..-1].map do |line|
       id, party_id, name, last_name, dropped_out_or_empty = line.split(/\t/)
-      dropped_out_date_or_nil = dropped_out_or_empty ? Date.parse(dropped_out_or_empty) : nil
+      dropped_out_date_or_nil = dropped_out_or_empty != '' ? Date.parse(dropped_out_or_empty) : nil
       Candidate.new(id, party_id, name, last_name, dropped_out_date_or_nil)
     end
 
