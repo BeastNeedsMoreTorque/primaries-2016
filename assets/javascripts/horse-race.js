@@ -284,6 +284,8 @@ HorseRace.prototype.play = function() {
 
   if (this.step_position == this.steps.length) {
     this.set_step_position(0);
+  } else {
+    this.refresh_active_race_day();
   }
 
   this.play_step();

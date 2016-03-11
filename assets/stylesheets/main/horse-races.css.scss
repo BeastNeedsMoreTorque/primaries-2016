@@ -2,6 +2,10 @@ $horse-width: 8rem;
 $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 
 .horse-races {
+  h3 {
+    margin: 0;
+  }
+
   .horse-race {
     position: relative;
     margin-bottom: 5rem;
@@ -9,10 +13,8 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
   }
 
   .n-delegates-needed {
-    position: absolute;
-    top: 2.5rem;
-    right: 0;
-    line-height: 1.5rem;
+    text-align: right;
+    line-height: 1rem;
     font-size: .8rem;
   }
 
@@ -232,7 +234,6 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     display: flex;
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    padding: .5rem 0 1.5rem;
     margin: 0;
     list-style: none;
     -webkit-perspective: 500px;
@@ -330,11 +331,16 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     position: absolute;
     pointer-events: none;
     left: 0;
-    bottom: 1.5rem;
+    bottom: 0;
     z-index: 1; // above race-days
   }
 
   .json-data, .json-state-paths { display: none; }
+
+  div.race-days {
+    position: relative;
+    height: 5rem;
+  }
 
   ol.race-days, ol.races {
     margin: 0;
@@ -396,18 +402,18 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       pointer-events: none;
     }
 
-    &.active a {
-      opacity: 1;
-      cursor: pointer;
-      pointer-events: auto;
-    }
-
     h4 {
       font: inherit;
       font-weight: bold;
       margin: 0;
       line-height: 1.4rem;
     }
+  }
+
+  .horse-race:not(.animating) ol.race-days>li.active a {
+    opacity: 1;
+    cursor: pointer;
+    pointer-events: auto;
   }
 
   li.race {

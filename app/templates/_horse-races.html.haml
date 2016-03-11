@@ -19,6 +19,27 @@
           .bar-label-outer
             .bar-label
 
+      .race-days
+        %ol.race-days<>
+          - party.party_race_days.select{ |prd| prd.n_pledged_delegates_with_candidates > 0 }.each do |prd|
+            != render(partial: 'horse-race-li', locals: { class_name: 'has-delegates', party_race_day: prd })
+          - if party.n_unpledged_delegates_with_candidates > 0
+            %li.unpledged-delegates<>
+              %h4 With Unpledged
+              %h4 Delegates
+              %a{href: '/2016/primaries/about-delegates'} More info &raquo;
+          - party.party_race_days.select{ |prd| prd.n_pledged_delegates_with_candidates == 0 }.each do |prd|
+            != render(partial: 'horse-race-li', locals: { class_name: 'has-no-delegates', party_race_day: prd })
+
+        .race-day-selector
+          .left
+          .right
+
+        .json-data= party.horse_race_data.to_json
+
+        %button.play
+          -# All CSS
+
       %ol.candidate-targets
         - party.candidates.select(&:in_horse_race?).reverse.each do |candidate|
           %li.candidate-target{'data-candidate-id': candidate.id}
@@ -26,23 +47,3 @@
             %img{src: image_path("horses/#{candidate.slug}-target.png"), alt: ''}
             .target
             .n-delegates= format_int(candidate.n_delegates)
-
-      %ol.race-days<>
-        - party.party_race_days.select{ |prd| prd.n_pledged_delegates_with_candidates > 0 }.each do |prd|
-          != render(partial: 'horse-race-li', locals: { class_name: 'has-delegates', party_race_day: prd })
-        - if party.n_unpledged_delegates_with_candidates > 0
-          %li.unpledged-delegates<>
-            %h4 With Unpledged
-            %h4 Delegates
-            %a{href: '/2016/primaries/about-delegates'} More info &raquo;
-        - party.party_race_days.select{ |prd| prd.n_pledged_delegates_with_candidates == 0 }.each do |prd|
-          != render(partial: 'horse-race-li', locals: { class_name: 'has-no-delegates', party_race_day: prd })
-
-      .race-day-selector
-        .left
-        .right
-
-      .json-data= party.horse_race_data.to_json
-
-      %button.play
-        -# All CSS
