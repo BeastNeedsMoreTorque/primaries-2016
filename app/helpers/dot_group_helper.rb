@@ -98,10 +98,10 @@ module DotGroupHelper
   #   html = party_state_dot_groups(party_state, :n_delegates)
   def party_state_dot_groups(party_state, method)
     dot_subgroups = party_state.candidate_states.map do |candidate_state|
-      DotSubgroup.new(candidate_state.candidate_id, candidate_state.send(method))
+      DotSubgroup.new(candidate_state.candidate_slug, candidate_state.send(method))
     end
 
-    group_dot_subgroups(dot_subgroups).to_html('data-candidate-id')
+    group_dot_subgroups(dot_subgroups).to_html('data-candidate-slug')
   end
 
   def races_to_unassigned_dot_groups(races, include_method, method)

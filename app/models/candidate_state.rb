@@ -18,6 +18,7 @@ CandidateState = RubyImmutableStruct.new(:database, :candidate_id, :state_code, 
   end
 
   def candidate_last_name; candidate.name; end
+  def candidate_slug; candidate.slug; end
   def state_name; state.name; end
   def party_name; candidate.party_name; end
   def has_delegates?; n_delegates > 0; end

@@ -44,9 +44,9 @@
     }
   }
 
-  @each $candidate in $candidate-colors {
-    img.#{$candidate} {
-      border: 5px solid $candidate;
+  @each $slug, $color in $candidate-colors {
+    .dot-group span[data-candidate-slug=#{$slug}] {
+      color: $color;
     }
   }
 

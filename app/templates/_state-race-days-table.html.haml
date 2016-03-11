@@ -27,6 +27,9 @@
               - when 'winner'
                 - if race.winner_or_nil
                   %img{class: "#{race.winner_or_nil.candidate_slug}", alt: "#{race.winner_or_nil.candidate_last_name}", src: image_path(race.winner_or_nil.candidate_slug + '.png')}
+
+                  != party_state_dot_groups(race.party_state, :n_delegates)
+
               - when 'state'
                 = race.state_name
               - when 'party'
