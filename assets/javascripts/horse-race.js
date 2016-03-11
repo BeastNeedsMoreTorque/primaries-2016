@@ -225,6 +225,8 @@ HorseRace.prototype.listen = function() {
 
   this.els.race_days.addEventListener('mousedown', function(ev) { _this.on_calendar_mousedown(ev); });
   this.els.race_days.addEventListener('touchstart', function(ev) { _this.on_calendar_mousedown(ev); });
+
+  window.addEventListener('resize', function() { _this.refresh(); });
 };
 
 /**
