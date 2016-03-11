@@ -60,15 +60,28 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
         height: 100%;
       }
 
-      &::before {
-        content: ' ';
+      .start-line {
         position: absolute;
+        box-sizing: border-box;
         top: 0;
-        left: $horse-width;
-        margin-left: -2px;
-        border-left: 2px dashed $muted;
-        height: 100%;
+        left: 0;
+        width: $horse-width * 19 / 20;
+        height: 2.5rem;
         z-index: 1;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="rgba(205, 174, 137, 1)"/></svg>') repeat-x left top;
+
+        &::after {
+          content: '';
+          position: absolute;
+          right: 0;
+          width: 2px;
+          top: 0;
+          height: 2.5rem;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="white"/></svg>') repeat-x;
+          background-size: auto 2.5rem;
+          background-position: left (-$horse-width * 19 / 20) top;
+          z-index: 1;
+        }
       }
     }
   }

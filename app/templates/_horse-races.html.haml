@@ -9,11 +9,13 @@
         - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
           %li.candidate-horse{'data-candidate-id': candidate.id, class: (candidate.dropped_out? ? 'dropped-out' : '')}
             .background
+              .start-line
             .marker{style: "left: #{(candidate.n_delegates || 0).to_f / party.n_delegates_needed * 100}%"}
               %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: ''}
               .speech-bubble
         %li.extra-layer
           .background
+            .start-line
           .bar-label-outer
             .bar-label
 
