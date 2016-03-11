@@ -262,9 +262,6 @@ HorseRace.prototype.play = function() {
 
   if (this.step_position == this.steps.length) {
     this.set_step_position(0);
-  } else {
-    // When paused, you're one position "ahead" of when playing
-    this.set_step_position(this.step_position - 1);
   }
 
   this.play_step();
