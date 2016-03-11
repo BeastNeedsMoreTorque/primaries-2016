@@ -138,6 +138,14 @@ HorseRace.prototype.load_steps = function() {
 
     steps.push(new HorseRaceStep(steps.length, 'unpledged', 'Unpledged delegates', current_candidates, step_candidates));
   }
+
+  // Add special-class bars to indicate final positions when scrolling
+  this.data.candidates.forEach(function(c) {
+    var bars = _this.candidates_by_id[c.id].els.bars;
+    var bar = document.createElement('li');
+    bar.className = 'final-position-notch';
+    bars.appendChild(bar);
+  });
 };
 
 HorseRace.prototype.on_calendar_mousedown = function(ev) {
