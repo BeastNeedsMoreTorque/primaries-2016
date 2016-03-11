@@ -12,7 +12,8 @@
               .start-line
             .marker{style: "left: #{(candidate.n_delegates || 0).to_f / party.n_delegates_needed * 100}%"}
               %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: ''}
-              .speech-bubble
+              .speech-bubble-outer
+                .speech-bubble
         %li.extra-layer
           .background
             .start-line

@@ -202,14 +202,26 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
-  .speech-bubble {
+  .speech-bubble-outer {
     display: none;
     position: absolute;
+    width: 20rem;
+    margin-left: -10rem;
+    text-align: center;
+    height: 0;
     top: -$horse-width * .5; // the _height_ of the horse depends on its width
-    @media (max-width: $widest-mobile) { top: -$horse-width-mobile * .5; }
-    left: 0;
-    min-width: 4rem;
-    float: left;
+    left: $horse-width * .7; // roughly the position of the head
+    @media (max-width: $widest-mobile) {
+      top: -$horse-width-mobile * .5;
+      left: $horse-width-mobile * .7;
+    }
+  }
+
+  .speech-bubble {
+    display: inline-block;
+    position: relative;
+    margin: 0 auto;
+    min-width: 3rem;
     padding: .75rem;
     line-height: 1rem;
     text-align: center;
@@ -222,8 +234,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     &::before, &::after {
       content: ' ';
       position: absolute;
-      left: $horse-width * .75;
-      @media (max-width: $widest-mobile) { left: $horse-width-mobile * .75; }
+      left: 50%;
       bottom: -13px;
       width: 0;
       height: 0;
@@ -243,7 +254,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
   }
 
   .marker:hover, .marker.force-speech-bubble {
-    .speech-bubble { display: block; }
+    .speech-bubble-outer { display: block; }
   }
 
   ol.candidate-targets {
