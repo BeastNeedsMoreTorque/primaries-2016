@@ -36,16 +36,19 @@ module ServerSchedule
   Ticks = [
    del_super,
    pollster,
-   election_day('2016-03-10'),
-   election_day('2016-03-08'),
-   election_day('2016-03-06'),
-   election_day('2016-03-05'),
-   election_day('2016-03-01'),
-   election_day('2016-02-27'),
-   election_day('2016-02-23'),
-   election_day('2016-02-20'),
-   election_day('2016-02-09'),
-   election_day('2016-02-01')
+   election_day('2016-03-12'),
+   election_day('2016-03-12'),
+   election_day('2016-03-12'),
+   #election_day('2016-03-10'),
+   #election_day('2016-03-08'),
+   #election_day('2016-03-06'),
+   #election_day('2016-03-05'),
+   #election_day('2016-03-01'),
+   #election_day('2016-02-27'),
+   #election_day('2016-02-23'),
+   #election_day('2016-02-20'),
+   #election_day('2016-02-09'),
+   #election_day('2016-02-01')
   ]
 
   # On election night, do something like this:
