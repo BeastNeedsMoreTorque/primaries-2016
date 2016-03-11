@@ -1,4 +1,5 @@
 $horse-width: 8rem;
+$horse-width-mobile: 6rem;
 $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 
 .horse-races {
@@ -41,6 +42,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     line-height: 1.5rem;
     height: 1.5rem;
     margin-left: $horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
+    @media (max-width: $widest-mobile) { margin-left: $horse-width-mobile * 19 / 20; }
     z-index: 0; // start a layer
 
     .background {
@@ -50,6 +52,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       right: 0;
       height: 2.5rem;
       margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
+      @media (max-width: $widest-mobile) { margin-left: -$horse-width-mobile * 19 / 20; }
 
       // The shadow is the same for all three backgrounds, so write it once
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><defs><filter x="-1" y="-1" width="12" height="7" id="blur"><feGaussianBlur stdDeviation="0.45" result="blur"/></filter></defs><path d="#{$wavy-path}" fill="black" filter="url(#blur)"/><path d="#{$wavy-path}" stroke="white" stroke-width="0.4" opacity="0.75"/></svg>') repeat-x left top;
@@ -68,6 +71,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
         top: 0;
         left: 0;
         width: $horse-width * 19 / 20;
+        @media (max-width: $widest-mobile) { width: $horse-width-mobile * 19 / 20; }
         height: 2.5rem;
         z-index: 1;
         background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="rgba(205, 174, 137, 1)"/></svg>') repeat-x left top;
@@ -82,6 +86,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
           background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="white"/></svg>') repeat-x;
           background-size: auto 2.5rem;
           background-position: left (-$horse-width * 19 / 20) top;
+          @media (max-width: $widest-mobile) { background-position: left (-$horse-width-mobile * 19 / 20) top; }
           z-index: 1;
         }
       }
@@ -96,6 +101,10 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     // Make cancelling margin+padding, so <li>s will have correct offsetLeft.
     margin-left: -$horse-width * 19 / 20;
     padding-left: $horse-width * 19 / 20;
+    @media (max-width: $widest-mobile) {
+      margin-left: -$horse-width-mobile * 19 / 20;
+      padding-left: $horse-width-mobile * 19 / 20;
+    }
     top: -1rem;
     white-space: nowrap;
     overflow: hidden;
@@ -118,6 +127,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 
   .bar-label-outer {
     margin-left: -$horse-width * 19 / 20;
+    @media (max-width: $widest-mobile) { margin-left: -$horse-width-mobile * 19 / 20; }
     height: 0;
     position: relative;
   }
@@ -168,6 +178,11 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     width: $horse-width;
     height: $horse-width * 3 / 4; // image aspect ratio
     margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
+    @media (max-width: $widest-mobile) {
+      width: $horse-width-mobile;
+      height: $horse-width-mobile * 3 / 4;
+      margin-left: -$horse-width-mobile * 19 / 20;
+    }
 
     transition: left .2s linear, transform .2s linear;
     -webkit-transform-origin: bottom 10%;
@@ -190,11 +205,12 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
   .speech-bubble {
     display: none;
     position: absolute;
-    top: -4rem;
-    left: 2rem;
+    top: -$horse-width * .5; // the _height_ of the horse depends on its width
+    @media (max-width: $widest-mobile) { top: -$horse-width-mobile * .5; }
+    left: 0;
     min-width: 4rem;
     float: left;
-    padding: 1rem;
+    padding: .75rem;
     line-height: 1rem;
     text-align: center;
     background: white;
@@ -206,7 +222,8 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     &::before, &::after {
       content: ' ';
       position: absolute;
-      left: 4rem;
+      left: $horse-width * .75;
+      @media (max-width: $widest-mobile) { left: $horse-width-mobile * .75; }
       bottom: -13px;
       width: 0;
       height: 0;
