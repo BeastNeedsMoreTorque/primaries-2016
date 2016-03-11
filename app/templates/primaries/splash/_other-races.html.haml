@@ -1,13 +1,14 @@
 - if races.length > 0
   .other-races
     %p Also today:
-    %ul
+    %ul<>
       - for race in races
-        %a{target: '_blank', href: race.href}= race.title
-        - leader = race.candidate_races.first
-        - if leader.winner?
-          %span.winner<>
-            (
-            %span.check-mark<> ✓
-            = leader.candidate_last_name
-            )
+        %li<>
+          %a{target: '_blank', href: race.href}<>= race.title
+          - leader = race.candidate_races.first
+          - if leader.winner?
+            %span.winner<>
+              (
+              %span.check-mark<> ✓
+              = leader.candidate_last_name
+              )
