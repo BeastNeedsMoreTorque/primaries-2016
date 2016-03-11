@@ -1,4 +1,5 @@
 $horse-width: 8rem;
+$wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 
 .horse-races {
   .horse-race {
@@ -49,7 +50,7 @@ $horse-width: 8rem;
       margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
 
       // The shadow is the same for all three backgrounds, so write it once
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><defs><filter x="-1" y="-1" width="12" height="7" id="blur"><feGaussianBlur stdDeviation="0.45" result="blur"/></filter></defs><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" fill="black" filter="url(#blur)"/><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" stroke="white" stroke-width="0.4" opacity="0.75"/></svg>') repeat-x bottom left;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><defs><filter x="-1" y="-1" width="12" height="7" id="blur"><feGaussianBlur stdDeviation="0.45" result="blur"/></filter></defs><path d="#{$wavy-path}" fill="black" filter="url(#blur)"/><path d="#{$wavy-path}" stroke="white" stroke-width="0.4" opacity="0.75"/></svg>') repeat-x bottom left;
 
       &::after {
         content: ' ';
@@ -73,7 +74,7 @@ $horse-width: 8rem;
     }
 
     .background::after {
-      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z" fill="%239DCF89"/></svg>');
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="%239DCF89"/></svg>');
     }
 
     &:nth-child(3n) .background {
