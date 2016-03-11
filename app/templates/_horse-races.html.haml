@@ -14,7 +14,8 @@
               .speech-bubble
         %li.extra-layer
           .background
-          .bar-label
+          .bar-label-outer
+            .bar-label
 
       %ol.candidate-targets
         - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|

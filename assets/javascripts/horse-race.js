@@ -60,6 +60,7 @@ function HorseRace(div) {
   this.candidates = Object.keys(candidates_by_id).map(function(k) { return candidates_by_id[k]; });
 
   this.load_steps();
+  this.set_bar_background_positions();
 
   /**
    * step_position: where we are in time.
@@ -73,6 +74,24 @@ function HorseRace(div) {
 
   this.refresh();
 }
+
+HorseRace.prototype.set_bar_background_positions = function() {
+  Array.prototype.forEach.call(this.els.div.querySelectorAll('ul.bars li'), function(li) {
+    // background-position is _old-school_. It's really hard to use percentages.
+    // We know that each "wave" is twice as wide as it is tall; so we can
+    // calculate how many "waves" have passed before this <li> starts, and align
+    // the image that way.
+    var h = li.offsetHeight;
+
+    if (h > 0) {
+      var waveWidth = 2 * h;
+      var left = li.offsetLeft;
+      var nWaves = left / waveWidth;
+      var fractionAlongThisWave = nWaves % 1;
+      li.style.backgroundPosition = 'left -' + (fractionAlongThisWave * waveWidth) + 'px top 1px';
+    }
+  });
+};
 
 /**
  * Sets this.steps to an Array of HorseRaceSteps.
@@ -226,7 +245,10 @@ HorseRace.prototype.listen = function() {
   this.els.race_days.addEventListener('mousedown', function(ev) { _this.on_calendar_mousedown(ev); });
   this.els.race_days.addEventListener('touchstart', function(ev) { _this.on_calendar_mousedown(ev); });
 
-  window.addEventListener('resize', function() { _this.refresh(); });
+  window.addEventListener('resize', function() {
+    _this.refresh();
+    _this.set_bar_background_positions();
+  });
 };
 
 /**
@@ -322,7 +344,21 @@ HorseRace.prototype.refresh_active_race_day = function() {
   this.els.race_day_left.style.width = Math.max(0, race_day_left - left) + 'px';
   this.els.race_day_right.style.width = Math.max(0, race_days_el.clientWidth - race_day_left + left - active_li.getBoundingClientRect().width) + 'px';
 
-  this.els.bar_label.innerText = this.steps[li_index].label;
+  var bar_label = this.els.bar_label;
+  var bar = this.candidates[this.candidates.length - 1].els.bars.childNodes[li_index];
+  var bar_left = (bar.offsetLeft + bar.offsetWidth / 2) / bar.parentNode.offsetWidth;
+  bar_label.innerText = this.steps[li_index].label;
+  if (bar_left < 0.5) {
+    bar_label.style.left = 100 * bar_left + '%';
+    bar_label.style.right = 'auto';
+    bar_label.classList.add('anchor-left');
+    bar_label.classList.remove('anchor-right');
+  } else {
+    bar_label.style.left = 'auto';
+    bar_label.style.right = 100 * (1 - bar_left) + '%';
+    bar_label.classList.remove('anchor-left');
+    bar_label.classList.add('anchor-right');
+  }
 };
 
 HorseRace.prototype.build_candidate_speech_bubble = function(candidate, max_n_delegates) {

@@ -5,19 +5,19 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
   .horse-race {
     position: relative;
     margin-bottom: 5rem;
+    overflow: hidden; // just in case
   }
 
   .n-delegates-needed {
     position: absolute;
     right: 1rem;
-    top: 2.5rem;
     line-height: 1.5rem;
     font-size: .8rem;
     z-index: 1;
   }
 
   ol.candidate-horses {
-    margin: 1rem 0 -1rem;
+    margin: 0;
     padding: 6rem .75rem 0 0;
     list-style: none;
     background: #DCF4FA;
@@ -50,14 +50,13 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
 
       // The shadow is the same for all three backgrounds, so write it once
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><defs><filter x="-1" y="-1" width="12" height="7" id="blur"><feGaussianBlur stdDeviation="0.45" result="blur"/></filter></defs><path d="#{$wavy-path}" fill="black" filter="url(#blur)"/><path d="#{$wavy-path}" stroke="white" stroke-width="0.4" opacity="0.75"/></svg>') repeat-x bottom left;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><defs><filter x="-1" y="-1" width="12" height="7" id="blur"><feGaussianBlur stdDeviation="0.45" result="blur"/></filter></defs><path d="#{$wavy-path}" fill="black" filter="url(#blur)"/><path d="#{$wavy-path}" stroke="white" stroke-width="0.4" opacity="0.75"/></svg>') repeat-x left top;
 
       &::after {
         content: ' ';
-        background-repeat: repeat-x;
-        background-position: bottom left;
         display: block;
         position: relative;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="%239DCF89"/></svg>') repeat-x left top;
         height: 100%;
       }
 
@@ -72,35 +71,17 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
         z-index: 1;
       }
     }
-
-    .background::after {
-      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="%239DCF89"/></svg>');
-    }
-
-    &:nth-child(3n) .background {
-      background-position-x: 0;
-      &::after {
-        background-position-x: 0;
-      }
-    }
-    &:nth-child(3n + 1) .background {
-      background-position-x: .2rem;
-      &::after {
-        background-position-x: .2rem;
-      }
-    }
-    &:nth-child(3n + 2) .background {
-      background-position-x: .1rem;
-      &::after {
-        background-position-x: .1rem;
-      }
-    }
   }
 
-  .bars {
+  ul.bars {
     margin: 0;
     padding: 0;
     list-style: none;
+
+    // Make cancelling margin+padding, so <li>s will have correct offsetLeft.
+    margin-left: -$horse-width * 19 / 20;
+    padding-left: $horse-width * 19 / 20;
+    top: -1rem;
     white-space: nowrap;
     overflow: hidden;
     position: relative; // for z-index
@@ -111,24 +92,57 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       margin: 0;
       padding: 0;
       display: inline-block;
-      height: 3rem;
-      background: transparent;
+      height: 2.5rem;
+      opacity: 0;
+      background: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 5"><defs><pattern id="p" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M-1,1L1,-1M-1,6L6,-1M4,6L6,4" stroke="rgba(0,0,0,.5)" stroke-width="5"/></pattern></defs><path d="#{$wavy-path}" fill="url(#p)"/></svg>') repeat-x left top;
+      background-size: auto 2.5rem;
 
-      &.current-step {
-        background: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><defs><pattern id="p" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M-1,1L1,-1M-1,6L6,-1M4,6L6,4" stroke="rgba(0,0,0,.5)" stroke-width="3"/></pattern></defs><rect x="0" y="0" width="5" height="5" fill="url(#p)"/></svg>');
-      }
+      &.current-step { opacity: 1; }
     }
   }
 
+  .bar-label-outer {
+    margin-left: -$horse-width * 19 / 20;
+    height: 0;
+    position: relative;
+  }
+
   .bar-label {
+    position: absolute;
     font-size: .8rem;
+    top: -.25rem;
     opacity: 1;
     transition: opacity .2s linear;
-    position: relative;
-    color: white;
-    text-align: center;
-    margin-left: -$horse-width * 19 / 20;
     z-index: 1; // on top of the start line, on mobile
+
+    &.anchor-left {
+      padding-left: .6rem;
+
+      &::before {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        left: -.4rem;
+        width: 1rem;
+        height: 1rem;
+        background: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M4,4C2,4 2,4 2,1L1,2M2,1L3,2" fill="none" stroke="black" stroke-width="0.4"/></svg>');
+      }
+    }
+
+    &.anchor-right {
+      text-align: right;
+      padding-right: .6rem;
+
+      &::before {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        right: -.4rem;
+        width: 1rem;
+        height: 1rem;
+        background: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,4C3,4 3,4 3,1L4,2M3,1L2,2" fill="none" stroke="black" stroke-width="0.4"/></svg>');
+      }
+    }
   }
 
   .marker {
@@ -205,7 +219,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     display: flex;
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    padding: 1.5rem 0;
+    padding: .5rem 0 1.5rem;
     margin: 0;
     list-style: none;
     -webkit-perspective: 500px;
