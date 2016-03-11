@@ -1,7 +1,10 @@
 .horse-races
   - parties.each do |party|
     .horse-race{class: "party-#{party.id}", 'data-n-delegates': party.n_delegates_total, 'data-n-delegates-needed': party.n_delegates_needed}
-      %h3= party.name
+      %h3
+        %span= party.name
+        %button.play
+          -# All CSS
 
       .n-delegates-needed #{format_int(party.n_delegates_needed)} delegates to win
 
@@ -37,9 +40,6 @@
           .right
 
         .json-data= party.horse_race_data.to_json
-
-        %button.play
-          -# All CSS
 
       %ol.candidate-targets
         - party.candidates.select(&:in_horse_race?).reverse.each do |candidate|

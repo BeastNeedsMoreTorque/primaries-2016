@@ -5,6 +5,15 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 .horse-races {
   h3 {
     margin: 0;
+    height: 3rem;
+
+    span {
+      display: inline-block;
+      height: 2rem;
+      padding: .75rem;
+      line-height: 2rem;
+      font-size: 1.5rem;
+    }
   }
 
   .horse-race {
@@ -505,48 +514,44 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
   }
 
   button {
-    position: absolute;
-    right: 0;
-    bottom: 1.5rem;
-    height: 3.5rem;
-    width: 3rem;
-    z-index: 2; // above the <canvas>
-    background: #ccc;
-    border: none;
-    border-radius: 5px;
-    width: 130px;
-    outline: none;
+    vertical-align: middle;
+    display: inline-block;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    box-sizing: border-box;
+    height: 3rem;
+    cursor: pointer;
+    width: 7rem;
+    background: #ccc;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    vertical-align: 1px; // different fonts....
 
     &::after {
       content: ' ';
       display: block;
-      min-width: 2rem;
+      text-transform: uppercase;
+      text-align: center;
+      padding-right: 2rem;
       height: 2rem;
-      background-size: stretch;
+      font-family: $header-font-family;
+      font-size: 1.25rem;
+      font-weight: bold;
+      line-height: 2rem;
       background-repeat: no-repeat;
+      background-size: 2.5rem 2.5rem;
     }
 
     &.play::after {
-      @media (min-width: $narrowest-desktop) {
-        content: 'Play ';
-        font-size: 1.3rem;
-        line-height: 2rem;
-        padding-right: 2rem;
-        padding-left: .5rem;
-        font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-        text-transform: uppercase;
-        font-weight: bold;
-        border: none;
-      }
-
+      content: 'Play ';
       background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>') no-repeat right;
     }
 
     &.pause::after {
-      background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>') no-repeat center;
+      content: 'Pause ';
+      background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>') no-repeat right;
     }
   }
 }
