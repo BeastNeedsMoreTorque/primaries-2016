@@ -364,7 +364,7 @@ HorseRace.prototype.refresh_active_race_day = function() {
 };
 
 HorseRace.prototype.build_candidate_speech_bubble = function(candidate, max_n_delegates) {
-  var in_past = this.step_position === this.steps.length - 1;
+  var in_past = this.step_position < this.steps.length;
 
   if (candidate.speech_bubble_html) {
     return candidate.speech_bubble_html; // "Yee-haw!", etc.
