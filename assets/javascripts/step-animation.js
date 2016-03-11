@@ -62,7 +62,7 @@ function build_race_transform_matrix(i, n, w) {
     0,
     StateWidth / 1000,
     Math.round(w / 2 - n * StateWidth / 2 + i * StateWidth) + 1, // 1 for left border
-    100
+    50
   ];
 }
 
@@ -109,8 +109,8 @@ function draw_path(ctx, path) {
 }
 
 function build_canvas(parent_div) {
-  var w = parent_div.clientWidth;
-  var h = 175;
+  var w = parent_div.offsetWidth;
+  var h = parent_div.offsetHeight - parent_div.querySelector('div.race-days').offsetTop;
 
   var canvas = document.createElement('canvas');
   canvas.width = w;
@@ -210,6 +210,7 @@ StepAnimation.prototype.show_states = function() {
 
   function initialize() {
     var div = _this.horse_race.els.div;
+
     canvas = _this.state_canvas = build_canvas(div);
 
     var ctx = canvas.getContext('2d');
@@ -236,7 +237,7 @@ StepAnimation.prototype.show_states = function() {
     } else {
       ctx.save();
       ctx.strokeStyle = '#666';
-      ctx.arc(canvas.width / 2, 110, 15, 0, 2 * Math.PI);
+      ctx.arc(canvas.width / 2, 50, 15, 0, 2 * Math.PI);
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.restore();
@@ -247,7 +248,7 @@ StepAnimation.prototype.show_states = function() {
     if (!canvas) { initialize(); }
 
     canvas.style.opacity = t;
-    canvas.style.marginBottom = ((1 - Math.sqrt(t)) * -50) + 'px';
+    canvas.style.bottom = ((1 - Math.sqrt(t)) * 25) + 'px'; // bottom 25px -> 0px
   }
 
   this.animate_step(300, step, function() { _this.show_dots(); });
@@ -314,13 +315,14 @@ StepAnimation.prototype.show_dots = function() {
   function candidate_to_target_xy(candidate) {
     var el = candidate.els.target.querySelector('.target');
     return {
-      x: el.offsetLeft + el.offsetWidth / 2 + el.parentNode.offsetLeft,
-      y: 80
+      x: el.offsetLeft + el.offsetWidth / 2 + el.offsetParent.offsetLeft,
+      y: el.offsetTop + el.offsetHeight / 2 + el.offsetParent.offsetTop - _this.horse_race.els.race_days.parentNode.offsetTop
     };
   }
 
   function initialize_with_races(races) {
     var partial_dot_sets = {}; // candidate_id -> Array of dots
+
     _this.candidates.forEach(function(c) { partial_dot_sets[c.id] = []; });
 
     for (var i = 0; i < races.length; i++) {
@@ -360,7 +362,7 @@ StepAnimation.prototype.show_dots = function() {
     var r = 15;
     var c = {
       x: canvas.width / 2,
-      y: 110
+      y: 50
     };
 
     candidate_dots = _this.candidates.map(function(candidate) {
@@ -437,7 +439,7 @@ StepAnimation.prototype.show_dots = function() {
     });
 
     _this.state_canvas.style.opacity = 0.5 * Math.pow(1 - t, 2);
-    _this.state_canvas.style.marginBottom = (Math.sqrt(t) * 5) + 'px';
+    _this.state_canvas.style.bottom = (Math.sqrt(t) * -5) + 'px'; // bottom 0px -> -5px
 
     _this.horse_race.refresh_candidate_els();
   }
