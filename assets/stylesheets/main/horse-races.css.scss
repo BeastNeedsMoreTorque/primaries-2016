@@ -474,8 +474,16 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     right: 0;
     bottom: 1.5rem;
     height: 3.5rem;
-    min-width: 3rem;
+    width: 3rem;
     z-index: 2; // above the <canvas>
+    background: #ccc;
+    border: none;
+    border-radius: 5px;
+    width: 130px;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 
     &::after {
       content: ' ';
@@ -488,18 +496,22 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 
     &.play::after {
       @media (min-width: $narrowest-desktop) {
-        content: 'Animate ';
-        font-size: 1.5rem;
+        content: 'Play ';
+        font-size: 1.3rem;
         line-height: 2rem;
         padding-right: 2rem;
         padding-left: .5rem;
+        font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+        text-transform: uppercase;
+        font-weight: bold;
+        border: none;
       }
 
       background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>') no-repeat right;
     }
 
     &.pause::after {
-      background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>');
+      background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>') no-repeat center;
     }
   }
 }
