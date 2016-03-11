@@ -101,7 +101,7 @@ HorseRace.prototype.load_steps = function() {
       els.bars.appendChild(bar);
     });
 
-    var step = new HorseRaceStep(i, 'race-day', 'Yellow bars show pledged delegates won ' + rd.date_s, current_candidates, rd.candidates);
+    var step = new HorseRaceStep(i, 'race-day', 'Pledged delegates won ' + rd.date_s, current_candidates, rd.candidates);
     steps.push(step);
     current_candidates = step.candidate_n_delegates_map;
   });
@@ -117,7 +117,7 @@ HorseRace.prototype.load_steps = function() {
       els.bars.appendChild(bar);
     });
 
-    steps.push(new HorseRaceStep(steps.length, 'unpledged', 'Yellow bars show unpledged delegates', current_candidates, step_candidates));
+    steps.push(new HorseRaceStep(steps.length, 'unpledged', 'Unpledged delegates', current_candidates, step_candidates));
   }
 };
 
