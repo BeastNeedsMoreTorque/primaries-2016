@@ -120,7 +120,7 @@ HorseRace.prototype.load_steps = function() {
       els.bars.appendChild(bar);
     });
 
-    var step = new HorseRaceStep(i, 'race-day', 'Pledged delegates won ' + rd.date_s, current_candidates, rd.candidates);
+    var step = new HorseRaceStep(i, 'race-day', 'Delegates won ' + rd.date_s, current_candidates, rd.candidates);
     steps.push(step);
     current_candidates = step.candidate_n_delegates_map;
   });
