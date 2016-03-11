@@ -1,4 +1,10 @@
 .horse-races
+  %p.description
+    Each candidate must earn delegates to win the party's nomination.
+
+  %p.description
+    Click Play to watch how candidates progressed each primary or caucus night.
+
   - parties.each do |party|
     .horse-race{class: "party-#{party.id}", 'data-n-delegates': party.n_delegates_total, 'data-n-delegates-needed': party.n_delegates_needed}
       %h3
