@@ -57,7 +57,7 @@ function HorseRace(div) {
     els.target = el;
   });
 
-  this.candidates = Object.keys(candidates_by_id).map(function(k) { return candidates_by_id[k]; });
+  this.candidates = this.data.candidates.map(function(c) { return candidates_by_id[c.id]; });
 
   this.load_steps();
   this.set_bar_background_positions();

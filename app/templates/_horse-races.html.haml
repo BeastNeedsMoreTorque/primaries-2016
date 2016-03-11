@@ -6,7 +6,7 @@
       .n-delegates-needed #{format_int(party.n_delegates_needed)} delegates to win
 
       %ol.candidate-horses
-        - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
+        - party.candidates.select(&:in_horse_race?).reverse.each do |candidate|
           %li.candidate-horse{'data-candidate-id': candidate.id, class: (candidate.dropped_out? ? 'dropped-out' : '')}
             .background
               .start-line
@@ -20,7 +20,7 @@
             .bar-label
 
       %ol.candidate-targets
-        - party.candidates.reject(&:dropped_out?).reverse.each do |candidate|
+        - party.candidates.select(&:in_horse_race?).reverse.each do |candidate|
           %li.candidate-target{'data-candidate-id': candidate.id}
             .last-name= candidate.name
             %img{src: image_path("horses/#{candidate.slug}-target.png"), alt: ''}
