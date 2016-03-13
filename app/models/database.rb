@@ -50,7 +50,7 @@ require_relative '../sources/sheets_source'
 # -- plus the rendering date.
 class Database
   LastDate = Date.parse(ENV['LAST_DATE'] || '2016-03-20')
-  FocusRaceDayId = ENV['FOCUS_RACE_DAY_ID'] || '2016-03-12'
+  FocusRaceDayId = ENV['FOCUS_RACE_DAY_ID'] || '2016-03-15'
 
   CollectionNames = %w(
     candidates
