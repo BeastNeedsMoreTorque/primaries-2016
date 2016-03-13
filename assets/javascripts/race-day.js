@@ -430,7 +430,8 @@
     on_database_change.push(update_races_from_database);
 
     function do_poll(callback) {
-      var json_url = window.location.toString().split('#')[0] + '.json';
+      //var json_url = window.location.toString().split('#')[0] + '.json';
+      var json_url = window.location.toString().split('#')[0].split("?")[0] + '.json';
 
       $.getJSON(json_url, handle_poll_results)
         .fail(function() { console.warn('Failed to load ' + json_url, this); })
