@@ -336,13 +336,26 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 
   li.candidate-target {
     position: relative;
-    background: white;
     text-align: center;
     width: 5rem;
     height: 6.5rem;
 
-    &.adding {
+    &::before {
+      // Rather than set background:#ffc on the candidate-target, we show and
+      // hide a pseudo-element. That should avoid a repaint.
+      content: ' ';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      z-index: -1;
       background: #ffc;
+      opacity: 0;
+    }
+
+    &.adding::before {
+      opacity: 1;
     }
 
     .last-name {
