@@ -170,6 +170,10 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     transition: opacity .2s linear;
     z-index: 1; // on top of the start line, on mobile
 
+    &.too-small {
+      opacity: 0;
+    }
+
     &.anchor-left {
       padding-left: .6rem;
 
