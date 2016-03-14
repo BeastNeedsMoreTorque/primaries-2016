@@ -386,7 +386,7 @@ HorseRace.prototype.build_candidate_speech_bubble = function(candidate, max_n_de
     return "I'm the presumptive nominee!";
   } else if (candidate.n_delegates == max_n_delegates) {
     var n_remaining = this.data.n_delegates_needed - candidate.n_delegates;
-    return 'I ' + (in_past ? 'needed' : 'need') + ' <strong>' + format_int(n_remaining) + ' more ' + (n_remaining > 1 ? 'delegates' : 'delegate') + '</strong>.';
+    return 'I ' + (in_past ? 'needed' : 'need') + ' <strong>' + format_int(n_remaining) + ' more ' + (n_remaining > 1 ? 'delegates' : 'delegate') + '</strong>';
   } else {
     var n_behind = max_n_delegates - candidate.n_delegates;
     return 'I' + (in_past ? ' was' : "'m") + ' behind by <strong>' + format_int(n_behind) + ' ' + (n_behind > 1 ? 'delegates' : 'delegate') + '</strong>';
