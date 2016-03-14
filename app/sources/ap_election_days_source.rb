@@ -21,7 +21,7 @@ require 'set'
 # * race_subcounties: race_id, reporting_unit_id, n_votes, n_precincts_reporting, n_precincts_total
 # * races: id, party_id, state_code, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource
-  NonCountyStateCodes = %w(AK KS MA ME MN NH VT).to_set
+  NonCountyStateCodes = %w(AK KS MA ME MN NH VT WY-GOP).to_set
 
   CandidateRace = RubyImmutableStruct.new(:id, :candidate_id, :n_votes, :winner)
   CandidateCountyRace = RubyImmutableStruct.new(:candidate_race_id, :candidate_id, :fips_int, :race_id, :n_votes)
@@ -115,7 +115,7 @@ class ApElectionDaysSource
         elsif reporting_unit[:reportingunitName] == 'Maine'
           # Do nothing. AP's API has a dummy entry that just copies the data
           # from the 'state' level. We don't want it.
-        elsif reporting_unit[:level] == 'subunit' && !NonCountyStateCodes.include?(state_code)
+        elsif reporting_unit[:level] == 'subunit' && !(NonCountyStateCodes.include?(state_code) || NonCountyStateCodes.include?("#{state_code}-#{party_id}"))
           fips_code = reporting_unit[:fipsCode]
           fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
           @county_fips_ints.add(fips_int)
