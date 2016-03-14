@@ -18,8 +18,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
   }
 
   span.delegates-legend, span.finish-line-legend {
-    border: 1px solid #ddd;
-    background: #f7f7f7;
+    background: #f0f0f0;
     padding: .25rem;
 
     &::before {
@@ -510,11 +509,18 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
-  li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
-    h4 {
-      color: $blue;
+  .horse-race[data-party-id=Dem] {
+    li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
+      h4 { color: $strongDem; }
     }
+  }
+  .horse-race[data-party-id=GOP] {
+    li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
+      h4 { color: $strongGOP; }
+    }
+  }
 
+  li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
     &:hover {
       h4 {
         text-decoration: underline;
@@ -596,7 +602,13 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     height: 3rem;
     cursor: pointer;
     width: 7.5rem;
-    background: #ccc;
+    background: #d7d7d7;
+
+    box-shadow: inset 0 -2px 3px #b7b7b7;
+    &:hover {
+      background: #dfdfdf;
+      box-shadow: inset 0 -2px 3px #bfbfbf;
+    }
     border: none;
     outline: none;
     vertical-align: 1px; // different fonts....

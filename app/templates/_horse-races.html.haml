@@ -11,7 +11,7 @@
     is the presumptive nominee.
 
   - parties.each do |party|
-    .horse-race.loading{class: "party-#{party.id}", 'data-n-delegates': party.n_delegates_total, 'data-n-delegates-needed': party.n_delegates_needed}
+    .horse-race.loading{'data-party-id': party.id}
       %h3
         %span= party.name
         %button.play
