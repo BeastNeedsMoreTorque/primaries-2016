@@ -17,7 +17,6 @@ module Assets
       render_time.js
       format_int.js
       format_percent.js
-      ellipsize_table.js
       polyfill_array_fill.js
       position_svg_cities.js
       countdown.js
