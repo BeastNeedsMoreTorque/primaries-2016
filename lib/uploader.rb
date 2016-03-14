@@ -70,6 +70,11 @@ class Uploader
     Dir["#{Paths.Dist}/**/*.html"].each do |filename|
       upload_if_changed(filename, 'text/html; charset=utf-8', ShortAge)
     end
+
+    # Finally, the sitemap -- least important
+    Dir["#{Paths.Dist}/**/*.txt"].each do |filename|
+      upload_if_changed(filename, 'text/plain; charset=utf-8', ShortAge)
+    end
   end
 
   private
