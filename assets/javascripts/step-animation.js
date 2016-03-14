@@ -113,6 +113,10 @@ function build_canvas(parent_div) {
   var h = parent_div.offsetHeight - parent_div.querySelector('div.race-days').offsetTop;
 
   var canvas = document.createElement('canvas');
+  canvas.mozImageSmoothingEnabled = false;
+  canvas.msImageSmoothingEnabled = false;
+  canvas.webkitImageSmoothingEnabled = false;
+  canvas.imageSmoothingEnabled = false;
   canvas.width = w;
   canvas.height = h;
 
@@ -248,7 +252,7 @@ StepAnimation.prototype.show_states = function() {
     if (!canvas) { initialize(); }
 
     canvas.style.opacity = t;
-    canvas.style.bottom = ((1 - Math.sqrt(t)) * 25) + 'px'; // bottom 25px -> 0px
+    canvas.style.transform = 'translate(0, ' + ((1 - Math.sqrt(t)) * -25) + 'px)'; // -25px -> 0px
   }
 
   this.animate_step(300, step, function() { _this.show_dots(); });
@@ -307,9 +311,20 @@ StepAnimation.prototype.show_dots = function() {
   var ctx;            // 2d context
   var candidates_by_id = {};
   var candidate_dots; // Array[AnimatedDotSet]
+  var candidate_sprites = {}; // Array[<canvas>]
 
   _this.candidates.forEach(function(candidate) {
     candidates_by_id[candidate.id] = candidate;
+
+    var ccanvas = document.createElement('canvas');
+    ccanvas.width = 5;
+    ccanvas.height = 5;
+    var cctx = ccanvas.getContext('2d');
+    cctx.fillStyle = CandidateColorsNoParties[candidate.slug];
+    cctx.arc(2.5, 2.5, 2.5, 0, Math.PI * 2);
+    cctx.closePath();
+    cctx.fill();
+    candidate_sprites[candidate.id] = ccanvas;
   });
 
   function candidate_to_target_xy(candidate) {
@@ -404,20 +419,14 @@ StepAnimation.prototype.show_dots = function() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    var radius = 2.5; // px
-
     candidate_dots.forEach(function(dot_set) {
+      var sprite = candidate_sprites[dot_set.candidate_id];
       var candidate = candidates_by_id[dot_set.candidate_id];
-
-      ctx.beginPath();
-      ctx.fillStyle = CandidateColorsNoParties[candidate.slug];
 
       var dots = dot_set.get_dots_at(t);
       for (var j = 0; j < dots.length; j++) {
         var dot = dots[j];
-        ctx.moveTo(dot.x, dot.y);
-        ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
-        ctx.closePath();
+        ctx.drawImage(sprite, dot.x - 2.5, dot.y - 2.5);
       }
 
       var n_complete = dot_set.get_n_dots_completed_at(t);
@@ -434,17 +443,15 @@ StepAnimation.prototype.show_dots = function() {
           candidate.speech_bubble_html = next_interjection();
         }
       }
-
-      ctx.fill();
     });
 
     _this.state_canvas.style.opacity = 0.5 * Math.pow(1 - t, 2);
-    _this.state_canvas.style.bottom = (Math.sqrt(t) * -5) + 'px'; // bottom 0px -> -5px
+    _this.state_canvas.style.transform = 'translate(0, ' + (Math.sqrt(t) * 5) + 'px)'; // 0px -> 5px
 
     _this.horse_race.refresh_candidate_els();
   }
 
-  var duration = Math.log2(this.step.n_delegates) * 200;
+  var duration = Math.log2(this.step.n_delegates) * 180;
   this.animate_step(duration, step, function() { _this.end(); });
 };
 

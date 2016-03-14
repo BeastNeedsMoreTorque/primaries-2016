@@ -218,7 +218,6 @@ HorseRace.prototype.on_calendar_mousedown = function(ev) {
       jump_to_centered_race_day();
     } else {
       if (ev2.target.tagName == 'A') {
-        console.log('Touched A', ev2.target);
         // do nothing. Let the browser treat it as a normal click
       } else {
         jump_to_clicked_race_day(ev2);
