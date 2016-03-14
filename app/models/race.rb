@@ -96,6 +96,7 @@ Race = RubyImmutableStruct.new(
   def n_delegates_with_candidates; party_state.n_delegates_with_candidates; end
   def n_pledged_delegates; party_state.n_pledged_delegates; end
   def n_pledged_delegates_with_candidates; party_state.n_pledged_delegates_with_candidates; end
+  def n_unpledged_delegates; party_state.n_unpledged_delegates; end
   def pollster_slug; party_state.pollster_slug; end
   def pollster_href; party_state.pollster_href; end
   def pollster_last_updated; party_state.pollster_last_updated; end

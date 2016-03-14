@@ -40,8 +40,8 @@
             != render(partial: 'horse-race-li', locals: { class_name: 'has-delegates', party_race_day: prd })
           - if party.n_unpledged_delegates_with_candidates > 0
             %li.unpledged-delegates<>
-              %h4 With Unpledged
-              %h4 Delegates
+              %h4 With
+              %h4 Superdelegates
               %a{href: '/2016/primaries/about-delegates'} More info &raquo;
           - party.party_race_days.select{ |prd| prd.n_pledged_delegates_with_candidates == 0 }.each do |prd|
             != render(partial: 'horse-race-li', locals: { class_name: 'has-no-delegates', party_race_day: prd })

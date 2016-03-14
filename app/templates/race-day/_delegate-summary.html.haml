@@ -18,8 +18,16 @@
           %thead
             %tr
               %th.candidate Candidate
-              %th.n-delegates{colspan: 2} Delegates (With Unpledged)
-              %th.n-pledged-delegates{colspan: 2} Pledged Delegates
+              %th.n-delegates{colspan: 2}
+                - if party_race_day.n_unpledged_delegates > 0
+                  Delegates &amp; Superdelegates
+                - else
+                  Delegates
+              %th.n-pledged-delegates{colspan: 2}
+                - if party_race_day.n_unpledged_delegates > 0
+                  Pledged Delegates
+                - else
+                  Delegates
           %tbody
             - party_race_day.candidate_race_days.each do |candidate_race_day|
               %tr{'data-candidate-id': candidate_race_day.candidate_id}
@@ -65,4 +73,5 @@
                 .n-delegates= format_int(party_state.n_delegates)
                 .n-pledged-delegates= format_int(party_state.n_pledged_delegates)
 
-        != render(partial: 'race-day/include-unpledged-delegates')
+        - if party_race_day.n_unpledged_delegates > 0
+          != render(partial: 'race-day/include-unpledged-delegates')

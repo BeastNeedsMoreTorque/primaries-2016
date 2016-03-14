@@ -140,7 +140,7 @@ HorseRace.prototype.load_steps = function() {
       els.bars.appendChild(bar);
     });
 
-    steps.push(new HorseRaceStep(steps.length, 'unpledged', 'Unpledged delegates', current_candidates, step_candidates));
+    steps.push(new HorseRaceStep(steps.length, 'unpledged', 'Superdelegates', current_candidates, step_candidates));
   }
 };
 
