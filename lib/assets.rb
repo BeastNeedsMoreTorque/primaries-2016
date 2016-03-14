@@ -10,7 +10,7 @@ module Assets
   JavascriptAssets = {
     'ga.js' => %w(ga.js),
     'stats.js' => %w(stats.js),
-    'main.js' => %w(
+    'race-day.js' => %w(
       vendor/jquery-2.2.0.js
       vendor/dropdown.js
       wait_for_font_then.js
@@ -20,20 +20,27 @@ module Assets
       polyfill_array_fill.js
       position_svg_cities.js
       countdown.js
-      state-race-days.js
       dot-groups.js
       race-day-database.js
       race-day-nodes.js
       candidate-colors.js
-      race-day.js
       delegate-summary.js
+      race-day.js
       social.js
+    ),
+    'all-primaries.js' => %w(
+      vendor/jquery-2.2.0.js
+      wait_for_font_then.js
+      format_int.js
+      state-race-days.js
+      candidate-colors.js
       animated-dot-set.js
       dot-line.js
       step-animation.js
       horse-race-step.js
       horse-race.js
       all-primaries.js
+      social.js
     ),
     'splash.js' => %w(
       vendor/jquery-2.2.0.js
