@@ -1,9 +1,14 @@
 .horse-races
   %p.description
-    Each candidate must earn delegates to win the party's nomination.
+    Each candidate tries to earn
+    %span.delegates-legend< delegates
+    before the party conventions in July. Delegates choose the presidential
+    nominees.
 
   %p.description
-    Click Play to watch how candidates progressed each primary or caucus night.
+    A candidate who earns
+    %span.finish-line-legend< half the party's delegates
+    is the presumptive nominee.
 
   - parties.each do |party|
     .horse-race.loading{class: "party-#{party.id}", 'data-n-delegates': party.n_delegates_total, 'data-n-delegates-needed': party.n_delegates_needed}

@@ -17,6 +17,39 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
+  span.delegates-legend, span.finish-line-legend {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f7f7f7;
+    padding: .25rem;
+
+    &::before {
+      margin-right: .25rem;
+    }
+  }
+
+  span.delegates-legend {
+    &::before {
+      content: '•';
+      font-family: 'Dots';
+      font-size: 10px;
+      color: $strongGOP;
+    }
+  }
+
+  span.finish-line-legend {
+    &::before {
+      display: inline-block;
+      content: '';
+      width: .75rem;
+      height: 1rem;
+      background: url('data:image/svg+xml,<svg verison="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2" width=".5rem" height=".5rem"><rect x="0" y="0" width="2" height="2" fill="white"/><path d="M0,0H1V1H0ZM1,1H2V2H1Z" fill="black"/></svg>') repeat;
+      border: 1px solid #ddd;
+      position: relative;
+      top: .15rem;
+    }
+  }
+
   p.description {
     text-align: center;
 
