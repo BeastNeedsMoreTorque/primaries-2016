@@ -21,7 +21,6 @@ function AnimatedDotSet(candidate_id, target_xy, dots, max_n_dots) {
   this.candidate_id = candidate_id;
   this.target_xy = target_xy;
   this.dots = dots;
-  this.max_n_dots = max_n_dots;
   this.is_winner = dots.length == max_n_dots;
 
   var no_dots_t = 0.1; // fraction of animation before first dot completes
@@ -58,18 +57,21 @@ AnimatedDotSet.prototype.get_dots_at = function(t) {
     return this._last_get_dots_at.ret;
   }
 
-
   var n_dots_complete = 0;
   var ret = [];
 
-  var max_n_dots = this.max_n_dots;
+  var skew_time;
+  if (Math.hasOwnProperty('cbrt')) {
+    skew_time = Math.cbrt;
+  } else {
+    skew_time = Math.sqrt;
+  }
 
   this._scratch.forEach(function(p, i) {
-
     if (t > p.max_t) {
       n_dots_complete += 1;
     } else {
-      var u = 1 - Math.pow((p.max_t - t) / p.max_t, .25);
+      var u = 1 - skew_time(1 - t / p.max_t);
       ret.push({
         x: p.x - u * p.dx,
         y: p.y - u * p.dy
