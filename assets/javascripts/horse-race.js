@@ -218,6 +218,7 @@ HorseRace.prototype.on_calendar_mousedown = function(ev) {
       jump_to_centered_race_day();
     } else {
       if (ev2.target.tagName == 'A') {
+        console.log('Touched A', ev2.target);
         // do nothing. Let the browser treat it as a normal click
       } else {
         jump_to_clicked_race_day(ev2);
@@ -230,7 +231,9 @@ HorseRace.prototype.on_calendar_mousedown = function(ev) {
   document.addEventListener('touchmove', maybe_reposition_calendar);
   document.addEventListener('touchend', on_mouseup);
 
-  ev.preventDefault(); // avoid dragging/selecting
+  if (ev.target.tagName != 'A') {
+    ev.preventDefault(); // avoid dragging/selecting
+  }
 };
 
 HorseRace.prototype.listen = function() {
