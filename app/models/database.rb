@@ -276,8 +276,8 @@ class Database
           self,
           candidate.id,
           race.id,
-          ap_candidate_race ? ap_candidate_race.n_votes : nil,
-          (can_calculate_percent && ap_candidate_race) ? (100 * ap_candidate_race.n_votes.to_f / ap_race.n_votes) : nil,
+          ap_candidate_race ? ap_candidate_race.n_votes : 0,
+          (can_calculate_percent && ap_candidate_race) ? (100 * ap_candidate_race.n_votes.to_f / ap_race.n_votes) : 0,
           (ap_candidate_race && ap_candidate_race.n_votes > 0) ? ap_candidate_race.n_votes == ap_race.max_n_votes : nil,
           !race.huffpost_override_winner_last_name && (ap_candidate_race ? ap_candidate_race.winner : false),
           race.huffpost_override_winner_last_name == candidate.last_name

@@ -81,8 +81,8 @@ class RaceDayResultsView < BaseView
   end
 
   def race_csv
-    header = "party_id,state_code,n_precincts_reporting,n_precincts_total,has_delegate_counts,has_pledged_delegate_counts,last_updated,when_race_happens,n_delegates_with_candidates,n_delegates,n_pledged_delegates_with_candidates,n_pledged_delegates,delegate_dots,pledged_delegate_dots\n"
-    data = race_day.races.map{ |r| "#{r.party_id},#{r.state_code},#{r.n_precincts_reporting},#{r.n_precincts_total},#{r.has_delegate_counts?},#{r.has_pledged_delegate_counts?},#{r.last_updated},#{r.when_race_happens},#{r.n_delegates_with_candidates},#{r.n_delegates},#{r.n_pledged_delegates_with_candidates},#{r.n_pledged_delegates},#{encode_race_delegate_dots(r, :n_delegates)},#{encode_race_delegate_dots(r, :n_pledged_delegates)}" }.join("\n")
+    header = "party_id,state_code,n_precincts_reporting,n_precincts_total,has_delegate_counts,has_pledged_delegate_counts,last_updated,when_race_happens,n_delegates_with_candidates,n_delegates,n_pledged_delegates_with_candidates,n_pledged_delegates,delegate_dots,pledged_delegate_dots,leader_slug\n"
+    data = race_day.races.map{ |r| "#{r.party_id},#{r.state_code},#{r.n_precincts_reporting},#{r.n_precincts_total},#{r.has_delegate_counts?},#{r.has_pledged_delegate_counts?},#{r.last_updated},#{r.when_race_happens},#{r.n_delegates_with_candidates},#{r.n_delegates},#{r.n_pledged_delegates_with_candidates},#{r.n_pledged_delegates},#{encode_race_delegate_dots(r, :n_delegates)},#{encode_race_delegate_dots(r, :n_pledged_delegates)},#{r.leader_slug}" }.join("\n")
     header + data
   end
 

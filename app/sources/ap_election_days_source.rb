@@ -100,7 +100,7 @@ class ApElectionDaysSource
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
 
-            n_votes += candidate_hash[:voteCount]
+            n_votes += candidate_hash[:voteCount] || 0
             max_n_votes = candidate_hash[:voteCount] if candidate_hash[:voteCount] > max_n_votes
 
             next if candidate_id.length >= 6 # unassigned, no preference, etc
@@ -108,7 +108,7 @@ class ApElectionDaysSource
             @candidate_races << CandidateRace.new(
               "#{candidate_id}-#{race_id}",
               candidate_id,
-              candidate_hash[:voteCount],
+              candidate_hash[:voteCount] || 0,
               candidate_hash[:winner] == 'X'
             )
           end
@@ -123,7 +123,7 @@ class ApElectionDaysSource
 
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
-            n_county_votes += candidate_hash[:voteCount]
+            n_county_votes += candidate_hash[:voteCount] || 0
 
             next if candidate_id.length >= 6 # unassigned, no preference, etc
 
@@ -132,7 +132,7 @@ class ApElectionDaysSource
               candidate_id,
               fips_int,
               race_id,
-              candidate_hash[:voteCount]
+              candidate_hash[:voteCount] || 0
             )
           end
 
@@ -151,7 +151,7 @@ class ApElectionDaysSource
 
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
-            n_subcounty_votes += candidate_hash[:voteCount]
+            n_subcounty_votes += (candidate_hash[:voteCount] || 0)
 
             next if candidate_id.length >= 6 # unassigned, no preference, etc
             @candidate_race_subcounties << CandidateRaceSubcounty.new(
@@ -159,7 +159,7 @@ class ApElectionDaysSource
               candidate_id,
               race_id,
               reporting_unit_id,
-              candidate_hash[:voteCount]
+              candidate_hash[:voteCount] || 0
             )
           end
 

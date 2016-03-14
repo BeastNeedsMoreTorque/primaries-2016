@@ -213,9 +213,10 @@
 
   function color_counties() {
     function refresh_geo_class_names(database, nodes) {
-      function refresh_geo_class_names_inner(geo_race, paths) {
+      function refresh_geo_class_names_inner(geo_race, paths, is_state) {
         var class_name;
         var leader_slug = geo_race.leader_slug;
+
         if (leader_slug) {
           var verb = geo_race.n_precincts_reporting == geo_race.n_precincts_total ? 'wins' : 'leads';
           class_name = leader_slug + '-' + verb;
@@ -226,10 +227,9 @@
         var o = paths[geo_race.party_id][geo_race.geo_id];
         if (o) {
           var path = o.path;
-          path.setAttribute('class', class_name);
+          path.setAttribute('class', class_name + (is_state ? ' state' : ''));
 
           if (/-leads$/.test(class_name)) {
-            // TODO geo_race.state_code, or change the ID of the pattern?
             var pattern_id_start = 'pattern-' + geo_race.party_id + '-' + geo_race.state_code + '-';
 
             path.setAttribute('style', 'fill: url(#' + pattern_id_start + class_name + ')');
@@ -240,6 +240,15 @@
       }
       database.county_races.forEach(function(geo_race) { refresh_geo_class_names_inner(geo_race, nodes.county_races); });
       database.race_subcounties.forEach(function(geo_race) { refresh_geo_class_names_inner(geo_race, nodes.race_subcounties); });
+      database.races
+        .filter(function(r) { return r.party_id == 'GOP' && r.state_code == 'ME'; })
+        .forEach(function(race) {
+          // It just so happens that `nodes.races` races have a `path` for the
+          // state-wide <svg> <path>. We use that to color GOP-ME, which has no
+          // county-level results.
+          var hacky_race = $.extend({ geo_id: race.state_code }, race);
+          refresh_geo_class_names_inner(hacky_race, nodes.races, true);
+        });
     }
     on_database_change.push(refresh_geo_class_names);
 

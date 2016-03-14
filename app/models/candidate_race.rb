@@ -9,6 +9,9 @@ CandidateRace = RubyImmutableStruct.new(:database, :candidate_id, :race_id, :n_v
 
   def after_initialize
     @id = "#{@candidate_id}-#{@race_id}"
+
+    raise "Why is n_votes nil on #{@id}?" if n_votes.nil?
+
     @candidate_race_day_id = "#{@candidate_id}-#{@race_id[0...10]}"
     @party_id = @race_id[11...14]
     @race_day_id = @race_id[0...10]
@@ -63,6 +66,7 @@ CandidateRace = RubyImmutableStruct.new(:database, :candidate_id, :race_id, :n_v
   def <=>(rhs)
     # Sort by race_day ID first. We have to do it at some point.
     x = race_day_id <=> rhs.race_day_id
+
     return x if x != 0
 
     # Next, by party. We have to do it at some point.

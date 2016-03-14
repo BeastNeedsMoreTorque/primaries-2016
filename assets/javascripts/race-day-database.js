@@ -79,6 +79,7 @@ function Race(line) {
   this.n_pledged_delegates = +arr[11];
   this.delegate_dots = arr[12];
   this.pledged_delegate_dots = arr[13];
+  this.leader_slug = arr[14];
 
   this.party_state_id = this.party_id + '-' + this.state_code;
 }
