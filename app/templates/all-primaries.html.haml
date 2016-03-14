@@ -21,10 +21,14 @@
           - else
             See preview &raquo;
 
-  %h3.section-hed Who&rsquo;s Ahead?
+  %h2.with-share-link
+    %a.share-link{name: 'horse-races', href: '#horse-races'}
+    Who&rsquo;s Ahead?
   != render(partial: 'horse-races')
 
-  %h3.section-hed What&rsquo;s next?
+  %h2.with-share-link
+    %a.share-link{name: 'calendar', href: '#calendar'}
+    What&rsquo;s next?
   != render(partial: 'state-race-days')
 
 -# race-day.js *could* be async, but then we'd have to wait for stats.js to
