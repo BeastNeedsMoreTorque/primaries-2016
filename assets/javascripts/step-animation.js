@@ -316,7 +316,7 @@ StepAnimation.prototype.show_dots = function() {
     var el = candidate.els.target.querySelector('.target');
     return {
       x: el.offsetLeft + el.offsetWidth / 2 + el.offsetParent.offsetLeft,
-      y: el.offsetTop + el.offsetHeight / 2 + el.offsetParent.offsetTop - _this.horse_race.els.race_days.parentNode.offsetTop
+      y: el.offsetTop + el.offsetHeight / 2 + _this.horse_race.els.race_days.offsetHeight
     };
   }
 
