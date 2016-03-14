@@ -24,7 +24,9 @@ function AnimatedDotSet(candidate_id, target_xy, dots, max_n_dots) {
   this.max_n_dots = max_n_dots;
   this.is_winner = dots.length == max_n_dots;
 
-  this._scratch = this.dots.map(function(xy) {
+  var no_dots_t = 0.1; // fraction of animation before first dot completes
+
+  this._scratch = this.dots.map(function(xy, i) {
     var dx = xy.x - target_xy.x;
     var dy = xy.y - target_xy.y;
     var d = Math.sqrt(dx * dx + dy * dy);
@@ -39,6 +41,10 @@ function AnimatedDotSet(candidate_id, target_xy, dots, max_n_dots) {
   });
 
   this._scratch.sort(function(p1, p2) { return p1.d - p2.d; });
+
+  this._scratch.forEach(function(p, i) {
+    p.max_t = no_dots_t + (1 - no_dots_t) * (i + 1) / max_n_dots
+  });
 }
 
 /**
@@ -52,58 +58,22 @@ AnimatedDotSet.prototype.get_dots_at = function(t) {
     return this._last_get_dots_at.ret;
   }
 
-  var n_dots_in, dot_t;
-  var no_dots_t = Math.log2(this.max_n_dots) * 0.03;
-  var Damping = 0.8; // so we can see dots going to Trump from far left
 
+  var n_dots_complete = 0;
   var ret = [];
 
-  // Number of dots in at time t, t >= no_dots_t:
-  // n_dots_in = max_n_dots * (t - no_dots_t) / (1 - no_dots_t)
-  //
-  // ... which lets us calculate that time n dots will be in:
-  // t = no_dots_t + n_dots_in * (1 - no_dots_t) / max_n_dots
-
-  if (t < no_dots_t) {
-    n_dots_in = 0;
-    dot_t = t / no_dots_t;
-  } else {
-    var n_dots_in_real = (t - no_dots_t) / (1 - no_dots_t) * this.max_n_dots;
-    n_dots_in = Math.floor(n_dots_in_real);
-
-    // Calculate how far towards the destination our next dot should be.
-    var last_dot_t = no_dots_t + n_dots_in * (1 - no_dots_t) / this.max_n_dots;
-    var next_dot_t = no_dots_t + (n_dots_in + 1) * (1 - no_dots_t) / this.max_n_dots;
-
-    // Okay, so I'm not so sure of myself here. But I think this is okay.
-    //
-    // The possible values:
-    //
-    // * t / next_dot_t: how far along we are to the next dot going in.
-    //   Rationale: if t =~ next_dot_t, we want that dot to be very close to
-    //   its destination.
-    // * t / last_dot_t * Damping: how far along the previous dot was at a `t`
-    //   very close to this one.
-    //   Rationale: if t =~ last_dot_t, we don't want dot_t to be _lower_ for
-    //   the next dot than it was in a previous frame.
-    // * 1: maximum `dot_t`.
-    //   Rationale: `t / last_dot_t * Damping` might be > 1.
-    //
-    // It's possible for this function to "jitter". That's okay -- we're
-    // simulating a smooth animation curve (really slow to compute) with very
-    // cheap math.
-    dot_t = Math.max(Math.min(1, t / last_dot_t * Damping), t / next_dot_t);
-  }
+  var max_n_dots = this.max_n_dots;
 
   this._scratch.forEach(function(p, i) {
-    if (i < n_dots_in) {
-      // Hide the dot
+
+    if (t > p.max_t) {
+      n_dots_complete += 1;
     } else {
+      var u = 1 - Math.pow((p.max_t - t) / p.max_t, .25);
       ret.push({
-        x: p.x - p.dx * Math.sqrt(dot_t),
-        y: p.y - p.dy * dot_t
+        x: p.x - u * p.dx,
+        y: p.y - u * p.dy
       });
-      dot_t *= Damping;
     }
   });
 
