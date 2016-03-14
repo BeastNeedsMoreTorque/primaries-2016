@@ -19,7 +19,6 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 
   span.delegates-legend, span.finish-line-legend {
     border: 1px solid #ddd;
-    border-radius: 5px;
     background: #f7f7f7;
     padding: .25rem;
 
@@ -33,7 +32,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       content: '•';
       font-family: 'Dots';
       font-size: 10px;
-      color: $strongGOP;
+      color: $muted;
     }
   }
 
@@ -46,7 +45,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       background: url('data:image/svg+xml,<svg verison="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2" width=".5rem" height=".5rem"><rect x="0" y="0" width="2" height="2" fill="white"/><path d="M0,0H1V1H0ZM1,1H2V2H1Z" fill="black"/></svg>') repeat;
       border: 1px solid #ddd;
       position: relative;
-      top: .15rem;
+      top: .2rem;
     }
   }
 
@@ -504,6 +503,23 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       margin: 0;
       line-height: 1.4rem;
     }
+
+    &:hover:not(.active):not(.has-no-delegates) {
+      text-decoration: underline;
+      color: white;
+    }
+  }
+
+  li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
+    h4 {
+      color: $blue;
+    }
+
+    &:hover {
+      h4 {
+        text-decoration: underline;
+      }
+    }
   }
 
   .horse-race:not(.animating) ol.race-days>li.active a {
@@ -572,7 +588,6 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
   }
 
   button {
-    vertical-align: middle;
     display: inline-block;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -580,36 +595,50 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     box-sizing: border-box;
     height: 3rem;
     cursor: pointer;
-    width: 7rem;
+    width: 7.5rem;
     background: #ccc;
     border: none;
-    border-radius: 5px;
     outline: none;
     vertical-align: 1px; // different fonts....
+    line-height: 2rem;
+    padding: .5rem 0;
+    font-family: $header-font-family;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+
+    &::before, &::after {
+      display: inline-block;
+      height: 2rem;
+      vertical-align: middle;
+    }
+
+    &::before {
+      // The ::after backgrounds both have ~.5rem of empty at their right.
+      // Even things out with extra padding on the left of the button.
+      padding-left: .5rem;
+    }
 
     &::after {
       content: ' ';
-      display: block;
-      text-transform: uppercase;
-      text-align: center;
-      padding-right: 2rem;
-      height: 2rem;
-      font-family: $header-font-family;
-      font-size: 1.25rem;
-      font-weight: bold;
-      line-height: 2rem;
+      width: 2rem;
       background-repeat: no-repeat;
-      background-size: 2.5rem 2.5rem;
+      background-size: 2rem 2rem;
     }
 
-    &.play::after {
-      content: 'Play ';
-      background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>') no-repeat right;
+    &.play {
+      &::before { content: 'Play'; }
+      &::after {
+        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>');
+      }
     }
 
-    &.pause::after {
-      content: 'Pause ';
-      background: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>') no-repeat right;
+    &.pause {
+      &::before { content: 'Pause'; }
+      &::after {
+        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>');
+      }
     }
   }
 }

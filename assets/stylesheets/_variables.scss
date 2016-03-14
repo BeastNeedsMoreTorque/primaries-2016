@@ -11,6 +11,8 @@ $candidate-colors: (
   'sanders': #84c9ec
 );
 
+$widget-link-color: #2e7061;
+
 $dots-with-candidates-color: #888;
 $dots-without-candidates-color: #ccc;
 
@@ -24,8 +26,8 @@ $undecided: #ddd;
 $independent: #339947;
 $libertarian: #7f5217;
 
-$facebookBlue: #3b5998 ;
-$twitterBlue: #c0deed ;
+$facebook-color: #3b5998;
+$twitter-color: #55acee;
 
 $splash-ele-bg: #eee;
 
@@ -133,7 +135,7 @@ $full-desktop-width: 960px;
   font-family: $huffpo-font-family;
 
   a {
-    color: #2e7061;
+    color: $widget-link-color;
   }
 
   h1, h2, h3, h4{
