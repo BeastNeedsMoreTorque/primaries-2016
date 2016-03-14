@@ -10,24 +10,35 @@ module Assets
   JavascriptAssets = {
     'ga.js' => %w(ga.js),
     'stats.js' => %w(stats.js),
-    'main.js' => %w(
+    'race-day.js' => %w(
       vendor/jquery-2.2.0.js
       vendor/dropdown.js
       wait_for_font_then.js
       render_time.js
       format_int.js
       format_percent.js
-      ellipsize_table.js
       polyfill_array_fill.js
       position_svg_cities.js
       countdown.js
-      state-race-days.js
       dot-groups.js
       race-day-database.js
       race-day-nodes.js
       candidate-colors.js
-      race-day.js
       delegate-summary.js
+      race-day.js
+      social.js
+    ),
+    'all-primaries.js' => %w(
+      vendor/jquery-2.2.0.js
+      wait_for_font_then.js
+      format_int.js
+      state-race-days.js
+      candidate-colors.js
+      animated-dot-set.js
+      dot-line.js
+      step-animation.js
+      horse-race-step.js
+      horse-race.js
       all-primaries.js
       social.js
     ),
@@ -78,6 +89,9 @@ module Assets
   StaticAssets = %w(
     javascripts/pym.min.js
     stylesheets/proxima-nova-condensed.css
+    images/horse.png
+    images/Dem.png
+    images/GOP.svg
   )
 
   def self.build
@@ -113,7 +127,7 @@ module Assets
   # digest_asset_path('images/clinton.png') -> '//asset_host/2016/images/clinton-abcdef.png'
   def self.digest_asset_path(path)
     if !@digest_asset_paths.include?(path)
-      raise "You requested image_path('#{name}'), but Assets did not compile #{name}."
+      raise "You requested image_path('#{path}'), but Assets did not compile #{path}."
     end
     "#{asset_host}/2016/#{@digest_asset_paths[path]}"
   end

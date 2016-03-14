@@ -4,14 +4,14 @@ require 'time'
 #
 # Provides:
 #
-# * candidates: id, party_id, name, last_name, dropped_out_date_or_nil
+# * candidates: id, party_id, name, last_name, dropped_out_date_or_nil, in_horse_race
 # * parties: id, name, adjective
 # * party_states: party_id, state_code, n_delegates, n_unpledged_delegates
 # * races: race_day_id, party_id, state_code, race_type, ap_says_its_over, :huffpost_override_winner_last_name
 # * race_days: id
 # * states: fips_int, code, abbreviation, name
 class SheetsSource
-  Candidate = RubyImmutableStruct.new(:id, :party_id, :full_name, :last_name, :dropped_out_date_or_nil)
+  Candidate = RubyImmutableStruct.new(:id, :party_id, :full_name, :last_name, :dropped_out_date_or_nil, :in_horse_race)
 
   Party = RubyImmutableStruct.new(:id, :name, :adjective)
 
@@ -52,9 +52,10 @@ class SheetsSource
 
   def initialize(candidates_tsv, parties_tsv, races_tsv, race_days_tsv, states_tsv)
     @candidates = candidates_tsv.split(/\r?\n/)[1..-1].map do |line|
-      id, party_id, name, last_name, dropped_out_or_empty = line.split(/\t/)
-      dropped_out_date_or_nil = dropped_out_or_empty != '' ? Date.parse(dropped_out_or_empty) : nil
-      Candidate.new(id, party_id, name, last_name, dropped_out_date_or_nil)
+      id, party_id, name, last_name, dropped_out_or_empty, in_horse_race_s = line.split(/\t/)
+      dropped_out_date_or_nil = dropped_out_or_empty == '' ? nil : Date.parse(dropped_out_or_empty)
+      in_horse_race = in_horse_race_s == 'TRUE'
+      Candidate.new(id, party_id, name, last_name, dropped_out_date_or_nil, in_horse_race)
     end
 
     @parties = parties_tsv.split(/\r?\n/)[1..-1].map do |line|

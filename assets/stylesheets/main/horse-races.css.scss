@@ -1,0 +1,675 @@
+$horse-width: 8rem;
+$horse-width-mobile: 6rem;
+$wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
+
+.horse-races {
+  h3 {
+    margin: 0;
+    margin-bottom: .75rem; // So it won't overlap "2,383 delegates to win"
+    height: 3rem;
+
+    span {
+      display: inline-block;
+      height: 2rem;
+      padding: .75rem;
+      line-height: 2rem;
+      font-size: 1.5rem;
+    }
+  }
+
+  span.delegates-legend, span.finish-line-legend {
+    background: #f0f0f0;
+    padding: .25rem;
+
+    &::before {
+      margin-right: .25rem;
+    }
+  }
+
+  span.delegates-legend {
+    &::before {
+      content: '•';
+      font-family: 'Dots';
+      font-size: 10px;
+      color: $muted;
+    }
+  }
+
+  span.finish-line-legend {
+    &::before {
+      display: inline-block;
+      content: '';
+      width: .75rem;
+      height: 1rem;
+      background: url('data:image/svg+xml,<svg verison="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2" width=".5rem" height=".5rem"><rect x="0" y="0" width="2" height="2" fill="white"/><path d="M0,0H1V1H0ZM1,1H2V2H1Z" fill="black"/></svg>') repeat;
+      border: 1px solid #ddd;
+      position: relative;
+      top: .2rem;
+    }
+  }
+
+  p.description {
+    text-align: center;
+
+    & + p {
+      margin-bottom: 2rem;
+    }
+  }
+
+  .horse-race.loading {
+    ol.race-days, .race-day-selector {
+      opacity: 0 !important;
+    }
+
+    .race-day-selector {
+      .left, .right {
+        transition: none;
+      }
+    }
+  }
+
+  .horse-race {
+    position: relative;
+    margin-bottom: 5rem;
+    overflow: hidden; // just in case
+  }
+
+  .n-delegates-needed {
+    text-align: right;
+    line-height: 1rem;
+    font-size: .8rem;
+  }
+
+  ol.candidate-horses {
+    margin: 0;
+    padding: 6rem .75rem 0 0;
+    list-style: none;
+    background: #DCF4FA;
+    position: relative;
+
+    &::after {
+      content: ' ';
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: .75rem;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 2 2" width="8px" height="8px"><path d="M0,0h1v1h-1ZM1,1h1v1h-1Z" fill="black"/><path d="M0,1h1v1h-1ZM1,0h1v1h-1Z" fill="white"/></svg>') repeat;
+    }
+  }
+
+  li.candidate-horse, li.extra-layer {
+    position: relative;
+    line-height: 1.5rem;
+    height: 1.5rem;
+    margin-left: $horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
+    @media (max-width: $widest-mobile) { margin-left: $horse-width-mobile * 19 / 20; }
+    z-index: 0; // start a layer
+
+    .background {
+      position: absolute;
+      top: -1rem;
+      left: 0;
+      right: 0;
+      height: 2.5rem;
+      margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
+      @media (max-width: $widest-mobile) { margin-left: -$horse-width-mobile * 19 / 20; }
+
+      // The shadow is the same for all three backgrounds, so write it once
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><defs><filter x="-1" y="-1" width="12" height="7" id="blur"><feGaussianBlur stdDeviation="0.45" result="blur"/></filter></defs><path d="#{$wavy-path}" fill="black" filter="url(#blur)"/><path d="#{$wavy-path}" stroke="white" stroke-width="0.4" opacity="0.75"/></svg>') repeat-x left top;
+
+      &::after {
+        content: ' ';
+        display: block;
+        position: relative;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="%239DCF89"/></svg>') repeat-x left top;
+        height: 100%;
+      }
+
+      .start-line {
+        position: absolute;
+        box-sizing: border-box;
+        top: 0;
+        left: 0;
+        width: $horse-width * 19 / 20;
+        @media (max-width: $widest-mobile) { width: $horse-width-mobile * 19 / 20; }
+        height: 2.5rem;
+        z-index: 1;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="rgba(205, 174, 137, 1)"/></svg>') repeat-x left top;
+
+        &::after {
+          content: '';
+          position: absolute;
+          right: 0;
+          width: 2px;
+          top: 0;
+          height: 2.5rem;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10 5"><path d="#{$wavy-path}" fill="white"/></svg>') repeat-x;
+          background-size: auto 2.5rem;
+          background-position: left (-$horse-width * 19 / 20) top;
+          @media (max-width: $widest-mobile) { background-position: left (-$horse-width-mobile * 19 / 20) top; }
+          z-index: 1;
+        }
+      }
+    }
+  }
+
+  ul.bars {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // Make cancelling margin+padding, so <li>s will have correct offsetLeft.
+    margin-left: -$horse-width * 19 / 20;
+    padding-left: $horse-width * 19 / 20;
+    @media (max-width: $widest-mobile) {
+      margin-left: -$horse-width-mobile * 19 / 20;
+      padding-left: $horse-width-mobile * 19 / 20;
+    }
+    top: -1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative; // for z-index
+    opacity: 1;
+    transition: opacity .2s linear;
+
+    li {
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+      height: 2.5rem;
+      opacity: 0;
+      background: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 5"><defs><pattern id="p" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M-1,1L1,-1M-1,6L6,-1M4,6L6,4" stroke="rgba(0,0,0,.5)" stroke-width="5"/></pattern></defs><path d="#{$wavy-path}" fill="url(#p)"/></svg>') repeat-x left top;
+      background-size: auto 2.5rem;
+
+      &.current-step { opacity: 1; }
+    }
+  }
+
+  .bar-label-outer {
+    margin-left: -$horse-width * 19 / 20;
+    @media (max-width: $widest-mobile) { margin-left: -$horse-width-mobile * 19 / 20; }
+    height: 0;
+    position: relative;
+  }
+
+  .bar-label {
+    position: absolute;
+    font-size: .8rem;
+    top: -.25rem;
+    opacity: 1;
+    transition: opacity .2s linear;
+    z-index: 1; // on top of the start line, on mobile
+
+    &.too-small {
+      opacity: 0;
+    }
+
+    &.anchor-left {
+      padding-left: .6rem;
+
+      &::before {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        left: -.4rem;
+        width: 1rem;
+        height: 1rem;
+        background: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M4,4C2,4 2,4 2,1L1,2M2,1L3,2" fill="none" stroke="black" stroke-width="0.4"/></svg>');
+      }
+    }
+
+    &.anchor-right {
+      text-align: right;
+      padding-right: .6rem;
+
+      &::before {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        right: -.4rem;
+        width: 1rem;
+        height: 1rem;
+        background: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,4C3,4 3,4 3,1L4,2M3,1L2,2" fill="none" stroke="black" stroke-width="0.4"/></svg>');
+      }
+    }
+  }
+
+  .marker {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    bottom: -.25rem;
+    width: $horse-width;
+    height: $horse-width * 3 / 4; // image aspect ratio
+    margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
+    @media (max-width: $widest-mobile) {
+      width: $horse-width-mobile;
+      height: $horse-width-mobile * 3 / 4;
+      margin-left: -$horse-width-mobile * 19 / 20;
+    }
+
+    transition: left .2s linear, transform .2s linear;
+    -webkit-transform-origin: bottom 10%;
+    transform-origin: bottom 10%;
+
+    &.adding {
+      -moz-animation: .5s linear 0s infinite horse-move;
+      -webkit-animation: .5s linear 0s infinite horse-move;
+      animation: .5s linear 0s infinite horse-move;
+      transition: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .speech-bubble-outer {
+    display: none;
+    position: absolute;
+    width: 20rem;
+    margin-left: -10rem;
+    text-align: center;
+    height: 0;
+    top: -$horse-width * .5; // the _height_ of the horse depends on its width
+    left: $horse-width * .7; // roughly the position of the head
+    @media (max-width: $widest-mobile) {
+      top: -$horse-width-mobile * .5;
+      left: $horse-width-mobile * .7;
+    }
+  }
+
+  .speech-bubble {
+    display: inline-block;
+    position: relative;
+    margin: 0 auto;
+    min-width: 3rem;
+    padding: .75rem;
+    line-height: 1rem;
+    text-align: center;
+    background: white;
+    border: 2px solid $muted;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+    white-space: nowrap;
+
+    &::before, &::after {
+      content: ' ';
+      position: absolute;
+      left: 50%;
+      bottom: -13px;
+      width: 0;
+      height: 0;
+      border: 6px solid transparent;
+    }
+
+    &::before {
+      border-color: $muted transparent transparent $muted;
+    }
+
+    &::after {
+      bottom: -8px;
+      border-width: 4px;
+      margin-left: 2px;
+      border-color: white transparent transparent white;
+    }
+  }
+
+  .marker:hover, .marker.force-speech-bubble {
+    .speech-bubble-outer { display: block; }
+  }
+
+  ol.candidate-targets {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    -webkit-perspective: 500px;
+    perspective: 500px;
+  }
+
+  li.candidate-target {
+    position: relative;
+    background: white;
+    text-align: center;
+    width: 5rem;
+    height: 6.5rem;
+
+    &.adding {
+      background: #ffc;
+    }
+
+    .last-name {
+      font-weight: bold;
+      height: 1rem;
+      line-height: 1rem;
+    }
+
+    img {
+      display: block;
+      width: 3rem;
+      height: 4rem;
+      margin: 0 auto;
+    }
+
+    .n-delegates {
+      text-align: center;
+      height: 1rem;
+      line-height: 1rem;
+      padding-right: 0; // We'll only show the .target during animation
+      transition: padding-right .2s ease-in-out;
+    }
+
+    .target {
+      position: absolute;
+      width: 1rem;
+      height: 1rem;
+      right: .5rem;
+      bottom: .5rem;
+      border-radius: .5rem;
+      background: #bbb;
+      box-sizing: border-box;
+      border: 2px solid white;
+      z-index: 0; // so ::before and ::after go behind it
+      transition: opacity .2s ease-in-out;
+      opacity: 0; // We'll only show it during animation
+
+      &::before, &::after {
+        position: absolute;
+        z-index: -1;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: .5rem;
+      }
+
+      &::before {
+        content: '';
+        box-shadow: 1px 1px 4px black;
+      }
+
+      &::after {
+        content: '';
+        box-shadow: 2px 2px 5px black;
+        transition: opacity .15s cubic-bezier(0, 1, 1, 1);
+      }
+    }
+
+    &.adding .target {
+      background: #d0d459;
+      border-color: yellow;
+
+      &::after {
+        opacity: 0;
+      }
+    }
+  }
+
+  .horse-race.animating {
+    .bar-label { opacity: 0; }
+    .bars { opacity: 0; }
+    li.candidate-target {
+      .n-delegates { padding-right: 2rem; }
+      .target { opacity: 1; }
+    }
+  }
+
+  canvas {
+    position: absolute;
+    pointer-events: none;
+    left: 0;
+    bottom: 0;
+    z-index: 1; // above race-days
+  }
+
+  .json-data, .json-state-paths { display: none; }
+
+  div.race-days {
+    position: relative;
+    height: 5rem;
+  }
+
+  ol.race-days, ol.races {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
+  }
+
+  ol.race-days {
+    overflow-x: hidden;
+    // We can't set overflow-y: visible, because you can't combine "visible" with other overflows.
+    // Instead, we'll make this <ol> a bit taller than its content.
+    height: 5rem;
+    padding-left: 50%;
+    padding-right: 50%;
+  }
+
+  .bar-label {
+    position: relative;
+  }
+
+  li.race-day, li.unpledged-delegates {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0 .5rem;
+    text-align: center;
+    border-right: 1px solid #ccc;
+    height: 3.5rem;
+    vertical-align: top;
+    &:last-child { border-right: none; }
+    cursor: pointer;
+    position: relative;
+
+    &.unpledged-delegates {
+      padding-top: .5rem;
+    }
+
+    &.has-no-delegates {
+      opacity: .5; // stacks with the opacity of the .race-day-selector
+    }
+
+    &.active, &.has-no-delegates {
+      cursor: default;
+    }
+
+    a {
+      opacity: 0;
+      transition: opacity .3s linear;
+      position: absolute;
+      line-height: 1rem;
+      bottom: -1.2rem;
+      font-size: .8rem;
+      // "left" and "right" need to extend beyond the <li>, because the link is wider than some <li>s
+      left: -2rem;
+      right: -2rem;
+      height: 1rem;
+      text-align: center;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    h4 {
+      font: inherit;
+      font-weight: bold;
+      margin: 0;
+      line-height: 1.4rem;
+    }
+
+    &:hover:not(.active):not(.has-no-delegates) {
+      text-decoration: underline;
+      color: white;
+    }
+  }
+
+  .horse-race[data-party-id=Dem] {
+    li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
+      h4 { color: $strongDem; }
+    }
+  }
+  .horse-race[data-party-id=GOP] {
+    li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
+      h4 { color: $strongGOP; }
+    }
+  }
+
+  li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
+    &:hover {
+      h4 {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .horse-race:not(.animating) ol.race-days>li.active a {
+    opacity: 1;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  li.race {
+    display: inline-block;
+    padding: .25rem 0;
+    position: relative;
+    width: 1.6rem;
+    height: 1.6rem;
+
+    .state-code {
+      position: absolute;
+      line-height: 1.6rem;
+      width: 1.6rem;
+      font-weight: bold;
+    }
+  }
+
+  .race-day-selector {
+    z-index: 2;
+    pointer-events: none;
+    position: absolute;
+    bottom: 1.5rem;
+    height: 3.5rem;
+    left: 0;
+    right: 0;
+
+    .left, .right {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      transition: width .2s ease-in-out;
+    }
+
+    .left {
+      left: 0;
+      width: 100px;
+      border-right: 1px solid #333;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .right {
+      right: 0;
+      width: 100px;
+      border-left: 1px solid #333;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 1));
+    }
+  }
+
+  .map {
+    svg {
+      height: 1.6rem;
+      width: 1.6rem;
+    }
+
+    path {
+      fill: #ddd;
+    }
+
+    text { display: none; }
+  }
+
+  button {
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    height: 3rem;
+    cursor: pointer;
+    width: 7.5rem;
+    background: #d7d7d7;
+
+    box-shadow: inset 0 -2px 3px #b7b7b7;
+    &:hover {
+      background: #dfdfdf;
+      box-shadow: inset 0 -2px 3px #bfbfbf;
+    }
+    border: none;
+    outline: none;
+    vertical-align: 1px; // different fonts....
+    line-height: 2rem;
+    padding: .5rem 0;
+    font-family: $header-font-family;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+
+    &::before, &::after {
+      display: inline-block;
+      height: 2rem;
+      vertical-align: middle;
+    }
+
+    &::before {
+      // The ::after backgrounds both have ~.5rem of empty at their right.
+      // Even things out with extra padding on the left of the button.
+      padding-left: .5rem;
+    }
+
+    &::after {
+      content: ' ';
+      width: 2rem;
+      background-repeat: no-repeat;
+      background-size: 2rem 2rem;
+    }
+
+    &.play {
+      &::before { content: 'Play'; }
+      &::after {
+        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>');
+      }
+    }
+
+    &.pause {
+      &::before { content: 'Pause'; }
+      &::after {
+        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>');
+      }
+    }
+  }
+}
+
+@-moz-keyframes horse-move {
+  25% { transform: rotate(-3deg); }
+  50% { transform: rotate(2deg); }
+  75% { transform: rotate(-1deg); }
+  60% { transform: rotate(0); }
+}
+@-webkit-keyframes horse-move {
+  25% { transform: rotate(-3deg); }
+  50% { transform: rotate(2deg); }
+  75% { transform: rotate(-1deg); }
+  60% { transform: rotate(0); }
+}
+@keyframes horse-move {
+  25% { transform: rotate(-3deg); }
+  50% { transform: rotate(2deg); }
+  75% { transform: rotate(-1deg); }
+  60% { transform: rotate(0); }
+}

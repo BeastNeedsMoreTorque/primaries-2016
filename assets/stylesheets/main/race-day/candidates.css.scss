@@ -1,8 +1,6 @@
 @import '../../_variables';
 
 body.race-day table.candidates {
-  @include ellipsized-table;
-
   border-collapse: collapse;
   width: 100%;
   line-height: 1.4rem; // .n-candidates-int is smaller; keep the same line height so it (almost) lines up
