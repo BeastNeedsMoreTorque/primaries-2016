@@ -25,7 +25,7 @@ function wait_for_font_then(font_name, callback) {
   var span1 = build_span('monospace');
   var width1 = span1.getBoundingClientRect().width;
 
-  var span2 = build_span(font_name);
+  var span2 = build_span(font_name + ', monospace');
 
   function finished_wait_for_font() {
     document.body.removeChild(span1);
