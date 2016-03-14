@@ -239,6 +239,10 @@ HorseRace.prototype.listen = function() {
   var _this = this;
 
   this.els.button.addEventListener('click', function(ev) {
+    if (window.ga) {
+      window.ga('send', 'event', 'horse-race', ev.currentTarget.className);
+    }
+
     if (ev.currentTarget.className == 'play') {
       _this.play();
       ev.currentTarget.className = 'pause';
