@@ -45,10 +45,10 @@
       %p Sources: The Associated Press, HuffPost Pollster
       %p By Adam Hooper, Hilary Fung, Shane Shifflett, Nicky Forster and Alissa Scheller
 
-      -if pubbed_dt
-        -if updated_dt
-          %p= "Page published #{pubbed_dt} and last updated #{updated_dt}"
-        -else
+      - if pubbed_dt
+        - if updated_dt
+          %p= "Page published #{pubbed_dt}, last updated #{updated_dt}"
+        - else
           %p= "Page published #{pubbed_dt}"
 
       %p
