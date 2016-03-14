@@ -24,6 +24,18 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
+  .horse-race.loading {
+    ol.race-days, .race-day-selector {
+      opacity: 0 !important;
+    }
+
+    .race-day-selector {
+      .left, .right {
+        transition: none;
+      }
+    }
+  }
+
   .horse-race {
     position: relative;
     margin-bottom: 5rem;

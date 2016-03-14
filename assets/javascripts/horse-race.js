@@ -19,6 +19,7 @@ function HorseRace(div) {
   };
 
   this.playing = false;
+  this.loading = true;
 
   this.data = JSON.parse(div.querySelector('.json-data').textContent);
 
@@ -73,6 +74,9 @@ function HorseRace(div) {
   this.listen();
 
   this.refresh();
+
+  this.loading = false;
+  div.classList.remove('loading');
 }
 
 HorseRace.prototype.set_bar_background_positions = function() {
@@ -341,7 +345,11 @@ HorseRace.prototype.refresh_active_race_day = function() {
   var race_day_left = active_li.offsetLeft;
   var left = Math.floor(race_day_left + active_li.getBoundingClientRect().width * 0.5 - race_days_el.getBoundingClientRect().width * 0.5);
   $(race_days_el).stop(true);
-  $(race_days_el).animate({ scrollLeft: left }, { duration: 200 });
+  if (!this.loading) {
+    $(race_days_el).animate({ scrollLeft: left }, { duration: 200 });
+  } else {
+    race_days_el.scrollLeft = left;
+  }
 
   this.els.race_day_left.style.width = Math.max(0, race_day_left - left) + 'px';
   this.els.race_day_right.style.width = Math.max(0, race_days_el.clientWidth - race_day_left + left - active_li.getBoundingClientRect().width) + 'px';
