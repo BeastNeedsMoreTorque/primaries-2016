@@ -411,9 +411,20 @@ HorseRace.prototype.refresh_candidate_els = function() {
     candidate.els.speech_bubble.innerHTML = _this.build_candidate_speech_bubble(candidate, max_n_delegates);
     candidate.els.n_delegates.innerText = format_int(candidate.n_delegates);
 
-    candidate.els.row.className = 'candidate-horse ' + candidate.animation_state;
-    candidate.els.marker.className = 'marker ' + candidate.animation_state + (candidate.speech_bubble_html ? ' force-speech-bubble' : '');
-    candidate.els.target.className = 'candidate-target ' + candidate.animation_state;
+    candidate.els.row.classList.remove('idle');
+    candidate.els.row.classList.remove('adding');
+    candidate.els.row.classList.add(candidate.animation_state);
+    candidate.els.marker.classList.remove('idle');
+    candidate.els.marker.classList.remove('adding');
+    candidate.els.marker.classList.add(candidate.animation_state);
+    if (candidate.speech_bubble_html) {
+      candidate.els.marker.classList.add('force-speech-bubble');
+    } else {
+      candidate.els.marker.classList.remove('force-speech-bubble');
+    }
+    candidate.els.target.classList.remove('idle');
+    candidate.els.target.classList.remove('adding');
+    candidate.els.target.classList.add(candidate.animation_state);
 
     $(candidate.els.bars).children()
       .removeClass('current-step')
