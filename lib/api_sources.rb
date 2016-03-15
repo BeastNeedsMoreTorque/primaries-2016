@@ -147,6 +147,6 @@ module ApiSources
   end
 
   def self.parse_json(string)
-    Oj.load(string, symbol_keys: true)
+    Oj.load(string, symbol_keys: true, allow_gc: false)
   end
 end
