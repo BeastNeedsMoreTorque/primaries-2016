@@ -1,3 +1,5 @@
+require 'tzinfo'
+
 # Could almost be called PartyState. Gives the votes/delegates of a state.
 Race = RubyImmutableStruct.new(
   :database,
@@ -16,6 +18,8 @@ Race = RubyImmutableStruct.new(
   :n_votes_footnote
 ) do
   include Comparable
+
+  Timezone = TZInfo::Timezone.get('America/New_York')
 
   attr_reader(
     :id,
@@ -206,7 +210,9 @@ Race = RubyImmutableStruct.new(
     elsif expect_results_time.nil?
       "Results coming soon"
     else
-      "Results coming #{expect_results_time.to_datetime.new_offset('Eastern').strftime('%l:%M %P %Z').sub('m', '.m.').sub('-05:00', 'EST').sub('-04:00', 'EDT')}"
+      localtime = Timezone.utc_to_local(expect_results_time)
+      zone_name = Timezone.period_for_local(localtime).dst? ? 'EDT' : 'EST'
+      "Results coming #{localtime.strftime('%l:%M %P')} #{zone_name}"
     end
   end
 
