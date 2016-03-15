@@ -104,6 +104,9 @@ RaceDay = RubyImmutableStruct.new(:database, :id, :enabled, :title, :body, :twee
       @title
     elsif @races.length == 1
       @races.first.title
+    elsif @races.length == 2 && @states.length == 1 && @races.first.race_type == @races.last.race_type
+      plural = @races.first.race_type == 'Caucus' ? 'Caucuses' : 'Primaries'
+      "#{@states.first.name} #{plural}"
     else
       date_s
     end
