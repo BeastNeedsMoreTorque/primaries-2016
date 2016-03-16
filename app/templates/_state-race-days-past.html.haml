@@ -1,0 +1,21 @@
+%table.state-race-days
+  %thead
+    %tr
+      %th Date
+      %th State
+      %th Party
+      %th Winner
+      %th Delegates
+  %tbody
+    - last_value = nil
+    - for race_day in race_days
+      - for race in race_day.races
+        %tr
+          %td
+            %time{datetime: race.race_day_id}= format_date(race.date)
+          %td= race.state_name
+          %td= race.party_name[0]
+          %td
+            #{race.winner_or_nil ? race.winner_or_nil.candidate_last_name : ""}
+          %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
+            != party_state_dot_groups(race.party_state, :n_delegates)

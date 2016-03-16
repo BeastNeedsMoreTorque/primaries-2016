@@ -315,6 +315,7 @@ class Database
         )
       end
 
+    all.sort!
     CandidateStates.new(all)
   end
 

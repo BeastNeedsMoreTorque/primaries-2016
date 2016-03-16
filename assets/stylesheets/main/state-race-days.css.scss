@@ -44,8 +44,12 @@
     }
   }
 
+  .dot-groups-past {
+    color: #ddd;
+  }
+
   @each $slug, $color in $candidate-colors {
-    .dot-group span[data-candidate-slug=#{$slug}] {
+    td.#{$slug} span[data-candidate-slug=#{$slug}] {
       color: $color;
     }
   }
@@ -93,7 +97,7 @@
     border-collapse: collapse;
     width: 100%;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 4em auto;
   }
 
   .flipper>* {

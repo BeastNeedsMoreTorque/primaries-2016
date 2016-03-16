@@ -11,43 +11,11 @@
             %th{class: column.html_class}= column.label
   %tbody
     - last_value = nil
-    - for race in races
-      - current_value = race.send(hide_repeats_column)
-      %tr{class: "#{race.enabled? ? 'enabled' : 'disabled'} #{current_value == last_value ? 'key-repeated' : ''}", 'data-party-id': race.party_id}
-        - for column in columns
-          %td{'class': "#{column.html_class} #{(column.html_class == hide_repeats_column && current_value == last_value) ? 'repeated' : ''}"}
-            - case column.html_class
-              - when 'date'
-                - if race.enabled?
-                  %a{href: "/2016/primaries/#{race.race_day_id}"}
-                    %time{datetime: race.race_day_id}= format_date(race.date)
-                - else
-                  %span.disabled
-                    %time{datetime: race.race_day_id}= format_date(race.date)
-              - when 'winner'
-                - if race.winner_or_nil
-                  %img{class: "#{race.winner_or_nil.candidate_slug}", alt: "#{race.winner_or_nil.candidate_last_name}", src: image_path(race.winner_or_nil.candidate_slug + '.png')}
-
-                  != party_state_dot_groups(race.party_state, :n_delegates)
-
-              - when 'state'
-                = race.state_name
-              - when 'party'
-                = race.party_name[0]
-              - when 'n-delegates-int'
-                = race.n_delegates
-              - when 'n-delegates-dots'
-                != race_simple_dot_groups(race).to_html
-              - when 'button'
-                - if !race.enabled?
-                  %td.disabled-button
-                - else
-                  %td.enabled-button
-                    %a.results-button{href: race.href}
-                      %span.results-button-desktop
-                        - if race.when_race_happens == 'future'
-                          Preview
-                        - else
-                          Results
-                      »
-      - last_value = current_value
+    - for race_day in race_days
+      - for race in race_day.races
+        %tr
+          %td
+            %time{datetime: race.race_day_id}= format_date(race.date)
+          %td= race.state_name
+          %td= race.party_name[0]
+          %td= race.winner_or_nil ? race.winner_or_nil.candidate_last_name : ""

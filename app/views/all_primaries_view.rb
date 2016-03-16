@@ -29,31 +29,17 @@ class AllPrimariesView < BaseView
     self.generate_for_view(AllPrimariesView.new(database))
   end
 
-  def render_state_race_days_by_date
-    render(partial: 'state-race-days-table', locals: {
-      columns: [
-        [ 'date', 'Date' ],
-        [ 'state', 'State' ],
-        [ 'party', 'Party' ],
-        [ 'winner', 'Winner' ]
-      ].map { |arr| StateRaceDaysColumn.new(*arr) },
+  def render_state_race_days_past
+    render(partial: 'state-race-days-past', locals: {
       hide_repeats_column: 'date',
-      races: races
+      race_days: database.race_days.select(&:past?)
     })
   end
 
-  def render_state_race_days_by_state
-    render(partial: 'state-race-days-table', locals: {
-      columns: [
-        [ 'date', 'Date' ],
-        [ 'state', 'State' ],
-        [ 'party', 'Party' ],
-        [ 'n-delegates-int', 'Total Delegates' ],
-        [ 'n-delegates-dots', 'Total Delegates' ],
-        [ 'button', '' ]
-      ].map { |arr| StateRaceDaysColumn.new(*arr) },
+  def render_state_race_days_future
+    render(partial: 'state-race-days-future', locals: {
       hide_repeats_column: 'date',
-      races: races
+      race_days: database.race_days.select(&:future?)
     })
   end
 end
