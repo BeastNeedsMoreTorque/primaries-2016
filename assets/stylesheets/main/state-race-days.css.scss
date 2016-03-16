@@ -1,6 +1,10 @@
 @import '../_variables';
 
 .state-race-days {
+  a {
+    color: #000;
+  }
+
   tr:hover td {
     background: aliceblue;
     .results-button {
@@ -25,6 +29,7 @@
     vertical-align: middle;
     padding: .3rem .5rem;
     &.state {
+      font-weight: bold;
       padding-right: 0;
     }
     &.date {
@@ -45,7 +50,15 @@
   }
 
   .dot-groups-past {
-    color: #ddd;
+    span.number {
+      display: inline-block;
+      width: 1.8em;
+      vertical-align: middle;
+      padding: .3rem 0;
+    }
+    span:not(.number) {
+      color: #ddd;
+    }
   }
 
   @each $slug, $color in $candidate-colors {
@@ -87,6 +100,10 @@
   }
   tr.key-repeated td {
     border-top-color: transparent;
+  }
+
+  .key-repeated .date time {
+    visibility: hidden;
   }
 
   tr[data-href] {

@@ -10,12 +10,17 @@
     - last_value = nil
     - for race_day in race_days
       - for race in race_day.races
-        %tr
-          %td
+        - current_value = race.send(hide_repeats_column)
+        %tr{class: "#{current_value == last_value ? 'key-repeated' : ''}"}
+          %td.date
             %time{datetime: race.race_day_id}= format_date(race.date)
-          %td= race.state_name
+          %td.state
+            %a{href: race.href}
+              #{race.state_name} &raquo;
           %td= race.party_name[0]
           %td
             #{race.winner_or_nil ? race.winner_or_nil.candidate_last_name : ""}
           %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
+            %span.number= race.n_delegates
             != party_state_dot_groups(race.party_state, :n_delegates)
+        - last_value = current_value
