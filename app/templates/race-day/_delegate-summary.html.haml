@@ -5,10 +5,10 @@
 
   %p
     Our intrepid contenders are trying to win enough delegates to
-    clinch a nomination at their party conventions in June.
+    clinch a nomination at their party conventions in July.
 
   %p
-    Here&rsquo;s a breakdown of the delegates from tonight&rsquo;s states.
+    Here&rsquo;s a breakdown of each state&rsquo;s delegates.
 
   .party-delegate-summaries
     - race_day.party_race_days.each do |party_race_day|
@@ -18,8 +18,16 @@
           %thead
             %tr
               %th.candidate Candidate
-              %th.n-delegates{colspan: 2} Delegates (With Unpledged)
-              %th.n-pledged-delegates{colspan: 2} Pledged Delegates
+              %th.n-delegates{colspan: 2}
+                - if party_race_day.n_unpledged_delegates > 0
+                  Delegates &amp; Superdelegates
+                - else
+                  Delegates
+              %th.n-pledged-delegates{colspan: 2}
+                - if party_race_day.n_unpledged_delegates > 0
+                  Pledged Delegates
+                - else
+                  Delegates
           %tbody
             - party_race_day.candidate_race_days.each do |candidate_race_day|
               %tr{'data-candidate-id': candidate_race_day.candidate_id}
@@ -65,4 +73,5 @@
                 .n-delegates= format_int(party_state.n_delegates)
                 .n-pledged-delegates= format_int(party_state.n_pledged_delegates)
 
-        != render(partial: 'race-day/include-unpledged-delegates')
+        - if party_race_day.n_unpledged_delegates > 0
+          != render(partial: 'race-day/include-unpledged-delegates')

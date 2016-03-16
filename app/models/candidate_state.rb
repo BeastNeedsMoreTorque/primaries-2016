@@ -42,4 +42,6 @@ CandidateState = RubyImmutableStruct.new(:database, :candidate_id, :state_code, 
 
     return candidate_last_name <=> rhs.candidate_last_name
   end
+
+  def n_unpledged_delegates; n_delegates - n_pledged_delegates; end
 end

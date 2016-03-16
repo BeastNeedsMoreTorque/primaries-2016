@@ -11,7 +11,7 @@ function RaceDayNodes() {
   // party_id -> { geo_id -> { path } }
   var race_subcounties = this.race_subcounties = {};
 
-  // party_id -> state_code -> { div, n_precincts, last_updated, n_delegates_with_candidates, n_pledged_delegates_with_candidates }
+  // party_id -> state_code -> { div, path, n_precincts, last_updated, n_delegates_with_candidates, n_pledged_delegates_with_candidates }
   var races = this.races = {};
 
   Array.prototype.forEach.call(document.querySelectorAll('div.race:not(.not-today)'), function(raceEl) {
@@ -22,6 +22,7 @@ function RaceDayNodes() {
     var psd = raceEl.querySelector('.party-state-delegates');
     races[party_id][state_code] = {
       div: raceEl,
+      path: raceEl.querySelector('path.state'),
       n_precincts: raceEl.querySelectorAll('.race-status .n-precincts-reporting'),
       last_updated: raceEl.querySelector('.race-status time'),
       n_delegates_with_candidates: {

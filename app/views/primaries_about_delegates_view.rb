@@ -10,7 +10,7 @@ class PrimariesAboutDelegatesView < BaseView
   def suggested_tweet; social_description; end
   def body_html; render_markdown(copy['primaries']['delegates-explainer']['body_markdown']); end
   def pubbed_dt; copy['primaries']['delegates-explainer']['pubbed_dt']; end
-  def updated_dt; nil; end
+  def updated_dt; copy['primaries']['delegates-explainer']['updated_dt']; end
 
   def self.generate_all(database)
     self.generate_for_view(PrimariesAboutDelegatesView.new(database))

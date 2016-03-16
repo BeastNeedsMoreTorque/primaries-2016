@@ -21,7 +21,7 @@ require 'set'
 # * race_subcounties: race_id, reporting_unit_id, n_votes, n_precincts_reporting, n_precincts_total
 # * races: id, party_id, state_code, n_votes, max_n_votes, n_precincts_reporting, n_precincts_total, last_updated
 class ApElectionDaysSource
-  NonCountyStateCodes = %w(AK KS MA ME MN NH VT).to_set
+  NonCountyStateCodes = %w(AK KS MA ME MN NH VT WY-GOP).to_set
 
   CandidateRace = RubyImmutableStruct.new(:id, :candidate_id, :n_votes, :winner)
   CandidateCountyRace = RubyImmutableStruct.new(:candidate_race_id, :candidate_id, :fips_int, :race_id, :n_votes)
@@ -100,7 +100,7 @@ class ApElectionDaysSource
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
 
-            n_votes += candidate_hash[:voteCount]
+            n_votes += candidate_hash[:voteCount] || 0
             max_n_votes = candidate_hash[:voteCount] if candidate_hash[:voteCount] > max_n_votes
 
             next if candidate_id.length >= 6 # unassigned, no preference, etc
@@ -108,14 +108,14 @@ class ApElectionDaysSource
             @candidate_races << CandidateRace.new(
               "#{candidate_id}-#{race_id}",
               candidate_id,
-              candidate_hash[:voteCount],
+              candidate_hash[:voteCount] || 0,
               candidate_hash[:winner] == 'X'
             )
           end
         elsif reporting_unit[:reportingunitName] == 'Maine'
           # Do nothing. AP's API has a dummy entry that just copies the data
           # from the 'state' level. We don't want it.
-        elsif reporting_unit[:level] == 'subunit' && !NonCountyStateCodes.include?(state_code)
+        elsif reporting_unit[:level] == 'subunit' && !(NonCountyStateCodes.include?(state_code) || NonCountyStateCodes.include?("#{state_code}-#{party_id}"))
           fips_code = reporting_unit[:fipsCode]
           fips_int = fips_code.to_i # Don't worry, Ruby won't parse '01234' as octal
           @county_fips_ints.add(fips_int)
@@ -123,7 +123,7 @@ class ApElectionDaysSource
 
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
-            n_county_votes += candidate_hash[:voteCount]
+            n_county_votes += candidate_hash[:voteCount] || 0
 
             next if candidate_id.length >= 6 # unassigned, no preference, etc
 
@@ -132,7 +132,7 @@ class ApElectionDaysSource
               candidate_id,
               fips_int,
               race_id,
-              candidate_hash[:voteCount]
+              candidate_hash[:voteCount] || 0
             )
           end
 
@@ -151,7 +151,7 @@ class ApElectionDaysSource
 
           for candidate_hash in reporting_unit[:candidates]
             candidate_id = candidate_hash[:polID]
-            n_subcounty_votes += candidate_hash[:voteCount]
+            n_subcounty_votes += (candidate_hash[:voteCount] || 0)
 
             next if candidate_id.length >= 6 # unassigned, no preference, etc
             @candidate_race_subcounties << CandidateRaceSubcounty.new(
@@ -159,7 +159,7 @@ class ApElectionDaysSource
               candidate_id,
               race_id,
               reporting_unit_id,
-              candidate_hash[:voteCount]
+              candidate_hash[:voteCount] || 0
             )
           end
 

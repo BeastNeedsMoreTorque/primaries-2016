@@ -16,10 +16,12 @@ CandidateCountyRace = RubyImmutableStruct.new(:database, :candidate_id, :fips_in
   def <=>(rhs)
     if (x = race_id <=> rhs.race_id) != 0
       x
-    elsif (x = geo_id <=> rhs.geo_id) != 0
+    elsif (x = fips_int <=> rhs.fips_int) != 0
+      x
+    elsif (x = rhs.n_votes <=> n_votes) != 0
       x
     else
-      rhs.n_votes <=> n_votes
+      candidate_id <=> rhs.candidate_id
     end
   end
 end

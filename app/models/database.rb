@@ -49,8 +49,8 @@ require_relative '../sources/sheets_source'
 # The Database contains every Collection we use -- e.g., `candidates`, `states`
 # -- plus the rendering date.
 class Database
-  LastDate = Date.parse(ENV['LAST_DATE'] || '2016-03-20')
-  FocusRaceDayId = ENV['FOCUS_RACE_DAY_ID'] || '2016-03-08'
+  LastDate = Date.parse(ENV['LAST_DATE'] || '2016-04-05')
+  FocusRaceDayId = ENV['FOCUS_RACE_DAY_ID'] || '2016-03-15'
 
   CollectionNames = %w(
     candidates
@@ -190,7 +190,8 @@ class Database
         pollster_candidate ? pollster_candidate.poll_percent : nil,
         pollster_candidate ? pollster_candidate.sparkline : nil,
         pollster_candidate ? pollster_candidate.last_updated : nil,
-        sheet_candidate.dropped_out_date_or_nil
+        sheet_candidate.dropped_out_date_or_nil,
+        sheet_candidate.in_horse_race
       )
     end
 
@@ -224,7 +225,7 @@ class Database
       last_race_day_id = candidate.dropped_out_date_or_nil ? candidate.dropped_out_date_or_nil.to_s : ':' # ':' is after '9'
 
       sheets_races
-        .select { |r| r.race_day_id < last_race_day_id }
+        .select { |r| r.race_day_id <= last_race_day_id }
         .map! { |r| "#{candidate.id}-#{r.id}" }
     end.to_set
   end
@@ -275,8 +276,8 @@ class Database
           self,
           candidate.id,
           race.id,
-          ap_candidate_race ? ap_candidate_race.n_votes : nil,
-          (can_calculate_percent && ap_candidate_race) ? (100 * ap_candidate_race.n_votes.to_f / ap_race.n_votes) : nil,
+          ap_candidate_race ? ap_candidate_race.n_votes : 0,
+          (can_calculate_percent && ap_candidate_race) ? (100 * ap_candidate_race.n_votes.to_f / ap_race.n_votes) : 0,
           (ap_candidate_race && ap_candidate_race.n_votes > 0) ? ap_candidate_race.n_votes == ap_race.max_n_votes : nil,
           !race.huffpost_override_winner_last_name && (ap_candidate_race ? ap_candidate_race.winner : false),
           race.huffpost_override_winner_last_name == candidate.last_name
@@ -365,7 +366,9 @@ class Database
 
     for party in parties
       for race_day in race_days
-        all << PartyRaceDay.new(self, party.id, race_day.id)
+        if race_day.races.any? { |r| r.party_id == party.id }
+          all << PartyRaceDay.new(self, party.id, race_day.id)
+        end
       end
     end
 

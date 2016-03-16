@@ -30,7 +30,7 @@ class Uploader
   # delete the old fingerprints. By uploading them first, we guarantee we don't
   # upload an HTML file that points to an asset before that asset is uploaded.
   def upload_assets
-    Dir["#{Paths.Dist}/**/*.*"].select{ |s| s !~ /\.(html|json)$/ }.sort.each do |filename|
+    Dir["#{Paths.Dist}/**/*.*"].select{ |s| s !~ /\.(html|json|txt)$/ }.sort.each do |filename|
       content_type = if filename =~ /\.css$/
         'text/css; charset=utf-8'
       elsif filename =~ /\.png$/
@@ -41,6 +41,8 @@ class Uploader
         'image/gif'
       elsif filename =~ /\.svg$/
         'image/svg+xml'
+      elsif filename =~ /\.txt$/
+        'text/plain'
       elsif filename =~ /\.js$/
         'application/javascript; charset=utf-8'
       else
@@ -67,6 +69,11 @@ class Uploader
     # Then the HTML
     Dir["#{Paths.Dist}/**/*.html"].each do |filename|
       upload_if_changed(filename, 'text/html; charset=utf-8', ShortAge)
+    end
+
+    # Finally, the sitemap -- least important
+    Dir["#{Paths.Dist}/**/*.txt"].each do |filename|
+      upload_if_changed(filename, 'text/plain; charset=utf-8', ShortAge)
     end
   end
 

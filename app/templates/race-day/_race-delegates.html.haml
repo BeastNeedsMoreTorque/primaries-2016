@@ -13,4 +13,5 @@
     %span.n-pledged-delegates-int= format_int(race.n_pledged_delegates)
     pledged delegates accounted for in #{race.state_name}.
 
-  != render(partial: 'race-day/include-unpledged-delegates')
+  - if race.n_unpledged_delegates > 0
+    != render(partial: 'race-day/include-unpledged-delegates')

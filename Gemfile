@@ -11,6 +11,7 @@ gem 'therubyracer' # for Uglifier
 gem 'hamlit' # Faster version of Haml
 gem 'sassc'
 gem 'mkfifo'
+gem 'tzinfo' # you'd expect this to be in Ruby's stdlib....
 
 group :development do
   gem 'capistrano'

@@ -1,3 +1,5 @@
+require 'tzinfo'
+
 # Could almost be called PartyState. Gives the votes/delegates of a state.
 Race = RubyImmutableStruct.new(
   :database,
@@ -16,6 +18,8 @@ Race = RubyImmutableStruct.new(
   :n_votes_footnote
 ) do
   include Comparable
+
+  Timezone = TZInfo::Timezone.get('America/New_York')
 
   attr_reader(
     :id,
@@ -101,9 +105,20 @@ Race = RubyImmutableStruct.new(
   def n_delegates_with_candidates; party_state.n_delegates_with_candidates; end
   def n_pledged_delegates; party_state.n_pledged_delegates; end
   def n_pledged_delegates_with_candidates; party_state.n_pledged_delegates_with_candidates; end
+  def n_unpledged_delegates; party_state.n_unpledged_delegates; end
   def pollster_slug; party_state.pollster_slug; end
   def pollster_href; party_state.pollster_href; end
   def pollster_last_updated; party_state.pollster_last_updated; end
+
+  def leader; 
+    first = candidate_races.first
+    first.n_votes > 0 ? first : nil
+  end
+
+  def leader_slug
+    x = leader
+    x.nil? ? nil : x.candidate_slug
+  end
 
   # false iff we have zilch data about how candidates are doing in this race
   def has_any_results_at_all?
@@ -200,7 +215,9 @@ Race = RubyImmutableStruct.new(
     elsif expect_results_time.nil?
       "Results coming soon"
     else
-      "Results coming #{expect_results_time.to_datetime.new_offset('Eastern').strftime('%l:%M %P %Z').sub('m', '.m.').sub('-05:00', 'EST').sub('-04:00', 'EDT')}"
+      localtime = Timezone.utc_to_local(expect_results_time)
+      zone_name = Timezone.period_for_local(localtime).dst? ? 'EDT' : 'EST'
+      "Results coming #{localtime.strftime('%l:%M %P')} #{zone_name}"
     end
   end
 
@@ -228,5 +245,16 @@ Race = RubyImmutableStruct.new(
 
   def tabulates_votes?
     state.is_actual_state? && id != '2016-03-05-GOP-ME'
+  end
+
+  def horse_race_data
+    {
+      state_code: state_code,
+      state_name: state_name,
+      n: n_pledged_delegates_with_candidates,
+      candidates: candidate_races
+        .select { |cr| cr.n_pledged_delegates > 0 }
+        .map { |cr| { id: cr.candidate_id, n_delegates: cr.n_pledged_delegates } }
+    }
   end
 end

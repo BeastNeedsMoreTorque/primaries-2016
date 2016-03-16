@@ -175,6 +175,46 @@ organize_alaska_districts = (features) ->
       GEOID: p.GEOID
       NAME: p.NAMELSAD
 
+# AP tallies WY results by pair-of-counries for Wyoming.
+organize_wyoming_gop_counties = ->
+  in_progress =
+    51025: { geometries: [], names: [], fips: [ '56001', '56025' ] }
+    51026: { geometries: [], names: [], fips: [ '56005', '56019' ] }
+    51027: { geometries: [], names: [], fips: [ '56009', '56027' ] }
+    51028: { geometries: [], names: [], fips: [ '56011', '56045' ] }
+    51029: { geometries: [], names: [], fips: [ '56013', '56029' ] }
+    51030: { geometries: [], names: [], fips: [ '56015', '56031' ] }
+    51031: { geometries: [], names: [], fips: [ '56017', '56043' ] }
+    51032: { geometries: [], names: [], fips: [ '56021' ] }
+    51033: { geometries: [], names: [], fips: [ '56033', '56003' ] }
+    51034: { geometries: [], names: [], fips: [ '56037', '56007' ] }
+    51035: { geometries: [], names: [], fips: [ '56039', '56035' ] }
+    51036: { geometries: [], names: [], fips: [ '56041', '56023' ] }
+
+  fips_to_geo_id = {}
+  for geo_id, o of in_progress
+    for fips in o.fips
+      fips_to_geo_id[fips] = geo_id
+
+  for feature in features_by_state.WY.counties
+    p = feature.properties
+    fips = p.ADMIN_FIPS
+    name = p.ADMIN_NAME || p.NAME
+    geo_id = fips_to_geo_id[fips]
+    throw new Error("What to do with fips code #{fips}?") if !geo_id
+
+    o = in_progress[geo_id]
+
+    o.geometries.push(feature.geometry)
+    o.names.push(name)
+
+  features_by_state.WY.subcounties = for geo_id, o of in_progress
+    type: 'Feature'
+    properties: { GEOID: geo_id, NAME: o.names.join(', ') }
+    geometry:
+      type: 'MultiPolygon'
+      coordinates: o.geometries.map((g) -> g.coordinates)
+
 # In some states, AP only reports by congressional district
 #
 # Notice that congressional-district geo IDs have four digits -- just like
@@ -689,13 +729,15 @@ geo_loader.load_all_features (err, key_to_features) ->
 
   organize_alaska_districts(key_to_features.AK)
 
+  organize_wyoming_gop_counties()
+
   [ 'MA', 'ME', 'NH', 'VT' ].forEach (key) ->
     organize_subcounty_features(key, key_to_features[key])
 
   [ 'AS', 'GU', 'MP' ].forEach (key) ->
     organize_territory_features(key, key_to_features[key])
 
-  [ [ 'KS', '20' ], [ 'MN', '27' ] ].forEach (arr) ->
+  [ [ 'AZ', '04' ], [ 'KS', '20' ], [ 'MN', '27' ] ].forEach (arr) ->
     [ state_code, fips_string ] = arr
     organize_congressional_district_features(state_code, fips_string, key_to_features.congressional_districts)
 

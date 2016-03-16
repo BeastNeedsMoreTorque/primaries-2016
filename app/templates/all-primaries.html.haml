@@ -2,7 +2,6 @@
 #main
   %h1= hed
   %p.dek= body
-  %p.intro-date= "Published #{pubbed_dt}"
 
   != render(partial: 'share-buttons')
 
@@ -21,14 +20,18 @@
           - else
             See preview &raquo;
 
-  %h3.section-hed Who&rsquo;s Ahead?
-  .pollster-tables.show-n-delegates
-    != render(partial: 'pollster-table', locals: { party: parties.find!('Dem') })
-    != render(partial: 'pollster-table', locals: { party: parties.find!('GOP') })
+  %h2.with-share-link
+    %a.share-link{name: 'horse-races', href: '#horse-races'}
+    Who&rsquo;s Ahead?
+  != render(partial: 'horse-races')
 
-  %h3.section-hed What&rsquo;s next?
+  %h2.with-share-link
+    %a.share-link{name: 'calendar', href: '#calendar'}
+    What&rsquo;s next?
   != render(partial: 'state-race-days')
 
-%script{src: asset_path('main.js'), async: true}
+-# race-day.js *could* be async, but then we'd have to wait for stats.js to
+-# load before executing it. stats.js is slow and we can't fix it.
+%script{src: asset_path('all-primaries.js')}
 %script{src: asset_path('stats.js')}
 %script{src: asset_path('ga.js')}

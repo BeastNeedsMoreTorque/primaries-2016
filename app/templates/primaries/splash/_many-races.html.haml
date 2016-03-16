@@ -27,7 +27,7 @@
                     %ul.states<>
                       - candidate_race_day.leads_candidate_races.each do |candidate_race|
                         %li{'data-state-code': candidate_race.state_code, class: candidate_race.winner? ? 'winner' : ''}<>
-                          %a{target: '_blank', href: candidate_race.race_href, title: "#{candidate_race.state_name}: #{candidate_race.candidate_last_name} #{candidate_race.winner? ? 'wins' : 'leads'} (#{candidate_race.race_pct_precincts_reporting} of precincts reporting)"}<>
+                          %a{target: '_blank', href: candidate_race.race_href, title: "#{candidate_race.state_name}: #{candidate_race.candidate_last_name} #{candidate_race.winner? ? 'wins' : 'leads'}"}<>
                             %span.state-code= candidate_race.state_code
                             != map_svg("states/tiny/#{candidate_race.state_code}")
 

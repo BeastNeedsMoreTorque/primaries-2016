@@ -3,7 +3,7 @@
 %html{lang: 'en'}
   %head
     %meta{charset: 'utf-8'}
-    %title HuffPost 2016 Election Coverage: #{hed}
+    %title 2016 Election: #{hed} – The Huffington Post
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
     %meta{name: 'author', content: 'HuffPostPolitics'}
     %meta{name: 'description', content: meta_description}
@@ -45,10 +45,10 @@
       %p Sources: The Associated Press, HuffPost Pollster
       %p By Adam Hooper, Hilary Fung, Shane Shifflett, Nicky Forster and Alissa Scheller
 
-      -if pubbed_dt
-        -if updated_dt
-          %p= "Page published #{pubbed_dt} and last updated #{updated_dt}"
-        -else
+      - if pubbed_dt
+        - if updated_dt
+          %p= "Page published #{pubbed_dt}, last updated #{updated_dt}"
+        - else
           %p= "Page published #{pubbed_dt}"
 
       %p

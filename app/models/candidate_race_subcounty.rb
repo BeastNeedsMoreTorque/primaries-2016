@@ -17,8 +17,10 @@ CandidateRaceSubcounty = RubyImmutableStruct.new(:database, :candidate_id, :race
       x
     elsif (x = geo_id <=> rhs.geo_id) != 0
       x
+    elsif (x = rhs.n_votes <=> n_votes) != 0
+      x
     else
-      rhs.n_votes <=> n_votes
+      candidate_id <=> rhs.candidate_id
     end
   end
 end

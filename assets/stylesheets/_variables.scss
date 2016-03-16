@@ -11,6 +11,8 @@ $candidate-colors: (
   'sanders': #84c9ec
 );
 
+$widget-link-color: #2e7061;
+
 $dots-with-candidates-color: #888;
 $dots-without-candidates-color: #ccc;
 
@@ -24,8 +26,8 @@ $undecided: #ddd;
 $independent: #339947;
 $libertarian: #7f5217;
 
-$facebookBlue: #3b5998 ;
-$twitterBlue: #c0deed ;
+$facebook-color: #3b5998;
+$twitter-color: #55acee;
 
 $splash-ele-bg: #eee;
 
@@ -129,77 +131,11 @@ $full-desktop-width: 960px;
   }
 }
 
-@mixin pollster-table {
-  border-collapse: collapse;
-
-  td, th {
-    padding: 2px 10px;
-    border-bottom: 1px solid #ccc;
-    white-space: nowrap;
-  }
-
-  .candidate {
-    text-align: left;
-  }
-
-  .pollster {
-    text-align: right;
-    font-weight: bold;
-  }
-
-  th {
-    border-bottom: 1px solid #999;
-  }
-
-  th.pollster {
-    position: relative;
-
-    .long-table-heading {
-      position: absolute;
-      // Copy from <th>'s padding
-      top: 2px;
-      right: 10px;
-    }
-  }
-
-  td.candidate {
-    width: 100%;
-
-    img {
-      margin-top: -2px;
-      margin-bottom: -2px;
-      width: 24px;
-      height: 36px;
-      vertical-align: middle;
-      padding-right: .4em;
-    }
-  }
-
-  &[data-party-id=Dem] .sparkline path {
-    stroke: $strongDem;
-  }
-
-  &[data-party-id=GOP] .sparkline path {
-    stroke: $strongGOP;
-  }
-
-  .sparkline {
-    vertical-align: middle;
-    width: 3rem;
-    height: 1rem;
-  }
-
-  .sparkline + .percent {
-    display: inline-block;
-    width: 2.75em;
-  }
-}
-
 @mixin widget-base {
   font-family: $huffpo-font-family;
 
   a {
-    color: #2e7061;
+    color: $widget-link-color;
   }
 
   h1, h2, h3, h4{
@@ -245,34 +181,6 @@ $full-desktop-width: 960px;
 
   p {
     margin: .5rem 0;
-  }
-}
-
-@mixin ellipsized-table {
-  &.ellipsized tr.ellipsized {
-    display: none;
-  }
-
-  & + .ellipsize-table-prompt {
-    height: 2rem;
-    text-align: center;
-
-    button {
-      box-sizing: border-box;
-      margin: 0;
-      padding: .25em 1rem;
-      height: 2rem;
-      line-height: 1.5rem;
-      border: none;
-      font: inherit;
-      background: none;
-      cursor: pointer;
-      color: #999;
-      border: 1px solid #ccc;
-      border-top: none;
-      text-transform: uppercase;
-      font-size: 0.8em;
-    }
   }
 }
 
