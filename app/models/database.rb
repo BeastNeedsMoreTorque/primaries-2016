@@ -225,7 +225,7 @@ class Database
       last_race_day_id = candidate.dropped_out_date_or_nil ? candidate.dropped_out_date_or_nil.to_s : ':' # ':' is after '9'
 
       sheets_races
-        .select { |r| r.race_day_id < last_race_day_id }
+        .select { |r| r.race_day_id <= last_race_day_id }
         .map! { |r| "#{candidate.id}-#{r.id}" }
     end.to_set
   end
