@@ -54,12 +54,12 @@ module ServerSchedule
   TickIntervalInS = 10
   
   Ticks = [
+    del_super,
     election_day('2016-03-15'),
     election_day('2016-03-15'),
     election_day('2016-03-15'),
     election_day('2016-03-15'),
-    election_day('2016-03-15'),
-    pollster
+    election_day('2016-03-15')
   ]
   #
   # ... that will update votes five times per minute (average once per 12s) and
