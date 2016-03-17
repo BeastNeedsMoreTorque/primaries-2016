@@ -22,6 +22,8 @@ function runOmni() {
   s_265.linkInternalFilters = 'javascript:,huffingtonpost.com';
   s_265.prop16 = 'page';
   s_265.prop1 = 'elections';
+  s_265.prop62 = 'video_novideo'; // As per Andrea Wright, 2016-03-17
+  s_265.prop65 = 'ap'; // The main source of election-2016 data is Associated Press
   s_265.pageName = "" + document.title;
   s_265.prop12 = "" + document.URL.split('?')[0];
   s_265.t();
