@@ -136,12 +136,13 @@
     padding: .25rem 0;
   }
 
-  tr[data-party-id=Dem] .n-delegates-dots {
-    color: $strongDem;
-  }
-
-  tr[data-party-id=GOP] .n-delegates-dots {
-    color: $strongGOP;
+  .dot-groups-future {
+    &.Dem {
+      color: $weakDem;
+    }
+    &.GOP {
+      color: $weakGOP;
+    }
   }
 
   .state-race-days-toggle {

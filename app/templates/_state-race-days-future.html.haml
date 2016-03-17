@@ -8,23 +8,18 @@
     - last_value = nil
     - for race_day in race_days
       - for race in race_day.races
-        %tr
-          %td
+        - current_value = race.send(hide_repeats_column)
+        %tr{class: "#{current_value == last_value ? 'key-repeated' : ''}"}
+          %td.date
             %time{datetime: race.race_day_id}= format_date(race.date)
-          %td= race.state_name
+          %td.state
+            - if race.enabled?
+              %a{href: race.href}
+                #{race.state_name} &raquo;
+            - else 
+              #{race.state_name}
           %td= race.party_name[0]
           %td= race.n_delegates
-          %td.dot-groups-future
+          %td.dot-groups-future{class: "#{race.party_id}"}
             != race_simple_dot_groups(race).to_html
-          %td
-            - if !race.enabled?
-              %td.disabled-button
-            - else
-              %td.enabled-button
-                %a.results-button{href: race.href}
-                  %span.results-button-desktop
-                    - if race.when_race_happens == 'future'
-                      Preview
-                    - else
-                      Results
-                  »
+        - last_value = current_value
