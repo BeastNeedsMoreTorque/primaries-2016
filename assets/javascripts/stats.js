@@ -89,16 +89,18 @@ function runNielson(){
 runNielson();
 
 function runComscore() {
+  var kw = isMobile ? 'mobile_politics' : 'politics';
+
   COMSCORE.beacon({
-    c1:2,
-    c2:6723616,
-    c3:"",
-    c4:"",
-    c5:"politics",
-    c6:"",
-    c15:"",
+    c1: 2,
+    c2: 6723616,
+    c3: "",
+    c4: "",
+    c5: kw,
+    c6: "",
+    c15: "",
     options: {
-      url_append: "comscorekw=politics"
+      url_append: "comscorekw=" + kw
     }
   });
 }
