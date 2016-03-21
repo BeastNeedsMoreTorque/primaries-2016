@@ -97,6 +97,7 @@ Race = RubyImmutableStruct.new(
   def state; database.states.find!(state_code); end
   def state_fips_int; state.fips_int; end
   def state_name; state.name; end
+  def state_abbreviation; state.abbreviation; end
   def date; race_day.date; end
   def disabled?; race_day.disabled?; end
   def enabled?; race_day.enabled?; end

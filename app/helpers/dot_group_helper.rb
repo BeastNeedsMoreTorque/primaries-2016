@@ -101,6 +101,8 @@ module DotGroupHelper
       DotSubgroup.new(candidate_state.candidate_slug, candidate_state.send(method))
     end
 
+    dot_subgroups << DotSubgroup.new('none', party_state.send("#{method}_without_candidates"))
+
     group_dot_subgroups(dot_subgroups).to_html('data-candidate-slug')
   end
 

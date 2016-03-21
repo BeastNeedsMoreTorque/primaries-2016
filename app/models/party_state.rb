@@ -17,6 +17,14 @@ PartyState = RubyImmutableStruct.new(:database, :party_id, :state_code, :n_deleg
     candidate_states.map(&:n_pledged_delegates).reduce(0, :+)
   end
 
+  def n_delegates_without_candidates
+    n_delegates - n_delegates_with_candidates
+  end
+
+  def n_pledged_delegates_without_candidates
+    n_pledged_delegates - n_pledged_delegates_with_candidates
+  end
+
   def n_unpledged_delegates
     n_delegates - n_pledged_delegates
   end
