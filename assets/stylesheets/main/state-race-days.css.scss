@@ -5,21 +5,32 @@
     color: #000;
   }
 
-  tr:hover td {
-    background: aliceblue;
-  }
-
   @media(max-width: $widest-mobile) {
     table {
       font-size: .85rem;
     }
   }
 
-  // .winner {
-  //   @media (max-width: 500px) {
-  //     display: none;
-  //   }
-  // }
+  .past-container {
+    @media (min-width: 700px) {
+      display: flex;
+    }
+  }
+
+  .past-table {
+    margin: 15px;
+    @media (max-width: 700px) {
+      .state-name {
+        display: none;
+      }
+    }
+    @media (min-width: 700px) {
+      width: 50%;
+      .state-abbreviation {
+        display: none;
+      }
+    }
+  }
 
   th {
     text-align: left;
@@ -34,14 +45,19 @@
       font-weight: bold;
       padding-right: 0;
     }
-    &.date {
-      background: $tableBorderColor;
+    &.date-past {
+      border-top: 5px solid #fff;
+      background: #f8f8f8;
       white-space: nowrap;
       text-align: center;
+      padding: 0;
       a {
         text-decoration: none;
         color: #000;
       }
+    }
+    &.date-future {
+      white-space: nowrap;
     }
     &.repeated * {
       visibility: hidden;
@@ -99,12 +115,6 @@
     margin: 4em auto;
   }
 
-  .flipper>* {
-    left: 0;
-    top: 0;
-    width: 100%;
-  }
-
   .n-delegates-int {
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
@@ -124,87 +134,6 @@
     }
     &.GOP {
       color: $weakGOP;
-    }
-  }
-
-  .state-race-days-toggle {
-    width: 300px;
-    margin: auto;
-    font-size: 0.9em;
-    height: 30px;
-    box-sizing: border-box;
-    text-transform: uppercase;
-    a {
-      box-sizing: border-box;
-      text-decoration: none;
-      margin: 0;
-      border: 1px solid #ccc;
-      width: 50%;
-      float: left;
-      text-align: center;
-      color: #ccc;
-      padding: 6px 3px;
-      &:first-child {
-        border-right: none;
-      }
-      &:last-child {
-        border-left: none;
-      }
-      &.selected {
-        color: inherit;
-        background: #efefef;
-        border: 1px solid #666;
-        color: $muted;
-        &:first-child {
-          border-right: 1px solid #666;
-        }
-        &:last-child {
-          border-left: 1px solid #666;
-        }
-      }
-    }
-  }
-
-  // https://davidwalsh.name/css-flip
-  .both-tables {
-    margin: 2rem 0 1rem;
-    -webkit-perspective: 1000rem;
-    -ms-perspective: 1000rem;
-    perspective: 1000rem;
-    overflow: hidden; // Otherwise the backface can push the page beyond the footer
-
-    .flipper {
-      transition: 0.5s;
-      -webkit-transform-style: preserve-3d;
-      transform-style: preserve-3d;
-      position: relative;
-
-      &.state-selected {
-        transform: rotateY(180deg);
-      }
-    }
-
-    .flipper>* {
-      -webkit-backface-visibility: hidden; // https://trello.com/c/rONHJUbe/88-mobile-schedule-table-has-overlapping-elements-text
-      -ms-backface-visibility: hidden;
-      backface-visibility: hidden;
-      transform: rotateY(180deg);
-    }
-
-    .flipper>:first-child {
-      z-index: 2; // above back
-      transform: rotateY(0deg);
-    }
-
-    .flipper>:last-child {
-      // We'll eventually set the :first-child position: absolute, but that
-      // only comes after we load the font. So we go like this:
-      //
-      // 1. Render :first-child, with :last-child absolute; browser calculates
-      //    all heights.
-      // 2. When font loads, change :first-child to position: absolute,
-      //    read the rendered heights, and set .flipper's height.
-      position: absolute;
     }
   }
 }

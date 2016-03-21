@@ -1,25 +1,29 @@
-- for party in parties
-  %h2= party.name
-  %table.state-race-days
-    %thead
-      %tr
-        %th State
-        %th.winner Winner
-        %th Delegates
-    %tbody
-      - last_value = nil
-      - for party_race_day in party.party_race_days
-        %tr
-          %td.date{colspan: 3}
-            %time{datetime: party_race_day.race_day_id}= format_date(party_race_day.date)
-        - for race in party_race_day.races
+.past-container
+  - for party in parties
+    .past-table
+      %h2= party.name
+      %table.state-race-days
+        %thead
           %tr
-            %td.state
-              %a{href: race.href}
-                #{race.state_abbreviation}&nbsp;&raquo;
-            %td.winner
-              - if race.winner_or_nil
-                #{race.winner_or_nil.candidate_last_name}
-                #{race.winner_or_nil.n_delegates}
-            %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
-              != party_state_dot_groups(race.party_state, :n_delegates)
+            %th State
+            %th.winner Winner
+            %th{colspan: 2} Delegates
+        %tbody
+          - for party_race_day in party.party_race_days
+            %tr
+              %td.date.date-past{colspan: 4}
+                %time{datetime: party_race_day.race_day_id}= format_date(party_race_day.date)
+            - for race in party_race_day.races
+              %tr
+                %td.state
+                  %a{href: race.href}
+                    %span.state-name #{race.state_name}&nbsp;&raquo;
+                    %span.state-abbreviation #{race.state_abbreviation}&nbsp;&raquo;
+                %td.winner
+                  - if race.winner_or_nil
+                    #{race.winner_or_nil.candidate_last_name}
+                %td.winner-delegates
+                  - if race.winner_or_nil
+                    #{race.winner_or_nil.n_delegates}
+                %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
+                  != party_state_dot_groups(race.party_state, :n_delegates)

@@ -10,7 +10,7 @@
       - for race in race_day.races
         - current_value = race.send(hide_repeats_column)
         %tr{class: "#{current_value == last_value ? 'key-repeated' : ''}"}
-          %td.date
+          %td.date.date-future
             %time{datetime: race.race_day_id}= format_date(race.date)
           %td.state
             - if race.enabled?
