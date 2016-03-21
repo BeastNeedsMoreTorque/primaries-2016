@@ -23,4 +23,5 @@ group :development do
   gem 'rack-contrib'
   gem 'rspec'
   gem 'ruby-prof'
+  gem 'thin'
 end

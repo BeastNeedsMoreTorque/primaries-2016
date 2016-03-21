@@ -1,0 +1,51 @@
+!!! 5
+%html{lang: 'en'}
+  %head
+    %meta{charset: 'utf-8'}
+    %title Huffington Post 2016 Focus Race Day Tests
+    %style
+      :plain
+        body {
+          background: #ddd;
+          padding: 10px;
+          margin: 0;
+          text-align: center;
+        }
+
+        #main>* {
+          margin: 10px;
+          vertical-align: top;
+          display: inline-block;
+          background: white;
+        }
+
+        #primaries-splash {
+          width: 946px;
+          margin: 0 auto 2rem;
+        }
+
+        #primaries-right-rail {
+          width: 311.625px;
+        }
+
+        #primaries-mobile-ad {
+          width: 320px;
+        }
+
+  %body
+    %p
+      This page is for debugging. It shows all the different way we present the
+      FocusRaceDay.
+
+    %p Set <tt>FocusRaceDayId</tt> in <tt>app/models/database.rb</tt>.
+
+    #main
+      #primaries-splash
+      #primaries-mobile-ad
+      #primaries-right-rail
+
+    %script{src: '/2016/javascripts/pym.min.js'}
+    :javascript
+      new pym.Parent('primaries-splash', '/2016/primaries/splash');
+      new pym.Parent('primaries-right-rail', '/2016/primaries/right-rail');
+      new pym.Parent('primaries-mobile-ad', '/2016/primaries/mobile-ad');

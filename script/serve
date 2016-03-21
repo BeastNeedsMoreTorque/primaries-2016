@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'date'
+require 'ruby-immutable-struct'
 
 require_relative '../lib/env'
 Bundler.require(:development)
@@ -10,6 +11,14 @@ require_relative '../lib/logger'
 
 $error_status = nil # if nil, HTTP response is 503; if non-zero, 500; if 0, 200/404.
 $error_text = nil
+$queued_requests = []
+
+QueuedRequest = RubyImmutableStruct.new(:app, :env) do
+  def continue
+    response = app.call(env)
+    env['async.callback'].call(response)
+  end
+end
 
 def rebuild
   $error_status = nil
@@ -24,6 +33,10 @@ def rebuild
   }
 
   $error_status = $?
+
+  queued_requests = $queued_requests
+  $queued_requests = []
+  queued_requests.each(&:continue)
 end
 
 listener = Listen.to('app', 'lib', 'assets', 'script', only: /\.(archieml|tsv|rb|js|json|png|css|sass|scss|haml|svg)$/) do |modified, added, removed|
@@ -40,8 +53,8 @@ class StatusReporter
 
   def call(env)
     if $error_status == nil
-      # TODO instead of refreshing every 1s, use a callback somewhere to actually respond when the request is done
-      [ 503, { 'Content-Type' => 'text/plain; charset=utf-8', 'Refresh' => '1' }, [ 'Regenerating...' ] ]
+      $queued_requests << QueuedRequest.new(self, env)
+      throw :async
     elsif $error_status != 0
       [ 500, { 'Content-Type' => 'text/plain; charset=utf-8' }, [ "ERROR #{$error_status}. Output:\n\n#{$error_text}" ] ]
     else
@@ -58,7 +71,7 @@ class Logger
   def call(env)
     response = @app.call(env)
 
-    $logger.info("#{env['REQUEST_METHOD']} #{env['PATH_INFO']} => #{response[0]}")
+    $logger.info("#{response[0]} #{env['REQUEST_METHOD']} #{env['PATH_INFO']}")
 
     response
   end
@@ -85,6 +98,6 @@ app = Rack::Builder.new(quiet: true) do
   run lambda { |env| [ 404, { 'Content-Type' => 'text/html; charset=utf-8' }, [ 'Not Found' ]] }
 end
 
-Rack::Server.start(app: app, Port: 3000, Host: '0.0.0.0', environment: 'none', AccessLog: []) # will return after Ctrl+C
+Rack::Server.start(app: app, Port: 3000, Host: '0.0.0.0', environment: 'none') # will return after Ctrl+C
 
 listener.stop
