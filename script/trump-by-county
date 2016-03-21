@@ -1,9 +1,27 @@
 #!/usr/bin/env ruby
 require 'ruby-immutable-struct'
+require 'csv'
 require_relative '../lib/env'
 require_relative '../app/models/database'
 db = Database.load
 
+fips_lookup = {}
+
 db.candidate_county_races.select{|ccr| ccr.candidate.party_id == "GOP" and ccr.candidate.name == "Trump"}.each{|ccr|
-	puts "#{ccr.fips_int}, #{ccr.candidate_percent_votes}"
+	#puts "#{ccr.fips_int}, #{ccr.candidate_percent_votes}"
+	fips_lookup[ccr.fips_int] = ccr.candidate_percent_votes
 }
+
+contents = CSV.parse(File.read("#{Paths.StaticData}/cdc-drug-poisoning.csv"))
+header = contents.first
+found = 0
+contents[1..-1].select{|row| row[header.index("Year")] == "2014"}.each{|row|
+	est = row[header.index("Estimated Age-adjusted Death Rate, 11 Categories (in ranges)")]
+	hi_est = est.split("-").last.gsub(">", "")
+	fips = row[header.index("FIPS")].to_i
+	if fips_lookup.keys.include? fips
+		found += 1
+		puts "#{fips}, #{fips_lookup[fips]}, #{hi_est}, #{est}"
+	end
+}
+#puts "found #{found}"
