@@ -15,6 +15,7 @@ db.candidate_county_races.select{|ccr| ccr.candidate.party_id == "GOP" and ccr.c
 contents = CSV.parse(File.read("#{Paths.StaticData}/cdc-drug-poisoning.csv"))
 header = contents.first
 found = 0
+puts "fips, trump-pct-of-votes, highest-od-estimate, od-estimate-range"
 contents[1..-1].select{|row| row[header.index("Year")] == "2014"}.each{|row|
 	est = row[header.index("Estimated Age-adjusted Death Rate, 11 Categories (in ranges)")]
 	hi_est = est.split("-").last.gsub(">", "")
