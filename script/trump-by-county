@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+require 'ruby-immutable-struct'
+require_relative '../lib/env'
+require_relative '../app/models/database'
+db = Database.load
+
+db.candidate_county_races.select{|ccr| ccr.candidate.party_id == "GOP" and ccr.candidate.name == "Trump"}.each{|ccr|
+	puts "#{ccr.fips_int}, #{ccr.candidate_percent_votes}"
+}
