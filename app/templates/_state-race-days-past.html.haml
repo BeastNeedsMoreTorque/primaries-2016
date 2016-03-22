@@ -23,7 +23,7 @@
                   %td.winner
                     - if race.winner_or_nil
                       #{race.winner_or_nil.candidate_last_name}
-                  %td.winner-delegates
+                  %td.n-delegates-int.winner-delegates
                     - if race.winner_or_nil
                       #{race.winner_or_nil.n_delegates}
                   %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}

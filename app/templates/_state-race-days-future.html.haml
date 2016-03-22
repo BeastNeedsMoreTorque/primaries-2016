@@ -19,7 +19,7 @@
             - else 
               #{race.state_name}
           %td= race.party_name[0]
-          %td= race.n_delegates
+          %td.n-delegates-int= race.n_delegates
           %td.dot-groups-future{class: "#{race.party_id}"}
             != race_simple_dot_groups(race).to_html
         - last_value = current_value
