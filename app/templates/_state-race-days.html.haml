@@ -1,6 +1,8 @@
 .state-race-days
-  != render_state_race_days_past
+  != render(partial: 'state-race-days-past')
+
   %h2.with-share-link
     %a.share-link{name: 'calendar', href: '#calendar'}
     What&rsquo;s Next?
-  != render_state_race_days_future
+
+  != render(partial: 'state-race-days-future')

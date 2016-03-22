@@ -32,7 +32,6 @@ module Assets
       vendor/jquery-2.2.0.js
       wait_for_font_then.js
       format_int.js
-      state-race-days.js
       candidate-colors.js
       animated-dot-set.js
       dot-line.js
