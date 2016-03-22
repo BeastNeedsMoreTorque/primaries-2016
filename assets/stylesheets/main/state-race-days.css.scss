@@ -65,6 +65,26 @@
     }
   }
 
+  @each $slug, $color in $candidate-colors {
+    td.#{$slug} span[data-candidate-slug=#{$slug}] {
+      color: $color;
+    }
+
+    .winner.#{$slug} .inner, .winner-delegates.#{$slug} .inner {
+      background: $color;
+    }
+  }
+
+  .winner, .winner-delegates {
+    padding: 0;
+    color: #fff;
+    span {
+      padding: .15rem .3rem;
+      width: 100%;
+      display: inline-block;
+    }
+  }
+
   .dot-groups-past {
     span.number {
       display: inline-block;

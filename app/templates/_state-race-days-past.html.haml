@@ -20,11 +20,11 @@
                     %a{href: race.href}
                       %span.state-name #{race.state_name}&nbsp;&raquo;
                       %span.state-abbreviation #{race.state_abbreviation}&nbsp;&raquo;
-                  %td.winner
+                  %td.winner{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
                     - if race.winner_or_nil
-                      #{race.winner_or_nil.candidate_last_name}
-                  %td.n-delegates-int.winner-delegates
+                      %span.inner<> #{race.winner_or_nil.candidate_last_name}
+                  %td.n-delegates-int.winner-delegates{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
                     - if race.winner_or_nil
-                      #{race.winner_or_nil.n_delegates}
+                      %span.inner<> #{race.winner_or_nil.n_delegates}
                   %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
                     != party_state_dot_groups(race.party_state, :n_delegates)
