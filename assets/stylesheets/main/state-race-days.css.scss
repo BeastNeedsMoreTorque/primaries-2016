@@ -11,12 +11,6 @@
     }
   }
 
-  .past-container {
-    @media (min-width: 700px) {
-      display: flex;
-    }
-  }
-
   .past-table {
     margin: 15px;
     @media (max-width: 700px) {
@@ -25,7 +19,6 @@
       }
     }
     @media (min-width: 700px) {
-      width: 50%;
       .state-abbreviation {
         display: none;
       }
