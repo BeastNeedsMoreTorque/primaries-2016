@@ -131,10 +131,10 @@
 
   .dot-groups-future {
     &.Dem {
-      color: $weakDem;
+      color: $strongDem;
     }
     &.GOP {
-      color: $weakGOP;
+      color: $strongGOP;
     }
   }
 }
