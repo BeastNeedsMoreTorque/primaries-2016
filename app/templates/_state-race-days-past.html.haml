@@ -10,20 +10,21 @@
             %th{colspan: 2} Delegates
         %tbody
           - for party_race_day in party.party_race_days
-            %tr
-              %td.date.date-past{colspan: 4}
-                %time{datetime: party_race_day.race_day_id}= format_date(party_race_day.date)
-            - for race in party_race_day.races
+            - if party_race_day.past?
               %tr
-                %td.state
-                  %a{href: race.href}
-                    %span.state-name #{race.state_name}&nbsp;&raquo;
-                    %span.state-abbreviation #{race.state_abbreviation}&nbsp;&raquo;
-                %td.winner
-                  - if race.winner_or_nil
-                    #{race.winner_or_nil.candidate_last_name}
-                %td.winner-delegates
-                  - if race.winner_or_nil
-                    #{race.winner_or_nil.n_delegates}
-                %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
-                  != party_state_dot_groups(race.party_state, :n_delegates)
+                %td.date.date-past{colspan: 4}
+                  %time{datetime: party_race_day.race_day_id}= format_date(party_race_day.date)
+              - for race in party_race_day.races
+                %tr
+                  %td.state
+                    %a{href: race.href}
+                      %span.state-name #{race.state_name}&nbsp;&raquo;
+                      %span.state-abbreviation #{race.state_abbreviation}&nbsp;&raquo;
+                  %td.winner
+                    - if race.winner_or_nil
+                      #{race.winner_or_nil.candidate_last_name}
+                  %td.winner-delegates
+                    - if race.winner_or_nil
+                      #{race.winner_or_nil.n_delegates}
+                  %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
+                    != party_state_dot_groups(race.party_state, :n_delegates)
