@@ -6,9 +6,9 @@
     %th{colspan: 2} Total Delegates
   %tbody
     - last_value = nil
-    - for race_day in race_days
+    - for race_day in race_days.select(&:future?)
       - for race in race_day.races
-        - current_value = race.send(hide_repeats_column)
+        - current_value = race.date
         %tr{class: "#{current_value == last_value ? 'key-repeated' : ''}"}
           %td.date.date-future
             %time{datetime: race.race_day_id}= format_date(race.date)

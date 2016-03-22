@@ -29,20 +29,6 @@ class AllPrimariesView < BaseView
     self.generate_for_view(AllPrimariesView.new(database))
   end
 
-  def render_state_race_days_past
-    render(partial: 'state-race-days-past', locals: {
-      hide_repeats_column: 'date',
-      race_days: database.race_days.select(&:past?)
-    })
-  end
-
-  def render_state_race_days_future
-    render(partial: 'state-race-days-future', locals: {
-      hide_repeats_column: 'date',
-      race_days: database.race_days.select(&:future?)
-    })
-  end
-
   # The stuff within a d="..." in an SVG <path> for the given state
   def state_svg_outline_path(state_code)
     svg = map_svg("states/tiny/#{state_code}")

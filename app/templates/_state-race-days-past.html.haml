@@ -9,22 +9,21 @@
             %th.winner Winner
             %th{colspan: 2} Delegates Won
         %tbody
-          - for party_race_day in party.party_race_days
-            - if party_race_day.past?
+          - for party_race_day in party.party_race_days.reject(&:future?)
+            %tr
+              %td.date.date-past{colspan: 4}
+                %time{datetime: party_race_day.race_day_id}= format_date(party_race_day.date)
+            - for race in party_race_day.races
               %tr
-                %td.date.date-past{colspan: 4}
-                  %time{datetime: party_race_day.race_day_id}= format_date(party_race_day.date)
-              - for race in party_race_day.races
-                %tr
-                  %td.state
-                    %a{href: race.href}
-                      %span.state-name #{race.state_name}&nbsp;&raquo;
-                      %span.state-abbreviation #{race.state_abbreviation}&nbsp;&raquo;
-                  %td.winner{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
-                    - if race.winner_or_nil
-                      %span.inner<> #{race.winner_or_nil.candidate_last_name}
-                  %td.n-delegates-int.winner-delegates{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
-                    - if race.winner_or_nil
-                      %span.inner<> #{race.winner_or_nil.n_delegates}
-                  %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
-                    != party_state_dot_groups(race.party_state, :n_delegates)
+                %td.state
+                  %a{href: race.href}
+                    %span.state-name #{race.state_name}&nbsp;&raquo;
+                    %span.state-abbreviation #{race.state_abbreviation}&nbsp;&raquo;
+                %td.winner{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
+                  - if race.winner_or_nil
+                    %span.inner<> #{race.winner_or_nil.candidate_last_name}
+                %td.n-delegates-int.winner-delegates{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
+                  - if race.winner_or_nil
+                    %span.inner<> #{race.winner_or_nil.n_delegates}
+                %td.dot-groups-past{class: race.winner_or_nil ? race.winner_or_nil.candidate_slug : ""}
+                  != party_state_dot_groups(race.party_state, :n_delegates)

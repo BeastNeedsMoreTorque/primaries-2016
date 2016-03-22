@@ -63,20 +63,13 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
     }
   end
 
+  # Tense for the _entire_ race day (including the other party's)
+  #
   # "past" when all races have finished reporting
   # "present" if any race is reporting
   # "future" if no races are reporting
   def when_race_day_happens
-    tenses = races.map(&:when_race_happens)
-
-    if tenses.all? { |t| t == 'past' }
-      'past'
-    elsif tenses.all? { |t| t == 'future' }
-      'future'
-    else
-      # If there's one past and one future, the race_day is 'present'
-      'present'
-    end
+    race_day.when_race_day_happens
   end
 
   def present?; when_race_day_happens == 'present'; end
