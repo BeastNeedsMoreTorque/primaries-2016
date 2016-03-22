@@ -737,7 +737,7 @@ geo_loader.load_all_features (err, key_to_features) ->
   [ 'AS', 'GU', 'MP' ].forEach (key) ->
     organize_territory_features(key, key_to_features[key])
 
-  [ [ 'AZ', '04' ], [ 'KS', '20' ], [ 'MN', '27' ] ].forEach (arr) ->
+  [ [ 'KS', '20' ], [ 'MN', '27' ] ].forEach (arr) ->
     [ state_code, fips_string ] = arr
     organize_congressional_district_features(state_code, fips_string, key_to_features.congressional_districts)
 
