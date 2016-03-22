@@ -3,7 +3,7 @@
 .state-race-days {
   h3 {
     font-size: 1.6em;
-    margin: 3.5rem auto 0;
+    margin: 3rem auto 0;
   }
 
   a {
@@ -52,6 +52,9 @@
       white-space: nowrap;
       text-align: center;
       padding: 0;
+      &:first-child {
+        border-top: 0;
+      }
       a {
         text-decoration: none;
         color: #000;
