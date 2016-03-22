@@ -42,7 +42,7 @@
     padding: .3rem .5rem;
     &.state {
       font-weight: bold;
-      padding-right: 0;
+      padding-right: .3rem;
       @media (max-width: $widest-mobile) {
         max-width: 7rem;
       }
@@ -103,16 +103,6 @@
     }
   }
 
-  .state-race-days-by-date td.state {
-    // td.state comes before td.party, which is very thin
-    padding-right: 0;
-  }
-
-  .state-race-days-by-state td.date {
-    // td.date comes before td.party, which is very thin
-    padding-right: 0;
-  }
-
   .disabled-button {
     visibility: hidden;
   }
@@ -134,6 +124,7 @@
     width: 100%;
     max-width: 650px;
     margin: 2em auto 4em;
+    line-height: 1.25rem;
   }
 
   .n-delegates-int {
