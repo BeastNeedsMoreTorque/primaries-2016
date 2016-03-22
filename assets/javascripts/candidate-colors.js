@@ -4,8 +4,8 @@ var CandidateColors = {
     sanders: '#84c9ec'
   },
   GOP: {
-    trump: '#91344c',
-    cruz: '#9c788c',
+    trump: '#B23151',
+    cruz: '#6844AD',
     rubio: '#d98628',
     kasich: '#fa7060',
     carson: '#a85d59'
