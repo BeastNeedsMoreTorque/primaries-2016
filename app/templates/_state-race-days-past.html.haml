@@ -1,13 +1,13 @@
 .past-container
   - for party in parties
     .past-table
-      %h2= party.name
+      %h3= party.name
       %table.state-race-days
         %thead
           %tr
             %th State
             %th.winner Winner
-            %th{colspan: 2} Delegates
+            %th{colspan: 2} Delegates Won
         %tbody
           - for party_race_day in party.party_race_days
             - if party_race_day.past?

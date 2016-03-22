@@ -3,7 +3,7 @@
     %th Date
     %th State
     %th Party
-    %th{colspan: 2} Delegates
+    %th{colspan: 2} Total Delegates
   %tbody
     - last_value = nil
     - for race_day in race_days
@@ -15,10 +15,12 @@
           %td.state
             - if race.enabled?
               %a{href: race.href}
-                #{race.state_name} &raquo;
+                %span.state-name #{race.state_name}&nbsp;&raquo;
+                %span.state-abbreviation #{race.state_abbreviation}&nbsp;&raquo;
             - else 
-              #{race.state_name}
-          %td= race.party_name[0]
+              %span.state-name #{race.state_name}
+              %span.state-abbreviation #{race.state_abbreviation}&nbsp;&raquo;
+          %td.party= race.party_name[0]
           %td.n-delegates-int= race.n_delegates
           %td.dot-groups-future{class: "#{race.party_id}"}
             != race_simple_dot_groups(race).to_html
