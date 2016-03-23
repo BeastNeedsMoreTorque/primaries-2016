@@ -56,7 +56,7 @@ module ServerSchedule
   TickIntervalInS = 10
   
   Ticks = [
-    #del_super,
+    del_super,
     election_day('2016-03-22'),
     election_day('2016-03-22'),
     election_day('2016-03-22'),
