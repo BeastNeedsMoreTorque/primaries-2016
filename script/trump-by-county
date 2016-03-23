@@ -9,20 +9,33 @@ fips_lookup = {}
 
 db.candidate_county_races.select{|ccr| ccr.candidate.party_id == "GOP" and ccr.candidate.name == "Trump"}.each{|ccr|
 	#puts "#{ccr.fips_int}, #{ccr.candidate_percent_votes}"
-	fips_lookup[ccr.fips_int] = ccr.candidate_percent_votes
+	fips_lookup[ccr.fips_int] = [ccr.fips_int, ccr.candidate_percent_votes]
 }
 
 contents = CSV.parse(File.read("#{Paths.StaticData}/cdc-drug-poisoning.csv"))
 header = contents.first
 found = 0
-puts "fips, trump-pct-of-votes, highest-od-estimate, od-estimate-range"
 contents[1..-1].select{|row| row[header.index("Year")] == "2014"}.each{|row|
 	est = row[header.index("Estimated Age-adjusted Death Rate, 11 Categories (in ranges)")]
 	hi_est = est.split("-").last.gsub(">", "")
 	fips = row[header.index("FIPS")].to_i
 	if fips_lookup.keys.include? fips
 		found += 1
-		puts "#{fips}, #{fips_lookup[fips]}, #{hi_est}, #{est}"
+		fips_lookup[fips].push(hi_est)
+		fips_lookup[fips].push(est)
 	end
 }
 #puts "found #{found}"
+
+contents = CSV.parse(File.read("#{Paths.StaticData}/2014-5year-est-poverty-rate.csv", {:encoding => 'ISO-8859-1'}))
+header = contents.first
+valid = contents[1..-1].select{|row| fips_lookup.keys.include? row[header.index("Id2")].to_i}
+valid.each{|row|
+	rate = row[header.index("poverty-rate")].to_i.round(1)
+	fips = row[header.index("Id2")].to_i
+	fips_lookup[fips].push(rate)
+}
+puts "fips, trump-pct-of-votes, highest-od-estimate, od-estimate-range, poverty-rate"
+fips_lookup.values.each{|row|
+	puts row.join(",")
+}
