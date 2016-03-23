@@ -133,7 +133,7 @@ HorseRace.prototype.load_steps = function() {
     var step_candidates = [];
 
     this.data.candidates.forEach(function(c) {
-      step_candidates.push({ id: c.id, n_delegates: c.n_unpledged_delegates });
+      step_candidates.push({ id: c.id, n_delegates: (c.n_unpledged_delegates || 0) });
       var els = _this.candidates_by_id[c.id].els;
       var bar = document.createElement('li');
       bar.style.width = 100 * c.n_unpledged_delegates / _this.data.n_delegates_needed + '%';
