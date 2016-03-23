@@ -12,7 +12,7 @@ db.candidate_county_races.select{|ccr| ccr.candidate.party_id == "GOP" and ccr.c
 	fips_lookup[ccr.fips_int] = [ccr.fips_int, ccr.candidate_percent_votes]
 }
 
-contents = CSV.parse(File.read("#{Paths.StaticData}/cdc-drug-poisoning.csv"))
+contents = CSV.parse(File.read("#{Paths.StaticData}/trump-data/cdc-drug-poisoning.csv"))
 header = contents.first
 found = 0
 contents[1..-1].select{|row| row[header.index("Year")] == "2014"}.each{|row|
@@ -27,7 +27,7 @@ contents[1..-1].select{|row| row[header.index("Year")] == "2014"}.each{|row|
 }
 #puts "found #{found}"
 
-contents = CSV.parse(File.read("#{Paths.StaticData}/2014-5year-est-poverty-rate.csv", {:encoding => 'ISO-8859-1'}))
+contents = CSV.parse(File.read("#{Paths.StaticData}/trump-data/2014-5year-est-poverty-rate.csv", {:encoding => 'ISO-8859-1'}))
 header = contents.first
 valid = contents[1..-1].select{|row| fips_lookup.keys.include? row[header.index("Id2")].to_i}
 valid.each{|row|
@@ -35,7 +35,18 @@ valid.each{|row|
 	fips = row[header.index("Id2")].to_i
 	fips_lookup[fips].push(rate)
 }
-puts "fips, trump-pct-of-votes, highest-od-estimate, od-estimate-range, poverty-rate"
-fips_lookup.values.each{|row|
-	puts row.join(",")
+
+contents = CSV.parse(File.read("#{Paths.StaticData}/trump-data/ruralurbancodes2013.csv", {:encoding => 'ISO-8859-1'}))
+header = contents.first
+valid = contents[1..-1].select{|row| fips_lookup.keys.include? row[header.index("FIPS")].to_i}
+valid.each{|row|
+	rucc = row[header.index("RUCC_2013")]
+	fips = row[header.index("FIPS")].to_i
+	fips_lookup[fips].push(rucc)
 }
+
+#puts "fips, trump-pct-of-votes, highest-od-estimate, od-estimate-range, poverty-rate, rucc"
+#fips_lookup.values.each{|row|
+#	puts row.join(",")
+#}
+
