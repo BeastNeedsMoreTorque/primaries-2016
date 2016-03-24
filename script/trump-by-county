@@ -45,8 +45,38 @@ valid.each{|row|
 	fips_lookup[fips].push(rucc)
 }
 
-#puts "fips, trump-pct-of-votes, highest-od-estimate, od-estimate-range, poverty-rate, rucc"
-#fips_lookup.values.each{|row|
-#	puts row.join(",")
-#}
+contents = CSV.parse(File.read("#{Paths.StaticData}/trump-data/education-attainment.csv", {:encoding => 'ISO-8859-1'}))
+header = contents.first
+valid = contents[1..-1].select{|row| fips_lookup.keys.include? row[header.index("Id2")].to_i}
+valid.each{|row|
+	 	 			
+	data = [
+		row[header.index("Total; Estimate; Population 25 years and over - Less than 9th grade")],
+		row[header.index("Total; Estimate; Population 25 years and over - 9th to 12th grade, no diploma")],
+		row[header.index("Total; Estimate; Population 25 years and over - High school graduate (includes equivalency)")],
+		row[header.index("Total; Estimate; Population 25 years and over - Some college, no degree")],
+		row[header.index("Total; Estimate; Population 25 years and over - Associate's degree")],
+		row[header.index("Total; Estimate; Population 25 years and over - Bachelor's degree")],
+		row[header.index("Total; Estimate; Population 25 years and over - Graduate or professional degree")]
+		]
+	fips = row[header.index("Id2")].to_i
+	fips_lookup[fips] = fips_lookup[fips] + data
+}
+
+contents = CSV.parse(File.read("#{Paths.StaticData}/trump-data/minority.csv", {:encoding => 'ISO-8859-1'}))
+header = contents.first
+valid = contents[1..-1].select{|row| fips_lookup.keys.include? row[header.index("Id2")].to_i}
+valid.each{|row|
+	white = row[header.index("pct-white")].to_i.round(2)
+	minority = row[header.index("pct-non-white")].to_i.round(2)
+	fips = row[header.index("Id2")].to_i
+	fips_lookup[fips].push(white)
+	fips_lookup[fips].push(minority)
+	fips_lookup[fips] = [row[header.index("Geography")]] + fips_lookup[fips]
+}
+
+puts "name, state, fips, trump-pct-of-votes, highest-od-estimate, od-estimate-range, poverty-rate, rucc, edu-less-than-9th-pct, edu-9-to-12-no-diploma-pct, edu-highschool-grad-pct, edu-some-college-pct, edu-associates-pct, edu-bachelors-pct, edu-grad-pct, pct-white, pct-minority"
+fips_lookup.values.each{|row|
+	puts row.join(",")
+}
 
