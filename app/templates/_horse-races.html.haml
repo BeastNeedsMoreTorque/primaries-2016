@@ -11,4 +11,10 @@
     is the presumptive nominee.
 
   - parties.each do |party|
-    != render(partial: 'horse-race', locals: { party: party })
+    .horse-race-wrapper
+      %h3
+        %span= party.name
+        %button.play{'data-party-id': party.id}
+          -# All CSS
+
+      != render(partial: 'horse-race', locals: { party: party, with_animation: true })

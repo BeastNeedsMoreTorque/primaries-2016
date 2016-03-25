@@ -41,6 +41,18 @@ module Assets
       all-primaries.js
       social.js
     ),
+    'primaries-horse-race.js' => %w(
+      vendor/jquery-2.2.0.js
+      wait_for_font_then.js
+      format_int.js
+      candidate-colors.js
+      animated-dot-set.js
+      dot-line.js
+      step-animation.js
+      horse-race-step.js
+      horse-race.js
+      primaries-horse-race.js
+    ),
     'splash.js' => %w(
       vendor/jquery-2.2.0.js
       countdown.js
@@ -66,6 +78,7 @@ module Assets
     primaries-linkout-image.css
     primaries-right-rail.css
     splash.css
+    primaries-horse-race.css
   )
 
   # Assets we serve with a sha1 digest.

@@ -15,7 +15,7 @@ function HorseRace(div) {
     race_days: div.querySelector('ol.race-days'),
     race_day_left: div.querySelector('.race-day-selector .left'),
     race_day_right: div.querySelector('.race-day-selector .right'),
-    button: div.querySelector('button')
+    button: div.parentNode.querySelector('button')
   };
 
   this.playing = false;
@@ -238,19 +238,21 @@ HorseRace.prototype.on_calendar_mousedown = function(ev) {
 HorseRace.prototype.listen = function() {
   var _this = this;
 
-  this.els.button.addEventListener('click', function(ev) {
-    if (window.ga) {
-      window.ga('send', 'event', 'horse-race', ev.currentTarget.className);
-    }
+  if (this.els.button) {
+    this.els.button.addEventListener('click', function(ev) {
+      if (window.ga) {
+        window.ga('send', 'event', 'horse-race', ev.currentTarget.className);
+      }
 
-    if (ev.currentTarget.className == 'play') {
-      _this.play();
-      ev.currentTarget.className = 'pause';
-    } else {
-      _this.pause();
-      ev.currentTarget.className = 'play';
-    }
-  });
+      if (ev.currentTarget.className == 'play') {
+        _this.play();
+        ev.currentTarget.className = 'pause';
+      } else {
+        _this.pause();
+        ev.currentTarget.className = 'play';
+      }
+    });
+  }
 
   this.els.race_days.addEventListener('mousedown', function(ev) { _this.on_calendar_mousedown(ev); });
   this.els.race_days.addEventListener('touchstart', function(ev) { _this.on_calendar_mousedown(ev); });
@@ -289,7 +291,11 @@ HorseRace.prototype.play = function() {
   if (this.playing) throw new Error('How are we playing if there is no animation?');
 
   this.playing = true;
-  this.els.button.className = 'pause';
+
+  if (this.els.button) {
+    this.els.button.className = 'pause';
+  }
+
   $(this.els.div).addClass('animating');
 
   if (this.step_position == this.steps.length) {
@@ -326,7 +332,10 @@ HorseRace.prototype.pause = function() {
   }
 
   $(this.els.div).removeClass('animating');
-  this.els.button.className = 'play';
+
+  if (this.els.button) {
+    this.els.button.className = 'play';
+  }
 };
 
 HorseRace.prototype.refresh = function() {
@@ -409,7 +418,6 @@ HorseRace.prototype.refresh_candidate_els = function() {
     var left = Math.min(1, candidate.n_delegates / n_delegates_needed);
     candidate.els.marker.style.left = (100 * left) + '%';
     candidate.els.speech_bubble.innerHTML = _this.build_candidate_speech_bubble(candidate, max_n_delegates);
-    candidate.els.n_delegates.innerText = format_int(candidate.n_delegates);
 
     candidate.els.row.classList.remove('idle');
     candidate.els.row.classList.remove('adding');
@@ -422,9 +430,13 @@ HorseRace.prototype.refresh_candidate_els = function() {
     } else {
       candidate.els.marker.classList.remove('force-speech-bubble');
     }
-    candidate.els.target.classList.remove('idle');
-    candidate.els.target.classList.remove('adding');
-    candidate.els.target.classList.add(candidate.animation_state);
+
+    if (candidate.els.target) {
+      candidate.els.n_delegates.innerText = format_int(candidate.n_delegates);
+      candidate.els.target.classList.remove('idle');
+      candidate.els.target.classList.remove('adding');
+      candidate.els.target.classList.add(candidate.animation_state);
+    }
 
     $(candidate.els.bars).children()
       .removeClass('current-step')
@@ -438,7 +450,7 @@ HorseRace.prototype.play_step = function() {
 };
 
 function init_horse_races() {
-  var divs = document.querySelectorAll('.horse-race');
+  var divs = document.querySelectorAll('div.horse-race');
   Array.prototype.forEach.call(divs, function(div) { new HorseRace(div); });
 }
 

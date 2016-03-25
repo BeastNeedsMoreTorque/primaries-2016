@@ -1,9 +1,4 @@
 .horse-race.loading{'data-party-id': party.id}
-  %h3
-    %span= party.name
-    %button.play
-      -# All CSS
-
   .n-delegates-needed #{format_int(party.n_delegates_needed)} delegates to win
 
   %ol.candidate-horses
@@ -37,12 +32,13 @@
       .left
       .right
 
-    .json-data= party.horse_race_data.to_json
+    .json-data= party.horse_race_data(with_animation: with_animation).to_json
 
-  %ol.candidate-targets
-    - party.candidates.select(&:in_horse_race?).reverse.each do |candidate|
-      %li.candidate-target{'data-candidate-id': candidate.id}
-        .last-name= candidate.name
-        %img{src: image_path("horses/#{candidate.slug}-target.png"), alt: ''}
-        .target
-        .n-delegates= format_int(candidate.n_delegates)
+  - if with_animation
+    %ol.candidate-targets
+      - party.candidates.select(&:in_horse_race?).reverse.each do |candidate|
+        %li.candidate-target{'data-candidate-id': candidate.id}
+          .last-name= candidate.name
+          %img{src: image_path("horses/#{candidate.slug}-target.png"), alt: ''}
+          .target
+          .n-delegates= format_int(candidate.n_delegates)

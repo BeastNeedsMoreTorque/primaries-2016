@@ -2,25 +2,7 @@ $horse-width: 8rem;
 $horse-width-mobile: 6rem;
 $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 
-.horse-races {
-  h2 {
-    font-size: 2.4 em;
-  }
-
-  h3 {
-    margin: 0;
-    margin-bottom: .75rem; // So it won't overlap "2,383 delegates to win"
-    height: 3rem;
-
-    span {
-      display: inline-block;
-      height: 2rem;
-      padding: .75rem;
-      line-height: 2rem;
-      font-size: 1.6rem;
-    }
-  }
-
+@mixin horse-race-legends() {
   span.delegates-legend, span.finish-line-legend {
     background: #f0f0f0;
     padding: .25rem;
@@ -50,6 +32,14 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       top: .2rem;
     }
   }
+}
+
+.horse-races {
+  overflow: hidden; // for all-primaries.html.haml on mobile, just to be safe
+
+  h2 {
+    font-size: 2.4 em;
+  }
 
   p.description {
     text-align: center;
@@ -59,7 +49,89 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
-  .horse-race.loading {
+  h3 {
+    margin: 0;
+    margin-bottom: .75rem; // So it won't overlap "2,383 delegates to win"
+    height: 3rem;
+
+    span {
+      display: inline-block;
+      height: 2rem;
+      padding: .75rem;
+      line-height: 2rem;
+      font-size: 1.6rem;
+    }
+  }
+
+  button {
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    height: 3rem;
+    cursor: pointer;
+    width: 7.5rem;
+    background: #d7d7d7;
+
+    box-shadow: inset 0 -2px 3px #b7b7b7;
+    &:hover {
+      background: #dfdfdf;
+      box-shadow: inset 0 -2px 3px #bfbfbf;
+    }
+    border: none;
+    outline: none;
+    vertical-align: 1px; // different fonts....
+    line-height: 2rem;
+    padding: .5rem 0;
+    font-family: $header-font-family;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+
+    &::before, &::after {
+      display: inline-block;
+      height: 2rem;
+      vertical-align: middle;
+    }
+
+    &::before {
+      // The ::after backgrounds both have ~.5rem of empty at their right.
+      // Even things out with extra padding on the left of the button.
+      padding-left: .5rem;
+    }
+
+    &::after {
+      content: ' ';
+      width: 2rem;
+      background-repeat: no-repeat;
+      background-size: 2rem 2rem;
+    }
+
+    &.play {
+      &::before { content: 'Play'; }
+      &::after {
+        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>');
+      }
+    }
+
+    &.pause {
+      &::before { content: 'Pause'; }
+      &::after {
+        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>');
+      }
+    }
+  }
+
+  @include horse-race-legends();
+}
+
+.horse-race {
+  position: relative;
+  margin-bottom: 5rem;
+
+  &.loading {
     ol.race-days, .race-day-selector {
       opacity: 0 !important;
     }
@@ -69,12 +141,6 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
         transition: none;
       }
     }
-  }
-
-  .horse-race {
-    position: relative;
-    margin-bottom: 5rem;
-    overflow: hidden; // just in case
   }
 
   .n-delegates-needed {
@@ -432,7 +498,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
-  .horse-race.animating {
+  &.animating {
     .bar-label { opacity: 0; }
     .bars { opacity: 0; }
     li.candidate-target {
@@ -529,12 +595,12 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
-  .horse-race[data-party-id=Dem] {
+  &[data-party-id=Dem] {
     li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
       h4 { color: $strongDem; }
     }
   }
-  .horse-race[data-party-id=GOP] {
+  &[data-party-id=GOP] {
     li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
       h4 { color: $strongGOP; }
     }
@@ -548,7 +614,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
-  .horse-race:not(.animating) ol.race-days>li.active a {
+  &:not(.animating) ol.race-days>li.active a {
     opacity: 1;
     cursor: pointer;
     pointer-events: auto;
@@ -613,66 +679,6 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     text { display: none; }
   }
 
-  button {
-    display: inline-block;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    box-sizing: border-box;
-    height: 3rem;
-    cursor: pointer;
-    width: 7.5rem;
-    background: #d7d7d7;
-
-    box-shadow: inset 0 -2px 3px #b7b7b7;
-    &:hover {
-      background: #dfdfdf;
-      box-shadow: inset 0 -2px 3px #bfbfbf;
-    }
-    border: none;
-    outline: none;
-    vertical-align: 1px; // different fonts....
-    line-height: 2rem;
-    padding: .5rem 0;
-    font-family: $header-font-family;
-    font-size: 1.25rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-
-    &::before, &::after {
-      display: inline-block;
-      height: 2rem;
-      vertical-align: middle;
-    }
-
-    &::before {
-      // The ::after backgrounds both have ~.5rem of empty at their right.
-      // Even things out with extra padding on the left of the button.
-      padding-left: .5rem;
-    }
-
-    &::after {
-      content: ' ';
-      width: 2rem;
-      background-repeat: no-repeat;
-      background-size: 2rem 2rem;
-    }
-
-    &.play {
-      &::before { content: 'Play'; }
-      &::after {
-        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>');
-      }
-    }
-
-    &.pause {
-      &::before { content: 'Pause'; }
-      &::after {
-        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>');
-      }
-    }
-  }
 }
 
 @-moz-keyframes horse-move {

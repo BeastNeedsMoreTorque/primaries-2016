@@ -426,7 +426,10 @@ StepAnimation.prototype.show_dots = function() {
       var dots = dot_set.get_dots_at(t);
       for (var j = 0; j < dots.length; j++) {
         var dot = dots[j];
-        ctx.drawImage(sprite, dot.x - 2.5, dot.y - 2.5);
+        // We want to move left by 2.5px, up by 2.5px ... and we also want to
+        // round to the nearest integer, to make drawing faster. We do both at
+        // once, with Math.floor(x - 2).
+        ctx.drawImage(sprite, Math.floor(dot.x - 2), Math.floor(dot.y - 2));
       }
 
       var n_complete = dot_set.get_n_dots_completed_at(t);

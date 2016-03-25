@@ -51,12 +51,12 @@ PartyRaceDay = RubyImmutableStruct.new(:database, :party_id, :race_day_id) do
       .uniq
   end
 
-  def horse_race_data
+  def horse_race_data(options={})
     {
       title: race_day.title,
       date_s: race_day.date_s,
       n_pledged_delegates: n_pledged_delegates,
-      races: races.map(&:horse_race_data),
+      races: races.map { |r| r.horse_race_data(options) },
       candidates: candidate_race_days
         .select(&:candidate_in_horse_race?)
         .map { |crd| { id: crd.candidate_id, n_delegates: crd.n_pledged_delegates } }

@@ -1,0 +1,26 @@
+@import '_variables.scss';
+@import 'main/horse-races.css.scss';
+
+body.horse-race {
+  font-family: $huffpo-font-family;
+
+  h1 {
+    font-family: $header-font-family;
+    font-size: 1.25rem;
+  }
+
+  h1, p.description {
+    text-align: center;
+  }
+
+  p.source {
+    margin: 0;
+    font-size: .8rem;
+  }
+
+  .horse-race {
+    margin-bottom: 0;
+  }
+
+  @include horse-race-legends();
+}
