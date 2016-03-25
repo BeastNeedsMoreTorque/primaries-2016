@@ -2,6 +2,8 @@
 @import 'main/horse-races.css.scss';
 
 body.horse-race {
+  margin: 0;
+  padding: 0;
   font-family: $huffpo-font-family;
 
   h1 {
@@ -11,6 +13,7 @@ body.horse-race {
 
   h1, p.description {
     text-align: center;
+    margin: 0 0 .5rem;
   }
 
   p.source {
@@ -23,4 +26,25 @@ body.horse-race {
   }
 
   @include horse-race-legends();
+}
+
+// When loading, hide the horses. Otherwise, they'll be placed at _today's_
+// position instead of the position in window.location.hash
+div.horse-race.loading {
+  .marker { display: none; }
+}
+
+.prompt-to-embed {
+  margin: 2rem auto;
+  max-width: 30rem;
+  padding: 1rem;
+  background: #ddd;
+
+  pre {
+    white-space: normal;
+    word-break: break-all;
+    border: 1px solid #ccc;
+    background: #eee;
+    padding: .5rem;
+  }
 }

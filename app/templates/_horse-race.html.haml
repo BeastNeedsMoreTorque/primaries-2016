@@ -6,6 +6,7 @@
       %li.candidate-horse{'data-candidate-id': candidate.id, class: (candidate.dropped_out? ? 'dropped-out' : '')}
         .background
           .start-line
+        .last-name= candidate.last_name
         .marker{style: "left: #{(candidate.n_delegates || 0).to_f / party.n_delegates_needed * 100}%"}
           %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: ''}
           .speech-bubble-outer
@@ -18,14 +19,14 @@
 
   .race-days
     %ol.race-days<>
-      - party.party_race_days.select{ |prd| prd.n_pledged_delegates_with_candidates > 0 }.each do |prd|
+      - party.party_race_days.reject(&:future?).each do |prd|
         != render(partial: 'horse-race-li', locals: { class_name: 'has-delegates', party_race_day: prd })
       - if party.n_unpledged_delegates_with_candidates > 0
         %li.unpledged-delegates<>
           %h4 With
           %h4 Superdelegates
           %a{href: '/2016/primaries/about-delegates'} More info &raquo;
-      - party.party_race_days.select{ |prd| prd.n_pledged_delegates_with_candidates == 0 }.each do |prd|
+      - party.party_race_days.select(&:future?).each do |prd|
         != render(partial: 'horse-race-li', locals: { class_name: 'has-no-delegates', party_race_day: prd })
 
     .race-day-selector

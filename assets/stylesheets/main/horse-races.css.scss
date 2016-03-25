@@ -127,7 +127,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
   @include horse-race-legends();
 }
 
-.horse-race {
+div.horse-race {
   position: relative;
   margin-bottom: 5rem;
 
@@ -164,6 +164,24 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       width: .75rem;
       height: 100%;
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 2 2" width="8px" height="8px"><path d="M0,0h1v1h-1ZM1,1h1v1h-1Z" fill="black"/><path d="M0,1h1v1h-1ZM1,0h1v1h-1Z" fill="white"/></svg>') repeat;
+    }
+  }
+
+  li.candidate-horse {
+    .last-name {
+      position: absolute;
+      left: -$horse-width * 19 / 20 - .25rem;
+      width: $horse-width * 19 / 20 - .25rem;
+      @media (max-width: $widest-mobile) {
+        left: -$horse-width-mobile * 19 / 20 - .25rem;
+        width: $horse-width-mobile * 19 / 20 - .25rem;
+      }
+      text-align: right;
+      font-weight: bold;
+      color: white;
+      z-index: 1;
+      font-size: .8rem;
+      line-height: 1.1rem;
     }
   }
 

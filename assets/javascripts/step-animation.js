@@ -150,7 +150,11 @@ function StepAnimation(horse_race, step) {
 }
 
 StepAnimation.prototype.start = function() {
-  this.wait_to_show_states();
+  if (this.n_delegates == 0) {
+    this.end();
+  } else {
+    this.wait_to_show_states();
+  }
 };
 
 /**

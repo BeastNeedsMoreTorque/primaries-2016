@@ -29,7 +29,7 @@ Party = RubyImmutableStruct.new(:database, :id, :name, :adjective, :n_delegates_
     {
       n_delegates: n_delegates_total,
       n_delegates_needed: n_delegates_needed,
-      race_days: party_race_days_with_pledged_delegates.map { |prd| prd.horse_race_data(options) },
+      race_days: party_race_days.reject(&:future?).map { |prd| prd.horse_race_data(options) },
       candidates: candidates
         .select(&:in_horse_race?)
         .reverse

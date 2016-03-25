@@ -8,7 +8,7 @@ function index_objects_by(array, property) {
   return ret;
 }
 
-function HorseRace(div) {
+function HorseRace(div, data) {
   this.els = {
     div: div,
     bar_label: div.querySelector('.bar-label'),
@@ -21,7 +21,11 @@ function HorseRace(div) {
   this.playing = false;
   this.loading = true;
 
-  this.data = JSON.parse(div.querySelector('.json-data').textContent);
+  if (data != null) {
+    this.data = data;
+  } else {
+    this.data = JSON.parse(div.querySelector('.json-data').textContent);
+  }
 
   var state_paths = this.state_paths = {}; // state-code -> svg path "d"
   Array.prototype.forEach.call(div.querySelectorAll('li.race'), function(el) {
