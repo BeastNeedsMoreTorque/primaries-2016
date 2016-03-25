@@ -32,7 +32,7 @@ a {
 
   svg {
     max-width: 100%;
-    max-height: 8em;
+    max-height: 6em;
   }
 
   path {
@@ -73,14 +73,27 @@ a {
 
   &>* {
     box-sizing: border-box;
-    width: 50%;
   }
 
-  &>:first-child {
-    border-right: .125rem solid white;
+  &[data-n-parties="2"] {
+    &>* {
+      width: 50%;
+    }
+
+    &>:first-child {
+      border-right: .125rem solid white;
+    }
+    &>:last-child {
+      border-left: .125rem solid white;
+    }
   }
-  &>:last-child {
-    border-left: .125rem solid white;
+
+  &[data-n-parties="1"]>* {
+    width: 100%;
+
+    svg {
+      max-height: 6rem;
+    }
   }
 
   .map-container {
@@ -124,9 +137,6 @@ a {
   -webkit-flex-direction: column;
   flex-direction: column;
 
-  &:first-child { border-right: 3px solid white; }
-  &:last-child { border-left: 3px solid white; }
-	width: 50%;
 	&.Dem {
 		background: $widgetLightBlue;
 	}

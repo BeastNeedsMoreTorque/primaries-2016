@@ -19,7 +19,7 @@
           - when 'past'
             RESULTS: #{race_day.title}
     - if race_day.races.length > 2
-      .many-races
+      .many-races{'data-n-parties': race_day.party_race_days.length}
         - race_day.party_race_days.each do |party_race_day|
           .party-race-day{'data-party-id': party_race_day.party_id}
             .party-header
@@ -77,7 +77,7 @@
     %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}
       - case race_day.when_race_day_happens
       - when 'future'
-        See all candidates
+        See candidates
       - when 'present'
         See live results
       - when 'past'
