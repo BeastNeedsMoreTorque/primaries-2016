@@ -7,7 +7,7 @@
           %tr
             %th State
             %th.winner Winner
-            %th{colspan: 2} Delegates Won
+            %th{colspan: 2} Delegates & Superdelegates
         %tbody
           - for party_race_day in party.party_race_days.reject(&:future?)
             %tr
