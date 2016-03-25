@@ -16,6 +16,11 @@ body.horse-race {
     margin: 0 0 .5rem;
   }
 
+  p.description {
+    line-height: 1.5rem;
+    @include horse-race-legends();
+  }
+
   p.source {
     margin: 0;
     font-size: .8rem;
@@ -24,8 +29,6 @@ body.horse-race {
   .horse-race {
     margin-bottom: 0;
   }
-
-  @include horse-race-legends();
 }
 
 // When loading, hide the horses. Otherwise, they'll be placed at _today's_
