@@ -68,9 +68,9 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-22	Dem	ID	Caucus	2016-03-23T03:00:00Z	TRUE				
 2016-03-22	Dem	UT	Caucus	2016-03-23T03:00:00Z	TRUE				
 2016-03-22	GOP	UT	Caucus	2016-03-23T05:00:00Z	TRUE				
-2016-03-26	Dem	AK	Caucus	2016-03-27T06:00:00Z					
+2016-03-26	Dem	AK	Caucus	2016-03-26T20:00:00Z					
 2016-03-26	Dem	HI	Caucus	2016-03-27T04:00:00Z					
-2016-03-26	Dem	WA	Caucus	2016-03-27T03:00:00Z					
+2016-03-26	Dem	WA	Caucus	2016-03-26T21:00:00Z					
 2016-04-05	Dem	WI	Primary	2016-04-06T01:15:00Z					
 2016-04-05	GOP	WI	Primary	2016-04-06T01:15:00Z					
 2016-04-09	Dem	WY	Caucus						
