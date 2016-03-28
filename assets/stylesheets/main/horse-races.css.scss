@@ -347,13 +347,14 @@ div.horse-race {
         height: $horse-width-mobile * 3 / 4;
         margin-left: -$horse-width-mobile * 19 / 20;
       }
+
+      -webkit-transform-origin: bottom 10%;
+      transform-origin: bottom 10%;
     }
 
     transition: left .2s linear, transform .2s linear;
-    -webkit-transform-origin: bottom 10%;
-    transform-origin: bottom 10%;
 
-    &.adding {
+    &.adding img {
       -moz-animation: .5s linear 0s infinite horse-move;
       -webkit-animation: .5s linear 0s infinite horse-move;
       animation: .5s linear 0s infinite horse-move;
@@ -736,19 +737,19 @@ div.horse-race {
 }
 
 @-moz-keyframes horse-move {
-  25% { transform: rotate(-3deg); }
+  25% { transform: rotate(-4deg); }
   50% { transform: rotate(2deg); }
   75% { transform: rotate(-1deg); }
   60% { transform: rotate(0); }
 }
 @-webkit-keyframes horse-move {
-  25% { transform: rotate(-3deg); }
+  25% { transform: rotate(-4deg); }
   50% { transform: rotate(2deg); }
   75% { transform: rotate(-1deg); }
   60% { transform: rotate(0); }
 }
 @keyframes horse-move {
-  25% { transform: rotate(-3deg); }
+  25% { transform: rotate(-4deg); }
   50% { transform: rotate(2deg); }
   75% { transform: rotate(-1deg); }
   60% { transform: rotate(0); }
