@@ -11,7 +11,7 @@ body.horse-race {
     font-size: 1.25rem;
   }
 
-  h1, p.description {
+  h1, p.description, p.link {
     text-align: center;
     margin: 0 0 .5rem;
   }
@@ -21,13 +21,38 @@ body.horse-race {
     @include horse-race-legends();
   }
 
-  p.source {
-    margin: 0;
+  p.link {
     font-size: .8rem;
+    @media (min-width: $narrowest-desktop) {
+      margin-bottom: 0; // Save a few pixels
+    }
   }
 
   .horse-race {
     margin-bottom: 0;
+  }
+
+  footer {
+    position: relative;
+    margin: 0 .5rem;
+
+    p.source {
+      margin: 0;
+      font-size: .8rem;
+      padding-top: .25rem; // line up (roughly, I'm lazy) with the p.source
+    }
+
+    button {
+      transition: opacity .2s ease-in-out;
+      opacity: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+
+  .horse-race.in-past + footer button {
+    opacity: 1;
   }
 }
 

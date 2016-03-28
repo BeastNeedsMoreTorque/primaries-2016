@@ -15,7 +15,8 @@ function HorseRace(div, data) {
     race_days: div.querySelector('ol.race-days'),
     race_day_left: div.querySelector('.race-day-selector .left'),
     race_day_right: div.querySelector('.race-day-selector .right'),
-    button: div.parentNode.querySelector('button')
+    play_button: div.parentNode.querySelector('button.play'),
+    reset_button: div.parentNode.querySelector('button.reset')
   };
 
   this.playing = false;
@@ -242,8 +243,8 @@ HorseRace.prototype.on_calendar_mousedown = function(ev) {
 HorseRace.prototype.listen = function() {
   var _this = this;
 
-  if (this.els.button) {
-    this.els.button.addEventListener('click', function(ev) {
+  if (this.els.play_button) {
+    this.els.play_button.addEventListener('click', function(ev) {
       if (window.ga) {
         window.ga('send', 'event', 'horse-race', ev.currentTarget.className);
       }
@@ -255,6 +256,12 @@ HorseRace.prototype.listen = function() {
         _this.pause();
         ev.currentTarget.className = 'play';
       }
+    });
+  }
+
+  if (this.els.reset_button) {
+    this.els.reset_button.addEventListener('click', function(ev) {
+      _this.set_step_position(_this.steps.length);
     });
   }
 
@@ -296,8 +303,8 @@ HorseRace.prototype.play = function() {
 
   this.playing = true;
 
-  if (this.els.button) {
-    this.els.button.className = 'pause';
+  if (this.els.play_button) {
+    this.els.play_button.className = 'pause';
   }
 
   $(this.els.div).addClass('animating');
@@ -337,8 +344,8 @@ HorseRace.prototype.pause = function() {
 
   $(this.els.div).removeClass('animating');
 
-  if (this.els.button) {
-    this.els.button.className = 'play';
+  if (this.els.play_button) {
+    this.els.play_button.className = 'play';
   }
 };
 
@@ -393,6 +400,13 @@ HorseRace.prototype.refresh_active_race_day = function() {
       bar_label.classList.remove('anchor-left');
       bar_label.classList.add('anchor-right');
     }
+  }
+
+  var in_past = this.step_position < this.steps.length;
+  if (in_past) {
+    this.els.div.classList.add('in-past');
+  } else {
+    this.els.div.classList.remove('in-past');
   }
 };
 

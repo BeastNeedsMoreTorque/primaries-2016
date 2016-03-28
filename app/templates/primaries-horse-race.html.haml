@@ -17,10 +17,14 @@
       %span.finish-line-legend< half the party's delegates
       is the presumptive nominee.
 
+    %p.link
+      %a{target: '_top', href: '/2016/primaries#horse-races'} Live delegate tracker
+
     != render(partial: 'horse-race', locals: { party: party, with_animation: false })
 
     %footer
       %p.source Source: The Associated Press
+      %button.reset Reset
 
     %script{src: asset_path('primaries-horse-race.js')}
     %script{src: '/2016/javascripts/pym.min.js'}
