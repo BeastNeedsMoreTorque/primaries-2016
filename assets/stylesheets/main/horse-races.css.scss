@@ -331,14 +331,22 @@ div.horse-race {
     position: absolute;
     z-index: 1;
     left: 0;
-    bottom: -.25rem;
-    width: $horse-width;
-    height: $horse-width * 3 / 4; // image aspect ratio
-    margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
-    @media (max-width: $widest-mobile) {
-      width: $horse-width-mobile;
-      height: $horse-width-mobile * 3 / 4;
-      margin-left: -$horse-width-mobile * 19 / 20;
+    right: 0;
+    height: 0;
+
+    img {
+      display: block;
+      position: absolute;
+      bottom: -2rem;
+      height: $horse-width * 3 / 4; // image aspect ratio
+      width: $horse-width;
+      margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
+
+      @media (max-width: $widest-mobile) {
+        width: $horse-width-mobile;
+        height: $horse-width-mobile * 3 / 4;
+        margin-left: -$horse-width-mobile * 19 / 20;
+      }
     }
 
     transition: left .2s linear, transform .2s linear;
@@ -351,33 +359,53 @@ div.horse-race {
       animation: .5s linear 0s infinite horse-move;
       transition: none;
     }
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
   }
 
+  // The speech bubbles are complicated.
+  //
+  // We need to calculate positions in CSS, not JS, because we use CSS
+  // transitions to move our horses. We also need to make sure we stay within
+  // the viewport's boundaries. In other words, we need a min-left and a
+  // max-right. To complicate matters, the text in the bubble can be quite
+  // small ("Bam!") and quite large ("I'm behind by 1,234 delegates").
+  //
+  // Here's how we handle _all_ this stuff:
+  // * min-left: The .speech-bubble-outer has left+margin-left equal to the
+  //             left of the marker image.
+  // * max-right: The .speech-bubble-outer has a max-width calc()ulated from
+  //              the parent's width ("100%"), which starts at the right of
+  //              the marker image and extends to the right edge of the race
+  //              track.
+  // * width: The .speech-bubble is an inline-block; that makes the width of
+  //          the .speech-bubble-outer equal to the width of the
+  //          .speech-bubble.
+  //
+  // So the .speech-bubble-outer is always from the left of the image to
+  // the right of where the speech bubble would go or the right of the page,
+  // whichever is smaller. Then we float the .speech-bubble right, effectively
+  // setting a max-right on it.
   .speech-bubble-outer {
-    display: none;
+    display: inline-block;
     position: absolute;
-    width: 20rem;
-    margin-left: -10rem;
-    text-align: center;
+    opacity: 0; // will show on marker hover
     height: 0;
+    margin-top: -3rem;
+    max-width: calc(100% + #{$horse-width} * 19 / 20 - 3px); // 3px for a bit of a margin
+    min-width: $horse-width * 19 / 20; // Make sure small speech bubble is right of candidate's head
+    left: -$horse-width * 19 / 20;
     top: -$horse-width * .5; // the _height_ of the horse depends on its width
-    left: $horse-width * .7; // roughly the position of the head
     @media (max-width: $widest-mobile) {
+      min-width: $horse-width-mobile * 19 / 20;
+      max-width: calc(100% + #{$horse-width-mobile} * 19 / 20 - 3px);
+      left: -$horse-width-mobile * 19 / 20;
       top: -$horse-width-mobile * .5;
-      left: $horse-width-mobile * .7;
     }
   }
 
   .speech-bubble {
     display: inline-block;
-    position: relative;
     margin: 0 auto;
+    float: right;
     min-width: 3rem;
     padding: .75rem;
     line-height: 1rem;
@@ -387,11 +415,18 @@ div.horse-race {
     border-radius: 10px;
     box-shadow: 0 0 10px #ccc;
     white-space: nowrap;
+  }
 
+  .speech-bubble-triangle {
     &::before, &::after {
       content: ' ';
       position: absolute;
-      left: 50%;
+      top: 2.5rem;
+      margin-top: 2px; // width of top border
+      left: $horse-width * .7;
+      @media (max-width: $widest-mobile) {
+        left: $horse-width-mobile * .7;
+      }
       bottom: -13px;
       width: 0;
       height: 0;
@@ -411,7 +446,7 @@ div.horse-race {
   }
 
   .marker:hover, .marker.force-speech-bubble {
-    .speech-bubble-outer { display: block; }
+    .speech-bubble-outer { opacity: 1; }
   }
 
   ol.candidate-targets {
