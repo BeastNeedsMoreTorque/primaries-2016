@@ -15,7 +15,8 @@ function encode_horse_race_data(json) {
       return rd.id + Split3 + rd.date_s + Split3 + json.candidates.map(function(c) {
         return counts[c.id] || 0;
       }).join(Split4)
-    }).join(Split2)
+    }).join(Split2),
+    json.date_s || format_date(new Date())
   ].join(Split1);
 }
 
@@ -50,7 +51,8 @@ function decode_horse_race_data(s) {
     n_delegates: parseInt(arr[0], 10),
     n_delegates_needed: parseInt(arr[1], 10),
     candidates: candidates,
-    race_days: race_days
+    race_days: race_days,
+    date_s: arr[4] || format_date(new Date())
   };
 }
 
@@ -91,6 +93,11 @@ function show_embed_code_for_data(data) {
     .appendTo('body');
 }
 
+function format_date(date) {
+  var Months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+  return Months[date.getMonth()] + ' ' + date.getDate();
+}
+
 $(function() {
   var data = decode_horse_race_data(location.hash.slice(1));
 
@@ -98,8 +105,12 @@ $(function() {
     rearrange_race_days_for_data(data);
   } else {
     data = JSON.parse(document.querySelector('.json-data').textContent);
+    data.date_s = format_date(new Date());
     show_embed_code_for_data(data);
   }
+
+  var h1 = document.querySelector('h1');
+  h1.textContent = h1.textContent + ', ' + data.date_s;
 
   var div = document.querySelector('div.horse-race');
   var horse_race = new HorseRace(div, data);
