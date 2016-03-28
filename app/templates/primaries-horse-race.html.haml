@@ -1,0 +1,34 @@
+!!! 5
+%html{lang: 'en'}
+  %head
+    %meta{charset: 'utf-8'}
+    %title 2016 Election: The #{party.adjective} Horse Race – The Huffington Post
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    %meta{name: 'author', content: 'HuffPostPolitics'}
+
+    %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
+    %link{rel: 'stylesheet', href: asset_path('primaries-horse-race.css')}
+
+  %body.horse-race
+    %h1 The #{party.adjective} Horse Race
+
+    %p.description
+      A candidate who earns
+      %span.finish-line-legend< half the party's delegates
+      is the presumptive nominee.
+
+    %p.link
+      %a{target: '_top', href: '/2016/primaries#horse-races'} Live delegate tracker
+
+    != render(partial: 'horse-race', locals: { party: party, with_animation: false })
+
+    %footer
+      %p.source Source: The Associated Press
+      %button.reset Reset
+
+    %script{src: asset_path('primaries-horse-race.js')}
+    %script{src: '/2016/javascripts/pym.min.js'}
+    %script
+      var pymChild = new pym.Child();
+    %script{src: asset_path('ga.js')}
+    %script{src: asset_path('stats.js')}
