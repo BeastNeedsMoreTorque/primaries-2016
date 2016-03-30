@@ -42,6 +42,13 @@ body.horse-race {
       padding-top: .25rem; // line up (roughly, I'm lazy) with the p.source
     }
 
+    p.credit {
+      margin: 0;
+      font-size: .8rem;
+      padding-top: .25rem;
+      color: #999;
+    }
+
     button {
       transition: opacity .2s ease-in-out;
       opacity: 0;
@@ -53,6 +60,10 @@ body.horse-race {
 
   .horse-race.in-past + footer button {
     opacity: 1;
+  }
+
+  .nobreak {
+    white-space: nowrap;
   }
 }
 
