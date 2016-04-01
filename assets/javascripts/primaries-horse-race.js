@@ -84,7 +84,7 @@ function show_embed_code_for_data(data) {
   var id = 'elections-primaries-horse-race-' + window.location.pathname.split('/').pop();
 
   var $pre = $('<pre></pre>')
-    .text('<div id="' + id + '"></div><script src="//elections.huffingtonpost.com/2016/javascripts/pym.min.js"></script><script>new pym.Parent("' + id + '", "//' + window.location.host + window.location.pathname + '#' + encodeURIComponent(encoded) + '");</script>');
+    .text('<div id="' + id + '"></div><script src="//elections.huffingtonpost.com/2016/javascripts/pym.min.js"></script><script>new pym.Parent("' + id + '", "//' + window.location.host + window.location.pathname + '#' + encodeURIComponent(encoded) + '");(function(){var i=document.querySelector("' + id + '");i.style.minWidth='100%';i.style.width='1px';})()</script>');
 
   $('<div class="prompt-to-embed"></div>')
     .append('<p class="instructions">Hi, editor! Would you like to embed this interactive? Use this embed code:</p>')
