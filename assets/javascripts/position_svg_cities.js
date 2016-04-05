@@ -85,7 +85,7 @@ function position_svg_cities(svgs) {
     // (See Kansas: Topeka and Overland Park.)
     texts.sort(function(o1, o2) { return o1.bbox.y - o2.bbox.y; });
 
-    texts.forEach(function(o) {
+    texts.forEach(function(o,txt_idx) {
       var potential_rects = trial_rectangles(o.bbox);
 
       for (var i = 0; i < potential_rects.length; i++) {
@@ -97,8 +97,8 @@ function position_svg_cities(svgs) {
           return;
         }
       }
-
-      console.warn('Could not position text', o);
+      //hide text if we can't position it
+      o.el.previousElementSibling.style.opacity = 0;
     });
 
     return ret;

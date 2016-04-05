@@ -1,6 +1,6 @@
 .two-races
   - race_day.tabulated_races.each do |race|
-    .race{'data-party-id': race.party_id, id: race.id, class: "race-#{race.when_race_happens} #{race.any_precincts_reporting? ? '' : 'no-'}precincts-reporting"}
+    .race{'data-party-id': race.party_id, id: "#{race.id}", class: "race-#{race.when_race_happens} #{race.any_precincts_reporting? ? '' : 'no-'}precincts-reporting"}
       != render(partial: 'primaries/splash/party-candidate-listing', locals: { race: race })
 
       .map-precincts-container

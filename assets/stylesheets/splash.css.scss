@@ -639,6 +639,13 @@ a:hover { text-decoration: underline; }
     flex: 1 1 auto;
     height: 180px;
     width: 100px; // IE 11+Edge make it too wide otherwise
+
+    text {
+      font-size: 80px;
+    }
+    circle:first-child {
+      opacity: 0;
+    }
   }
 }
 
@@ -650,3 +657,5 @@ a:hover { text-decoration: underline; }
     font-size: .9rem;
   }
 }
+
+
