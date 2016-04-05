@@ -8,20 +8,25 @@ function index_objects_by(array, property) {
   return ret;
 }
 
-function HorseRace(div) {
+function HorseRace(div, data) {
   this.els = {
     div: div,
     bar_label: div.querySelector('.bar-label'),
     race_days: div.querySelector('ol.race-days'),
     race_day_left: div.querySelector('.race-day-selector .left'),
     race_day_right: div.querySelector('.race-day-selector .right'),
-    button: div.querySelector('button')
+    play_button: div.parentNode.querySelector('button.play'),
+    reset_button: div.parentNode.querySelector('button.reset')
   };
 
   this.playing = false;
   this.loading = true;
 
-  this.data = JSON.parse(div.querySelector('.json-data').textContent);
+  if (data != null) {
+    this.data = data;
+  } else {
+    this.data = JSON.parse(div.querySelector('.json-data').textContent);
+  }
 
   var state_paths = this.state_paths = {}; // state-code -> svg path "d"
   Array.prototype.forEach.call(div.querySelectorAll('li.race'), function(el) {
@@ -238,19 +243,27 @@ HorseRace.prototype.on_calendar_mousedown = function(ev) {
 HorseRace.prototype.listen = function() {
   var _this = this;
 
-  this.els.button.addEventListener('click', function(ev) {
-    if (window.ga) {
-      window.ga('send', 'event', 'horse-race', ev.currentTarget.className);
-    }
+  if (this.els.play_button) {
+    this.els.play_button.addEventListener('click', function(ev) {
+      if (window.ga) {
+        window.ga('send', 'event', 'horse-race', ev.currentTarget.className);
+      }
 
-    if (ev.currentTarget.className == 'play') {
-      _this.play();
-      ev.currentTarget.className = 'pause';
-    } else {
-      _this.pause();
-      ev.currentTarget.className = 'play';
-    }
-  });
+      if (ev.currentTarget.className == 'play') {
+        _this.play();
+        ev.currentTarget.className = 'pause';
+      } else {
+        _this.pause();
+        ev.currentTarget.className = 'play';
+      }
+    });
+  }
+
+  if (this.els.reset_button) {
+    this.els.reset_button.addEventListener('click', function(ev) {
+      _this.set_step_position(_this.steps.length);
+    });
+  }
 
   this.els.race_days.addEventListener('mousedown', function(ev) { _this.on_calendar_mousedown(ev); });
   this.els.race_days.addEventListener('touchstart', function(ev) { _this.on_calendar_mousedown(ev); });
@@ -289,7 +302,11 @@ HorseRace.prototype.play = function() {
   if (this.playing) throw new Error('How are we playing if there is no animation?');
 
   this.playing = true;
-  this.els.button.className = 'pause';
+
+  if (this.els.play_button) {
+    this.els.play_button.className = 'pause';
+  }
+
   $(this.els.div).addClass('animating');
 
   if (this.step_position == this.steps.length) {
@@ -326,7 +343,10 @@ HorseRace.prototype.pause = function() {
   }
 
   $(this.els.div).removeClass('animating');
-  this.els.button.className = 'play';
+
+  if (this.els.play_button) {
+    this.els.play_button.className = 'play';
+  }
 };
 
 HorseRace.prototype.refresh = function() {
@@ -381,6 +401,13 @@ HorseRace.prototype.refresh_active_race_day = function() {
       bar_label.classList.add('anchor-right');
     }
   }
+
+  var in_past = this.step_position < this.steps.length;
+  if (in_past) {
+    this.els.div.classList.add('in-past');
+  } else {
+    this.els.div.classList.remove('in-past');
+  }
 };
 
 HorseRace.prototype.build_candidate_speech_bubble = function(candidate, max_n_delegates) {
@@ -409,7 +436,6 @@ HorseRace.prototype.refresh_candidate_els = function() {
     var left = Math.min(1, candidate.n_delegates / n_delegates_needed);
     candidate.els.marker.style.left = (100 * left) + '%';
     candidate.els.speech_bubble.innerHTML = _this.build_candidate_speech_bubble(candidate, max_n_delegates);
-    candidate.els.n_delegates.innerText = format_int(candidate.n_delegates);
 
     candidate.els.row.classList.remove('idle');
     candidate.els.row.classList.remove('adding');
@@ -422,9 +448,13 @@ HorseRace.prototype.refresh_candidate_els = function() {
     } else {
       candidate.els.marker.classList.remove('force-speech-bubble');
     }
-    candidate.els.target.classList.remove('idle');
-    candidate.els.target.classList.remove('adding');
-    candidate.els.target.classList.add(candidate.animation_state);
+
+    if (candidate.els.target) {
+      candidate.els.n_delegates.innerText = format_int(candidate.n_delegates);
+      candidate.els.target.classList.remove('idle');
+      candidate.els.target.classList.remove('adding');
+      candidate.els.target.classList.add(candidate.animation_state);
+    }
 
     $(candidate.els.bars).children()
       .removeClass('current-step')
@@ -438,7 +468,7 @@ HorseRace.prototype.play_step = function() {
 };
 
 function init_horse_races() {
-  var divs = document.querySelectorAll('.horse-race');
+  var divs = document.querySelectorAll('div.horse-race');
   Array.prototype.forEach.call(divs, function(div) { new HorseRace(div); });
 }
 

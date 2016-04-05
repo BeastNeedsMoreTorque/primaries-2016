@@ -1,90 +1,91 @@
 !!! 5
 %html{lang: 'en'}
-  %meta{charset: 'utf-8'}
-  %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
-  %title Huffington Post 2016 Primary Results Mobile
-  %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
-  %link{rel: 'stylesheet', href: asset_path('mobile-ad.css')}
+  %head
+    %meta{charset: 'utf-8'}
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    %title Huffington Post 2016 Primary Results Mobile
+    %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
+    %link{rel: 'stylesheet', href: asset_path('mobile-ad.css')}
 
-%body
-  %div.primary-mobile-ad
-    %div.head
-      %h1
-        %a{target: '_blank', href: race_day.href}
-          - case race_day.when_race_day_happens
-          - when 'future'
-            HAPPENING SOON: #{race_day.title}
-          - when 'present'
-            LIVE RESULTS: #{race_day.title}
-          - when 'past'
-            RESULTS: #{race_day.title}
-    - if race_day.races.length > 2
-      .many-races
-        - race_day.party_race_days.each do |party_race_day|
-          .party-race-day{'data-party-id': party_race_day.party_id}
-            .party-header
-              %img{src: image_path("#{party_race_day.party_id}.svg"), alt: ''}
-              .party= party_race_day.party_name
-            .map-container
-              != country_map_with_race_day_party_states_highlighted(party_race_day.party_id)
-              %p
-                %a{target: '_blank', href: race_day.href}
-                  %strong #{party_race_day.races.length}
-                  race#{party_race_day.races.length > 1 ? 's' : ''}
-    - else
-      .parties-container
-        - race_day.races.each do |race|
-          .party-container.race{class: "#{race.party_id} race-#{race.when_race_happens}"}
-            .party-header
-              %img{src: image_path("#{race.party_id}.svg"), alt: ''}
-              .party= race.party_name
-
-            - leader = race.candidate_races.first
-            - if leader.n_pledged_delegates > 0 || (!leader.n_votes.nil? && leader.n_votes > 0) || (!leader.poll_percent.nil? && leader.poll_percent > 0)
-              .leader
-                %img{src: image_path("big-headshots/#{leader.candidate.slug}.png"), alt: ''}
+  %body
+    %div.primary-mobile-ad
+      %div.head
+        %h1
+          %a{target: '_blank', href: race_day.href}
+            - case race_day.when_race_day_happens
+            - when 'future'
+              HAPPENING SOON: #{race_day.title}
+            - when 'present'
+              LIVE RESULTS: #{race_day.title}
+            - when 'past'
+              RESULTS: #{race_day.title}
+      - if race_day.races.length > 2
+        .many-races{'data-n-parties': race_day.party_race_days.length}
+          - race_day.party_race_days.each do |party_race_day|
+            .party-race-day{'data-party-id': party_race_day.party_id}
+              .party-header
+                %img{src: image_path("#{party_race_day.party_id}.svg"), alt: ''}
+                .party= party_race_day.party_name
+              .map-container
+                != country_map_with_race_day_party_states_highlighted(party_race_day.party_id)
                 %p
-                  - if leader.winner?
-                    #{leader.candidate_last_name} Wins
+                  %a{target: '_blank', href: race_day.href}
+                    %strong #{party_race_day.races.length}
+                    race#{party_race_day.races.length > 1 ? 's' : ''}
+      - else
+        .parties-container
+          - race_day.races.each do |race|
+            .party-container.race{class: "#{race.party_id} race-#{race.when_race_happens}"}
+              .party-header
+                %img{src: image_path("#{race.party_id}.svg"), alt: ''}
+                .party= race.party_name
+
+              - leader = race.candidate_races.first
+              - if leader.n_pledged_delegates > 0 || (!leader.n_votes.nil? && leader.n_votes > 0) || (!leader.poll_percent.nil? && leader.poll_percent > 0)
+                .leader
+                  %img{src: image_path("big-headshots/#{leader.candidate.slug}.png"), alt: ''}
+                  %p
+                    - if leader.winner?
+                      #{leader.candidate_last_name} Wins
+                    - else
+                      #{leader.candidate_last_name} Leads
+                .votes-container
+                  - if race.future?
+                    %span.polling= "#{format_percent_or_nil(leader.poll_percent)}%"
+                    %span.polling Polling Average 
+                    %span.polling.source
+                      %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
                   - else
-                    #{leader.candidate_last_name} Leads
-              .votes-container
-                - if race.future?
-                  %span.polling= "#{format_percent_or_nil(leader.poll_percent)}%"
-                  %span.polling Polling Average 
-                  %span.polling.source
-                    %a{target: '_blank', href: "//elections.huffingtonpost.com/pollster/#{race.pollster_slug}"} Source
-                - else
-                  %span.frontrunner-num= format_int(leader.n_votes)
-                  - if !leader.percent_vote.nil? && leader.percent_vote > 0
-                    -# Don't show vote percentage in territories, where we don't count votes
-                    %span.frontrunner-unit
-                      - if race.n_votes_th
-                        = race.n_votes_th
-                        %span.asterisk<> *
-                      - else
-                        Votes
-                    %div= "#{format_percent_or_nil(leader.percent_vote)}%"
-            - else
-              .map!= map_svg_without_geos("states/#{race.state_code}")
+                    %span.frontrunner-num= format_int(leader.n_votes)
+                    - if !leader.percent_vote.nil? && leader.percent_vote > 0
+                      -# Don't show vote percentage in territories, where we don't count votes
+                      %span.frontrunner-unit
+                        - if race.n_votes_th
+                          = race.n_votes_th
+                          %span.asterisk<> *
+                        - else
+                          Votes
+                      %div= "#{format_percent_or_nil(leader.percent_vote)}%"
+              - else
+                .map!= map_svg_without_geos("states/#{race.state_code}")
 
-      - race_day.races.reject(&:future?).map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
-        %p.footnote
-          %span.asterisk *
-          = footnote
+        - race_day.races.reject(&:future?).map(&:n_votes_footnote).reject(&:nil?).each do |footnote|
+          %p.footnote
+            %span.asterisk *
+            = footnote
 
-  .tease-link
-    %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}
-      - case race_day.when_race_day_happens
-      - when 'future'
-        See all candidates
-      - when 'present'
-        See live results
-      - when 'past'
-        See results
+    .tease-link
+      %a{href: "/2016/primaries/#{race_day.id}", "target": "_blank"}
+        - case race_day.when_race_day_happens
+        - when 'future'
+          See candidates
+        - when 'present'
+          See live results
+        - when 'past'
+          See results
 
-  %script{src: '/2016/javascripts/pym.min.js'}
-  %script
-    var pymChild = new pym.Child();
-  %script{src: asset_path('ga.js')}
-  %script{src: asset_path('stats.js')}
+    %script{src: '/2016/javascripts/pym.min.js'}
+    %script
+      var pymChild = new pym.Child();
+    %script{src: asset_path('ga.js')}
+    %script{src: asset_path('stats.js')}

@@ -2,25 +2,7 @@ $horse-width: 8rem;
 $horse-width-mobile: 6rem;
 $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
 
-.horse-races {
-  h2 {
-    font-size: 2.4 em;
-  }
-
-  h3 {
-    margin: 0;
-    margin-bottom: .75rem; // So it won't overlap "2,383 delegates to win"
-    height: 3rem;
-
-    span {
-      display: inline-block;
-      height: 2rem;
-      padding: .75rem;
-      line-height: 2rem;
-      font-size: 1.6rem;
-    }
-  }
-
+@mixin horse-race-legends() {
   span.delegates-legend, span.finish-line-legend {
     background: #f0f0f0;
     padding: .25rem;
@@ -50,16 +32,107 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       top: .2rem;
     }
   }
+}
+
+.horse-races {
+  overflow: hidden; // for all-primaries.html.haml on mobile, just to be safe
+
+  h2 {
+    font-size: 2.4 em;
+  }
 
   p.description {
     text-align: center;
+    line-height: 1.5rem;
 
     & + p {
       margin-bottom: 2rem;
     }
   }
 
-  .horse-race.loading {
+  h3 {
+    margin: 0;
+    margin-bottom: .75rem; // So it won't overlap "2,383 delegates to win"
+    height: 3rem;
+
+    span {
+      display: inline-block;
+      height: 2rem;
+      padding: .75rem;
+      line-height: 2rem;
+      font-size: 1.6rem;
+    }
+  }
+
+  button {
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    height: 3rem;
+    cursor: pointer;
+    width: 7.5rem;
+    background: #d7d7d7;
+
+    box-shadow: inset 0 -2px 3px #b7b7b7;
+    &:hover {
+      background: #dfdfdf;
+      box-shadow: inset 0 -2px 3px #bfbfbf;
+    }
+    border: none;
+    outline: none;
+    vertical-align: 1px; // different fonts....
+    line-height: 2rem;
+    padding: .5rem 0;
+    font-family: $header-font-family;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+
+    &::before, &::after {
+      display: inline-block;
+      height: 2rem;
+      vertical-align: middle;
+    }
+
+    &::before {
+      // The ::after backgrounds both have ~.5rem of empty at their right.
+      // Even things out with extra padding on the left of the button.
+      padding-left: .5rem;
+    }
+
+    &::after {
+      content: ' ';
+      width: 2rem;
+      background-repeat: no-repeat;
+      background-size: 2rem 2rem;
+    }
+
+    &.play {
+      &::before { content: 'Play'; }
+      &::after {
+        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>');
+      }
+    }
+
+    &.pause {
+      &::before { content: 'Pause'; }
+      &::after {
+        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>');
+      }
+    }
+  }
+
+  @include horse-race-legends();
+}
+
+div.horse-race {
+  position: relative;
+  margin-bottom: 5rem;
+
+  &.loading {
     ol.race-days, .race-day-selector {
       opacity: 0 !important;
     }
@@ -69,12 +142,6 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
         transition: none;
       }
     }
-  }
-
-  .horse-race {
-    position: relative;
-    margin-bottom: 5rem;
-    overflow: hidden; // just in case
   }
 
   .n-delegates-needed {
@@ -98,6 +165,24 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
       width: .75rem;
       height: 100%;
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 2 2" width="8px" height="8px"><path d="M0,0h1v1h-1ZM1,1h1v1h-1Z" fill="black"/><path d="M0,1h1v1h-1ZM1,0h1v1h-1Z" fill="white"/></svg>') repeat;
+    }
+  }
+
+  li.candidate-horse {
+    .last-name {
+      position: absolute;
+      left: -$horse-width * 19 / 20 - .25rem;
+      width: $horse-width * 19 / 20 - .25rem;
+      @media (max-width: $widest-mobile) {
+        left: -$horse-width-mobile * 19 / 20 - .25rem;
+        width: $horse-width-mobile * 19 / 20 - .25rem;
+      }
+      text-align: right;
+      font-weight: bold;
+      color: white;
+      z-index: 1;
+      font-size: .8rem;
+      line-height: 1.1rem;
     }
   }
 
@@ -246,53 +331,82 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     position: absolute;
     z-index: 1;
     left: 0;
-    bottom: -.25rem;
-    width: $horse-width;
-    height: $horse-width * 3 / 4; // image aspect ratio
-    margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
-    @media (max-width: $widest-mobile) {
-      width: $horse-width-mobile;
-      height: $horse-width-mobile * 3 / 4;
-      margin-left: -$horse-width-mobile * 19 / 20;
+    right: 0;
+    height: 0;
+
+    img {
+      display: block;
+      position: absolute;
+      bottom: -2rem;
+      height: $horse-width * 3 / 4; // image aspect ratio
+      width: $horse-width;
+      margin-left: -$horse-width * 19 / 20; // The nose is 5% from the rightmost point of the horse image.
+
+      @media (max-width: $widest-mobile) {
+        width: $horse-width-mobile;
+        height: $horse-width-mobile * 3 / 4;
+        margin-left: -$horse-width-mobile * 19 / 20;
+      }
+
+      -webkit-transform-origin: bottom 10%;
+      transform-origin: bottom 10%;
     }
 
     transition: left .2s linear, transform .2s linear;
-    -webkit-transform-origin: bottom 10%;
-    transform-origin: bottom 10%;
 
-    &.adding {
+    &.adding img {
       -moz-animation: .5s linear 0s infinite horse-move;
       -webkit-animation: .5s linear 0s infinite horse-move;
       animation: .5s linear 0s infinite horse-move;
       transition: none;
     }
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
   }
 
+  // The speech bubbles are complicated.
+  //
+  // We need to calculate positions in CSS, not JS, because we use CSS
+  // transitions to move our horses. We also need to make sure we stay within
+  // the viewport's boundaries. In other words, we need a min-left and a
+  // max-right. To complicate matters, the text in the bubble can be quite
+  // small ("Bam!") and quite large ("I'm behind by 1,234 delegates").
+  //
+  // Here's how we handle _all_ this stuff:
+  // * min-left: The .speech-bubble-outer has left+margin-left equal to the
+  //             left of the marker image.
+  // * max-right: The .speech-bubble-outer has a max-width calc()ulated from
+  //              the parent's width ("100%"), which starts at the right of
+  //              the marker image and extends to the right edge of the race
+  //              track.
+  // * width: The .speech-bubble is an inline-block; that makes the width of
+  //          the .speech-bubble-outer equal to the width of the
+  //          .speech-bubble.
+  //
+  // So the .speech-bubble-outer is always from the left of the image to
+  // the right of where the speech bubble would go or the right of the page,
+  // whichever is smaller. Then we float the .speech-bubble right, effectively
+  // setting a max-right on it.
   .speech-bubble-outer {
-    display: none;
+    display: inline-block;
     position: absolute;
-    width: 20rem;
-    margin-left: -10rem;
-    text-align: center;
+    opacity: 0; // will show on marker hover
     height: 0;
+    margin-top: -3rem;
+    max-width: calc(100% + #{$horse-width} * 19 / 20 - 3px); // 3px for a bit of a margin
+    min-width: $horse-width * 19 / 20; // Make sure small speech bubble is right of candidate's head
+    left: -$horse-width * 19 / 20;
     top: -$horse-width * .5; // the _height_ of the horse depends on its width
-    left: $horse-width * .7; // roughly the position of the head
     @media (max-width: $widest-mobile) {
+      min-width: $horse-width-mobile * 19 / 20;
+      max-width: calc(100% + #{$horse-width-mobile} * 19 / 20 - 3px);
+      left: -$horse-width-mobile * 19 / 20;
       top: -$horse-width-mobile * .5;
-      left: $horse-width-mobile * .7;
     }
   }
 
   .speech-bubble {
     display: inline-block;
-    position: relative;
     margin: 0 auto;
+    float: right;
     min-width: 3rem;
     padding: .75rem;
     line-height: 1rem;
@@ -302,11 +416,18 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     border-radius: 10px;
     box-shadow: 0 0 10px #ccc;
     white-space: nowrap;
+  }
 
+  .speech-bubble-triangle {
     &::before, &::after {
       content: ' ';
       position: absolute;
-      left: 50%;
+      top: 2.5rem;
+      margin-top: 2px; // width of top border
+      left: $horse-width * .7;
+      @media (max-width: $widest-mobile) {
+        left: $horse-width-mobile * .7;
+      }
       bottom: -13px;
       width: 0;
       height: 0;
@@ -326,7 +447,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
   }
 
   .marker:hover, .marker.force-speech-bubble {
-    .speech-bubble-outer { display: block; }
+    .speech-bubble-outer { opacity: 1; }
   }
 
   ol.candidate-targets {
@@ -432,7 +553,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
-  .horse-race.animating {
+  &.animating {
     .bar-label { opacity: 0; }
     .bars { opacity: 0; }
     li.candidate-target {
@@ -529,12 +650,12 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
-  .horse-race[data-party-id=Dem] {
+  &[data-party-id=Dem] {
     li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
       h4 { color: $strongDem; }
     }
   }
-  .horse-race[data-party-id=GOP] {
+  &[data-party-id=GOP] {
     li.race-day.before-active, li.after-active.has-delegates, li.after-active.unpledged-delegates {
       h4 { color: $strongGOP; }
     }
@@ -548,7 +669,7 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     }
   }
 
-  .horse-race:not(.animating) ol.race-days>li.active a {
+  &:not(.animating) ol.race-days>li.active a {
     opacity: 1;
     cursor: pointer;
     pointer-events: auto;
@@ -613,82 +734,22 @@ $wavy-path: 'M0,1C3,1 2,2 5,2C8,2 7,1 10,1L11,1L11,6L-1,6L-1,1Z';
     text { display: none; }
   }
 
-  button {
-    display: inline-block;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    box-sizing: border-box;
-    height: 3rem;
-    cursor: pointer;
-    width: 7.5rem;
-    background: #d7d7d7;
-
-    box-shadow: inset 0 -2px 3px #b7b7b7;
-    &:hover {
-      background: #dfdfdf;
-      box-shadow: inset 0 -2px 3px #bfbfbf;
-    }
-    border: none;
-    outline: none;
-    vertical-align: 1px; // different fonts....
-    line-height: 2rem;
-    padding: .5rem 0;
-    font-family: $header-font-family;
-    font-size: 1.25rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-
-    &::before, &::after {
-      display: inline-block;
-      height: 2rem;
-      vertical-align: middle;
-    }
-
-    &::before {
-      // The ::after backgrounds both have ~.5rem of empty at their right.
-      // Even things out with extra padding on the left of the button.
-      padding-left: .5rem;
-    }
-
-    &::after {
-      content: ' ';
-      width: 2rem;
-      background-repeat: no-repeat;
-      background-size: 2rem 2rem;
-    }
-
-    &.play {
-      &::before { content: 'Play'; }
-      &::after {
-        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><path d="M1,1L3,2L1,3Z" fill="black"/></svg>');
-      }
-    }
-
-    &.pause {
-      &::before { content: 'Pause'; }
-      &::after {
-        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5"><path d="M1,1h1v3h-1ZM3,1h1v3h-1Z" fill="black"/></svg>');
-      }
-    }
-  }
 }
 
 @-moz-keyframes horse-move {
-  25% { transform: rotate(-3deg); }
+  25% { transform: rotate(-4deg); }
   50% { transform: rotate(2deg); }
   75% { transform: rotate(-1deg); }
   60% { transform: rotate(0); }
 }
 @-webkit-keyframes horse-move {
-  25% { transform: rotate(-3deg); }
+  25% { transform: rotate(-4deg); }
   50% { transform: rotate(2deg); }
   75% { transform: rotate(-1deg); }
   60% { transform: rotate(0); }
 }
 @keyframes horse-move {
-  25% { transform: rotate(-3deg); }
+  25% { transform: rotate(-4deg); }
   50% { transform: rotate(2deg); }
   75% { transform: rotate(-1deg); }
   60% { transform: rotate(0); }
