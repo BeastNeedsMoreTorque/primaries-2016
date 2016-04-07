@@ -495,7 +495,7 @@ render_cities_g = (city_features) ->
   ret.join('\n')
 
 render_state_svg = (state_code, feature_set, options, callback) ->
-  output_filename = "./output/#{state_code}.svg"
+  output_filename = "./output/#{options.output_name || state_code}.svg"
 
   console.log("Rendering #{output_filename}...")
 
@@ -650,8 +650,8 @@ grok_input_city_features = (input_city_features) ->
 
 # Writes output files for the given state code, reading from
 # features_by_state[state_code]
-render_state = (state_code, callback) ->
-  console.log("#{state_code}:")
+render_state = (state_code, options, callback) ->
+  console.log("#{options.output_name || state_code}:")
 
   input_county_features = features_by_state[state_code].counties
   input_subcounty_features = features_by_state[state_code].subcounties
@@ -669,7 +669,7 @@ render_state = (state_code, callback) ->
     city_features
   )
 
-  render_state_svg state_code, feature_set, {}, (err) ->
+  render_state_svg state_code, feature_set, options, (err) ->
     return callback(err) if err
     render_tiny_state_svg(state_code, jsts_state_multipolygon, {}, callback)
 
@@ -679,7 +679,7 @@ render_all_states = (callback) ->
   step = ->
     if pending_states.length > 0
       state_code = pending_states.shift()
-      render_state state_code, (err) ->
+      render_state state_code, {}, (err) ->
         return callback(err) if err
         process.nextTick(step)
     else
@@ -729,8 +729,6 @@ geo_loader.load_all_features (err, key_to_features) ->
 
   organize_alaska_districts(key_to_features.AK)
 
-  organize_wyoming_gop_counties()
-
   [ 'MA', 'ME', 'NH', 'VT' ].forEach (key) ->
     organize_subcounty_features(key, key_to_features[key])
 
@@ -744,6 +742,12 @@ geo_loader.load_all_features (err, key_to_features) ->
   render_all_states (err) ->
     throw err if err
 
-    render_DA key_to_features.DA, (err) ->
+    organize_wyoming_gop_counties()
+
+    # WY-GOP is an ugly hack. Heck, primaries are almost over; I'm lazy.
+    render_state 'WY', { output_name: 'WY-GOP' }, (err) ->
       throw err if err
-      console.log('Done! Now try `cp -r output/* ../assets/maps/states/`')
+
+      render_DA key_to_features.DA, (err) ->
+        throw err if err
+        console.log('Done! Now try `cp -r output/* ../assets/maps/states/`')

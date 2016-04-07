@@ -121,7 +121,11 @@ class BaseView
   def race_map_svg(race)
     path = "states/#{race.state_code}"
     if race.tabulates_votes?
-      map_svg(path)
+      if race.party_state_id == 'GOP-WY'
+        map_svg('states/WY-GOP')
+      else
+        map_svg(path)
+      end
     else
       map_svg_without_geos(path)
     end
