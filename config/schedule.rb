@@ -36,6 +36,7 @@ module ServerSchedule
   Ticks = [
    del_super,
    pollster,
+   election_day('2016-04-05'),
    election_day('2016-03-26'),
    election_day('2016-03-22'),
    election_day('2016-03-15'),
@@ -54,16 +55,16 @@ module ServerSchedule
 
   # On election night, do something like this:
   #
-  TickIntervalInS = 10
+  #TickIntervalInS = 10
   
-  Ticks = [
-    del_super,
-    election_day('2016-04-05'),
-    election_day('2016-04-05'),
-    election_day('2016-04-05'),
-    election_day('2016-04-05'),
-    election_day('2016-04-05'),
-  ]
+  #Ticks = [
+  #  del_super,
+  #  election_day('2016-04-05'),
+  #  election_day('2016-04-05'),
+  #  election_day('2016-04-05'),
+  #  election_day('2016-04-05'),
+  #  election_day('2016-04-05'),
+  #]
 
   #
   # ... that will update votes five times per minute (average once per 12s) and
