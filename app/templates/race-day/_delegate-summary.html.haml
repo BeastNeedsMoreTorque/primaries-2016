@@ -73,5 +73,7 @@
                 .n-delegates= format_int(party_state.n_delegates)
                 .n-pledged-delegates= format_int(party_state.n_pledged_delegates)
 
-        - if party_race_day.n_unpledged_delegates > 0
-          != render(partial: 'race-day/include-unpledged-delegates')
+        .delegate-footnotes
+          - if party_race_day.n_unpledged_delegates > 0
+            != render(partial: 'race-day/include-unpledged-delegates')
+          != render(partial: 'race-day/delegate-counts-may-change')

@@ -140,8 +140,16 @@ body.race-day .delegate-summary {
     }
   }
 
-  p.include-unpledged-delegates {
+  .delegate-footnotes {
     padding-top: .5rem;
+
+    p {
+      margin: 0;
+      line-height: 1.5rem;
+      font-size: .8rem;
+      color: $muted;
+      text-align: center;
+    }
   }
 
   .state-delegates {
