@@ -15,7 +15,7 @@
       %h1.main-hed.when-race-day-past
         %a{target: '_blank', href: race_day.href}= "RESULTS: #{race_day.title}"
       %h1.main-hed.when-race-day-future
-        %a{target: '_blank', href: race_day.href}= "HAPPENING SOON: #{race_day.title}"
+        %a{target: '_blank', href: race_day.href}= "HAPPENING TODAY: #{race_day.title}"
     .line
   - if race_day.tabulated_races.length == 1
     != render(partial: 'primaries/splash/1-race', locals: { race_day: race_day })
