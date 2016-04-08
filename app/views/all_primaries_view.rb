@@ -22,6 +22,7 @@ class AllPrimariesView < BaseView
   def updated_dt; copy['primaries']['landing-page']['updated_dt']; end
 
   def focus_race_day
+    #SHANE doesn't understand this one, why don't we do focus_race_day?
     @focus_race_day ||= database.race_days.all.find { |rd| rd.present? || rd.future? }
   end
 
