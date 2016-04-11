@@ -42,7 +42,7 @@ load_ap_rows = (state_code, filename, callback) ->
       for reportingUnit in race.reportingUnits when reportingUnit.level == 'subunit' && reportingUnit.statePostal == state_code
         ap_id_to_row[reportingUnit.reportingunitID] =
           ap_id: +reportingUnit.reportingunitID
-          fips_int: +reportingUnit.fipsCode
+          fips_int: +reportingUnit.fipsCode || 0
           name: reportingUnit.reportingunitName
 
     ap_rows = (row for __, row of ap_id_to_row)
