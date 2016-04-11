@@ -729,7 +729,7 @@ geo_loader.load_all_features (err, key_to_features) ->
 
   organize_alaska_districts(key_to_features.AK)
 
-  [ 'MA', 'ME', 'NH', 'VT' ].forEach (key) ->
+  [ 'CT', 'MA', 'ME', 'NH', 'VT' ].forEach (key) ->
     organize_subcounty_features(key, key_to_features[key])
 
   [ 'AS', 'GU', 'MP' ].forEach (key) ->
