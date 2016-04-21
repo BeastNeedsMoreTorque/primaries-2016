@@ -68,26 +68,26 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-03-22	Dem	ID	Caucus	2016-03-23T03:00:00Z	TRUE				
 2016-03-22	Dem	UT	Caucus	2016-03-23T03:00:00Z	TRUE				
 2016-03-22	GOP	UT	Caucus	2016-03-23T05:00:00Z	TRUE				
-2016-03-26	Dem	AK	Caucus	2016-03-26T20:00:00Z			SCDs	SCDs	The Alaska Democratic Party doesn't report vote counts. It reports State Convention Delegates (SCDs).
-2016-03-26	Dem	HI	Caucus	2016-03-27T04:00:00Z					
-2016-03-26	Dem	WA	Caucus	2016-03-26T21:00:00Z					
-2016-04-05	Dem	WI	Primary	2016-04-06T01:15:00Z					
-2016-04-05	GOP	WI	Primary	2016-04-06T01:15:00Z					
-2016-04-09	Dem	WY	Caucus	2016-04-09T17:00:00Z			SCDs	SCDs	The Wyoming Democratic Party doesn't report vote counts. It reports State Convention Delegates (SCDs).
-2016-04-19	Dem	NY	Primary	2016-04-20T01:30:00Z					
-2016-04-19	GOP	NY	Primary	2016-04-20T01:30:00Z					
-2016-04-26	Dem	CT	Primary						
-2016-04-26	GOP	CT	Primary						
-2016-04-26	Dem	DE	Primary						
-2016-04-26	GOP	DE	Primary						
-2016-04-26	Dem	MD	Primary						
-2016-04-26	GOP	MD	Primary						
-2016-04-26	Dem	PA	Primary						
-2016-04-26	GOP	PA	Primary						
-2016-04-26	Dem	RI	Primary						
-2016-04-26	GOP	RI	Primary						
-2016-05-03	Dem	IN	Primary						
-2016-05-03	GOP	IN	Primary						
+2016-03-26	Dem	AK	Caucus	2016-03-26T20:00:00Z	TRUE		SCDs	SCDs	The Alaska Democratic Party doesn't report vote counts. It reports State Convention Delegates (SCDs).
+2016-03-26	Dem	HI	Caucus	2016-03-27T04:00:00Z	TRUE				
+2016-03-26	Dem	WA	Caucus	2016-03-26T21:00:00Z	TRUE				
+2016-04-05	Dem	WI	Primary	2016-04-06T01:15:00Z	TRUE				
+2016-04-05	GOP	WI	Primary	2016-04-06T01:15:00Z	TRUE				
+2016-04-09	Dem	WY	Caucus	2016-04-09T17:00:00Z	TRUE		SCDs	SCDs	The Wyoming Democratic Party doesn't report vote counts. It reports State Convention Delegates (SCDs).
+2016-04-19	Dem	NY	Primary	2016-04-20T01:30:00Z	TRUE				
+2016-04-19	GOP	NY	Primary	2016-04-20T01:30:00Z	TRUE				
+2016-04-26	Dem	CT	Primary	2016-04-27T00:30:00Z					
+2016-04-26	GOP	CT	Primary	2016-04-27T00:30:00Z					
+2016-04-26	Dem	DE	Primary	2016-04-27T00:30:00Z					
+2016-04-26	GOP	DE	Primary	2016-04-27T00:30:00Z					
+2016-04-26	Dem	MD	Primary	2016-04-27T00:30:00Z					
+2016-04-26	GOP	MD	Primary	2016-04-27T00:30:00Z					
+2016-04-26	Dem	PA	Primary	2016-04-27T00:15:00Z					
+2016-04-26	GOP	PA	Primary	2016-04-27T00:15:00Z					
+2016-04-26	Dem	RI	Primary	2016-04-27T00:10:00Z					
+2016-04-26	GOP	RI	Primary	2016-04-27T00:10:00Z					
+2016-05-03	Dem	IN	Primary	2016-05-03T22:15:00Z					
+2016-05-03	GOP	IN	Primary	2016-05-03T22:15:00Z					
 2016-05-07	Dem	GU	Caucus						
 2016-05-10	GOP	NE	Primary						
 2016-05-10	Dem	WV	Primary						
