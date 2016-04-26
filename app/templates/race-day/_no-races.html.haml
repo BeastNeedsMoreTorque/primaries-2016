@@ -1,10 +1,6 @@
 .no-races
   - if party.id == 'GOP' && state.code == 'DA'
     -# Show nothing. Obviously Republicans don't have a Democrats Abroad primary!
-  - elsif party.id == 'GOP' && state.code == 'CO'
-    %p
-      Colorado Republicans won't endorse a presidential candidate in 2016. All
-      37 delegates will be unpledged.
   - elsif party.id == 'GOP' && state.code == 'ND'
     %p
       North Dakota Republicans won't hold a presidential primary vote in 2016.
