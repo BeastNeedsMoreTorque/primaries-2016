@@ -60,7 +60,7 @@ module ServerSchedule
   #
   TickIntervalInS = 10
   #
-  #Ticks = [
+  Ticks = [
     del_super,
     election_day('2016-05-03'),
     election_day('2016-05-03'),
