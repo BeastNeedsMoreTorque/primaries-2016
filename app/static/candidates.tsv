@@ -2,7 +2,7 @@ id	party_id	full_name	last_name	dropped_out	in_horse_race
 1746	Dem	Hillary Clinton	Clinton		TRUE
 1445	Dem	Bernie Sanders	Sanders		TRUE
 22603	Dem	Martin O'Malley	O'Malley	2016-02-01	
-36679	GOP	John Kasich	Kasich		TRUE
+36679	GOP	John Kasich	Kasich	2016-05-04	TRUE
 61815	GOP	Ted Cruz	Cruz	2016-05-03	TRUE
 1239	GOP	Jeb Bush	Bush	2016-02-20	
 60051	GOP	Chris Christie	Christie	2016-02-10	
