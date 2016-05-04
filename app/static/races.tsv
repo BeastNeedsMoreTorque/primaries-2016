@@ -87,8 +87,8 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-04-26	GOP	PA	Primary	2016-04-27T00:15:00Z	TRUE				
 2016-04-26	Dem	RI	Primary	2016-04-27T00:10:00Z	TRUE				
 2016-04-26	GOP	RI	Primary	2016-04-27T00:10:00Z	TRUE				
-2016-05-03	Dem	IN	Primary	2016-05-03T22:15:00Z					
-2016-05-03	GOP	IN	Primary	2016-05-03T22:15:00Z					
+2016-05-03	Dem	IN	Primary	2016-05-03T22:15:00Z	TRUE				
+2016-05-03	GOP	IN	Primary	2016-05-03T22:15:00Z	TRUE				
 2016-05-07	Dem	GU	Caucus						
 2016-05-10	GOP	NE	Primary	2016-05-10T01:03:00Z					
 2016-05-10	Dem	WV	Primary	2016-05-10T23:50:00Z					
