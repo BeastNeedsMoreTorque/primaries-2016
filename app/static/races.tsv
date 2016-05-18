@@ -93,9 +93,9 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-05-10	GOP	NE	Primary	2016-05-11T01:03:00Z	TRUE				
 2016-05-10	Dem	WV	Primary	2016-05-10T23:50:00Z	TRUE				
 2016-05-10	GOP	WV	Primary	2016-05-10T23:50:00Z	TRUE				
-2016-05-17	Dem	KY	Primary	2016-05-17T22:00:00Z					
-2016-05-17	Dem	OR	Primary	2016-05-18T02:00:00Z					
-2016-05-17	GOP	OR	Primary	2016-05-18T02:00:00Z					
+2016-05-17	Dem	KY	Primary	2016-05-17T22:00:00Z	TRUE				
+2016-05-17	Dem	OR	Primary	2016-05-18T02:00:00Z	TRUE				
+2016-05-17	GOP	OR	Primary	2016-05-18T02:00:00Z	TRUE				
 2016-05-24	GOP	WA	Primary	2016-05-25T03:15:00Z					Washington Republicans vote by mail. Ballots must be postmarked by May 24, but they will trickle in for days. When we give a number of precincts reporting, that's an estimate based on past years' voter participation.
 2016-06-04	Dem	VI	Caucus						
 2016-06-05	Dem	PR	Caucus						
