@@ -49,7 +49,7 @@ require_relative '../sources/sheets_source'
 # The Database contains every Collection we use -- e.g., `candidates`, `states`
 # -- plus the rendering date.
 class Database
-  LastDate = Date.parse(ENV['LAST_DATE'] || '2016-05-24')
+  LastDate = Date.parse(ENV['LAST_DATE'] || '2016-06-07')
   FocusRaceDayId = ENV['FOCUS_RACE_DAY_ID'] || '2016-05-17'
 
   CollectionNames = %w(
