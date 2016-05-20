@@ -25,7 +25,7 @@ describe 'a Race on the Race Day dashboard', type: :feature do
     RaceDayResultsView.generate_all(database)
 
     visit('/2016/primaries/2016-02-01')
-    expect(page.first('#IA-Dem')['class']).to match(/\bpast\b/)
+    expect(page.first('.race[data-party-id=Dem][data-state-code=IA]')['class']).to match(/\bpast\b/)
   end
 
   it 'should have state=future when 0 precincts are reporting' do
@@ -39,7 +39,7 @@ describe 'a Race on the Race Day dashboard', type: :feature do
     RaceDayResultsView.generate_all(database)
 
     visit('/2016/primaries/2016-02-01')
-    expect(page.first('#IA-Dem')['class']).to match(/\bfuture\b/)
+    expect(page.first('.race[data-party-id=Dem][data-state-code=IA]')['class']).to match(/\bfuture\b/)
   end
 
   it 'should have state=future when AP has no precinct counts' do
@@ -53,7 +53,7 @@ describe 'a Race on the Race Day dashboard', type: :feature do
     RaceDayResultsView.generate_all(database)
 
     visit('/2016/primaries/2016-02-01')
-    expect(page.first('#IA-Dem')['class']).to match(/\bfuture\b/)
+    expect(page.first('.race[data-party-id=Dem][data-state-code=IA]')['class']).to match(/\bfuture\b/)
   end
 
   it 'should have state=present when at least one precinct is reporting' do
@@ -67,7 +67,7 @@ describe 'a Race on the Race Day dashboard', type: :feature do
     RaceDayResultsView.generate_all(database)
 
     visit('/2016/primaries/2016-02-01')
-    expect(page.first('#IA-Dem')['class']).to match(/\bpresent\b/)
+    expect(page.first('.race[data-party-id=Dem][data-state-code=IA]')['class']).to match(/\bpresent\b/)
   end
 
   it 'should have state=past when the sheet says over=true' do
@@ -81,6 +81,6 @@ describe 'a Race on the Race Day dashboard', type: :feature do
     RaceDayResultsView.generate_all(database)
 
     visit('/2016/primaries/2016-02-01')
-    expect(page.first('#IA-Dem')['class']).to match(/\bpast\b/)
+    expect(page.first('.race[data-party-id=Dem][data-state-code=IA]')['class']).to match(/\bpast\b/)
   end
 end
