@@ -161,12 +161,12 @@ organize_features = (key, features) ->
       features_by_state[state_code] = { cities: [], counties: [], subcounties: [] }
     features_by_state[state_code][key].push(feature)
 
-# AP tallies Alaska votes by congressional district for these states.
+# AP tallies AK and ND votes by state congressional district.
 #
 # Our HACK is to overwrite counties with districts. They both look like FIPS
-# codes.
-organize_alaska_districts = (features) ->
-  features_by_state.AK.subcounties = for feature in features
+# codes for Alaska. ND, it's four-digit, so it doesn't look like FIPS codes.
+organize_state_congressional_districts = (state_code, features) ->
+  features_by_state[state_code].subcounties = for feature in features
     p = feature.properties
 
     type: 'Feature'
@@ -217,9 +217,12 @@ organize_wyoming_gop_counties = ->
 
 # In some states, AP only reports by congressional district
 #
-# Notice that congressional-district geo IDs have four digits -- just like
-# Alaska FIPS codes. So don't render Alaska and Kansas on the same page! (If you
-# need to, come up with a different encoding scheme for one or the other.)
+# Don't render Alaska (State House District ID 2XXX) and Kansas
+# (US District ID 20XX) on the same page!
+#
+# @param state_code State code
+# @param fips_string 2-digit FIPS code of the state (for filtering districts)
+# @param all_congressional_district_features An Array of Features
 organize_congressional_district_features = (state_code, fips_string, all_congressional_district_features) ->
   features = (f for f in all_congressional_district_features when f.properties.STATEFP == fips_string)
 
@@ -727,7 +730,8 @@ geo_loader.load_all_features (err, key_to_features) ->
   organize_features('cities', key_to_features.cities)
   organize_features('counties', key_to_features.counties)
 
-  organize_alaska_districts(key_to_features.AK)
+  [ 'AK', 'ND' ].forEach (key) ->
+    organize_state_congressional_districts(key, key_to_features[key])
 
   [ 'CT', 'MA', 'ME', 'NH', 'RI', 'VT' ].forEach (key) ->
     organize_subcounty_features(key, key_to_features[key])

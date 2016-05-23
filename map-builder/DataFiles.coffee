@@ -19,6 +19,10 @@ module.exports =
     basename: 'tl_2015_60_cousub'
     url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_60_cousub.zip'
     shp_size: 37256
+  CT:
+    basename: 'tl_2015_09_cousub'
+    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_09_cousub.zip'
+    shp_size: 1332580
   DA:
     basename: 'ne_110m_land'
     url: 'http://naciscdn.org/naturalearth/110m/physical/ne_110m_land.zip'
@@ -27,6 +31,10 @@ module.exports =
     basename: 'tl_2015_66_cousub'
     url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_66_cousub.zip'
     shp_size: 709728
+  MA:
+    basename: 'tl_2015_25_cousub'
+    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_25_cousub.zip'
+    shp_size: 2485608
   ME:
     basename: 'tl_2015_23_cousub'
     url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_23_cousub.zip'
@@ -35,23 +43,19 @@ module.exports =
     basename: 'tl_2015_69_cousub'
     url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_69_cousub.zip'
     shp_size: 1345544
+  ND:
+    basename: 'tl_2015_38_sldl'
+    url: 'http://www2.census.gov/geo/tiger/TIGER2015/SLDL/tl_2015_38_sldl.zip'
+    shp_size: 1540896
   NH:
     basename: 'tl_2015_33_cousub'
     url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_33_cousub.zip'
     shp_size: 914616
-  MA:
-    basename: 'tl_2015_25_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_25_cousub.zip'
-    shp_size: 2485608
-  VT:
-    basename: 'tl_2015_50_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_50_cousub.zip'
-    shp_size: 926440
-  CT:
-    basename: 'tl_2015_09_cousub'
-    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_09_cousub.zip'
-    shp_size: 1332580
   RI:
     basename: 'tl_2015_44_cousub'
     url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_44_cousub.zip'
     shp_size: 598260
+  VT:
+    basename: 'tl_2015_50_cousub'
+    url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_50_cousub.zip'
+    shp_size: 926440
