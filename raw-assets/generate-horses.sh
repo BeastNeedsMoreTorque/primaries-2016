@@ -4,7 +4,7 @@ DIR="$(dirname "$0")"
 IN_DIR="$DIR/horses"
 OUT_DIR="$DIR/../assets/images/horses"
 
-for path in $(ls "$IN_DIR"/*-horse.png); do
+for path in $(ls "$IN_DIR"/*-horse.png "$IN_DIR"/*-horse-win.png); do
   basename="$(basename "$path")"
 
   # http://www.imagemagick.org/Usage/advanced/#3d-logos

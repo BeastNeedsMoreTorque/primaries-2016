@@ -9,7 +9,7 @@
           .start-line
         .last-name= candidate.last_name
         .marker{style: "left: #{[ 1.0, fraction ].min * 100}%"}
-          %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: ''}
+          %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: '', 'data-src': image_path("horses/#{candidate.slug}-horse.png"), 'data-winner-src': ([ 'clinton', 'trump '].include?(candidate.slug) ? image_path("horses/#{candidate.slug}-horse-win.png") : image_path("horses/#{candidate.slug}-horse.png"))}
           .speech-bubble-outer
             .speech-bubble
             .speech-bubble-triangle

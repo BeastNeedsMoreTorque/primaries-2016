@@ -76,7 +76,7 @@ window.Confetti = (function() {
   Confetti.prototype.remove = function() {
     this.stop();
     this.container.removeChild(this.canvas);
-    window.removeEventListener(this.on_resize);
+    window.removeEventListener('resize', this.on_resize);
   };
 
   Confetti.prototype.set_size_from_horse_race = function() {

@@ -46,6 +46,7 @@ function HorseRace(div, data) {
       els: {
         row: el,
         marker: el.querySelector('.marker'),
+        img: el.querySelector('.marker img'),
         speech_bubble: el.querySelector('.speech-bubble')
       },
       data: data,
@@ -444,7 +445,7 @@ HorseRace.prototype.add_confetti = function() {
 HorseRace.prototype.remove_confetti = function() {
   if (this.confetti) {
     this.confetti.remove();
-    this.els.div.removeChild(this.confetti.canvas);
+    this.confetti = null;
   }
 };
 
@@ -471,8 +472,10 @@ HorseRace.prototype.refresh_candidate_els = function() {
     candidate.els.row.classList.remove('adding');
     if (left < 1) {
       candidate.els.row.classList.remove('winner');
+      candidate.els.img.src = candidate.els.img.getAttribute('data-src');
     } else {
       candidate.els.row.classList.add('winner');
+      candidate.els.img.src = candidate.els.img.getAttribute('data-winner-src');
     }
     candidate.els.row.classList.add(candidate.animation_state);
     candidate.els.marker.classList.remove('idle');
