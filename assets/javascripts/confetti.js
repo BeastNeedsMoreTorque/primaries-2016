@@ -59,14 +59,25 @@ window.Confetti = (function() {
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'confetti';
     container.appendChild(this.canvas);
+
     // HACK: The dimensions are specific to horse-race....
     this.set_size_from_horse_race();
 
     this.ctx = this.canvas.getContext('2d');
 
-    this.n_papers = 100;
+    var _this = this;
+    this.on_resize = function() { _this.set_size_from_horse_race(); };
+    window.addEventListener('resize', this.on_resize);
+
+    this.n_papers = 80;
     this.papers = [];
   }
+
+  Confetti.prototype.remove = function() {
+    this.stop();
+    this.container.removeChild(this.canvas);
+    window.removeEventListener(this.on_resize);
+  };
 
   Confetti.prototype.set_size_from_horse_race = function() {
     var div = this.container;
@@ -74,13 +85,13 @@ window.Confetti = (function() {
     var ol = div.querySelector('ol.candidate-horses');
 
     var width = Math.floor(ol.clientWidth);
-    var height = Math.floor(ol.clientHeight + needed.clientHeight);
+    var height = Math.floor(ol.clientHeight);
 
     this.width = this.canvas.width = width;
     this.height = this.canvas.height = height;
     this.canvas.style.position = 'absolute';
     this.canvas.style.pointerEvents = 'none';
-    this.canvas.style.top = '0';
+    this.canvas.style.top = needed.clientHeight + 'px';
   };
 
   Confetti.prototype._addPaper = function(t) {
@@ -96,7 +107,7 @@ window.Confetti = (function() {
       2 * Math.PI * rand3,
       this.color,
       t,
-      0.2 * rand2 + 0.15
+      0.1 * rand2 + 0.15
     ));
   };
 

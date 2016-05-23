@@ -443,9 +443,8 @@ HorseRace.prototype.add_confetti = function() {
 
 HorseRace.prototype.remove_confetti = function() {
   if (this.confetti) {
-    this.confetti.stop();
+    this.confetti.remove();
     this.els.div.removeChild(this.confetti.canvas);
-    this.confetti = null;
   }
 };
 
