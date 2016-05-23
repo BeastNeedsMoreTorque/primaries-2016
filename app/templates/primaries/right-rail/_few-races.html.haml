@@ -1,5 +1,5 @@
 .few-races
-  - race_day.races.each do |race|
+  - focus_race_day.races.each do |race|
     .race{id: race.id, 'data-party-id': race.party_id, class: race.any_precincts_reporting? ? 'precincts-reporting' : 'no-precincts-reporting'}
       .race-name
         %h3

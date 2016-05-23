@@ -82,6 +82,10 @@ $empty-state-height: 8rem;
     border-bottom: 2px solid white;
   }
 
+  &[data-n-parties="1"] {
+    th, td.color-box { width: 50%; }
+  }
+
   tr.no-data .color-box {
     height: $empty-state-height;
   }
