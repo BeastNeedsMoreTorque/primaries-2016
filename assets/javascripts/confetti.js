@@ -58,6 +58,8 @@ window.Confetti = (function() {
     this.container = container;
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'confetti';
+    this.canvas.style.position = 'absolute';
+    this.canvas.style.pointerEvents = 'none';
     container.appendChild(this.canvas);
 
     // HACK: The dimensions are specific to horse-race....
@@ -89,8 +91,6 @@ window.Confetti = (function() {
 
     this.width = this.canvas.width = width;
     this.height = this.canvas.height = height;
-    this.canvas.style.position = 'absolute';
-    this.canvas.style.pointerEvents = 'none';
     this.canvas.style.top = needed.clientHeight + 'px';
   };
 

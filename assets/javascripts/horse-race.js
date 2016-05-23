@@ -311,7 +311,7 @@ HorseRace.prototype.play = function() {
     this.els.play_button.className = 'pause';
   }
 
-  $(this.els.div).addClass('animating');
+  this.els.div.classList.add('animating');
 
   if (this.step_position == this.steps.length) {
     this.set_step_position(0);
@@ -346,7 +346,7 @@ HorseRace.prototype.pause = function() {
     this.animation.end();
   }
 
-  $(this.els.div).removeClass('animating');
+  this.els.div.classList.remove('animating');
 
   if (this.els.play_button) {
     this.els.play_button.className = 'play';
@@ -358,25 +358,34 @@ HorseRace.prototype.refresh = function() {
   this.refresh_candidate_els();
 };
 
+function toggle_class(class_list, class_name, is_active) {
+  if (is_active) {
+    class_list.add(class_name);
+  } else {
+    class_list.remove(class_name);
+  }
+}
+
 HorseRace.prototype.refresh_active_race_day = function() {
   var race_days_el = this.els.race_days;
-  $(race_days_el).children().removeClass('active after-active before-active');
 
   // If we're playing starting at position 2, highlight li #2
   // If we *clicked* on li #2, we're at position 3; highlight li #2
   var li_index = this.playing ? this.step_position : Math.max(0, this.step_position - 1);
 
-  var $active_li = $(race_days_el).children().eq(li_index);
-  
-  $active_li.addClass('active');
-  $active_li.prevAll().addClass('before-active');
-  $active_li.nextAll().addClass('after-active');
-  var active_li = $active_li.get(0);
+  Array.prototype.forEach.call(race_days_el.childNodes, function(li, i) {
+    var cl = li.classList;
+    toggle_class(cl, 'active', i === li_index);
+    toggle_class(cl, 'before-active', i < li_index);
+    toggle_class(cl, 'after-active', i > li_index);
+  });
+
+  var active_li = race_days_el.childNodes[li_index];
   var race_day_left = active_li.offsetLeft;
   var left = Math.floor(race_day_left + active_li.getBoundingClientRect().width * 0.5 - race_days_el.getBoundingClientRect().width * 0.5);
   $(race_days_el).stop(true);
   if (!this.loading) {
-    $(race_days_el).animate({ scrollLeft: left }, { duration: 200 });
+    $(race_days_el).animate({ scrollLeft: left }, { duration: 80 });
   } else {
     race_days_el.scrollLeft = left;
   }
