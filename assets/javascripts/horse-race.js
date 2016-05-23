@@ -85,21 +85,24 @@ function HorseRace(div, data) {
 }
 
 HorseRace.prototype.set_bar_background_positions = function() {
+  var tasks = []; // set styles in batch, to avoid reflows
+
   Array.prototype.forEach.call(this.els.div.querySelectorAll('ul.bars li'), function(li) {
     // background-position is _old-school_. It's really hard to use percentages.
     // We know that each "wave" is twice as wide as it is tall; so we can
     // calculate how many "waves" have passed before this <li> starts, and align
     // the image that way.
     var h = li.offsetHeight;
-
     if (h > 0) {
       var waveWidth = 2 * h;
       var left = li.offsetLeft;
       var nWaves = left / waveWidth;
       var fractionAlongThisWave = nWaves % 1;
-      li.style.backgroundPosition = 'left -' + (fractionAlongThisWave * waveWidth) + 'px top 1px';
+      tasks.push({ li: li, position: ('left -' + (fractionAlongThisWave * waveWidth) + 'px top 1px') });
     }
   });
+
+  tasks.forEach(function(task) { task.li.style.backgroundPosition = task.position; });
 };
 
 /**
@@ -426,11 +429,39 @@ HorseRace.prototype.build_candidate_speech_bubble = function(candidate, max_n_de
   }
 };
 
+HorseRace.prototype.add_confetti = function() {
+  if (this.confetti) return;
+
+  var party_id = this.els.div.getAttribute('data-party-id');
+  var color = {
+    Dem: '#5c6b95',
+    GOP: '#bc5c5c'
+  }[party_id];
+  this.confetti = new Confetti(this.els.div, color);
+  this.confetti.start();
+};
+
+HorseRace.prototype.remove_confetti = function() {
+  if (this.confetti) {
+    this.confetti.stop();
+    this.els.div.removeChild(this.confetti.canvas);
+    this.confetti = null;
+  }
+};
+
 HorseRace.prototype.refresh_candidate_els = function() {
   var _this = this;
 
   var n_delegates_needed = this.data.n_delegates_needed;
   var max_n_delegates = this.candidates.reduce(function(max, c) { return c.n_delegates > max ? c.n_delegates : max; }, 0);
+
+  if (max_n_delegates >= n_delegates_needed) {
+    this.els.div.classList.add('has-winner');
+    this.add_confetti();
+  } else {
+    this.els.div.classList.remove('has-winner');
+    this.remove_confetti();
+  }
 
   this.candidates.forEach(function(candidate) {
     var left = Math.min(1, candidate.n_delegates / n_delegates_needed);
@@ -439,6 +470,11 @@ HorseRace.prototype.refresh_candidate_els = function() {
 
     candidate.els.row.classList.remove('idle');
     candidate.els.row.classList.remove('adding');
+    if (left < 1) {
+      candidate.els.row.classList.remove('winner');
+    } else {
+      candidate.els.row.classList.add('winner');
+    }
     candidate.els.row.classList.add(candidate.animation_state);
     candidate.els.marker.classList.remove('idle');
     candidate.els.marker.classList.remove('adding');

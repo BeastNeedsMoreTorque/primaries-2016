@@ -1,13 +1,14 @@
-.horse-race.loading{'data-party-id': party.id}
+.horse-race.loading{'data-party-id': party.id, class: party.candidates.find{|c| (c.n_delegates || 0) >= party.n_delegates_needed } ? 'has-winner' : ''}
   .n-delegates-needed #{format_int(party.n_delegates_needed)} delegates to win
 
   %ol.candidate-horses
     - party.candidates.select(&:in_horse_race?).reverse.each do |candidate|
-      %li.candidate-horse{'data-candidate-id': candidate.id, class: (candidate.dropped_out? ? 'dropped-out' : '')}
+      - fraction = (candidate.n_delegates || 0).to_f / party.n_delegates_needed
+      %li.candidate-horse{'data-candidate-id': candidate.id, class: "#{candidate.dropped_out? ? 'dropped-out' : ''} #{fraction >= 1.0 ? 'winner' : ''}"}
         .background
           .start-line
         .last-name= candidate.last_name
-        .marker{style: "left: #{(candidate.n_delegates || 0).to_f / party.n_delegates_needed * 100}%"}
+        .marker{style: "left: #{[ 1.0, fraction ].min * 100}%"}
           %img{src: image_path("horses/#{candidate.slug}-horse.png"), alt: ''}
           .speech-bubble-outer
             .speech-bubble
