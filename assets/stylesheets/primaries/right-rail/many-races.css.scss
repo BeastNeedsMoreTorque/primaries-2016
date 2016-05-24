@@ -1,4 +1,4 @@
-$state-height: 12.5rem;
+$state-height: 8rem;
 $empty-state-height: 8rem;
 
 .many-races {
@@ -80,6 +80,10 @@ $empty-state-height: 8rem;
     padding: 5px;
     border-top: 2px solid white;
     border-bottom: 2px solid white;
+  }
+
+  &[data-n-parties="1"] {
+    th, td.color-box { width: 50%; }
   }
 
   tr.no-data .color-box {

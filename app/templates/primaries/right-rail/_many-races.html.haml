@@ -1,20 +1,23 @@
-.many-races
+- contested_parties = focus_race_day.party_race_days.reject(&:is_uncontested?).map(&:party)
+
+.many-races{'data-n-parties': contested_parties.length}
   %table
     %thead
       %tr
         %th.state
           %h3 Race
-        - for party in database.parties.all
+        - for party in contested_parties
           %th{'data-party-id': party.id}
             %h3= party.name
     %tbody
-      - race_day.state_party_races.each do |state, party_races|
+      - focus_race_day.state_party_races.each do |state, party_races|
         %tr{class: party_races.map{ |x| x[1] }.compact.any?(&:has_any_results_at_all?) ? 'with-data' : 'no-data'}
           %td.state
             %h3= state.name
             .map!= map_svg("states/tiny/#{state.code}")
 
           - party_races.each do |party, race, __|
+            - next if !contested_parties.include?(party)
             %td{'data-party-id': party.id, class: race.nil? ? 'no-race' : ''}<>
               - if race.nil?
                 -# Show nothing

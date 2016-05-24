@@ -8,3 +8,4 @@ node_modules/
 map-builder/input/
 map-builder/output/
 .DS_Store
+log/

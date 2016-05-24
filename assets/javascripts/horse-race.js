@@ -46,6 +46,7 @@ function HorseRace(div, data) {
       els: {
         row: el,
         marker: el.querySelector('.marker'),
+        img: el.querySelector('.marker img'),
         speech_bubble: el.querySelector('.speech-bubble')
       },
       data: data,
@@ -85,21 +86,24 @@ function HorseRace(div, data) {
 }
 
 HorseRace.prototype.set_bar_background_positions = function() {
+  var tasks = []; // set styles in batch, to avoid reflows
+
   Array.prototype.forEach.call(this.els.div.querySelectorAll('ul.bars li'), function(li) {
     // background-position is _old-school_. It's really hard to use percentages.
     // We know that each "wave" is twice as wide as it is tall; so we can
     // calculate how many "waves" have passed before this <li> starts, and align
     // the image that way.
     var h = li.offsetHeight;
-
     if (h > 0) {
       var waveWidth = 2 * h;
       var left = li.offsetLeft;
       var nWaves = left / waveWidth;
       var fractionAlongThisWave = nWaves % 1;
-      li.style.backgroundPosition = 'left -' + (fractionAlongThisWave * waveWidth) + 'px top 1px';
+      tasks.push({ li: li, position: ('left -' + (fractionAlongThisWave * waveWidth) + 'px top 1px') });
     }
   });
+
+  tasks.forEach(function(task) { task.li.style.backgroundPosition = task.position; });
 };
 
 /**
@@ -307,7 +311,7 @@ HorseRace.prototype.play = function() {
     this.els.play_button.className = 'pause';
   }
 
-  $(this.els.div).addClass('animating');
+  this.els.div.classList.add('animating');
 
   if (this.step_position == this.steps.length) {
     this.set_step_position(0);
@@ -342,7 +346,7 @@ HorseRace.prototype.pause = function() {
     this.animation.end();
   }
 
-  $(this.els.div).removeClass('animating');
+  this.els.div.classList.remove('animating');
 
   if (this.els.play_button) {
     this.els.play_button.className = 'play';
@@ -354,25 +358,34 @@ HorseRace.prototype.refresh = function() {
   this.refresh_candidate_els();
 };
 
+function toggle_class(class_list, class_name, is_active) {
+  if (is_active) {
+    class_list.add(class_name);
+  } else {
+    class_list.remove(class_name);
+  }
+}
+
 HorseRace.prototype.refresh_active_race_day = function() {
   var race_days_el = this.els.race_days;
-  $(race_days_el).children().removeClass('active after-active before-active');
 
   // If we're playing starting at position 2, highlight li #2
   // If we *clicked* on li #2, we're at position 3; highlight li #2
   var li_index = this.playing ? this.step_position : Math.max(0, this.step_position - 1);
 
-  var $active_li = $(race_days_el).children().eq(li_index);
-  
-  $active_li.addClass('active');
-  $active_li.prevAll().addClass('before-active');
-  $active_li.nextAll().addClass('after-active');
-  var active_li = $active_li.get(0);
+  Array.prototype.forEach.call(race_days_el.childNodes, function(li, i) {
+    var cl = li.classList;
+    toggle_class(cl, 'active', i === li_index);
+    toggle_class(cl, 'before-active', i < li_index);
+    toggle_class(cl, 'after-active', i > li_index);
+  });
+
+  var active_li = race_days_el.childNodes[li_index];
   var race_day_left = active_li.offsetLeft;
   var left = Math.floor(race_day_left + active_li.getBoundingClientRect().width * 0.5 - race_days_el.getBoundingClientRect().width * 0.5);
   $(race_days_el).stop(true);
   if (!this.loading) {
-    $(race_days_el).animate({ scrollLeft: left }, { duration: 200 });
+    $(race_days_el).animate({ scrollLeft: left }, { duration: 80 });
   } else {
     race_days_el.scrollLeft = left;
   }
@@ -426,11 +439,38 @@ HorseRace.prototype.build_candidate_speech_bubble = function(candidate, max_n_de
   }
 };
 
+HorseRace.prototype.add_confetti = function() {
+  if (this.confetti) return;
+
+  var party_id = this.els.div.getAttribute('data-party-id');
+  var color = {
+    Dem: '#5c6b95',
+    GOP: '#bc5c5c'
+  }[party_id];
+  this.confetti = new Confetti(this.els.div, color);
+  this.confetti.start();
+};
+
+HorseRace.prototype.remove_confetti = function() {
+  if (this.confetti) {
+    this.confetti.remove();
+    this.confetti = null;
+  }
+};
+
 HorseRace.prototype.refresh_candidate_els = function() {
   var _this = this;
 
   var n_delegates_needed = this.data.n_delegates_needed;
   var max_n_delegates = this.candidates.reduce(function(max, c) { return c.n_delegates > max ? c.n_delegates : max; }, 0);
+
+  if (max_n_delegates >= n_delegates_needed) {
+    this.els.div.classList.add('has-winner');
+    this.add_confetti();
+  } else {
+    this.els.div.classList.remove('has-winner');
+    this.remove_confetti();
+  }
 
   this.candidates.forEach(function(candidate) {
     var left = Math.min(1, candidate.n_delegates / n_delegates_needed);
@@ -439,6 +479,13 @@ HorseRace.prototype.refresh_candidate_els = function() {
 
     candidate.els.row.classList.remove('idle');
     candidate.els.row.classList.remove('adding');
+    if (left < 1) {
+      candidate.els.row.classList.remove('winner');
+      candidate.els.img.src = candidate.els.img.getAttribute('data-src');
+    } else {
+      candidate.els.row.classList.add('winner');
+      candidate.els.img.src = candidate.els.img.getAttribute('data-winner-src');
+    }
     candidate.els.row.classList.add(candidate.animation_state);
     candidate.els.marker.classList.remove('idle');
     candidate.els.marker.classList.remove('adding');

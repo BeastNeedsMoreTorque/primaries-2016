@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.4.0'
+lock '3.5.0'
 
 set :application, 'election-2016'
 set :repo_url, 'ssh://git@github.com/huffpostdata/election-2016'

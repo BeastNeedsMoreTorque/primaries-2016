@@ -9,13 +9,14 @@ geo_loader = require('./geo-loader')
 normalize_name = (name) ->
   name
     .replace(/ Plt\.?/, '')
-    .replace(/St./, 'Saint')
+    .replace(/St\./, 'Saint')
     .replace(/ (Cty|Dst|Islands?|Townships?|Vot|Vtng|Votng)/g, '')
+    .replace(/State House District /g, 'District ')
     .replace(/'?s\b/, '')
     .toLowerCase()
 
 compare_rows = (a, b) ->
-  a.fips_int - b.fips_int || normalize_name(a.name).localeCompare(normalize_name(b.name))
+  a.fips_int - b.fips_int || a.normalized_name.localeCompare(b.normalized_name)
 
 load_geo_rows = (state_code, callback) ->
   geo_loader.load_features state_code, (err, features) ->
@@ -25,7 +26,8 @@ load_geo_rows = (state_code, callback) ->
       props = feature.properties
       fips_int: +"#{props.STATEFP}#{props.COUNTYFP}"
       geo_id: +props.GEOID
-      name: props.NAME
+      name: props.NAME || props.NAMELSAD
+      normalized_name: normalize_name(props.NAME || props.NAMELSAD)
 
     geo_rows.sort(compare_rows)
 
@@ -44,6 +46,7 @@ load_ap_rows = (state_code, filename, callback) ->
           ap_id: +reportingUnit.reportingunitID
           fips_int: +reportingUnit.fipsCode || 0
           name: reportingUnit.reportingunitName
+          normalized_name: normalize_name(reportingUnit.reportingunitName)
 
     ap_rows = (row for __, row of ap_id_to_row)
     ap_rows.sort(compare_rows)

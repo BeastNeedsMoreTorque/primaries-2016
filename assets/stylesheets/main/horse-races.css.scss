@@ -263,7 +263,7 @@ div.horse-race {
     overflow: hidden;
     position: relative; // for z-index
     opacity: 1;
-    transition: opacity .2s linear;
+    transition: opacity .15s linear;
 
     li {
       margin: 0;
@@ -290,7 +290,7 @@ div.horse-race {
     font-size: .8rem;
     top: -.25rem;
     opacity: 1;
-    transition: opacity .2s linear;
+    transition: opacity .15s linear;
     z-index: 1; // on top of the start line, on mobile
 
     &.too-small {
@@ -352,7 +352,7 @@ div.horse-race {
       transform-origin: bottom 10%;
     }
 
-    transition: left .2s linear, transform .2s linear;
+    transition: left .1s linear, transform .15s linear;
 
     &.adding img {
       -moz-animation: .5s linear 0s infinite horse-move;
@@ -504,7 +504,7 @@ div.horse-race {
       height: 1rem;
       line-height: 1rem;
       padding-right: 0; // We'll only show the .target during animation
-      transition: padding-right .2s ease-in-out;
+      transition: padding-right .15s ease-in-out;
     }
 
     .target {
@@ -518,7 +518,7 @@ div.horse-race {
       box-sizing: border-box;
       border: 2px solid white;
       z-index: 0; // so ::before and ::after go behind it
-      transition: opacity .2s ease-in-out;
+      transition: opacity .15s ease-in-out;
       opacity: 0; // We'll only show it during animation
 
       &::before, &::after {
@@ -646,7 +646,6 @@ div.horse-race {
 
     &:hover:not(.active):not(.has-no-delegates) {
       text-decoration: underline;
-      color: white;
     }
   }
 
@@ -703,7 +702,7 @@ div.horse-race {
       position: absolute;
       top: 0;
       bottom: 0;
-      transition: width .2s ease-in-out;
+      transition: width .15s ease-in-out;
     }
 
     .left {

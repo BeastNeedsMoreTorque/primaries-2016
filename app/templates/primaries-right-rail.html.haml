@@ -6,33 +6,33 @@
     %title Huffington Post 2016 Primaries Results Right Rail
     %link{rel: 'stylesheet', href: '/2016/stylesheets/proxima-nova-condensed.css'}
     %link{rel: 'stylesheet', href: asset_path('primaries-right-rail.css')}
-  %body{class: "race-day-#{race_day.when_race_day_happens}"}
+  %body{class: "race-day-#{focus_race_day.when_race_day_happens}"}
     .header
       .line
       .hed
         %h1.when-race-day-present
-          %a{target: '_blank', href: race_day.href} Live Results
+          %a{target: '_blank', href: focus_race_day.href} Live Results
         %h1.when-race-day-past
-          %a{target: '_blank', href: race_day.href} Results
+          %a{target: '_blank', href: focus_race_day.href} Results
         %h1.when-race-day-future
-          %a{target: '_blank', href: race_day.href} Happening Soon
+          %a{target: '_blank', href: focus_race_day.href} Happening Soon
       .line
 
     .race-day
       %h2
-        %a{target: '_blank', href: race_day.href}= race_day.title
-      - if !race_day.today? && !race_day.title_is_just_date_s?
-        %h4.date= race_day.date.strftime('%B %-d')
-      %p.intro= race_day.body
+        %a{target: '_blank', href: focus_race_day.href}= focus_race_day.title
+      - if !focus_race_day.today? && !focus_race_day.title_is_just_date_s?
+        %h4.date= focus_race_day.date.strftime('%B %-d')
+      %p.intro= focus_race_day.body
       %p.tease-link.when-race-day-future.when-race-day-past
         %a{target: '_blank', href: '/2016/primaries#horse-races'} See the horse race
       %p.tease-link.when-race-day-present
-        %a{target: '_blank', href: race_day.href} See live updates
+        %a{target: '_blank', href: focus_race_day.href} See live updates
 
-      - if race_day.races.length < 4
-        != render(partial: '/primaries/right-rail/few-races', locals: { race_day: race_day })
+      - if focus_race_day.races.length < 4
+        != render(partial: '/primaries/right-rail/few-races', locals: { focus_race_day: focus_race_day })
       - else
-        != render(partial: '/primaries/right-rail/many-races', locals: { race_day: race_day })
+        != render(partial: '/primaries/right-rail/many-races', locals: { focus_race_day: focus_race_day })
 
   %script{src: '/2016/javascripts/pym.min.js'}
   %script
