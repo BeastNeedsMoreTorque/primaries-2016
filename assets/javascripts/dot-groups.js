@@ -76,7 +76,8 @@ var encoded_dot_groups_html = null;
         var value = arr[0];
         var n_dots = +arr[1];
 
-        html.push('<span ' + html_attribute + '="' + value + '">' + DotStrings[n_dots] + '</span>');
+        // The U+200B zero-width space is for Chrome 51 on Linux
+        html.push('<span ' + html_attribute + '="' + value + '">' + DotStrings[n_dots] + '</span>\u200b');
       });
 
       html.push('</div>');

@@ -19,7 +19,28 @@ module DotGroupHelper
         html << '<div class="dot-group">'
 
         for dot_subgroup in dot_group.dot_subgroups
-          html << "<span #{subgroup_key}=\"#{dot_subgroup.data}\">#{'•' * dot_subgroup.n_dots}</span>"
+          # Add U+200B zero width space because Chrome 51 on Fedora 23 doesn't
+          # wrap correctly otherwise. Assuming span1 has length 5 and span2 has
+          # length 5, it should show:
+          #
+          #     **
+          #     **
+          #     **
+          #     **
+          #     **
+          #
+          # But it actually shows:
+          #
+          #     **
+          #     **
+          #     **
+          #     *
+          #     *
+          #     *
+          #     *
+          #
+          # This happens after every multiple-of-5 length span.
+          html << "<span #{subgroup_key}=\"#{dot_subgroup.data}\">#{'•' * dot_subgroup.n_dots}</span>​"
         end
 
         html << '</div>'
