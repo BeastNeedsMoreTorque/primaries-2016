@@ -41,6 +41,7 @@
                       - for dot_subgroup in dot_group.dot_subgroups
                         %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                           = '•' * dot_subgroup.n_dots
+                        = "\u200b"
                 %td.n-pledged-delegates-int= format_int(candidate_race_day.n_pledged_delegates)
                 %td.n-pledged-delegates-dots
                   - for dot_group in candidate_states_to_dot_groups(candidate_race_day.candidate_states, :has_pledged_delegates?, :n_pledged_delegates)
@@ -48,6 +49,7 @@
                       - for dot_subgroup in dot_group.dot_subgroups
                         %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                           = '•' * dot_subgroup.n_dots
+                        = "\u200b"
             %tr.up-for-grabs
               %td.candidate
                 %span Up for grabs
@@ -58,6 +60,7 @@
                     - for dot_subgroup in dot_group.dot_subgroups
                       %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                         = '•' * dot_subgroup.n_dots
+                      = "\u200b"
               %td.n-pledged-delegates-int= party_race_day.n_pledged_delegates_up_for_grabs
               %td.n-pledged-delegates-dots
                 - for dot_group in races_to_unassigned_dot_groups(party_race_day.races, :has_pledged_delegates_without_candidates?, :n_pledged_delegates_without_candidates)
@@ -65,6 +68,7 @@
                     - for dot_subgroup in dot_group.dot_subgroups
                       %span.dot-subgroup{'data-state-code': dot_subgroup.state_code}<>
                         = '•' * dot_subgroup.n_dots
+                      = "\u200b"
         .state-delegates
           %ul
             - party_race_day.party_states.each do |party_state|

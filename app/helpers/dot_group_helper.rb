@@ -40,7 +40,7 @@ module DotGroupHelper
           #     *
           #
           # This happens after every multiple-of-5 length span.
-          html << "<span #{subgroup_key}=\"#{dot_subgroup.data}\">#{'•' * dot_subgroup.n_dots}</span>​"
+          html << "<span #{subgroup_key}=\"#{dot_subgroup.data}\">#{'•' * dot_subgroup.n_dots}</span>\u200B"
         end
 
         html << '</div>'
