@@ -110,4 +110,4 @@ date	party_id	state_code	race_type	expect_results_ISO8601_UTC	huffpost_override_
 2016-06-07	Dem	ND	Caucus	2016-06-08T01:00:00Z	TRUE		SCDs	SCDs	The North Dakota Democratic Party doesn't report vote counts. It reports State Convention Delegates (SCDs).
 2016-06-07	Dem	SD	Primary	2016-06-08T01:05:00Z	TRUE				
 2016-06-07	GOP	SD	Primary	2016-06-08T01:05:00Z	TRUE				
-2016-06-14	Dem	DC	Primary						
+2016-06-14	Dem	DC	Primary	2016-06-15T00:30:00Z					
