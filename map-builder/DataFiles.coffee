@@ -27,6 +27,10 @@ module.exports =
     basename: 'ne_110m_land'
     url: 'http://naciscdn.org/naturalearth/110m/physical/ne_110m_land.zip'
     shp_size: 89504
+  DC:
+    basename: 'Ward__2012'
+    url: 'http://opendata.dc.gov/datasets/0ef47379cbae44e88267c01eaec2ff6e_31.zip'
+    shp_size: 364628
   GU:
     basename: 'tl_2015_66_cousub'
     url: 'http://www2.census.gov/geo/tiger/TIGER2015/COUSUB/tl_2015_66_cousub.zip'

@@ -1,1 +1,4 @@
 This file exists so we don't have to write `mkdir` in scripts.
+
+The DC-wards file is invalid; no JS unzip library seems to read it correctly. So
+we add it to the git repo.

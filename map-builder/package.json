@@ -25,9 +25,9 @@
     "jsts": "^1.0.0-rc8",
     "math-float64-exponent": "^1.0.0",
     "shapefile": "^0.3.1",
-    "simple-get": "^1.4.3",
+    "simple-get": "^2.2.0",
     "tar-fs": "^1.10.0",
     "topojson": "^1.6.24",
-    "unzip": "^0.1.11"
+    "yauzl": "^2.5.0"
   }
 }

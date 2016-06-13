@@ -215,6 +215,13 @@ organize_wyoming_gop_counties = ->
       type: 'MultiPolygon'
       coordinates: o.geometries.map((g) -> g.coordinates)
 
+# AP tallies DC votes by ward.
+organize_dc_wards = ->
+  for feature in features_by_state.DC.subcounties
+    # DC's county FIPS code is 11001. There are no other FIPS codes that start
+    # with "11", so "1101X" is safe.
+    feature.properties.GEOID = "1101#{feature.properties.WARD}"
+
 # In some states, AP only reports by congressional district
 #
 # Don't render Alaska (State House District ID 2XXX) and Kansas
@@ -746,12 +753,17 @@ geo_loader.load_all_features (err, key_to_features) ->
   render_all_states (err) ->
     throw err if err
 
-    organize_wyoming_gop_counties()
-
     # WY-GOP is an ugly hack. Heck, primaries are almost over; I'm lazy.
+    organize_wyoming_gop_counties()
     render_state 'WY', { output_name: 'WY-GOP' }, (err) ->
       throw err if err
 
-      render_DA key_to_features.DA, (err) ->
+      # And DC-Dem is literally the very last one. Lazy hack again!
+      organize_subcounty_features('DC', key_to_features.DC)
+      organize_dc_wards()
+      render_state 'DC', { output_name: 'DC-Dem' }, (err) ->
         throw err if err
-        console.log('Done! Now try `cp -r output/* ../assets/maps/states/`')
+
+        render_DA key_to_features.DA, (err) ->
+          throw err if err
+          console.log('Done! Now try `cp -r output/* ../assets/maps/states/`')

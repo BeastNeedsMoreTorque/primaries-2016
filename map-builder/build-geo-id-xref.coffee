@@ -79,11 +79,17 @@ merge_rows = (ap_rows, geo_rows) ->
         geo_only.push(geo_row)
         j += 1
       else
-        merged.push
-          fips_int: ap_row.fips_int
-          name: ap_row.name
-          ap_id: ap_row.ap_id
-          geo_id: geo_row.geo_id
+        if geo_row.geo_id && ap_row.ap_id
+          merged.push
+            fips_int: ap_row.fips_int
+            name: ap_row.name
+            ap_id: ap_row.ap_id
+            geo_id: geo_row.geo_id
+        else if ap_row.ap_id
+          # DC-Dem won't find geo IDs because it's an ugly hack
+          ap_only.push(ap_row)
+        else
+          throw new Error('We never handled this case')
         i += 1
         j += 1
 

@@ -123,6 +123,8 @@ class BaseView
     if race.tabulates_votes?
       if race.party_state_id == 'GOP-WY'
         map_svg('states/WY-GOP')
+      elsif race.party_state_id == 'Dem-DC'
+        map_svg('states/DC-Dem')
       else
         map_svg(path)
       end

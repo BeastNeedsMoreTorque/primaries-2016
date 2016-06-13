@@ -1,7 +1,7 @@
 fs = require('fs')
 get = require('simple-get')
 tar = require('tar-fs')
-unzip = require('unzip')
+yauzl = require('yauzl') # unzip library
 shapefile = require('shapefile')
 zlib = require('zlib')
 
@@ -23,23 +23,40 @@ is_data_downloaded = (key, callback) ->
 
     callback(null, ret)
 
+untar_stream = (stream, outdir, callback) ->
+  res
+    .pipe(zlib.createGunzip())
+    .pipe(tar.extract("#{__dirname}/input"))
+    .on('error', (err) -> throw err)
+    .on('finish', -> callback())
+
+unzip_buffer = (buffer, outdir, callback) ->
+  yauzl.fromBuffer buffer, (err, zipfile) ->
+    throw err if err
+
+    zipfile.on('end', callback)
+    zipfile.on 'entry', (entry) ->
+      zipfile.openReadStream entry, (err, readStream) ->
+        throw err if err
+
+        readStream
+          .pipe(fs.createWriteStream(entry.fileName))
+          .on('end', -> zipfile.readEntry())
+    zipfile.readEntry()
+
 download_data = (key, callback) ->
   data_file = DataFiles[key]
   basename = data_file.basename
   url = data_file.url
 
   console.log("GET #{url}...")
-  get url, (err, res) ->
+  get.concat url, (err, res, buffer) ->
     throw err if err
 
-    deflated = if /\.zip$/.test(url)
-      res.pipe(unzip.Extract(path: "#{__dirname}/input"))
+    if /\.zip$/.test(url)
+      unzip_buffer(buffer, "#{__dirname}/input", callback)
     else
-      res.pipe(zlib.createGunzip()).pipe(tar.extract("#{__dirname}/input"))
-
-    deflated
-      .on('error', (err) -> throw err)
-      .on('finish', -> callback())
+      untar_stream(res, "#{__dirname}/input", callback)
 
 ensure_data_downloaded = (key, callback) ->
   is_data_downloaded key, (err, is_downloaded) ->
