@@ -47,6 +47,7 @@ body.race-day table.candidates {
       line-height: 1.25rem;
       padding-left: 2.5rem;
       max-width: 7rem;
+      position: relative;
     }
 
     span {
@@ -60,7 +61,8 @@ body.race-day table.candidates {
       width: 1.9rem;
       height: 2.85rem;
       left: .5rem;
-      top: 0;
+      top: -50%;
+      margin-top: -.2rem; // looks nicer
     }
 
     padding-right: 0; // goes with .n-delegates padding-left: 0;
