@@ -1,8 +1,10 @@
 .state-race-days
-  != render(partial: 'state-race-days-past')
+  - if race_days.any?(&:past?)
+    != render(partial: 'state-race-days-past')
 
-  %h2.with-share-link
-    %a.share-link{name: 'calendar', href: '#calendar'}
-    What&rsquo;s Next?
+  - if race_days.any?(&:future?)
+    %h2.with-share-link
+      %a.share-link{name: 'calendar', href: '#calendar'}
+      What&rsquo;s Next?
 
-  != render(partial: 'state-race-days-future')
+    != render(partial: 'state-race-days-future')
