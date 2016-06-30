@@ -396,20 +396,21 @@ HorseRace.prototype.refresh_active_race_day = function() {
   var bar_label = this.els.bar_label;
   var bar = this.candidates[this.candidates.length - 1].els.bars.childNodes[li_index];
   var bar_left = (bar.offsetLeft + bar.offsetWidth / 2) / bar.parentNode.offsetWidth;
+  var label_fits = bar.offsetWidth > 2 && bar.offsetLeft < bar.parentNode.offsetWidth;
 
-  if (bar.offsetWidth < 3) {
-    bar_label.classList.add('too-small');
+  if (!label_fits) {
+    bar_label.classList.add('does-not-fit');
   } else {
-    bar_label.classList.remove('too-small');
+    bar_label.classList.remove('does-not-fit');
     bar_label.innerText = this.steps[li_index].label;
     if (bar_left < 0.5) {
-      bar_label.style.left = 100 * bar_left + '%';
+      bar_label.style.left = 100 * Math.max(bar_left, 0) + '%';
       bar_label.style.right = 'auto';
       bar_label.classList.add('anchor-left');
       bar_label.classList.remove('anchor-right');
     } else {
       bar_label.style.left = 'auto';
-      bar_label.style.right = 100 * (1 - bar_left) + '%';
+      bar_label.style.right = 100 * Math.max(.005, 1 - bar_left) + '%';
       bar_label.classList.remove('anchor-left');
       bar_label.classList.add('anchor-right');
     }

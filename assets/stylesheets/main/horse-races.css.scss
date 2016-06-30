@@ -293,7 +293,7 @@ div.horse-race {
     transition: opacity .15s linear;
     z-index: 1; // on top of the start line, on mobile
 
-    &.too-small {
+    &.does-not-fit {
       opacity: 0;
     }
 
