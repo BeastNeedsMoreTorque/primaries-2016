@@ -141,6 +141,7 @@ class Server
       "--exclude=pollster*",
       "--exclude=uglified-javascript",
       "--exclude=templates",
+      "--exclude=sprockets",
       "--exclude=*.etag",
       '.'
     )
